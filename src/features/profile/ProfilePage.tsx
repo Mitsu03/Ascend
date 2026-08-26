@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ArtIcon } from '@/components/ArtIcon'
+import { DivisionSeal } from '@/components/DivisionSeal'
 import { AVATAR_VARIANT_COUNT, HeroAvatar } from '@/components/HeroAvatar'
 import { SpiritMotes } from '@/components/art/SpiritArt'
 import { useHeroTitle } from '@/components/layout/AppShell'
@@ -13,9 +15,11 @@ import { AchievementsGrid } from '@/features/profile/AchievementsGrid'
 import { ArtworkPanel } from '@/features/profile/ArtworkPanel'
 import { InventoryPanel } from '@/features/profile/InventoryPanel'
 import { ProgressCharts, WeightChart } from '@/features/profile/ProgressCharts'
+import { AVATAR_EMBLEMS, EMBLEM_FAMILY_ORDER } from '@/data/avatarEmblems'
+import { DIVISIONS, getDivision } from '@/data/divisions'
 import { LANGUAGES, LANGUAGE_NAMES, useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
-import { computeTargets, levelFromXp } from '@/services/calculations'
+import { computeTargets, levelFromXp, maskStageForLevel, titleKeyForLevel } from '@/services/calculations'
 import { formatShortDate, today } from '@/services/dates'
 import { visionIsConfigured } from '@/services/foodVision'
 import { VISION_PRESETS, presetForEndpoint } from '@/services/visionProviders'
@@ -27,13 +31,19 @@ import { useQuestStore } from '@/store/questStore'
 import { DEFAULT_VISION_ENDPOINT, DEFAULT_VISION_MODEL, useSettingsStore } from '@/store/settingsStore'
 import { useUserStore } from '@/store/userStore'
 import { useWorkoutStore } from '@/store/workoutStore'
+import type { ArtIconName } from '@/data/artIcons'
 import type { AttributeKey, DietPreference, Goal, UserProfile } from '@/types'
 
-const ATTRIBUTES: { key: AttributeKey; icon: string; tone: 'ember' | 'good' | 'crimson' | 'gold' }[] = [
-  { key: 'forca', icon: 'Dumbbell', tone: 'ember' },
-  { key: 'resistencia', icon: 'Activity', tone: 'good' },
-  { key: 'disciplina', icon: 'Brain', tone: 'crimson' },
-  { key: 'energia', icon: 'Battery', tone: 'gold' },
+/**
+ * As quatro artes de combate do Gotei, cada uma com o seu emblema:
+ * zanjutsu é a lâmina, hohō é o passo rápido, kidō é o feitiço e reiryoku é
+ * o poder espiritual em bruto.
+ */
+const ATTRIBUTES: { key: AttributeKey; emblem: ArtIconName; tone: 'ember' | 'good' | 'crimson' | 'gold' }[] = [
+  { key: 'forca', emblem: 'katana', tone: 'ember' },
+  { key: 'resistencia', emblem: 'quick-slash', tone: 'good' },
+  { key: 'disciplina', emblem: 'fire-ray', tone: 'crimson' },
+  { key: 'energia', emblem: 'aura', tone: 'gold' },
 ]
 
 const ATTRIBUTE_COLORS: Record<string, string> = {
@@ -53,14 +63,26 @@ const GOAL_ORDER: Goal[] = ['perder_gordura', 'ganhar_massa', 'manter', 'condica
 const DIET_ORDER: DietPreference[] = ['sem_preferencia', 'mediterranica', 'vegetariano', 'vegan']
 
 function AvatarCard() {
-  const { t, n } = useI18n()
+  const { t, n, loc } = useI18n()
   const profile = useUserStore((state) => state.profile)!
   const setAvatar = useUserStore((state) => state.setAvatar)
+  const updateProfile = useUserStore((state) => state.updateProfile)
   const xp = useGameStore((state) => state.xp)
   const coins = useGameStore((state) => state.coins)
   const equipped = useGameStore((state) => state.equipped)
   const info = levelFromXp(xp)
   const title = useHeroTitle(info.level)
+  const division = getDivision(profile.divisionId)
+
+  const emblemId = profile.avatarEmblem as ArtIconName | undefined
+  /*
+   * A máscara existe a partir da patente 10 e é o utilizador que decide se a
+   * usa. `showMask` está ausente nos perfis criados antes desta versão, e
+   * nesses a máscara aparece — é o que dá sentido ao desbloqueio.
+   */
+  const unlockedStage = maskStageForLevel(info.level)
+  const wearsMask = profile.showMask !== false
+  const maskStage = wearsMask ? unlockedStage : undefined
 
   return (
     <Card glow="crimson" edge className="relative overflow-hidden">
@@ -75,50 +97,140 @@ function AvatarCard() {
             hue={profile.avatarHue}
             frameId={equipped.frame}
             auraId={equipped.aura}
+            maskStage={maskStage}
+            emblemId={emblemId}
+            divisionId={division.id}
           />
-          <div className="grid grid-cols-4 gap-1.5">
-            {AVATAR_VARIANTS.map((variant) => (
-              <button
-                key={variant}
-                type="button"
-                aria-label={t.profile.hairAria(variant + 1)}
-                aria-pressed={profile.avatarVariant === variant}
-                onClick={() => setAvatar(variant, profile.avatarHue)}
-                className={cn(
-                  'size-8 rounded-lg border text-xs font-semibold transition-colors',
-                  profile.avatarVariant === variant
-                    ? 'border-ember bg-ember/15 text-ember'
-                    : 'border-void-600 text-ink-muted hover:border-void-500 hover:text-ink',
-                )}
-              >
-                {variant + 1}
-              </button>
-            ))}
+
+          {/* Figura desenhada ou brasão de esquadrão */}
+          <div
+            className="flex rounded-lg border border-void-600 p-0.5"
+            role="group"
+            aria-label={t.profile.avatarModeTitle}
+          >
+            <button
+              type="button"
+              aria-pressed={!emblemId}
+              onClick={() => updateProfile({ avatarEmblem: undefined })}
+              className={cn(
+                'rounded-md px-3 py-1 text-xs font-medium transition-colors',
+                emblemId ? 'text-ink-muted hover:text-ink' : 'bg-ember/15 text-ember',
+              )}
+            >
+              {t.profile.avatarModeDrawn}
+            </button>
+            <button
+              type="button"
+              aria-pressed={Boolean(emblemId)}
+              onClick={() => updateProfile({ avatarEmblem: emblemId ?? AVATAR_EMBLEMS[0].id })}
+              className={cn(
+                'rounded-md px-3 py-1 text-xs font-medium transition-colors',
+                emblemId ? 'bg-ember/15 text-ember' : 'text-ink-muted hover:text-ink',
+              )}
+            >
+              {t.profile.avatarModeEmblem}
+            </button>
           </div>
-          <div className="grid grid-cols-8 gap-1.5">
-            {AVATAR_HUES.map((hue) => (
-              <button
-                key={hue}
-                type="button"
-                aria-label={t.profile.colourAria(hue)}
-                aria-pressed={profile.avatarHue === hue}
-                onClick={() => setAvatar(profile.avatarVariant, hue)}
-                className={cn(
-                  'size-6 rounded-full border-2 transition-transform',
-                  profile.avatarHue === hue ? 'scale-110 border-ink' : 'border-transparent hover:scale-105',
-                )}
-                style={{ background: `hsl(${hue} 78% 54%)` }}
-              />
-            ))}
-          </div>
+
+          {emblemId ? (
+            <div className="max-h-56 w-full max-w-64 space-y-2 overflow-y-auto pr-1">
+              {EMBLEM_FAMILY_ORDER.map((family) => (
+                <div key={family}>
+                  <p className="mb-1 text-[10px] uppercase tracking-widest text-ink-faint">
+                    {t.profile.emblemFamilies[family]}
+                  </p>
+                  <div className="grid grid-cols-6 gap-1.5">
+                    {AVATAR_EMBLEMS.filter((emblem) => emblem.family === family).map((emblem) => (
+                      <button
+                        key={emblem.id}
+                        type="button"
+                        title={loc(emblem.name)}
+                        aria-label={loc(emblem.name)}
+                        aria-pressed={emblemId === emblem.id}
+                        onClick={() => updateProfile({ avatarEmblem: emblem.id })}
+                        className={cn(
+                          'flex size-9 items-center justify-center rounded-lg border transition-colors',
+                          emblemId === emblem.id
+                            ? 'border-ember bg-ember/15 text-ember'
+                            : 'border-void-600 text-ink-muted hover:border-void-500 hover:text-ink',
+                        )}
+                      >
+                        <ArtIcon name={emblem.id} size={20} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-4 gap-1.5">
+                {AVATAR_VARIANTS.map((variant) => (
+                  <button
+                    key={variant}
+                    type="button"
+                    aria-label={t.profile.hairAria(variant + 1)}
+                    aria-pressed={profile.avatarVariant === variant}
+                    onClick={() => setAvatar(variant, profile.avatarHue)}
+                    className={cn(
+                      'size-8 rounded-lg border text-xs font-semibold transition-colors',
+                      profile.avatarVariant === variant
+                        ? 'border-ember bg-ember/15 text-ember'
+                        : 'border-void-600 text-ink-muted hover:border-void-500 hover:text-ink',
+                    )}
+                  >
+                    {variant + 1}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-8 gap-1.5">
+                {AVATAR_HUES.map((hue) => (
+                  <button
+                    key={hue}
+                    type="button"
+                    aria-label={t.profile.colourAria(hue)}
+                    aria-pressed={profile.avatarHue === hue}
+                    onClick={() => setAvatar(profile.avatarVariant, hue)}
+                    className={cn(
+                      'size-6 rounded-full border-2 transition-transform',
+                      profile.avatarHue === hue ? 'scale-110 border-ink' : 'border-transparent hover:scale-105',
+                    )}
+                    style={{ background: `hsl(${hue} 78% 54%)` }}
+                  />
+                ))}
+              </div>
+
+              {/* A máscara só se liga depois de a patente a desbloquear. */}
+              {unlockedStage ? (
+                <label className="flex cursor-pointer items-center gap-2 text-xs text-ink-muted">
+                  <input
+                    type="checkbox"
+                    checked={wearsMask}
+                    onChange={(event) => updateProfile({ showMask: event.target.checked })}
+                    className="size-3.5 accent-[var(--color-ember)]"
+                  />
+                  {t.profile.maskShow}
+                  <span className="text-ink-faint">· {t.profile.maskStages[unlockedStage]}</span>
+                </label>
+              ) : (
+                <p className="text-center text-[11px] text-ink-faint">{t.profile.maskLocked(10)}</p>
+              )}
+            </>
+          )}
         </div>
 
         <div className="min-w-0 flex-1 text-center sm:text-left">
-          <h1 className="text-glow-ember font-display text-4xl font-bold leading-tight text-ink">{profile.name}</h1>
-          <p className="mt-1 flex items-center justify-center gap-2 text-ember-soft sm:justify-start">
-            <span className="h-px w-6 bg-gradient-to-r from-ember to-transparent" aria-hidden="true" />
-            {title}
-          </p>
+          <div className="flex items-center justify-center gap-3 sm:justify-start">
+            <DivisionSeal divisionId={division.id} size={46} />
+            <div className="min-w-0">
+              <h1 className="text-glow-ember font-display text-4xl font-bold leading-tight text-ink">{profile.name}</h1>
+              <p className="mt-1 flex items-center justify-center gap-2 text-ember-soft sm:justify-start">
+                <span className="h-px w-6 bg-gradient-to-r from-ember to-transparent" aria-hidden="true" />
+                {title}
+              </p>
+            </div>
+          </div>
+          <p className="mt-2 text-sm text-ink-muted">{t.rankNotes[titleKeyForLevel(info.level)]}</p>
           <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
             <Badge tone="ember" icon="TrendingUp">
               {t.common.levelWithNumber(info.level)}
@@ -153,6 +265,54 @@ function AvatarCard() {
   )
 }
 
+/** Painel da divisão: função, lema e pedido de transferência para outra. */
+function DivisionPanel() {
+  const { t, loc } = useI18n()
+  const profile = useUserStore((state) => state.profile)!
+  const updateProfile = useUserStore((state) => state.updateProfile)
+  const division = getDivision(profile.divisionId)
+
+  return (
+    <Card>
+      <CardHeader title={t.profile.divisionTitle} subtitle={t.profile.divisionSubtitle} icon="Shield" />
+      <CardBody className="space-y-4 pt-3">
+        <div className="flex items-center gap-4">
+          <DivisionSeal divisionId={division.id} size={64} />
+          <div className="min-w-0">
+            <p className="font-display text-xl font-bold text-ink">{loc(division.name)}</p>
+            <p className="text-sm text-ink-muted">{loc(division.role)}</p>
+            <p className="mt-1 text-sm italic text-ink-faint">“{loc(division.motto)}”</p>
+          </div>
+        </div>
+
+        <div>
+          <p className="mb-2 text-xs font-medium text-ink-muted">{t.profile.divisionPick}</p>
+          <div className="flex flex-wrap gap-2">
+            {DIVISIONS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                title={loc(option.name)}
+                aria-label={loc(option.name)}
+                aria-pressed={option.id === division.id}
+                onClick={() => updateProfile({ divisionId: option.id })}
+                className={cn(
+                  'rounded-xl border p-1 transition-colors',
+                  option.id === division.id ? 'border-ember bg-ember/10' : 'border-void-600 hover:border-void-500',
+                )}
+              >
+                <DivisionSeal divisionId={option.id} size={40} />
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-[11px] leading-relaxed text-ink-faint">{t.profile.divisionPickHint}</p>
+        </div>
+      </CardBody>
+    </Card>
+  )
+}
+
+
 function AttributesCard() {
   const { t } = useI18n()
   const attributes = useGameStore((state) => state.attributes)
@@ -166,7 +326,7 @@ function AttributesCard() {
           <div key={attribute.key}>
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-sm font-medium text-ink">
-                <Icon name={attribute.icon} size={15} className={ATTRIBUTE_COLORS[attribute.tone]} />
+                <ArtIcon name={attribute.emblem} size={17} className={ATTRIBUTE_COLORS[attribute.tone]} />
                 {t.attributes[attribute.key]}
               </span>
               <span className={cn('font-display text-lg font-bold tabular-nums', ATTRIBUTE_COLORS[attribute.tone])}>
@@ -214,7 +374,7 @@ function StatsCard() {
 }
 
 function BodyProgressCard() {
-  const { t } = useI18n()
+  const { t, d } = useI18n()
   const logs = useBodyStore((state) => state.logs)
   const addLog = useBodyStore((state) => state.addLog)
   const [weight, setWeight] = useState('')
@@ -247,7 +407,7 @@ function BodyProgressCard() {
           logs.length > 1 ? (
             <Badge tone={delta <= 0 ? 'good' : 'warn'} icon="TrendingUp">
               {delta > 0 ? '+' : ''}
-              {delta.toFixed(1).replace('.', ',')} kg
+              {d(delta)} kg
             </Badge>
           ) : undefined
         }
@@ -299,8 +459,8 @@ function BodyProgressCard() {
                 >
                   <span className="text-ink-muted">{formatShortDate(log.date)}</span>
                   <span className="tabular-nums text-ink">
-                    {log.weightKg.toFixed(1).replace('.', ',')} kg
-                    {log.waistCm ? ` · ${log.waistCm} cm` : ''}
+                    {d(log.weightKg)} kg
+                    {log.waistCm ? ` · ${d(log.waistCm)} cm` : ''}
                   </span>
                 </li>
               ))}
@@ -683,6 +843,7 @@ export function ProfilePage() {
 
       <div className="grid gap-5 lg:grid-cols-2">
         <AttributesCard />
+        <DivisionPanel />
         <StatsCard />
       </div>
 

@@ -12,7 +12,7 @@ import { Badge, EmptyState, Stat } from '@/components/ui/Misc'
 import { MacroBar, ProgressBar, ProgressRing } from '@/components/ui/Progress'
 import { QuestCard } from '@/features/quests/QuestCard'
 import { useI18n } from '@/i18n'
-import { levelFromXp } from '@/services/calculations'
+import { levelFromXp, maskStageForLevel } from '@/services/calculations'
 import { formatLongDate, greetingKeyForHour, today } from '@/services/dates'
 import { narrativeForDay } from '@/services/narrative'
 import { estimateDuration, totalSets } from '@/services/planGenerator'
@@ -22,6 +22,7 @@ import { useQuestStore } from '@/store/questStore'
 import { useArt, useArtStore } from '@/store/artStore'
 import { useUserStore } from '@/store/userStore'
 import { useWorkoutStore } from '@/store/workoutStore'
+import type { ArtIconName } from '@/data/artIcons'
 import type { Quest } from '@/types'
 
 function StreakCard() {
@@ -168,7 +169,7 @@ function NextWorkoutCard() {
 }
 
 function NutritionCard() {
-  const { t, n } = useI18n()
+  const { t, n, d } = useI18n()
   const targets = useUserStore((state) => state.targets)
   const entries = useNutritionStore((state) => state.entries)
   const totalsForDate = useNutritionStore((state) => state.totalsForDate)
@@ -211,7 +212,7 @@ function NutritionCard() {
                 <Icon name="Droplets" size={13} />
                 {t.dashboard.waterToday}
               </span>
-              <span className="tabular-nums">{t.common.litres((water / 1000).toFixed(2).replace('.', ','))}</span>
+              <span className="tabular-nums">{t.common.litres(d(water / 1000, 2))}</span>
             </div>
           </div>
         </div>
@@ -282,6 +283,9 @@ function HeroCard() {
           hue={profile.avatarHue}
           frameId={equipped.frame}
           auraId={equipped.aura}
+          maskStage={profile.showMask === false ? undefined : maskStageForLevel(info.level)}
+          emblemId={profile.avatarEmblem as ArtIconName | undefined}
+          divisionId={profile.divisionId}
         />
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-muted">

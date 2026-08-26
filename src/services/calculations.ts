@@ -95,25 +95,26 @@ export function levelFromXp(xp: number): LevelInfo {
   }
 }
 
+/** Patentes do Gotei 13, da alma sem lâmina ao Capitão-Comandante. */
 export type LevelTitleKey =
-  | 'despertar'
-  | 'aprendiz'
-  | 'guardiao'
-  | 'lamina'
-  | 'sentinela'
-  | 'mestre'
-  | 'tita'
-  | 'lenda'
+  | 'alma'
+  | 'academia'
+  | 'shinigami'
+  | 'oficial'
+  | 'terceiro'
+  | 'tenente'
+  | 'capitao'
+  | 'comandante'
 
 export const LEVEL_TITLES: { minLevel: number; key: LevelTitleKey }[] = [
-  { minLevel: 1, key: 'despertar' },
-  { minLevel: 3, key: 'aprendiz' },
-  { minLevel: 5, key: 'guardiao' },
-  { minLevel: 7, key: 'lamina' },
-  { minLevel: 10, key: 'sentinela' },
-  { minLevel: 14, key: 'mestre' },
-  { minLevel: 18, key: 'tita' },
-  { minLevel: 25, key: 'lenda' },
+  { minLevel: 1, key: 'alma' },
+  { minLevel: 3, key: 'academia' },
+  { minLevel: 5, key: 'shinigami' },
+  { minLevel: 7, key: 'oficial' },
+  { minLevel: 10, key: 'terceiro' },
+  { minLevel: 14, key: 'tenente' },
+  { minLevel: 18, key: 'capitao' },
+  { minLevel: 25, key: 'comandante' },
 ]
 
 export function titleKeyForLevel(level: number): LevelTitleKey {
@@ -122,6 +123,20 @@ export function titleKeyForLevel(level: number): LevelTitleKey {
     if (level >= entry.minLevel) key = entry.key
   }
   return key
+}
+
+/**
+ * Estado da máscara de Hollow por patente.
+ *
+ * A máscara só aparece a partir de Terceiro Oficial e segue a ordem em que se
+ * domina o poder: primeiro mal se forma, depois aguenta rachada, e só no fim
+ * fica inteira. `undefined` significa sem máscara.
+ */
+export function maskStageForLevel(level: number): 'nascente' | 'rachada' | 'plena' | undefined {
+  if (level >= 18) return 'plena'
+  if (level >= 14) return 'rachada'
+  if (level >= 10) return 'nascente'
+  return undefined
 }
 
 // ---------------------------------------------------------------- Recompensas

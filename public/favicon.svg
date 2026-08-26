@@ -1,11 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!--
+    Máscara de Hollow — o mesmo desenho de src/components/art/HollowMask.tsx,
+    reduzido ao essencial para os tamanhos de favicon. Arte original.
+  -->
   <defs>
-    <linearGradient id="ascend-grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#22d3ee" />
-      <stop offset="100%" stop-color="#7c3aed" />
+    <linearGradient id="bone" x1="0.25" y1="0" x2="0.75" y2="1">
+      <stop offset="0%" stop-color="#fffdf7" />
+      <stop offset="52%" stop-color="#ece3d2" />
+      <stop offset="100%" stop-color="#b8ab92" />
     </linearGradient>
+    <radialGradient id="socket" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff7a1a" stop-opacity="1" />
+      <stop offset="60%" stop-color="#ff7a1a" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#ff7a1a" stop-opacity="0" />
+    </radialGradient>
+    <clipPath id="shell">
+      <path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z" />
+    </clipPath>
   </defs>
-  <rect width="64" height="64" rx="16" fill="#0b1120" />
-  <rect x="4" y="4" width="56" height="56" rx="13" fill="url(#ascend-grad)" opacity="0.18" />
-  <path d="M35 6 L16 36 H29 L27 58 L48 27 H34 Z" fill="url(#ascend-grad)" />
+
+  <rect width="128" height="128" rx="30" fill="#050507" />
+  <rect x="8" y="8" width="112" height="112" rx="24" fill="#ff7a1a" opacity="0.1" />
+
+  <g transform="translate(19 14) scale(0.9)">
+    <path
+      d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z"
+      fill="url(#bone)"
+    />
+    <g clip-path="url(#shell)">
+      <path d="M27.5 6.5 L38.5 3 L35.5 57 L28 55 Z" fill="#b81236" opacity="0.85" />
+      <path d="M43 2 L48 1.5 L46.5 26 L42.5 26 Z" fill="#b81236" opacity="0.85" />
+      <path d="M20 30 L44 38 L45.5 50 L23 46 Z" fill="#050507" />
+      <path d="M80 30 L56 38 L54.5 50 L77 46 Z" fill="#050507" />
+      <ellipse cx="32" cy="41" rx="13" ry="11" fill="url(#socket)" />
+      <ellipse cx="68" cy="41" rx="13" ry="11" fill="url(#socket)" />
+      <circle cx="32" cy="41" r="3.2" fill="#ff7a1a" />
+      <circle cx="68" cy="41" r="3.2" fill="#ff7a1a" />
+      <path d="M17 60 L83 60 L77.5 83 L22.5 83 Z" fill="#050507" />
+      <path
+        d="M17 60 L83 60 L80 72 L74.5 61.5 L68 73 L61.5 61.5 L55 73 L48.5 61.5 L42 73 L35.5 61.5 L29 73 L23 61.5 L20 72 Z"
+        fill="url(#bone)"
+      />
+      <path
+        d="M22.5 83 L77.5 83 L74.5 72 L69 82 L63 71.5 L57 82 L51 71.5 L45 82 L39 71.5 L33 82 L27 71.5 L25 79 Z"
+        fill="url(#bone)"
+      />
+    </g>
+  </g>
 </svg>

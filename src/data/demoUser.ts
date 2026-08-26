@@ -26,6 +26,9 @@ export const DEMO_PROFILE: UserProfile = {
   createdAt: new Date().toISOString(),
   avatarVariant: 1,
   avatarHue: 24,
+  /* Décima Primeira: combate direto — a que combina com um objetivo de massa. */
+  divisionId: 11,
+  showMask: true,
 }
 
 export interface DemoData {
@@ -242,8 +245,8 @@ export function buildDemoData(): DemoData {
     // Derivado dos contadores: mostrar uma conquista a 20/20 ainda bloqueada
     // seria incoerente com o resto do perfil.
     unlockedAchievements: unlockedFromCounters(counters, 12, now),
-    inventory: ['titulo-novato', 'aura-ciano', 'moldura-ferro'],
-    equipped: { title: 'titulo-novato', aura: 'aura-ciano', frame: 'moldura-ferro' },
+    inventory: ['titulo-rukongai', 'reiatsu-espectral', 'selo-asauchi'],
+    equipped: { title: 'titulo-rukongai', aura: 'reiatsu-espectral', frame: 'selo-asauchi' },
     counters,
     proteinBonusDates: Array.from({ length: 6 }, (_, index) => addDays(now, -(index + 1))),
     xpByDate,

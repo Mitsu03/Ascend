@@ -17,13 +17,13 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
-        name: 'Ascend — Fitness & Nutrição',
+        name: 'Ascend — Gotei 13',
         short_name: 'Ascend',
         description:
-          'Fitness e nutrição gamificados. Treina, regista refeições, completa missões e sobe de nível.',
+          'Fitness e nutrição gamificados no universo do Bleach. Treina, regista refeições, cumpre as ordens da tua divisão e sobe de patente no Gotei 13.',
         lang: 'pt-PT',
-        theme_color: '#0b1120',
-        background_color: '#0b1120',
+        theme_color: '#050507',
+        background_color: '#050507',
         display: 'standalone',
         orientation: 'any',
         start_url: '/',

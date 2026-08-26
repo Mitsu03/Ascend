@@ -181,7 +181,7 @@ function AddFoodModal({
 }
 
 function WaterCard() {
-  const { t } = useI18n()
+  const { t, d } = useI18n()
   const addWater = useNutritionStore((state) => state.addWater)
   const waterByDate = useNutritionStore((state) => state.waterByDate)
   const water = waterByDate[today()] ?? 0
@@ -190,13 +190,13 @@ function WaterCard() {
     <Card>
       <CardHeader
         title={t.nutrition.hydration}
-        subtitle={t.nutrition.suggestedGoal(String(WATER_GOAL_ML / 1000).replace('.', ','))}
+        subtitle={t.nutrition.suggestedGoal(d(WATER_GOAL_ML / 1000, 1))}
         icon="Droplets"
       />
       <CardBody className="space-y-3 pt-3">
         <div className="flex items-baseline gap-2">
           <span className="font-display text-4xl font-bold tabular-nums text-ember">
-            {(water / 1000).toFixed(2).replace('.', ',')}
+            {d(water / 1000, 2)}
           </span>
           <span className="text-ink-muted">{t.nutrition.litresToday}</span>
         </div>

@@ -2,119 +2,128 @@ import { localized as l } from '@/i18n/types'
 import type { CosmeticItem, CosmeticSlot, Rarity } from '@/types'
 
 /**
- * Cosméticos puramente estéticos. As moedas do MVP servem apenas para isto —
- * não existe qualquer vantagem de jogo associada.
+ * Cosméticos puramente estéticos. O kan do MVP serve apenas para isto — não
+ * existe qualquer vantagem de jogo associada.
+ *
+ * Os três escalões seguem a escala de evolução dos Hollow: `comum` é um
+ * Hollow, `raro` um Adjuchas e `epico` um Vasto Lorde.
  */
 export const COSMETICS: CosmeticItem[] = [
-  // Molduras do avatar
+  // Selos — o anel à volta do retrato, ao jeito do distintivo da divisão
   {
-    id: 'moldura-ferro',
-    name: l('Moldura de Aço', 'Steel Frame'),
+    id: 'selo-asauchi',
+    name: l('Selo Asauchi', 'Asauchi Seal'),
     slot: 'frame',
     rarity: 'comum',
     description: l(
-      'Um contorno sóbrio para quem começou a levar a sério.',
-      'A restrained outline for someone starting to take this seriously.',
+      'Aço por nomear, igual para todos os recrutas. Ainda assim, já é uma lâmina.',
+      'Unnamed steel, the same for every recruit. Still a blade.',
     ),
     price: 120,
     value: '#7b8494',
   },
   {
-    id: 'moldura-aurora',
-    name: l('Moldura Aurora', 'Dawn Frame'),
+    id: 'selo-shikai',
+    name: l('Selo Shikai', 'Shikai Seal'),
     slot: 'frame',
     rarity: 'raro',
     description: l(
-      'Gradiente âmbar e carmesim, como o céu antes do treino da manhã.',
-      'An amber and crimson gradient, like the sky before a morning session.',
+      'Âmbar e carmesim: a lâmina respondeu quando lhe chamaste pelo nome.',
+      'Amber and crimson: the blade answered when you called its name.',
     ),
     price: 260,
     value: 'linear-gradient(135deg, #ff7a1a, #d1244a)',
   },
   {
-    id: 'moldura-solar',
-    name: l('Moldura Solar', 'Solar Frame'),
+    id: 'selo-bankai',
+    name: l('Selo Bankai', 'Bankai Seal'),
     slot: 'frame',
     rarity: 'epico',
-    description: l('Ouro fundido. Reservada a quem não falha.', 'Molten gold. Reserved for those who never miss.'),
+    description: l(
+      'Ouro fundido. Dez mil vezes o poder — e dez anos a merecê-lo.',
+      'Molten gold. Ten thousand times the power — and ten years earning it.',
+    ),
     price: 480,
     value: 'linear-gradient(135deg, #ffb020, #ff5a1f)',
   },
 
   // Títulos
   {
-    id: 'titulo-novato',
+    id: 'titulo-rukongai',
     name: l('Alma Determinada', 'Determined Soul'),
     slot: 'title',
     rarity: 'comum',
-    description: l('Todo o herói começa aqui.', 'Every hero starts here.'),
+    description: l('Todo o Shinigami saiu do Rukongai.', 'Every Soul Reaper came out of the Rukongai.'),
     price: 80,
     value: 'title',
   },
   {
-    id: 'titulo-lamina',
-    name: l('Lâmina do Amanhecer', 'Blade of Dawn'),
+    id: 'titulo-getsuga',
+    name: l('Lua Cortante', 'Cutting Moon'),
     slot: 'title',
     rarity: 'raro',
     description: l(
-      'Para quem treina antes de o mundo acordar.',
-      'For those who train before the world wakes up.',
+      'Para quem treina antes de o sol nascer, com a lua ainda no céu.',
+      'For those who train before sunrise, while the moon is still up.',
     ),
     price: 240,
     value: 'title',
   },
   {
-    id: 'titulo-guardiao-descanso',
-    name: l('Guardião do Descanso', 'Guardian of Rest'),
+    id: 'titulo-quarta',
+    name: l('Guardião da Quarta', 'Guardian of the Fourth'),
     slot: 'title',
     rarity: 'raro',
     description: l(
-      'Sabe que a recuperação também é treino.',
-      'Knows that recovery is training too.',
+      'Sabe que a Quarta Divisão ganha as batalhas que ninguém vê.',
+      'Knows the Fourth Division wins the battles nobody sees.',
     ),
     price: 240,
     value: 'title',
   },
   {
-    id: 'titulo-lenda',
-    name: l('Lenda em Ascensão', 'Rising Legend'),
+    id: 'titulo-visored',
+    name: l('Visored', 'Visored'),
     slot: 'title',
     rarity: 'epico',
     description: l(
-      'O nome que aparece nas histórias que se contam no ginásio.',
-      'The name that shows up in the stories people tell at the gym.',
+      'Pôs a máscara e não deixou o Hollow decidir por si.',
+      'Put the mask on and did not let the Hollow decide.',
     ),
     price: 520,
     value: 'title',
   },
 
-  // Auras
+  // Reiatsu — a cor da pressão espiritual à volta do retrato
   {
-    id: 'aura-ciano',
-    name: l('Aura Espectral', 'Spectral Aura'),
+    id: 'reiatsu-espectral',
+    name: l('Reiatsu Espectral', 'Spectral Reiatsu'),
     slot: 'aura',
     rarity: 'comum',
-    description: l('Brilho branco-azulado e sereno.', 'A calm blue-white glow.'),
+    description: l(
+      'Azul-branco sereno, de quem ainda anda à procura do seu limite.',
+      'A calm blue-white, still looking for its own limit.',
+    ),
     price: 140,
     value: '#8fd4ff',
   },
   {
-    id: 'aura-carmesim',
-    name: l('Aura Carmesim', 'Crimson Aura'),
+    id: 'reiatsu-carmesim',
+    name: l('Reiatsu Carmesim', 'Crimson Reiatsu'),
     slot: 'aura',
     rarity: 'raro',
-    description: l('Energia profunda de fim de tarde.', 'Deep late-afternoon energy.'),
+    description: l('Denso ao ponto de se sentir na sala ao lado.', 'Dense enough to be felt in the next room.'),
     price: 280,
     value: '#e0325c',
   },
   {
-    id: 'aura-dourada',
-    name: l('Aura Incandescente', 'Blazing Aura'),
+    id: 'reiatsu-getsuga',
+    name: l('Reiatsu Incandescente', 'Blazing Reiatsu'),
     slot: 'aura',
     rarity: 'epico',
     description: l(
-      'A luz de quem já provou muito a si próprio.',
-      'The light of someone who has proved plenty to themselves.',
+      'O laranja que fica no ar depois do corte.',
+      'The orange that hangs in the air after the cut.',
     ),
     price: 500,
     value: '#ff7a1a',
