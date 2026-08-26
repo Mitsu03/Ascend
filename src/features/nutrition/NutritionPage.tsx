@@ -6,6 +6,7 @@ import { Icon } from '@/components/ui/Icon'
 import { Badge, Disclaimer, EmptyState, Field, SearchInput, Select, TextInput } from '@/components/ui/Misc'
 import { MacroBar, ProgressRing } from '@/components/ui/Progress'
 import { Modal } from '@/components/ui/Modal'
+import { PhotoLogModal } from '@/features/nutrition/PhotoLogModal'
 import { useI18n } from '@/i18n'
 import { today } from '@/services/dates'
 import { suggestMeals } from '@/services/suggestions'
@@ -13,6 +14,7 @@ import {
   MEAL_ORDER,
   checkProteinBonus,
   entryMacros,
+  foodForEntry,
   remainingMacros,
   useNutritionStore,
 } from '@/store/nutritionStore'
@@ -58,7 +60,7 @@ function AddFoodModal({
 
   const confirm = () => {
     if (!food || !Number.isFinite(quantity) || quantity <= 0) return
-    addEntry(selectedMeal, food.id, quantity)
+    addEntry(selectedMeal, food, quantity)
     checkProteinBonus(targets)
     onClose()
   }
@@ -228,6 +230,7 @@ export function NutritionPage() {
   const removeEntry = useNutritionStore((state) => state.removeEntry)
 
   const [adding, setAdding] = useState<MealType | null>(null)
+  const [photoLogging, setPhotoLogging] = useState<MealType | null>(null)
 
   const date = today()
   const todayEntries = useMemo(() => entriesForDate(date), [entries, entriesForDate, date])
@@ -250,9 +253,14 @@ export function NutritionPage() {
           <h1 className="slash-divider text-3xl font-bold text-ink">{t.nutrition.title}</h1>
           <p className="mt-3 text-ink-muted">{t.nutrition.remainingOf(n(remaining.calories), n(targets.calories))}</p>
         </div>
-        <Button variant="primary" icon="Plus" onClick={() => setAdding('almoco')}>
-          {t.nutrition.logMeal}
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="secondary" icon="Camera" onClick={() => setPhotoLogging('almoco')}>
+            {t.photoLog.title}
+          </Button>
+          <Button variant="primary" icon="Plus" onClick={() => setAdding('almoco')}>
+            {t.nutrition.logMeal}
+          </Button>
+        </div>
       </header>
 
       <div className="grid gap-5 lg:grid-cols-[1fr_20rem]">
@@ -381,7 +389,7 @@ export function NutritionPage() {
                 </div>
                 <ul className="space-y-1.5">
                   {mealEntries.map((entry) => {
-                    const food = getFood(entry.foodId)
+                    const food = foodForEntry(entry)
                     const macros = entryMacros(entry)
                     const foodName = food ? loc(food.name) : entry.foodId
                     return (
@@ -389,6 +397,13 @@ export function NutritionPage() {
                         key={entry.id}
                         className="flex items-center gap-3 rounded-xl border border-void-600 bg-void-800/40 p-3"
                       >
+                        {entry.photo && (
+                          <img
+                            src={entry.photo}
+                            alt={t.photoLog.photoAlt}
+                            className="size-11 shrink-0 rounded-lg border border-void-600 object-cover"
+                          />
+                        )}
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-sm font-medium text-ink">{foodName}</p>
                           <p className="text-xs text-ink-faint">
@@ -430,6 +445,11 @@ export function NutritionPage() {
       </p>
 
       <AddFoodModal open={adding !== null} mealType={adding ?? 'almoco'} onClose={() => setAdding(null)} />
+      <PhotoLogModal
+        open={photoLogging !== null}
+        mealType={photoLogging ?? 'almoco'}
+        onClose={() => setPhotoLogging(null)}
+      />
     </div>
   )
 }

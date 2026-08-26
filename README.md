@@ -2,7 +2,7 @@
 
 **Fitness e nutrição gamificados.** Uma aplicação web desktop-first (Windows) com estética anime original, onde o utilizador é o protagonista da sua própria jornada de evolução: treina, regista refeições, completa missões e sobe de nível.
 
-Interface totalmente em português de Portugal. Funciona offline, sem contas, sem subscrições e sem APIs pagas — todos os dados ficam no dispositivo.
+Interface em **português de Portugal**, com **inglês** disponível nas definições. Funciona offline, sem contas, sem subscrições e sem APIs pagas — todos os dados ficam no dispositivo.
 
 > ⚠️ **Aviso:** a Ascend calcula **estimativas** de calorias e macronutrientes para gestão pessoal. Não constitui aconselhamento médico ou nutricional. Em caso de dúvida, consulta um profissional de saúde.
 
@@ -15,9 +15,28 @@ Interface totalmente em português de Portugal. Funciona offline, sem contas, se
 | **Onboarding** | Wizard de 5 passos (nome, objetivo, nível, dias/semana, equipamento, dados corporais). Calcula calorias e macros e gera o plano semanal e as missões. |
 | **Base do Herói** (dashboard) | Saudação personalizada, cartão de nível com barra de XP animada, moedas, sequência de dias, calorias vs meta, missões do dia, próximo treino e uma frase narrativa adaptada ao estado do dia. |
 | **Treino** | Calendário semanal, detalhe do treino com séries/reps/descanso/dificuldade, sessão guiada com cronómetro, checkboxes por série, temporizador de descanso e barra de progresso. Ecrã de celebração no fim com XP, moedas, atributos e recompensa aleatória. Criador de treinos personalizados. |
-| **Nutrição** | Meta diária de calorias, anéis e barras de macros, registo rápido a partir de um catálogo de ~60 alimentos comuns em Portugal, contador de água e sugestões de refeições com base no que falta para a meta. |
+| **Nutrição** | Meta diária de calorias, anéis e barras de macros, registo rápido a partir de um catálogo de ~60 alimentos comuns em Portugal, registo por fotografia e código de barras, contador de água e sugestões de refeições com base no que falta para a meta. |
 | **Missões** | 3 missões diárias, 2 semanais e 1 desafio especial. Recompensas visíveis antes de concluir (XP, moedas, cosméticos). Cada missão pode ser substituída uma vez por período. |
 | **Perfil / Progresso** | Avatar SVG original personalizável, nível e título, atributos (Força, Resistência, Disciplina, Energia), histórico de peso e medidas, gráficos de calorias/treinos/XP, 10 conquistas e inventário cosmético. |
+
+### Registo por fotografia e código de barras
+
+Na página de Nutrição, o botão **Registar por fotografia** abre um modo de captura com dois separadores:
+
+- **Código de barras** — lê o código da embalagem com a câmara (via `BarcodeDetector`, disponível no Chrome, Edge e Android; nos restantes navegadores escreve-se o código à mão) e consulta o [Open Food Facts](https://world.openfoodfacts.org/), uma base de dados pública e gratuita. Os valores nutricionais registados são os reais do produto. É a única funcionalidade da app que precisa de ligação à internet.
+- **Fotografia** — tira uma foto ao prato com a câmara ou escolhe uma imagem. A miniatura fica anexada à refeição no diário.
+
+O **reconhecimento automático do prato está desligado por omissão**, e é importante perceber porquê: não existe hoje um modelo de visão gratuito e fiável que corra offline no browser, e o MVP não depende de APIs pagas. Sem reconhecimento, a foto serve de registo visual e os alimentos são escolhidos por ti.
+
+Quem quiser reconhecimento automático pode ligar um serviço próprio em **Perfil › Definições › Reconhecimento por fotografia**: basta um endpoint compatível com a API de chat da OpenAI, o nome do modelo e uma chave. A chave fica guardada apenas neste dispositivo e só é enviada para o endpoint indicado. A app envia a foto, recebe os alimentos e as porções estimadas, e mostra-os para confirmação antes de registar — as estimativas nunca entram no diário sem passares os olhos por elas.
+
+O código está isolado em `src/services/foodVision.ts`; trocar de fornecedor é implementar essa interface.
+
+### Idiomas
+
+Português de Portugal é o idioma por omissão. O inglês escolhe-se em **Perfil › Definições › Idioma da aplicação** e aplica-se de imediato — incluindo catálogos de exercícios e alimentos, missões, conquistas, datas e formatação de números. A escolha fica guardada no dispositivo.
+
+Para acrescentar uma língua: `src/i18n/pt.ts` é o dicionário de referência e o tipo `Dictionary` deriva dele, por isso o TypeScript assinala qualquer chave em falta na tradução nova.
 
 ### Sistema de gamificação
 
@@ -69,10 +88,11 @@ Para voltar ao início: **Perfil → Definições → Repor dados**.
 - **zustand** com middleware `persist` para estado e persistência
 - **react-router-dom** para navegação
 - **recharts** para gráficos (carregado em chunk separado)
+- **BarcodeDetector** nativo e **Open Food Facts** para códigos de barras (sem dependências nem chaves)
 - **lucide-react** para ícones
 - **vite-plugin-pwa** para o manifesto e service worker
 
-Sem backend, sem autenticação e sem dependências de serviços externos.
+Sem backend e sem autenticação. A única chamada de rede é a consulta de códigos de barras ao Open Food Facts, e o reconhecimento por fotografia quando o ligas tu.
 
 ---
 
@@ -99,8 +119,12 @@ src/
 │  ├─ nutrition/            # metas, registo, sugestões
 │  ├─ quests/               # missões diárias e semanais
 │  └─ profile/              # avatar, atributos, gráficos, conquistas, inventário
+├─ i18n/                   # dicionários pt/en e o hook useI18n
 ├─ services/
 │  ├─ storage.ts            # adaptador de persistência (ver abaixo)
+│  ├─ photos.ts             # câmara, captura e compressão de imagens
+│  ├─ openFoodFacts.ts      # consulta de produtos por código de barras
+│  ├─ foodVision.ts         # reconhecimento por fotografia (opcional)
 │  ├─ calculations.ts       # Mifflin-St Jeor, macros, curva de XP, recompensas
 │  ├─ planGenerator.ts      # geração do plano semanal
 │  ├─ questGenerator.ts     # geração e substituição de missões
@@ -142,6 +166,7 @@ Os valores nutricionais do catálogo são aproximados. Consulta sempre o rótulo
 
 ## Roadmap (fora do MVP)
 
+- Reconhecimento de pratos offline, com um modelo a correr no próprio dispositivo
 - Componente social: amigos, ligas e desafios entre utilizadores
 - Mensagens e notificações push
 - Sincronização na cloud e conta de utilizador

@@ -435,6 +435,59 @@ export const en: Dictionary = {
     listJoin: ' and ',
   },
 
+  photoLog: {
+    title: 'Log from a photo',
+    description: 'Take a photo of your plate or scan the packaging barcode.',
+    modePhoto: 'Photo',
+    modeBarcode: 'Barcode',
+    openCamera: 'Open camera',
+    scanBarcode: 'Scan barcode',
+    chooseFile: 'Choose image',
+    takePhoto: 'Take photo',
+    retake: 'Retake',
+    pointAtBarcode: 'Point the camera at the product barcode.',
+    barcodePlaceholder: 'Barcode',
+    lookup: 'Look up',
+    analysing: 'Analysing…',
+    register: 'Log',
+    selectedCount: (n: number) => `${n} ${n === 1 ? 'item selected' : 'items selected'}`,
+    footerHint: 'Take a photo or scan a code to start.',
+    photoAlt: 'Photo of the meal',
+    checkEstimates: 'Check the estimates and adjust the amounts before logging.',
+    attachedOnly:
+      'The photo is attached to the meal. Pick the foods through the normal log, or switch on automatic recognition in Settings.',
+    manualModeNote:
+      'Automatic recognition is off. Without it the photo is saved with the meal but you choose the foods yourself. You can connect a vision service under Profile › Settings.',
+    barcodeUnsupported:
+      'Automatic barcode scanning is not available in this browser. You can type the code by hand.',
+    notConfigured: 'Automatic recognition is not configured.',
+    analysisFailed: 'Could not analyse the photo. Check your connection and vision settings.',
+    noFoodFound: 'No food was identified in this photo.',
+    cameraDenied: 'Could not access the camera. Check your browser permissions.',
+    readFailed: 'Could not read this image.',
+    barcodeNotFound: 'Product not found on Open Food Facts.',
+    barcodeIncomplete: 'This product has no complete nutrition values in the database.',
+    barcodeFailed: 'Could not look up the barcode. Check your connection.',
+    estimatedValues: 'Estimated values',
+    gramsAria: (food: string) => `Amount of ${food} in grams`,
+    disclaimer:
+      'Photo estimates are approximate and can get portion sizes wrong. Always check the values before logging.',
+    visionTitle: 'Photo recognition',
+    visionHint:
+      'Optional. Connect an OpenAI-compatible vision service to estimate foods from photos. The key is stored on this device only and is sent solely to the endpoint you provide.',
+    visionEndpoint: 'Endpoint',
+    visionModel: 'Model',
+    visionKey: 'API key',
+    visionKeyWarning:
+      'Storing a key in the browser is convenient but not a vault: use a dedicated key with a spending limit.',
+    visionEnabled: 'On',
+    visionDisabled: 'Off',
+    visionSave: 'Save service',
+    visionClear: 'Disconnect',
+    barcodeSourceNote:
+      'Barcode lookups query Open Food Facts, a free public database. It is the only feature in the app that needs an internet connection.',
+  },
+
   quests: {
     title: 'Quests',
     weekOf: (date: string) => `Week of ${date}`,

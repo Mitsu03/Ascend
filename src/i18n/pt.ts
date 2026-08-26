@@ -440,6 +440,59 @@ export const pt = {
     listJoin: ' e ',
   },
 
+  photoLog: {
+    title: 'Registar por fotografia',
+    description: 'Tira uma foto ao prato ou lê o código de barras da embalagem.',
+    modePhoto: 'Fotografia',
+    modeBarcode: 'Código de barras',
+    openCamera: 'Abrir câmara',
+    scanBarcode: 'Ler código',
+    chooseFile: 'Escolher imagem',
+    takePhoto: 'Tirar foto',
+    retake: 'Repetir',
+    pointAtBarcode: 'Aponta a câmara ao código de barras do produto.',
+    barcodePlaceholder: 'Código de barras',
+    lookup: 'Procurar',
+    analysing: 'A analisar…',
+    register: 'Registar',
+    selectedCount: (n: number) => `${n} ${n === 1 ? 'item selecionado' : 'itens selecionados'}`,
+    footerHint: 'Tira uma foto ou lê um código para começar.',
+    photoAlt: 'Fotografia da refeição',
+    checkEstimates: 'Confirma as estimativas e ajusta as quantidades antes de registar.',
+    attachedOnly:
+      'A foto fica anexada à refeição. Escolhe os alimentos no registo normal ou ativa o reconhecimento automático nas Definições.',
+    manualModeNote:
+      'O reconhecimento automático está desligado. Sem ele, a foto é guardada com a refeição mas os alimentos são escolhidos por ti. Podes ligar um serviço de visão em Perfil › Definições.',
+    barcodeUnsupported:
+      'A leitura automática de códigos de barras não está disponível neste navegador. Podes escrever o código à mão.',
+    notConfigured: 'O reconhecimento automático não está configurado.',
+    analysisFailed: 'Não foi possível analisar a fotografia. Verifica a ligação e as definições de visão.',
+    noFoodFound: 'Não foi identificado nenhum alimento nesta fotografia.',
+    cameraDenied: 'Não foi possível aceder à câmara. Verifica as permissões do navegador.',
+    readFailed: 'Não foi possível ler esta imagem.',
+    barcodeNotFound: 'Produto não encontrado no Open Food Facts.',
+    barcodeIncomplete: 'Este produto não tem valores nutricionais completos na base de dados.',
+    barcodeFailed: 'Não foi possível consultar o código de barras. Verifica a ligação.',
+    estimatedValues: 'Valores estimados',
+    gramsAria: (food: string) => `Quantidade de ${food} em gramas`,
+    disclaimer:
+      'As estimativas por fotografia são aproximadas e podem enganar-se na quantidade. Confirma sempre os valores antes de registar.',
+    visionTitle: 'Reconhecimento por fotografia',
+    visionHint:
+      'Opcional. Liga um serviço de visão compatível com a API da OpenAI para estimar alimentos a partir de fotos. A chave fica guardada apenas neste dispositivo e só é enviada para o endpoint indicado.',
+    visionEndpoint: 'Endpoint',
+    visionModel: 'Modelo',
+    visionKey: 'Chave de API',
+    visionKeyWarning:
+      'Guardar uma chave no navegador é conveniente mas não é um cofre: usa uma chave dedicada e com limite de gastos.',
+    visionEnabled: 'Ativo',
+    visionDisabled: 'Desligado',
+    visionSave: 'Guardar serviço',
+    visionClear: 'Desligar',
+    barcodeSourceNote:
+      'A leitura de códigos de barras consulta o Open Food Facts, uma base de dados pública e gratuita. É a única funcionalidade da app que precisa de ligação à internet.',
+  },
+
   quests: {
     title: 'Missões',
     weekOf: (date: string) => `Semana de ${date}`,

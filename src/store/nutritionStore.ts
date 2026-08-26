@@ -7,7 +7,7 @@ import { createPersistStorage } from '@/services/storage'
 import { useGameStore } from '@/store/gameStore'
 import { useQuestStore } from '@/store/questStore'
 import { toast } from '@/store/toastStore'
-import type { DailyTotals, MacroTargets, MealEntry, MealType } from '@/types'
+import type { DailyTotals, Food, MacroTargets, MealEntry, MealType } from '@/types'
 
 export const EMPTY_TOTALS: DailyTotals = { calories: 0, proteinG: 0, carbsG: 0, fatG: 0 }
 
@@ -21,7 +21,7 @@ const PROTEIN_DAY_QUESTS = new Set(['w-proteina', 's-forja'])
 interface NutritionStore {
   entries: MealEntry[]
   waterByDate: Record<string, number>
-  addEntry: (mealType: MealType, foodId: string, grams: number, date?: string) => void
+  addEntry: (mealType: MealType, food: Food, grams: number, options?: AddEntryOptions) => void
   removeEntry: (id: string) => void
   addWater: (ml: number, date?: string) => void
   entriesForDate: (date?: string) => MealEntry[]
@@ -31,8 +31,13 @@ interface NutritionStore {
   reset: () => void
 }
 
+/** O alimento de um registo: o snapshot guardado tem precedência sobre o catálogo. */
+export function foodForEntry(entry: MealEntry): Food | undefined {
+  return entry.food ?? getFood(entry.foodId)
+}
+
 export function entryMacros(entry: MealEntry): DailyTotals {
-  const food = getFood(entry.foodId)
+  const food = foodForEntry(entry)
   if (!food) return EMPTY_TOTALS
   const factor = entry.grams / 100
   return {
@@ -65,6 +70,14 @@ export function remainingMacros(totals: DailyTotals, targets: MacroTargets | nul
   }
 }
 
+interface AddEntryOptions {
+  date?: string
+  photo?: string
+}
+
+/** Máximo de fotografias guardadas; as mais antigas são libertadas. */
+const MAX_STORED_PHOTOS = 40
+
 let counter = 0
 
 export const useNutritionStore = create<NutritionStore>()(
@@ -73,17 +86,33 @@ export const useNutritionStore = create<NutritionStore>()(
       entries: [],
       waterByDate: {},
 
-      addEntry: (mealType, foodId, grams, date = today()) => {
-        if (grams <= 0 || !getFood(foodId)) return
+      addEntry: (mealType, food, grams, options) => {
+        const date = options?.date ?? today()
+        if (grams <= 0) return
         counter += 1
+        const fromCatalogue = getFood(food.id) !== undefined
         const entry: MealEntry = {
           id: `meal-${Date.now()}-${counter}`,
           date,
           mealType,
-          foodId,
+          foodId: food.id,
           grams: Math.round(grams),
+          // Alimentos externos guardam uma cópia; os do catálogo não precisam.
+          food: fromCatalogue ? undefined : food,
+          photo: options?.photo,
         }
-        set((state) => ({ entries: [entry, ...state.entries] }))
+        set((state) => {
+          const entries = [entry, ...state.entries]
+          // Liberta as fotos mais antigas para não esgotar a quota do storage.
+          let kept = 0
+          return {
+            entries: entries.map((item) => {
+              if (!item.photo) return item
+              kept += 1
+              return kept <= MAX_STORED_PHOTOS ? item : { ...item, photo: undefined }
+            }),
+          }
+        })
 
         const game = useGameStore.getState()
         game.incrementCounter('meals')

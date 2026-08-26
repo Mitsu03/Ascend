@@ -174,7 +174,18 @@ export interface MealEntry {
   mealType: MealType
   foodId: string
   grams: number
+  /**
+   * Cópia do alimento quando ele não vem do catálogo local (código de barras
+   * ou reconhecimento por fotografia), para o registo continuar legível mesmo
+   * sem rede.
+   */
+  food?: Food
+  /** Miniatura JPEG (data URL) da fotografia da refeição. */
+  photo?: string
 }
+
+/** Origem de um alimento registado, usada para o rótulo na UI. */
+export type FoodSource = 'catalogo' | 'codigo_barras' | 'fotografia'
 
 export interface DailyTotals {
   calories: number

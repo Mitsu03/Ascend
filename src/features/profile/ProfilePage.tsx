@@ -15,12 +15,13 @@ import { LANGUAGES, LANGUAGE_NAMES, useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { computeTargets, levelFromXp } from '@/services/calculations'
 import { formatShortDate, today } from '@/services/dates'
+import { visionIsConfigured } from '@/services/foodVision'
 import { resetEverything } from '@/services/session'
 import { useBodyStore } from '@/store/bodyStore'
 import { useGameStore } from '@/store/gameStore'
 import { useNutritionStore } from '@/store/nutritionStore'
 import { useQuestStore } from '@/store/questStore'
-import { useSettingsStore } from '@/store/settingsStore'
+import { DEFAULT_VISION_ENDPOINT, DEFAULT_VISION_MODEL, useSettingsStore } from '@/store/settingsStore'
 import { useUserStore } from '@/store/userStore'
 import { useWorkoutStore } from '@/store/workoutStore'
 import type { AttributeKey, DietPreference, Goal, UserProfile } from '@/types'
@@ -298,6 +299,91 @@ function BodyProgressCard() {
   )
 }
 
+function VisionSettingsCard() {
+  const { t } = useI18n()
+  const vision = useSettingsStore((state) => state.vision)
+  const setVision = useSettingsStore((state) => state.setVision)
+  const active = visionIsConfigured(vision)
+
+  const [endpoint, setEndpoint] = useState(vision?.endpoint ?? DEFAULT_VISION_ENDPOINT)
+  const [model, setModel] = useState(vision?.model ?? DEFAULT_VISION_MODEL)
+  const [apiKey, setApiKey] = useState(vision?.apiKey ?? '')
+
+  const save = () => setVision({ endpoint: endpoint.trim(), model: model.trim(), apiKey: apiKey.trim() })
+
+  const clear = () => {
+    setVision(null)
+    setApiKey('')
+  }
+
+  return (
+    <Card>
+      <CardHeader
+        title={t.photoLog.visionTitle}
+        subtitle={t.photoLog.visionHint}
+        icon="Camera"
+        action={
+          <Badge tone={active ? 'good' : 'neutral'} icon={active ? 'CheckCircle2' : 'Circle'}>
+            {active ? t.photoLog.visionEnabled : t.photoLog.visionDisabled}
+          </Badge>
+        }
+      />
+      <CardBody className="space-y-4 pt-3">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label={t.photoLog.visionEndpoint}>
+            {(id) => (
+              <TextInput
+                id={id}
+                value={endpoint}
+                placeholder={DEFAULT_VISION_ENDPOINT}
+                onChange={(event) => setEndpoint(event.target.value)}
+              />
+            )}
+          </Field>
+          <Field label={t.photoLog.visionModel}>
+            {(id) => (
+              <TextInput
+                id={id}
+                value={model}
+                placeholder={DEFAULT_VISION_MODEL}
+                onChange={(event) => setModel(event.target.value)}
+              />
+            )}
+          </Field>
+        </div>
+        <Field label={t.photoLog.visionKey} hint={t.photoLog.visionKeyWarning}>
+          {(id) => (
+            <TextInput
+              id={id}
+              type="password"
+              value={apiKey}
+              autoComplete="off"
+              placeholder="sk-…"
+              onChange={(event) => setApiKey(event.target.value)}
+            />
+          )}
+        </Field>
+
+        <div className="flex flex-wrap gap-2">
+          <Button variant="primary" icon="Check" onClick={save} disabled={!apiKey.trim()}>
+            {t.photoLog.visionSave}
+          </Button>
+          {active && (
+            <Button variant="danger" icon="X" onClick={clear}>
+              {t.photoLog.visionClear}
+            </Button>
+          )}
+        </div>
+
+        <p className="flex items-start gap-2 rounded-xl border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-faint">
+          <Icon name="Info" size={14} className="mt-0.5 shrink-0" />
+          {t.photoLog.barcodeSourceNote}
+        </p>
+      </CardBody>
+    </Card>
+  )
+}
+
 function SettingsCard() {
   const navigate = useNavigate()
   const { t, n } = useI18n()
@@ -548,6 +634,7 @@ export function ProfilePage() {
       <ProgressCharts />
       <AchievementsGrid />
       <InventoryPanel />
+      <VisionSettingsCard />
       <SettingsCard />
     </div>
   )
