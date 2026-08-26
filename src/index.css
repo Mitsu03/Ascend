@@ -1,0 +1,196 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Fundos — azul noite */
+  --color-night-950: #070b16;
+  --color-night-900: #0b1120;
+  --color-night-850: #0e1526;
+  --color-night-800: #111a2e;
+  --color-night-700: #1a2540;
+  --color-night-600: #263353;
+  --color-night-500: #34456b;
+
+  /* Acentos */
+  --color-cyan-electric: #22d3ee;
+  --color-cyan-soft: #67e8f9;
+  --color-violet-deep: #7c3aed;
+  --color-violet-soft: #a855f7;
+  --color-gold: #fbbf24;
+  --color-gold-soft: #fcd34d;
+
+  /* Texto e estado */
+  --color-ink: #e8eefb;
+  --color-ink-muted: #9aabc4;
+  --color-ink-faint: #6c7f9c;
+  --color-good: #34d399;
+  --color-warn: #fb923c;
+  --color-bad: #f87171;
+
+  /* Tipografia */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Rajdhani', 'Inter', system-ui, sans-serif;
+
+  /* Animações */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 2.4s ease-in-out infinite;
+  --animate-rise: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-pop: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-shimmer: shimmer 2.6s linear infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-night-600);
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: var(--color-night-900);
+    background-image:
+      radial-gradient(70rem 40rem at 12% -10%, color-mix(in oklab, var(--color-violet-deep) 22%, transparent), transparent 60%),
+      radial-gradient(55rem 34rem at 100% 0%, color-mix(in oklab, var(--color-cyan-electric) 12%, transparent), transparent 60%);
+    background-attachment: fixed;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cyan-electric);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-night-900);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-night-600);
+    border-radius: 999px;
+    border: 2px solid var(--color-night-900);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-night-500);
+  }
+
+  /* Remove as setas dos inputs numéricos para um visual mais limpo */
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .glow-cyan {
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-cyan-electric) 26%, transparent),
+      0 8px 40px -12px color-mix(in oklab, var(--color-cyan-electric) 45%, transparent);
+  }
+
+  .glow-gold {
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-gold) 32%, transparent),
+      0 8px 40px -12px color-mix(in oklab, var(--color-gold) 50%, transparent);
+  }
+
+  .glow-violet {
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--color-violet-soft) 26%, transparent),
+      0 8px 40px -12px color-mix(in oklab, var(--color-violet-deep) 55%, transparent);
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
