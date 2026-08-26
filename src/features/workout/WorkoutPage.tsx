@@ -217,7 +217,9 @@ function HistoryCard() {
                     )}
                   </p>
                 </div>
-                <span className="shrink-0 text-sm font-semibold tabular-nums text-ember">+{log.xpEarned} XP</span>
+                <span className="shrink-0 text-sm font-semibold tabular-nums text-ember">
+                  +{log.xpEarned} {t.common.xp}
+                </span>
               </li>
             ))}
           </ul>

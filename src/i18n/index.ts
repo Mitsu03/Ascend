@@ -34,14 +34,32 @@ export function formatCount(value: number, language: Language = getLanguage()): 
   return new Intl.NumberFormat(LOCALE_TAG[language]).format(Math.round(value))
 }
 
+/**
+ * Número com casas decimais na língua ativa. O separador decimal é vírgula em
+ * português e ponto em inglês — escrevê-lo à mão dava sempre uma das línguas
+ * errada.
+ */
+export function formatDecimal(
+  value: number,
+  digits = 1,
+  language: Language = getLanguage(),
+): string {
+  return new Intl.NumberFormat(LOCALE_TAG[language], {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(value)
+}
+
 export interface I18n {
   lang: Language
   locale: string
   t: Dictionary
   /** Texto de catálogo na língua ativa */
   loc: (value: Localized) => string
-  /** Número formatado na língua ativa */
+  /** Número inteiro formatado na língua ativa */
   n: (value: number) => string
+  /** Número com casas decimais formatado na língua ativa */
+  d: (value: number, digits?: number) => string
 }
 
 export function useI18n(): I18n {
@@ -53,6 +71,7 @@ export function useI18n(): I18n {
       t: DICTIONARIES[lang],
       loc: (value: Localized) => value[lang],
       n: (value: number) => formatCount(value, lang),
+      d: (value: number, digits = 1) => formatDecimal(value, digits, lang),
     }),
     [lang],
   )

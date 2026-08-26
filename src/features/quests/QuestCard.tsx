@@ -85,7 +85,7 @@ export function QuestCard({ quest, compact = false, onProgress, onReplace, onAcc
               <span className="flex items-center gap-2.5 font-semibold">
                 <span className="flex items-center gap-1 text-ember">
                   <Icon name="Zap" size={12} />
-                  {quest.rewardXp} XP
+                  {quest.rewardXp} {t.common.xp}
                 </span>
                 <span className="flex items-center gap-1 text-gold">
                   <Icon name="Coins" size={12} />

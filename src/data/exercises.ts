@@ -33,7 +33,7 @@ export const EXERCISES: Exercise[] = [
     equipment: 'nenhum',
     difficulty: 'iniciante',
     description: l(
-      'Pés à largura dos ombros, desce como se fosse sentar, joelhos alinhados com os pés.',
+      'Pés à largura dos ombros, desce como se te fosses sentar, joelhos alinhados com os pés.',
       'Feet shoulder-width apart, sit back as if into a chair, knees tracking over your toes.',
     ),
   },
@@ -182,7 +182,7 @@ export const EXERCISES: Exercise[] = [
   },
   {
     id: 'pike-push-up',
-    name: l('Flexões pique', 'Pike push-ups'),
+    name: l('Flexões em pique', 'Pike push-ups'),
     muscleGroup: 'ombros',
     equipment: 'nenhum',
     difficulty: 'intermedio',
@@ -384,7 +384,7 @@ export const EXERCISES: Exercise[] = [
   // ---------------------------------------------------------- Ginásio
   {
     id: 'supino',
-    name: l('Supino com barra', 'Barbell bench press'),
+    name: l('Press de peito com barra', 'Barbell bench press'),
     muscleGroup: 'peito',
     equipment: 'ginasio',
     difficulty: 'intermedio',
@@ -395,7 +395,7 @@ export const EXERCISES: Exercise[] = [
   },
   {
     id: 'supino-inclinado',
-    name: l('Supino inclinado', 'Incline bench press'),
+    name: l('Press de peito inclinado', 'Incline bench press'),
     muscleGroup: 'peito',
     equipment: 'ginasio',
     difficulty: 'intermedio',
@@ -527,7 +527,7 @@ export const EXERCISES: Exercise[] = [
   },
   {
     id: 'elevacao-pernas-suspenso',
-    name: l('Elevação de pernas suspenso', 'Hanging leg raise'),
+    name: l('Elevação de pernas na barra', 'Hanging leg raise'),
     muscleGroup: 'core',
     equipment: 'ginasio',
     difficulty: 'avancado',
@@ -549,7 +549,7 @@ export const EXERCISES: Exercise[] = [
   },
   {
     id: 'remo-ergometro',
-    name: l('Remo ergómetro', 'Rowing machine'),
+    name: l('Remo em ergómetro', 'Rowing machine'),
     muscleGroup: 'cardio',
     equipment: 'ginasio',
     difficulty: 'intermedio',

@@ -9,21 +9,6 @@ import { cn } from '@/lib/cn'
 import { levelFromXp } from '@/services/calculations'
 import { formatShortDate } from '@/services/dates'
 import { useGameStore } from '@/store/gameStore'
-import type { ArtIconName } from '@/data/artIcons'
-
-/** Emblema ilustrativo por conquista, usado como marca de água do cartão. */
-const ACHIEVEMENT_EMBLEM: Record<string, ArtIconName> = {
-  'primeiro-passo': 'torii',
-  'chama-acesa': 'fire-silhouette',
-  'semana-de-ferro': 'flame-spin',
-  'guerreiro-dedicado': 'katana',
-  'mestre-proteina': 'kimono',
-  ascensao: 'feathered-wing',
-  'cacador-missoes': 'energy-sword',
-  'chef-heroi': 'burning-embers',
-  arquiteto: 'cross-flare',
-  observador: 'moon',
-}
 
 export function AchievementsGrid() {
   const { t, loc } = useI18n()
@@ -80,7 +65,7 @@ export function AchievementsGrid() {
                   )}
                   aria-hidden="true"
                 >
-                  <ArtIcon name={ACHIEVEMENT_EMBLEM[achievement.id] ?? 'aura'} size={112} />
+                  <ArtIcon name={achievement.emblem} size={112} />
                 </span>
 
                 <div className="relative flex items-start gap-3">
@@ -90,7 +75,7 @@ export function AchievementsGrid() {
                       unlockedAt ? 'bg-gold/15 text-gold' : 'bg-void-700 text-ink-faint',
                     )}
                   >
-                    <Icon name={unlockedAt ? achievement.icon : 'Lock'} size={21} />
+                    {unlockedAt ? <ArtIcon name={achievement.emblem} size={24} /> : <Icon name="Lock" size={21} />}
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className={cn('font-semibold', unlockedAt ? 'text-gold-soft' : 'text-ink-muted')}>

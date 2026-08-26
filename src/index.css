@@ -1,9 +1,12 @@
 @import 'tailwindcss';
 
 /*
- * Tema visual: alto contraste preto/branco cortado por laranja incandescente e
- * carmesim, com um azul-espectral para a energia. Inspirado na estética de
- * shonen de lâminas e espíritos — todos os elementos gráficos são originais.
+ * Tema visual: o preto do shihakushō cortado pelo laranja de um Getsuga e pelo
+ * carmesim das marcas de máscara, com o osso das máscaras de Hollow a fazer de
+ * branco e um azul-espectral para o reiatsu.
+ *
+ * A aplicação usa o vocabulário do universo do Bleach; a arte é toda original
+ * ou de terceiros sob licença livre (ver public/art/LICENSE.md).
  */
 @theme {
   /* Fundos — preto-tinta */
@@ -23,6 +26,10 @@
   --color-spirit: #8fd4ff;
   --color-gold: #ffb020;
   --color-gold-soft: #ffcd5e;
+
+  /* Osso — as máscaras de Hollow e o branco do shihakushō */
+  --color-bone: #ece3d2;
+  --color-bone-deep: #b8ab92;
 
   /* Texto e estado */
   --color-ink: #f2f3f7;

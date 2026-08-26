@@ -1,3 +1,4 @@
+import type { ArtIconName } from '@/data/artIcons'
 import type { Localized } from '@/i18n/types'
 
 /**
@@ -27,6 +28,15 @@ export interface UserProfile {
   /** Identificador da variante de avatar escolhida */
   avatarVariant: number
   avatarHue: number
+  /** Divisão do Gotei 13 (1 a 13). Ausente nos perfis criados antes das divisões. */
+  divisionId?: number
+  /**
+   * Emblema usado no lugar da figura desenhada, quando o utilizador prefere um
+   * brasão. Ausente = figura desenhada.
+   */
+  avatarEmblem?: string
+  /** Mostrar a máscara de Hollow assim que a patente a desbloqueia. */
+  showMask?: boolean
 }
 
 export interface MacroTargets {
@@ -253,7 +263,10 @@ export interface Achievement {
   id: string
   title: Localized
   description: Localized
+  /** Ícone lucide, usado onde só cabe um traço fino. */
   icon: string
+  /** Emblema de game-icons.net usado na grelha de conquistas. */
+  emblem: ArtIconName
   target: number
   metric:
     | 'workouts'

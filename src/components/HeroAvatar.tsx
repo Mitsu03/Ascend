@@ -1,15 +1,28 @@
 import { useId } from 'react'
+import { ArtIcon } from '@/components/ArtIcon'
+import { HollowMaskShape } from '@/components/art/HollowMask'
 import { getCosmetic } from '@/data/cosmetics'
+import { getDivision } from '@/data/divisions'
 import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { useArt } from '@/store/artStore'
+import type { ArtIconName } from '@/data/artIcons'
+import type { MaskStage } from '@/components/art/HollowMask'
 
 /**
- * Avatar original em SVG, desenhado por camadas geométricas.
- * Não usa qualquer material de terceiros — apenas formas próprias: céu de
- * crepúsculo atrás da figura, traje escuro de lapelas cruzadas com faixa
- * clara, ombreira, echarpe ao vento, olhos estilizados e cabelo com volume
- * frontal e traseiro.
+ * Avatar do Shinigami, desenhado de raiz em SVG por camadas geométricas:
+ * céu de crepúsculo por trás da figura, zanpakutō às costas, shihakushō preto
+ * de lapelas cruzadas sobre o kosode branco, faixa na cintura, olhos
+ * estilizados e cabelo com volume frontal e traseiro.
+ *
+ * Tem três modos, por ordem de precedência:
+ *   1. retrato carregado pelo utilizador nas Definições;
+ *   2. brasão — um emblema de game-icons.net (CC BY 3.0) dentro do selo da
+ *      divisão, para quem prefere não usar uma figura;
+ *   3. a figura desenhada.
+ *
+ * Sobre a figura pode ainda assentar a máscara de Hollow, que se vai formando
+ * com o progresso (ver `HollowMask`).
  */
 
 interface HeroAvatarProps {
@@ -20,6 +33,12 @@ interface HeroAvatarProps {
   auraId?: string
   className?: string
   animated?: boolean
+  /** Estado da máscara de Hollow sobre o rosto. Omitido = sem máscara. */
+  maskStage?: MaskStage
+  /** Modo brasão: emblema no lugar da figura desenhada. */
+  emblemId?: ArtIconName
+  /** Divisão do Gotei — dá a cor do anel no modo brasão. */
+  divisionId?: number
 }
 
 /**
@@ -59,6 +78,9 @@ export function HeroAvatar({
   auraId,
   className,
   animated = true,
+  maskStage,
+  emblemId,
+  divisionId,
 }: HeroAvatarProps) {
   const { t } = useI18n()
   const portrait = useArt('avatar')
@@ -83,6 +105,8 @@ export function HeroAvatar({
 
   const frameStyle = frame ? { background: frame.value } : { background: 'var(--color-void-600)' }
   const id = `avatar-${rawId}`
+  /* No modo brasão o fundo segue a divisão; sem divisão, segue a aura. */
+  const emblemColour = divisionId ? getDivision(divisionId).color : auraColor
 
   return (
     <div
@@ -111,6 +135,19 @@ export function HeroAvatar({
           style={{ padding: size * 0.035 }}
           aria-hidden="true"
         />
+      ) : emblemId ? (
+        /* Modo brasão: emblema centrado sobre o reiatsu da divisão. */
+        <span
+          className="absolute inset-0 flex items-center justify-center rounded-full"
+          style={{
+            padding: size * 0.035,
+            color: emblemColour,
+            background: `radial-gradient(circle at 50% 62%, color-mix(in oklab, ${emblemColour} 26%, transparent), var(--color-void-950) 74%)`,
+          }}
+          aria-hidden="true"
+        >
+          <ArtIcon name={emblemId} size={Math.round(size * 0.58)} />
+        </span>
       ) : (
       <svg
         viewBox="0 0 120 120"
@@ -165,10 +202,34 @@ export function HeroAvatar({
             <path d="M-4 100 L124 48" />
           </g>
 
+          {/*
+            Zanpakutō às costas: a lâmina fica embainhada e atravessada da
+            cintura ao ombro direito, por isso só o punho e o topo da saya
+            aparecem acima da figura. Desenhada na vertical e rodada em
+            bloco — é mais legível do que caminhos já inclinados.
+          */}
+          <g transform="rotate(30 60 60) translate(26 0)">
+            {/* Saya, com o fio de luz que corre ao longo da laca */}
+            <rect x="56.6" y="50" width="6.8" height="66" rx="2.6" fill="#08080d" />
+            <rect x="58" y="50" width="1.6" height="66" fill={accent} opacity="0.35" />
+            {/* Sageo — o cordão que prende a saya à faixa */}
+            <path d="M63 62 C70 66 71 74 67 80 C69 73 67 68 62.6 66 Z" fill="#f2f3f7" opacity="0.7" />
+            {/* Tsuba losangular e punho entrançado */}
+            <path d="M60 42 L69 50 L60 58 L51 50 Z" fill="#4a4636" />
+            <path d="M60 44.6 L66 50 L60 55.4 L54 50 Z" fill="#8a8163" />
+            <rect x="57.4" y="26" width="5.2" height="18" rx="2" fill="#1a1a24" />
+            <g stroke="#f2f3f7" strokeWidth="0.7" opacity="0.5">
+              <path d="M57.4 30 L62.6 33" />
+              <path d="M57.4 34 L62.6 37" />
+              <path d="M57.4 38 L62.6 41" />
+            </g>
+            <rect x="56.6" y="23.4" width="6.8" height="3.4" rx="1.2" fill="#4a4636" />
+          </g>
+
           {/* Volume de cabelo atrás da cabeça */}
           <path d={HAIR_BACK} fill={hairShade} />
 
-          {/* Traje: corpo escuro, lapelas cruzadas e roupa interior clara */}
+          {/* Shihakushō: kosode preto de lapelas cruzadas sobre o branco interior */}
           <path d="M10 120 C14 95 30 84 60 84 C90 84 106 95 110 120 Z" fill={`url(#${id}-robe)`} />
           <path d="M50 84 L60 99 L70 84 L75 87 L60 110 L45 87 Z" fill="#f2f3f7" opacity="0.94" />
           <path d="M45 87 L60 110 L60 120 L26 120 C29 101 35 91 45 87 Z" fill={suit} />
@@ -233,6 +294,17 @@ export function HeroAvatar({
 
           {/* Marca no rosto — só em metade das variantes */}
           {hasMark && <path d="M70 61 L77 55 L78.6 57.4 L71.6 63.4 Z" fill={accent} opacity="0.8" />}
+
+          {/*
+            Máscara de Hollow por cima do rosto. O desenho da máscara ocupa
+            0–100 nos dois eixos; aqui é encaixado na elipse da cabeça
+            (centro 60,50, raios 23×26).
+          */}
+          {maskStage && (
+            <g transform="translate(36 23.5) scale(0.48 0.53)">
+              <HollowMaskShape stage={maskStage} glow={auraColor} animated={animated} />
+            </g>
+          )}
 
           {/* Partículas espirituais em primeiro plano */}
           <g fill={auraColor} className={animated ? 'animate-pulse-glow' : undefined}>

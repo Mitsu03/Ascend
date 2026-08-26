@@ -17,9 +17,10 @@ interface ArtIconProps {
   /** Marca decorativa — fica fora da árvore de acessibilidade. */
   decorative?: boolean
   title?: string
+  style?: React.CSSProperties
 }
 
-export function ArtIcon({ name, size = 24, className, decorative = true, title }: ArtIconProps) {
+export function ArtIcon({ name, size = 24, className, decorative = true, title, style }: ArtIconProps) {
   const path = ART_ICONS[name]
   if (!path) return null
 
@@ -29,6 +30,7 @@ export function ArtIcon({ name, size = 24, className, decorative = true, title }
       width={size}
       height={size}
       className={cn('shrink-0', className)}
+      style={style}
       role={decorative ? undefined : 'img'}
       aria-hidden={decorative ? 'true' : undefined}
       aria-label={decorative ? undefined : title}

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ArtIcon } from '@/components/ArtIcon'
+import { HollowMask } from '@/components/art/HollowMask'
 import { getCosmetic } from '@/data/cosmetics'
 import { BladeSlashes, InkWash, SpiritBurst, SpiritMotes } from '@/components/art/SpiritArt'
 import { Button } from '@/components/ui/Button'
@@ -7,7 +9,7 @@ import { Icon } from '@/components/ui/Icon'
 import { Badge } from '@/components/ui/Misc'
 import { ProgressBar } from '@/components/ui/Progress'
 import { useI18n } from '@/i18n'
-import { levelFromXp } from '@/services/calculations'
+import { levelFromXp, maskStageForLevel } from '@/services/calculations'
 import { formatDuration } from '@/services/dates'
 import { workoutDoneLine } from '@/services/narrative'
 import { useGameStore } from '@/store/gameStore'
@@ -58,8 +60,16 @@ export function CelebrationScreen({ result, onClose }: CelebrationScreenProps) {
 
         <div className="relative space-y-5">
           <div className="text-center">
+            {/*
+              Subir de patente é o momento em que a máscara aparece; nos
+              restantes treinos fica o emblema da lâmina.
+            */}
             <span className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-gold/15 text-gold ring-1 ring-gold/40">
-              <Icon name={perfect ? 'Trophy' : 'PartyPopper'} size={32} />
+              {leveledUp ? (
+                <HollowMask size={40} stage={maskStageForLevel(result.levelAfter) ?? 'nascente'} />
+              ) : (
+                <ArtIcon name={perfect ? 'crossed-swords' : 'quick-slash'} size={34} />
+              )}
             </span>
             <h1 className="text-glow-gold mt-4 font-display text-3xl font-bold uppercase tracking-[0.1em] text-ink">
               {t.celebration.title}

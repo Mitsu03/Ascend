@@ -1,11 +1,15 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { DivisionSeal } from '@/components/DivisionSeal'
+import { HollowMask } from '@/components/art/HollowMask'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
 import { Disclaimer, Field, OptionCard, Select, TextInput } from '@/components/ui/Misc'
 import { ProgressBar } from '@/components/ui/Progress'
+import { DIVISIONS, suggestedDivision } from '@/data/divisions'
 import { useI18n } from '@/i18n'
+import { cn } from '@/lib/cn'
 import { computeTargets } from '@/services/calculations'
 import { completeOnboarding } from '@/services/session'
 import type { DietPreference, Equipment, ExperienceLevel, Goal, Sex, UserProfile } from '@/types'
@@ -34,7 +38,7 @@ const EQUIPMENT_ICONS: Record<Equipment, string> = {
 
 const DIET_ORDER: DietPreference[] = ['sem_preferencia', 'mediterranica', 'vegetariano', 'vegan']
 
-const TOTAL_STEPS = 5
+const TOTAL_STEPS = 6
 
 interface Draft {
   name: string
@@ -47,6 +51,7 @@ interface Draft {
   age: string
   sex: Sex
   dietPreference: DietPreference
+  divisionId: number
 }
 
 const INITIAL_DRAFT: Draft = {
@@ -60,6 +65,7 @@ const INITIAL_DRAFT: Draft = {
   age: '',
   sex: 'masculino',
   dietPreference: 'sem_preferencia',
+  divisionId: suggestedDivision('ganhar_massa'),
 }
 
 function toProfile(draft: Draft): UserProfile {
@@ -77,12 +83,14 @@ function toProfile(draft: Draft): UserProfile {
     createdAt: new Date().toISOString(),
     avatarVariant: 0,
     avatarHue: 24,
+    divisionId: draft.divisionId,
+    showMask: true,
   }
 }
 
 export function OnboardingPage() {
   const navigate = useNavigate()
-  const { t, n } = useI18n()
+  const { t, n, loc } = useI18n()
   const [step, setStep] = useState(0)
   const [draft, setDraft] = useState<Draft>(INITIAL_DRAFT)
   const [touched, setTouched] = useState(false)
@@ -103,7 +111,7 @@ export function OnboardingPage() {
 
   const stepValid = (index: number): boolean => {
     if (index === 0) return !errors.name
-    if (index === 3) return !errors.weightKg && !errors.heightCm && !errors.age
+    if (index === 4) return !errors.weightKg && !errors.heightCm && !errors.age
     return true
   }
 
@@ -131,8 +139,9 @@ export function OnboardingPage() {
       <header className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-2 font-display text-xl font-bold tracking-[0.2em] text-ink">
-            <Icon name="Zap" size={20} className="text-ember" />
+            <HollowMask size={22} />
             {t.app.name}
+            <span className="text-[10px] tracking-[0.4em] text-ember/70">{t.app.kanji}</span>
           </span>
           <span className="text-sm tabular-nums text-ink-muted">{t.onboarding.stepOf(step + 1, TOTAL_STEPS)}</span>
         </div>
@@ -176,7 +185,8 @@ export function OnboardingPage() {
                   <OptionCard
                     key={goal}
                     selected={draft.goal === goal}
-                    onSelect={() => patch({ goal })}
+                    /* A divisão sugerida acompanha o objetivo — o passo dela vem depois. */
+                    onSelect={() => patch({ goal, divisionId: suggestedDivision(goal) })}
                     icon={GOAL_ICONS[goal]}
                     title={t.goals[goal]}
                     description={t.goalDescriptions[goal]}
@@ -251,6 +261,46 @@ export function OnboardingPage() {
           {step === 3 && (
             <>
               <div>
+                <h1 className="text-2xl font-bold text-ink">{t.onboarding.divisionTitle}</h1>
+                <p className="mt-1.5 text-ink-muted">{t.onboarding.divisionText}</p>
+              </div>
+
+              <div className="grid gap-2.5 sm:grid-cols-2">
+                {DIVISIONS.map((division) => {
+                  const selected = draft.divisionId === division.id
+                  return (
+                    <button
+                      key={division.id}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() => patch({ divisionId: division.id })}
+                      className={cn(
+                        'flex items-center gap-3 rounded-xl border p-3 text-left transition-colors',
+                        selected
+                          ? 'border-ember bg-ember/10'
+                          : 'border-void-600 hover:border-void-500 hover:bg-void-700/40',
+                      )}
+                    >
+                      <DivisionSeal divisionId={division.id} size={46} />
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-semibold text-ink">{loc(division.name)}</span>
+                        <span className="block truncate text-xs text-ink-muted">{loc(division.role)}</span>
+                        {division.id === suggestedDivision(draft.goal) && (
+                          <span className="mt-0.5 block text-[11px] text-ember-soft">
+                            {t.onboarding.divisionSuggested}
+                          </span>
+                        )}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </>
+          )}
+
+          {step === 4 && (
+            <>
+              <div>
                 <h1 className="text-2xl font-bold text-ink">{t.onboarding.bodyTitle}</h1>
                 <p className="mt-1.5 text-ink-muted">{t.onboarding.bodyText}</p>
               </div>
@@ -319,7 +369,7 @@ export function OnboardingPage() {
             </>
           )}
 
-          {step === 4 && targets && (
+          {step === 5 && targets && (
             <>
               <div>
                 <h1 className="text-2xl font-bold text-ink">{t.onboarding.summaryTitle(draft.name.trim())}</h1>

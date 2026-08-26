@@ -32,7 +32,7 @@ const TOOLTIP_STYLE = {
 }
 
 export function WeightChart() {
-  const { t } = useI18n()
+  const { t, d } = useI18n()
   const logs = useBodyStore((state) => state.logs)
 
   const data = useMemo(
@@ -69,9 +69,12 @@ export function WeightChart() {
             tickLine={false}
             axisLine={false}
             width={48}
-            tickFormatter={(value: number) => value.toFixed(1)}
+            tickFormatter={(value: number) => d(value)}
           />
-          <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value} kg`, t.profile.chartWeight]} />
+          <Tooltip
+            contentStyle={TOOLTIP_STYLE}
+            formatter={(value) => [`${d(Number(value))} kg`, t.profile.chartWeight]}
+          />
           <Line
             type="monotone"
             dataKey="value"
@@ -87,7 +90,7 @@ export function WeightChart() {
 }
 
 function CaloriesChart() {
-  const { t } = useI18n()
+  const { t, n } = useI18n()
   const entries = useNutritionStore((state) => state.entries)
   const targets = useUserStore((state) => state.targets)
 
@@ -115,7 +118,10 @@ function CaloriesChart() {
               label={{ value: t.profile.chartTarget, fill: 'var(--color-gold)', fontSize: 11, position: 'right' }}
             />
           )}
-          <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value} kcal`, t.profile.chartCalories]} />
+          <Tooltip
+            contentStyle={TOOLTIP_STYLE}
+            formatter={(value) => [`${n(Number(value))} kcal`, t.profile.chartCalories]}
+          />
           <Bar dataKey="value" fill="var(--color-crimson-soft)" radius={[6, 6, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
@@ -157,7 +163,7 @@ function WorkoutsChart() {
 }
 
 function XpChart() {
-  const { t } = useI18n()
+  const { t, n } = useI18n()
   const xpByDate = useGameStore((state) => state.xpByDate)
 
   const data = useMemo(() => {
@@ -175,7 +181,10 @@ function XpChart() {
           <CartesianGrid stroke="var(--color-void-700)" vertical={false} />
           <XAxis dataKey="date" tick={AXIS_STYLE} tickLine={false} axisLine={false} interval={1} />
           <YAxis tick={AXIS_STYLE} tickLine={false} axisLine={false} width={52} />
-          <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value} XP`, t.profile.chartCumulative]} />
+          <Tooltip
+            contentStyle={TOOLTIP_STYLE}
+            formatter={(value) => [`${n(Number(value))} ${t.common.xp}`, t.profile.chartCumulative]}
+          />
           <Line type="monotone" dataKey="value" stroke="var(--color-gold)" strokeWidth={2.5} dot={false} />
         </LineChart>
       </ResponsiveContainer>
