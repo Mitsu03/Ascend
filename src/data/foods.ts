@@ -189,7 +189,7 @@ export const FOODS: Food[] = [
   },
   {
     id: 'bebida-soja',
-    name: l('Bebida de soja s/ açúcar', 'Unsweetened soy drink'),
+    name: l('Bebida de soja sem açúcar', 'Unsweetened soy drink'),
     category: 'bebida',
     per100g: { calories: 33, proteinG: 3.3, carbsG: 0.6, fatG: 1.8 },
     commonPortionG: 250,
@@ -258,7 +258,7 @@ export const FOODS: Food[] = [
     category: 'hidratos',
     per100g: { calories: 250, proteinG: 8.5, carbsG: 47, fatG: 2.5 },
     commonPortionG: 60,
-    portionLabel: l('1 papo-seco (60 g)', '1 roll (60 g)'),
+    portionLabel: l('1 fatia (60 g)', '1 slice (60 g)'),
     diets: TODAS,
   },
   {
