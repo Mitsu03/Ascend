@@ -1,3 +1,4 @@
+import { ArtIcon } from '@/components/ArtIcon'
 import { ACHIEVEMENTS } from '@/data/achievements'
 import { Card, CardBody, CardHeader } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
@@ -8,6 +9,21 @@ import { cn } from '@/lib/cn'
 import { levelFromXp } from '@/services/calculations'
 import { formatShortDate } from '@/services/dates'
 import { useGameStore } from '@/store/gameStore'
+import type { ArtIconName } from '@/data/artIcons'
+
+/** Emblema ilustrativo por conquista, usado como marca de água do cartão. */
+const ACHIEVEMENT_EMBLEM: Record<string, ArtIconName> = {
+  'primeiro-passo': 'torii',
+  'chama-acesa': 'fire-silhouette',
+  'semana-de-ferro': 'flame-spin',
+  'guerreiro-dedicado': 'katana',
+  'mestre-proteina': 'kimono',
+  ascensao: 'feathered-wing',
+  'cacador-missoes': 'energy-sword',
+  'chef-heroi': 'burning-embers',
+  arquiteto: 'cross-flare',
+  observador: 'moon',
+}
 
 export function AchievementsGrid() {
   const { t, loc } = useI18n()
@@ -52,11 +68,22 @@ export function AchievementsGrid() {
               <li
                 key={achievement.id}
                 className={cn(
-                  'rounded-xl border p-4 transition-colors',
+                  'relative overflow-hidden rounded-xl border p-4 transition-colors',
                   unlockedAt ? 'border-gold/45 bg-gold/5' : 'border-void-600 bg-void-800/40',
                 )}
               >
-                <div className="flex items-start gap-3">
+                {/* Emblema ilustrativo, mais presente quando a conquista está ganha. */}
+                <span
+                  className={cn(
+                    'pointer-events-none absolute -bottom-6 -right-4 rotate-6',
+                    unlockedAt ? 'text-gold/[0.13]' : 'text-ink/[0.04]',
+                  )}
+                  aria-hidden="true"
+                >
+                  <ArtIcon name={ACHIEVEMENT_EMBLEM[achievement.id] ?? 'aura'} size={112} />
+                </span>
+
+                <div className="relative flex items-start gap-3">
                   <span
                     className={cn(
                       'flex size-11 shrink-0 items-center justify-center rounded-xl',

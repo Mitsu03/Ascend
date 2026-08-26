@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { ArtIcon } from '@/components/ArtIcon'
 import { EXERCISE_BY_ID } from '@/data/exercises'
+import { BladeSlashes, InkWash, SpiritMotes, TwilightSky } from '@/components/art/SpiritArt'
 import { HeroAvatar } from '@/components/HeroAvatar'
 import { useHeroTitle } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/Button'
@@ -17,6 +19,7 @@ import { estimateDuration, totalSets } from '@/services/planGenerator'
 import { useGameStore } from '@/store/gameStore'
 import { useNutritionStore } from '@/store/nutritionStore'
 import { useQuestStore } from '@/store/questStore'
+import { useArt, useArtStore } from '@/store/artStore'
 import { useUserStore } from '@/store/userStore'
 import { useWorkoutStore } from '@/store/workoutStore'
 import type { Quest } from '@/types'
@@ -225,6 +228,8 @@ function NutritionCard() {
 }
 
 function HeroCard() {
+  const banner = useArt('dashboard')
+  const scrim = useArtStore((state) => state.scrim)
   const { t, n } = useI18n()
   const profile = useUserStore((state) => state.profile)!
   const xp = useGameStore((state) => state.xp)
@@ -234,19 +239,61 @@ function HeroCard() {
   const title = useHeroTitle(info.level)
 
   return (
-    <Card glow="crimson" className="overflow-hidden">
-      <div className="flex flex-col gap-5 p-5 sm:flex-row sm:items-center">
+    <Card glow="crimson" edge className="relative overflow-hidden">
+      {/* Faixa escolhida pelo utilizador, atrás do conteúdo do cartão. */}
+      {banner && (
+        <>
+          <div
+            className="art-layer bg-cover bg-center"
+            style={{ backgroundImage: `url(${banner})` }}
+            aria-hidden="true"
+          />
+          <div
+            className="art-layer"
+            style={{
+              backgroundColor: `color-mix(in oklab, var(--color-void-900) ${scrim * 100}%, transparent)`,
+            }}
+            aria-hidden="true"
+          />
+        </>
+      )}
+      {/* Marca de água: lâmina em diagonal no canto do cartão. */}
+      <span
+        className="pointer-events-none absolute -bottom-8 -right-6 rotate-12 text-ember/[0.07]"
+        aria-hidden="true"
+      >
+        <ArtIcon name="katana" size={200} />
+      </span>
+      {/* Crepúsculo, cortes de lâmina e partículas por trás do herói. */}
+      <div className="art-layer">
+        <TwilightSky opacity={0.4} ridges={false} />
+      </div>
+      <div className="art-layer">
+        <BladeSlashes tone="crimson" opacity={0.35} />
+      </div>
+      <SpiritMotes count={6} />
+      <div className="art-layer ink-grain" />
+      <div className="art-layer bg-gradient-to-r from-void-900/85 via-void-900/55 to-void-900/80" aria-hidden="true" />
+
+      <div className="relative flex flex-col gap-5 p-5 sm:flex-row sm:items-center">
         <HeroAvatar
-          size={104}
+          size={112}
           variant={profile.avatarVariant}
           hue={profile.avatarHue}
           frameId={equipped.frame}
           auraId={equipped.aura}
         />
         <div className="min-w-0 flex-1">
-          <p className="text-sm text-ink-muted">{t.dashboard.greeting(t.greetings[greetingKeyForHour()])}</p>
-          <h1 className="truncate font-display text-3xl font-bold text-ink">{profile.name}</h1>
-          <p className="mt-0.5 text-sm text-ember-soft">{title}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-muted">
+            {t.dashboard.greeting(t.greetings[greetingKeyForHour()])}
+          </p>
+          <h1 className="text-glow-ember truncate font-display text-4xl font-bold leading-tight text-ink">
+            {profile.name}
+          </h1>
+          <p className="mt-1 flex items-center gap-2 text-sm font-medium text-ember-soft">
+            <span className="h-px w-6 bg-gradient-to-r from-ember to-transparent" aria-hidden="true" />
+            {title}
+          </p>
 
           <div className="mt-4 space-y-1.5">
             <div className="flex items-center justify-between text-xs font-medium">
@@ -347,18 +394,25 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-5">
-      <div className="hidden items-baseline justify-between md:flex">
-        <h1 className="slash-divider text-3xl font-bold text-ink">{t.dashboard.title}</h1>
+      <div className="hidden items-end justify-between md:flex">
+        <div>
+          <h1 className="slash-divider font-display text-3xl font-bold text-ink">{t.dashboard.title}</h1>
+          <p className="mt-3.5 text-sm text-ink-muted">{t.dashboard.subtitle}</p>
+        </div>
         <p className="text-sm text-ink-muted first-letter:uppercase">{formatLongDate(today())}</p>
       </div>
 
       <HeroCard />
 
-      <Card className="flex items-start gap-3 border-ember/25 bg-ember/5 p-4">
-        <span className="mt-0.5 shrink-0 text-ember">
+      {/* Linha narrativa do dia, sobre uma mancha de tinta. */}
+      <Card className="relative flex items-start gap-3.5 overflow-hidden border-ember/25 bg-ember/5 p-4">
+        <span className="pointer-events-none absolute -right-8 -top-10 size-40" aria-hidden="true">
+          <InkWash tone="ember" opacity={0.12} />
+        </span>
+        <span className="relative mt-0.5 shrink-0 text-ember">
           <Icon name="Sparkles" size={18} />
         </span>
-        <p className="text-balance text-sm leading-relaxed text-ink">{narrative}</p>
+        <p className="relative text-balance text-sm leading-relaxed text-ink">{narrative}</p>
       </Card>
 
       <div className="grid gap-5 lg:grid-cols-12">

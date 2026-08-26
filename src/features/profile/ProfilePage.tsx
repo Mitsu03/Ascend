@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { HeroAvatar } from '@/components/HeroAvatar'
+import { AVATAR_VARIANT_COUNT, HeroAvatar } from '@/components/HeroAvatar'
+import { SpiritMotes } from '@/components/art/SpiritArt'
 import { useHeroTitle } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/Button'
 import { Card, CardBody, CardHeader } from '@/components/ui/Card'
@@ -9,6 +10,7 @@ import { Badge, Disclaimer, Field, OptionCard, Select, Stat, TextInput } from '@
 import { ConfirmDialog, Modal } from '@/components/ui/Modal'
 import { ProgressBar } from '@/components/ui/Progress'
 import { AchievementsGrid } from '@/features/profile/AchievementsGrid'
+import { ArtworkPanel } from '@/features/profile/ArtworkPanel'
 import { InventoryPanel } from '@/features/profile/InventoryPanel'
 import { ProgressCharts, WeightChart } from '@/features/profile/ProgressCharts'
 import { LANGUAGES, LANGUAGE_NAMES, useI18n } from '@/i18n'
@@ -42,7 +44,10 @@ const ATTRIBUTE_COLORS: Record<string, string> = {
 }
 
 /** Matizes disponíveis para o cabelo do avatar. */
-const AVATAR_HUES = [24, 0, 320, 200, 145]
+const AVATAR_HUES = [24, 0, 320, 268, 200, 172, 145, 48]
+
+/** Índices dos penteados, derivados do próprio componente do avatar. */
+const AVATAR_VARIANTS = Array.from({ length: AVATAR_VARIANT_COUNT }, (_, index) => index)
 
 const GOAL_ORDER: Goal[] = ['perder_gordura', 'ganhar_massa', 'manter', 'condicao_fisica']
 const DIET_ORDER: DietPreference[] = ['sem_preferencia', 'mediterranica', 'vegetariano', 'vegan']
@@ -58,18 +63,21 @@ function AvatarCard() {
   const title = useHeroTitle(info.level)
 
   return (
-    <Card glow="crimson">
-      <CardBody className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
+    <Card glow="crimson" edge className="relative overflow-hidden">
+      <SpiritMotes count={5} />
+      <div className="art-layer ink-grain" />
+
+      <CardBody className="relative flex flex-col items-center gap-5 sm:flex-row sm:items-start">
         <div className="flex flex-col items-center gap-3">
           <HeroAvatar
-            size={148}
+            size={156}
             variant={profile.avatarVariant}
             hue={profile.avatarHue}
             frameId={equipped.frame}
             auraId={equipped.aura}
           />
-          <div className="flex gap-1.5">
-            {[0, 1, 2, 3].map((variant) => (
+          <div className="grid grid-cols-4 gap-1.5">
+            {AVATAR_VARIANTS.map((variant) => (
               <button
                 key={variant}
                 type="button"
@@ -80,14 +88,14 @@ function AvatarCard() {
                   'size-8 rounded-lg border text-xs font-semibold transition-colors',
                   profile.avatarVariant === variant
                     ? 'border-ember bg-ember/15 text-ember'
-                    : 'border-void-600 text-ink-muted hover:text-ink',
+                    : 'border-void-600 text-ink-muted hover:border-void-500 hover:text-ink',
                 )}
               >
                 {variant + 1}
               </button>
             ))}
           </div>
-          <div className="flex gap-1.5">
+          <div className="grid grid-cols-8 gap-1.5">
             {AVATAR_HUES.map((hue) => (
               <button
                 key={hue}
@@ -96,8 +104,8 @@ function AvatarCard() {
                 aria-pressed={profile.avatarHue === hue}
                 onClick={() => setAvatar(profile.avatarVariant, hue)}
                 className={cn(
-                  'size-7 rounded-full border-2 transition-transform',
-                  profile.avatarHue === hue ? 'scale-110 border-ink' : 'border-transparent',
+                  'size-6 rounded-full border-2 transition-transform',
+                  profile.avatarHue === hue ? 'scale-110 border-ink' : 'border-transparent hover:scale-105',
                 )}
                 style={{ background: `hsl(${hue} 78% 54%)` }}
               />
@@ -106,8 +114,11 @@ function AvatarCard() {
         </div>
 
         <div className="min-w-0 flex-1 text-center sm:text-left">
-          <h1 className="font-display text-3xl font-bold text-ink">{profile.name}</h1>
-          <p className="mt-0.5 text-ember-soft">{title}</p>
+          <h1 className="text-glow-ember font-display text-4xl font-bold leading-tight text-ink">{profile.name}</h1>
+          <p className="mt-1 flex items-center justify-center gap-2 text-ember-soft sm:justify-start">
+            <span className="h-px w-6 bg-gradient-to-r from-ember to-transparent" aria-hidden="true" />
+            {title}
+          </p>
           <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
             <Badge tone="ember" icon="TrendingUp">
               {t.common.levelWithNumber(info.level)}
@@ -679,6 +690,7 @@ export function ProfilePage() {
       <ProgressCharts />
       <AchievementsGrid />
       <InventoryPanel />
+      <ArtworkPanel />
       <VisionSettingsCard />
       <SettingsCard />
     </div>

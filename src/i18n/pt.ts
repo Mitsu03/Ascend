@@ -275,6 +275,7 @@ export const pt = {
 
   dashboard: {
     title: 'Base do Herói',
+    subtitle: 'O teu dia num relance: treino, energia e missões',
     greeting: (greeting: string) => `${greeting},`,
     streak: 'Sequência',
     bestStreak: (n: number) => `Melhor marca: ${n} dias`,
@@ -438,6 +439,27 @@ export const pt = {
     gapCarbs: (n: number) => `${n} g de hidratos`,
     gapFat: (n: number) => `${n} g de gordura`,
     listJoin: ' e ',
+  },
+
+  artwork: {
+    title: 'Imagens da aplicação',
+    subtitle: 'Personaliza os fundos e o avatar com imagens tuas',
+    slotStart: 'Fundo do ecrã inicial',
+    slotDashboard: 'Faixa da Base do Herói',
+    slotAvatar: 'Imagem de avatar',
+    choose: 'Escolher imagem',
+    replace: 'Substituir',
+    remove: 'Remover',
+    empty: 'A usar a ilustração original',
+    fromFolder: 'Ficheiro encontrado em public/assets/',
+    scrimLabel: 'Escurecimento sobre os fundos',
+    scrimHint: 'Mais escuro deixa o texto mais legível; mais claro deixa a imagem respirar.',
+    tooLarge: 'A imagem é demasiado grande para o armazenamento local, mesmo depois de comprimida. Tenta uma com menos detalhe.',
+    unreadable: 'Não foi possível ler esta imagem.',
+    note:
+      'As imagens ficam guardadas apenas neste dispositivo. Em alternativa, podes colocar ficheiros na pasta public/assets/ do projeto com os nomes backdrop-start, backdrop-dashboard e avatar.',
+    licenceNote:
+      'Os emblemas ilustrativos da aplicação são de game-icons.net (Lorc e Delapouite), usados sob licença Creative Commons BY 3.0. O restante material gráfico é original.',
   },
 
   photoLog: {

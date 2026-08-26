@@ -42,6 +42,11 @@
   --animate-rise: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   --animate-pop: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   --animate-shimmer: shimmer 2.6s linear infinite;
+  --animate-mote: mote-rise 9s linear infinite;
+  --animate-aura: aura-breathe 5.5s ease-in-out infinite;
+  --animate-rays: ray-spin 48s linear infinite;
+  --animate-slash: slash-sweep 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-drift: ink-drift 30s ease-in-out infinite alternate;
 }
 
 @keyframes float {
@@ -100,6 +105,69 @@
   }
   100% {
     transform: translateX(220%);
+  }
+}
+
+/*
+ * Partícula espiritual: sobe, desvia-se de lado e apaga-se. A posição de
+ * partida é o estado base do elemento, por isso com movimento reduzido a
+ * partícula fica simplesmente parada e visível.
+ */
+@keyframes mote-rise {
+  0% {
+    opacity: 0.2;
+    transform: translate3d(0, 0, 0) scale(0.6);
+  }
+  18% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--mote-drift, 8px), var(--mote-travel, -150px), 0) scale(1.15);
+  }
+}
+
+/* Respiração da aura — escala e opacidade em torno do estado base. */
+@keyframes aura-breathe {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes ray-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Corte de lâmina que entra a riscar o ecrã. */
+@keyframes slash-sweep {
+  from {
+    opacity: 0.25;
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  }
+  to {
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+/* Deriva lenta das massas de tinta no céu. */
+@keyframes ink-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-3%, 1.5%, 0);
   }
 }
 
@@ -206,6 +274,66 @@
       color-mix(in oklab, var(--color-crimson-soft) 45%, transparent) 35%,
       transparent 70%
     );
+  }
+
+  /*
+   * Grão de tinta sobre papel. O ruído é gerado uma única vez num tile de
+   * 160×160 e repetido pelo navegador — muito mais barato do que aplicar um
+   * feTurbulence à área toda. O elemento onde se aplica tem de estar
+   * posicionado (a classe não impõe `position` para não colidir com
+   * `absolute`/`relative` das utilidades do Tailwind).
+   */
+  .ink-grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.18;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+  }
+
+  /* Cantos cortados a direito, como se a lâmina tivesse passado pela caixa. */
+  .blade-corner {
+    clip-path: polygon(1.15rem 0, 100% 0, 100% calc(100% - 1.15rem), calc(100% - 1.15rem) 100%, 0 100%, 0 1.15rem);
+  }
+
+  /* Fio de luz no topo de um cartão — o brilho da aresta da lâmina. */
+  .edge-glint {
+    position: relative;
+  }
+  .edge-glint::before {
+    content: '';
+    position: absolute;
+    inset-inline: 1.25rem;
+    top: 0;
+    height: 1px;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--color-ember) 70%, transparent) 30%,
+      color-mix(in oklab, var(--color-gold) 40%, transparent) 55%,
+      transparent
+    );
+  }
+
+  /* Texto com halo incandescente, reservado a números e títulos grandes. */
+  .text-glow-ember {
+    text-shadow: 0 0 18px color-mix(in oklab, var(--color-ember) 55%, transparent);
+  }
+  .text-glow-gold {
+    text-shadow: 0 0 20px color-mix(in oklab, var(--color-gold) 55%, transparent);
+  }
+
+  /* Caixa de arte: recorta o SVG de fundo e nunca intercepta o rato. */
+  .art-layer {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
   }
 
   .scrollbar-none {

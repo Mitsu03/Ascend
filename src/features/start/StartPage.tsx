@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { BladeSlashes, SpiritBurst, SpiritMotes, TwilightSky } from '@/components/art/SpiritArt'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
@@ -6,12 +7,15 @@ import { Disclaimer } from '@/components/ui/Misc'
 import { HeroAvatar } from '@/components/HeroAvatar'
 import { useI18n } from '@/i18n'
 import { loadDemoProfile } from '@/services/session'
+import { useArt, useArtStore } from '@/store/artStore'
 import { useUserStore } from '@/store/userStore'
 
 export function StartPage() {
   const navigate = useNavigate()
   const { t } = useI18n()
   const hasProfile = useUserStore((state) => state.profile !== null)
+  const backdrop = useArt('start')
+  const scrim = useArtStore((state) => state.scrim)
 
   const highlights = [
     { icon: 'Dumbbell', title: t.start.highlights.workoutTitle, text: t.start.highlights.workoutText },
@@ -26,52 +30,116 @@ export function StartPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col justify-center gap-8 px-5 py-10">
-      <header className="flex flex-col items-center gap-5 text-center">
-        <div className="flex items-center gap-3">
-          <span className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-ember to-crimson">
-            <Icon name="Zap" size={24} className="text-void-950" strokeWidth={2.5} />
-          </span>
-          <span className="font-display text-4xl font-bold tracking-[0.24em] text-ink">{t.app.name}</span>
+    <div className="relative min-h-dvh overflow-hidden">
+      {/*
+        Camadas de arte: a imagem do utilizador, quando existe, substitui o céu
+        desenhado; as restantes camadas mantêm-se por cima em qualquer caso.
+      */}
+      {backdrop ? (
+        <div
+          className="art-layer bg-cover bg-center"
+          style={{ backgroundImage: `url(${backdrop})` }}
+          aria-hidden="true"
+        />
+      ) : (
+        <div className="art-layer">
+          <TwilightSky />
         </div>
-        <div className="max-w-xl">
-          <h1 className="text-balance text-3xl font-bold leading-tight text-ink sm:text-4xl">
-            {t.start.headline}
-          </h1>
-          <p className="mt-3 text-balance leading-relaxed text-ink-muted">{t.start.subheadline}</p>
-        </div>
-        <HeroAvatar size={132} variant={1} hue={24} auraId="aura-ciano" frameId="moldura-aurora" />
-      </header>
+      )}
+      <div className="art-layer">
+        <BladeSlashes opacity={0.8} animated />
+      </div>
+      <SpiritMotes />
+      <div className="art-layer ink-grain" />
+      {/*
+        Véu de contraste: escurece os extremos e deixa o horizonte respirar,
+        com um halo suave por trás do bloco de texto para o manter legível.
+      */}
+      <div
+        className="art-layer bg-gradient-to-b from-void-950/85 via-void-950/25 to-void-950/90"
+        aria-hidden="true"
+      />
+      {backdrop && (
+        <div
+          className="art-layer"
+          style={{ backgroundColor: `color-mix(in oklab, var(--color-void-950) ${scrim * 100}%, transparent)` }}
+          aria-hidden="true"
+        />
+      )}
+      <div
+        className="art-layer"
+        style={{
+          background:
+            'radial-gradient(60% 45% at 50% 42%, color-mix(in oklab, var(--color-void-950) 72%, transparent), transparent 70%)',
+        }}
+        aria-hidden="true"
+      />
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        {highlights.map((item) => (
-          <Card key={item.title} className="flex items-start gap-3 p-4">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-void-700 text-ember">
-              <Icon name={item.icon} size={19} />
+      <div className="relative mx-auto flex min-h-dvh w-full max-w-5xl flex-col justify-center gap-9 px-5 py-12">
+        <header className="flex flex-col items-center gap-6 text-center">
+          <div className="flex items-center gap-3">
+            <span className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-ember to-crimson">
+              <Icon name="Zap" size={24} className="text-void-950" strokeWidth={2.5} />
             </span>
-            <div>
-              <p className="font-semibold text-ink">{item.title}</p>
-              <p className="mt-0.5 text-sm leading-relaxed text-ink-muted">{item.text}</p>
-            </div>
-          </Card>
-        ))}
-      </div>
+            <span className="font-display text-4xl font-bold tracking-[0.24em] text-ink">{t.app.name}</span>
+          </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-        <Button variant="primary" size="lg" icon="Play" onClick={() => navigate('/onboarding')}>
-          {t.start.beginJourney}
-        </Button>
-        <Button variant="secondary" size="lg" icon="Sparkles" onClick={startDemo}>
-          {t.start.exploreDemo}
-        </Button>
-        {hasProfile && (
-          <Button variant="ghost" size="lg" icon="ArrowRight" onClick={() => navigate('/')}>
-            {t.start.continue}
+          {/* Herói ao centro, dentro de uma coroa de raios de energia. */}
+          <div className="relative flex items-center justify-center">
+            <span className="pointer-events-none absolute -inset-14" aria-hidden="true">
+              <SpiritBurst tone="ember" opacity={0.45} />
+            </span>
+            <HeroAvatar size={156} variant={2} hue={24} auraId="aura-ciano" frameId="moldura-aurora" />
+          </div>
+
+          <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-ember-soft">
+            <span className="h-px w-8 bg-gradient-to-r from-transparent to-ember" aria-hidden="true" />
+            {t.app.tagline}
+            <span className="h-px w-8 bg-gradient-to-l from-transparent to-ember" aria-hidden="true" />
+          </p>
+
+          <div className="max-w-2xl">
+            <h1 className="text-glow-ember text-balance font-display text-4xl font-bold leading-[1.1] text-ink sm:text-5xl">
+              {t.start.headline}
+            </h1>
+            <p className="mt-4 text-balance leading-relaxed text-ink-muted">{t.start.subheadline}</p>
+          </div>
+        </header>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          {highlights.map((item) => (
+            <Card
+              key={item.title}
+              edge
+              className="group flex items-start gap-3.5 p-4 transition-colors duration-200 hover:border-ember/45"
+            >
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-void-700 to-void-800 text-ember ring-1 ring-ember/25 transition-colors duration-200 group-hover:ring-ember/60">
+                <Icon name={item.icon} size={19} />
+              </span>
+              <div>
+                <p className="font-display text-lg font-semibold leading-tight text-ink">{item.title}</p>
+                <p className="mt-1 text-sm leading-relaxed text-ink-muted">{item.text}</p>
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <Button variant="primary" size="lg" icon="Play" onClick={() => navigate('/onboarding')}>
+            {t.start.beginJourney}
           </Button>
-        )}
-      </div>
+          <Button variant="secondary" size="lg" icon="Sparkles" onClick={startDemo}>
+            {t.start.exploreDemo}
+          </Button>
+          {hasProfile && (
+            <Button variant="ghost" size="lg" icon="ArrowRight" onClick={() => navigate('/')}>
+              {t.start.continue}
+            </Button>
+          )}
+        </div>
 
-      <Disclaimer>{t.disclaimer.start}</Disclaimer>
+        <Disclaimer>{t.disclaimer.start}</Disclaimer>
+      </div>
     </div>
   )
 }

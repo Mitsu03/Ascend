@@ -1,3 +1,4 @@
+import { ACHIEVEMENTS } from '@/data/achievements'
 import { FOOD_BY_ID } from '@/data/foods'
 import { computeTargets, totalXpForLevel, xpForLevel } from '@/services/calculations'
 import { addDays, dayOfWeek, startOfWeek, today } from '@/services/dates'
@@ -137,6 +138,32 @@ function buildBodyLogs(): BodyLog[] {
   })
 }
 
+/**
+ * Conquistas que os contadores da demonstração já justificam, com datas
+ * escalonadas para trás para o histórico parecer natural.
+ */
+function unlockedFromCounters(
+  counters: GameState['counters'],
+  bestStreak: number,
+  now: string,
+): Record<string, string> {
+  const metrics: Record<string, number> = {
+    workouts: counters.workouts,
+    streak: bestStreak,
+    level: 7,
+    proteinDays: counters.proteinDays,
+    quests: counters.quests,
+    meals: counters.meals,
+    customWorkouts: counters.customWorkouts,
+    weightLogs: counters.weightLogs,
+  }
+
+  const earned = ACHIEVEMENTS.filter((achievement) => metrics[achievement.metric] >= achievement.target)
+  return Object.fromEntries(
+    earned.map((achievement, index) => [achievement.id, addDays(now, -(earned.length - index) * 3 - 2)]),
+  )
+}
+
 export function buildDemoData(): DemoData {
   const profile = DEMO_PROFILE
   const targets = computeTargets(profile)
@@ -193,6 +220,15 @@ export function buildDemoData(): DemoData {
     xpByDate[log.date] = (xpByDate[log.date] ?? 0) + log.xpEarned
   }
 
+  const counters = {
+    workouts: history.length,
+    quests: 34,
+    meals: entries.length,
+    customWorkouts: 0,
+    proteinDays: 6,
+    weightLogs: 6,
+  }
+
   const game: GameState = {
     ...INITIAL_GAME_STATE,
     xp: totalXpForLevel(7) + Math.round(xpForLevel(7) * 0.42),
@@ -203,22 +239,12 @@ export function buildDemoData(): DemoData {
     bestStreak: 12,
     lastActiveDate: now,
     recoveryAvailable: true,
-    unlockedAchievements: {
-      'primeiro-passo': addDays(now, -20),
-      'chama-acesa': addDays(now, -17),
-      'semana-de-ferro': addDays(now, -12),
-      'guerreiro-dedicado': addDays(now, -5),
-    },
+    // Derivado dos contadores: mostrar uma conquista a 20/20 ainda bloqueada
+    // seria incoerente com o resto do perfil.
+    unlockedAchievements: unlockedFromCounters(counters, 12, now),
     inventory: ['titulo-novato', 'aura-ciano', 'moldura-ferro'],
     equipped: { title: 'titulo-novato', aura: 'aura-ciano', frame: 'moldura-ferro' },
-    counters: {
-      workouts: history.length,
-      quests: 34,
-      meals: entries.length,
-      customWorkouts: 0,
-      proteinDays: 6,
-      weightLogs: 6,
-    },
+    counters,
     proteinBonusDates: Array.from({ length: 6 }, (_, index) => addDays(now, -(index + 1))),
     xpByDate,
   }

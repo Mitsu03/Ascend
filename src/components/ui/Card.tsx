@@ -15,15 +15,18 @@ interface CardProps {
   children: ReactNode
   className?: string
   glow?: Glow
+  /** Fio de luz no topo do cartão, como a aresta de uma lâmina. */
+  edge?: boolean
   as?: 'div' | 'section' | 'article' | 'li'
 }
 
-export function Card({ children, className, glow = 'none', as: Tag = 'div' }: CardProps) {
+export function Card({ children, className, glow = 'none', edge = false, as: Tag = 'div' }: CardProps) {
   return (
     <Tag
       className={cn(
         'rounded-2xl border border-void-600/70 bg-void-800/70 backdrop-blur-sm',
         GLOW_CLASS[glow],
+        edge && 'edge-glint',
         className,
       )}
     >

@@ -271,6 +271,7 @@ export const en: Dictionary = {
 
   dashboard: {
     title: "Hero's Base",
+    subtitle: 'Your day at a glance: training, energy and quests',
     greeting: (greeting: string) => `${greeting},`,
     streak: 'Streak',
     bestStreak: (n: number) => `Best run: ${n} days`,
@@ -433,6 +434,27 @@ export const en: Dictionary = {
     gapCarbs: (n: number) => `${n} g of carbs`,
     gapFat: (n: number) => `${n} g of fat`,
     listJoin: ' and ',
+  },
+
+  artwork: {
+    title: 'App imagery',
+    subtitle: 'Personalise the backgrounds and avatar with your own images',
+    slotStart: 'Start screen background',
+    slotDashboard: "Hero's Base banner",
+    slotAvatar: 'Avatar image',
+    choose: 'Choose image',
+    replace: 'Replace',
+    remove: 'Remove',
+    empty: 'Using the original illustration',
+    fromFolder: 'File found in public/assets/',
+    scrimLabel: 'Darkening over backgrounds',
+    scrimHint: 'Darker keeps text readable; lighter lets the image breathe.',
+    tooLarge: 'That image is too large for local storage, even after compression. Try one with less detail.',
+    unreadable: 'Could not read this image.',
+    note:
+      'Images are stored on this device only. Alternatively, drop files into the project folder public/assets/ named backdrop-start, backdrop-dashboard and avatar.',
+    licenceNote:
+      'The illustrative emblems come from game-icons.net (Lorc and Delapouite), used under a Creative Commons BY 3.0 licence. All other artwork is original.',
   },
 
   photoLog: {
