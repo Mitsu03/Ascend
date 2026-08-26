@@ -1,30 +1,36 @@
 @import 'tailwindcss';
 
+/*
+ * Tema visual: alto contraste preto/branco cortado por laranja incandescente e
+ * carmesim, com um azul-espectral para a energia. Inspirado na estética de
+ * shonen de lâminas e espíritos — todos os elementos gráficos são originais.
+ */
 @theme {
-  /* Fundos — azul noite */
-  --color-night-950: #070b16;
-  --color-night-900: #0b1120;
-  --color-night-850: #0e1526;
-  --color-night-800: #111a2e;
-  --color-night-700: #1a2540;
-  --color-night-600: #263353;
-  --color-night-500: #34456b;
+  /* Fundos — preto-tinta */
+  --color-void-950: #050507;
+  --color-void-900: #0a0a0e;
+  --color-void-850: #101017;
+  --color-void-800: #16161f;
+  --color-void-700: #1f1f2b;
+  --color-void-600: #2c2c3b;
+  --color-void-500: #414155;
 
   /* Acentos */
-  --color-cyan-electric: #22d3ee;
-  --color-cyan-soft: #67e8f9;
-  --color-violet-deep: #7c3aed;
-  --color-violet-soft: #a855f7;
-  --color-gold: #fbbf24;
-  --color-gold-soft: #fcd34d;
+  --color-ember: #ff7a1a;
+  --color-ember-soft: #ffa04d;
+  --color-crimson: #b81236;
+  --color-crimson-soft: #e8365c;
+  --color-spirit: #8fd4ff;
+  --color-gold: #ffb020;
+  --color-gold-soft: #ffcd5e;
 
   /* Texto e estado */
-  --color-ink: #e8eefb;
-  --color-ink-muted: #9aabc4;
-  --color-ink-faint: #6c7f9c;
-  --color-good: #34d399;
-  --color-warn: #fb923c;
-  --color-bad: #f87171;
+  --color-ink: #f2f3f7;
+  --color-ink-muted: #a2a4b4;
+  --color-ink-faint: #6f7183;
+  --color-good: #3ddc97;
+  --color-warn: #ff9f1c;
+  --color-bad: #ff5468;
 
   /* Tipografia */
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -99,7 +105,7 @@
 
 @layer base {
   * {
-    border-color: var(--color-night-600);
+    border-color: var(--color-void-600);
   }
 
   html {
@@ -109,10 +115,12 @@
   body {
     margin: 0;
     min-height: 100dvh;
-    background-color: var(--color-night-900);
+    background-color: var(--color-void-900);
+    /* Duas auras de energia e um corte diagonal ténue sobre o preto. */
     background-image:
-      radial-gradient(70rem 40rem at 12% -10%, color-mix(in oklab, var(--color-violet-deep) 22%, transparent), transparent 60%),
-      radial-gradient(55rem 34rem at 100% 0%, color-mix(in oklab, var(--color-cyan-electric) 12%, transparent), transparent 60%);
+      radial-gradient(60rem 34rem at 8% -12%, color-mix(in oklab, var(--color-ember) 16%, transparent), transparent 62%),
+      radial-gradient(52rem 30rem at 102% 4%, color-mix(in oklab, var(--color-crimson) 24%, transparent), transparent 60%),
+      linear-gradient(115deg, transparent 46%, color-mix(in oklab, var(--color-ember) 5%, transparent) 48%, transparent 50%);
     background-attachment: fixed;
     color: var(--color-ink);
     font-family: var(--font-sans);
@@ -127,7 +135,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-cyan-electric);
+    outline: 2px solid var(--color-ember);
     outline-offset: 2px;
     border-radius: 6px;
   }
@@ -137,15 +145,15 @@
     height: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--color-night-900);
+    background: var(--color-void-900);
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-night-600);
+    background: var(--color-void-600);
     border-radius: 999px;
-    border: 2px solid var(--color-night-900);
+    border: 2px solid var(--color-void-900);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-night-500);
+    background: var(--color-void-500);
   }
 
   /* Remove as setas dos inputs numéricos para um visual mais limpo */
@@ -164,22 +172,40 @@
     text-wrap: balance;
   }
 
-  .glow-cyan {
+  .glow-ember {
     box-shadow:
-      0 0 0 1px color-mix(in oklab, var(--color-cyan-electric) 26%, transparent),
-      0 8px 40px -12px color-mix(in oklab, var(--color-cyan-electric) 45%, transparent);
+      0 0 0 1px color-mix(in oklab, var(--color-ember) 30%, transparent),
+      0 8px 40px -12px color-mix(in oklab, var(--color-ember) 50%, transparent);
   }
 
   .glow-gold {
     box-shadow:
-      0 0 0 1px color-mix(in oklab, var(--color-gold) 32%, transparent),
-      0 8px 40px -12px color-mix(in oklab, var(--color-gold) 50%, transparent);
+      0 0 0 1px color-mix(in oklab, var(--color-gold) 34%, transparent),
+      0 8px 40px -12px color-mix(in oklab, var(--color-gold) 52%, transparent);
   }
 
-  .glow-violet {
+  .glow-crimson {
     box-shadow:
-      0 0 0 1px color-mix(in oklab, var(--color-violet-soft) 26%, transparent),
-      0 8px 40px -12px color-mix(in oklab, var(--color-violet-deep) 55%, transparent);
+      0 0 0 1px color-mix(in oklab, var(--color-crimson-soft) 28%, transparent),
+      0 8px 40px -12px color-mix(in oklab, var(--color-crimson) 60%, transparent);
+  }
+
+  /* Corte diagonal usado nos cabeçalhos, como um golpe de lâmina. */
+  .slash-divider {
+    position: relative;
+  }
+  .slash-divider::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.5rem;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--color-ember) 75%, transparent),
+      color-mix(in oklab, var(--color-crimson-soft) 45%, transparent) 35%,
+      transparent 70%
+    );
   }
 
   .scrollbar-none {

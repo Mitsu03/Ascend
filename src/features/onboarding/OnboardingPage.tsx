@@ -5,36 +5,36 @@ import { Card } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
 import { Disclaimer, Field, OptionCard, Select, TextInput } from '@/components/ui/Misc'
 import { ProgressBar } from '@/components/ui/Progress'
+import { useI18n } from '@/i18n'
 import { computeTargets } from '@/services/calculations'
 import { completeOnboarding } from '@/services/session'
-import { formatNumber } from '@/lib/cn'
 import type { DietPreference, Equipment, ExperienceLevel, Goal, Sex, UserProfile } from '@/types'
 
-const GOALS: { value: Goal; title: string; description: string; icon: string }[] = [
-  { value: 'perder_gordura', title: 'Perder gordura', description: 'Défice calórico moderado com proteína alta.', icon: 'Flame' },
-  { value: 'ganhar_massa', title: 'Ganhar massa', description: 'Excedente controlado e treino de força.', icon: 'Dumbbell' },
-  { value: 'manter', title: 'Manter', description: 'Manter o peso e melhorar composição corporal.', icon: 'Shield' },
-  { value: 'condicao_fisica', title: 'Melhorar condição física', description: 'Foco em resistência, energia e hábito.', icon: 'Activity' },
-]
+const GOAL_ORDER: Goal[] = ['perder_gordura', 'ganhar_massa', 'manter', 'condicao_fisica']
+const GOAL_ICONS: Record<Goal, string> = {
+  perder_gordura: 'Flame',
+  ganhar_massa: 'Dumbbell',
+  manter: 'Shield',
+  condicao_fisica: 'Activity',
+}
 
-const LEVELS: { value: ExperienceLevel; title: string; description: string; icon: string }[] = [
-  { value: 'iniciante', title: 'Iniciante', description: 'Menos de 6 meses de treino regular.', icon: 'Star' },
-  { value: 'intermedio', title: 'Intermédio', description: 'Treinas com consistência há mais de 6 meses.', icon: 'TrendingUp' },
-  { value: 'avancado', title: 'Avançado', description: 'Anos de treino e domínio técnico.', icon: 'Trophy' },
-]
+const LEVEL_ORDER: ExperienceLevel[] = ['iniciante', 'intermedio', 'avancado']
+const LEVEL_ICONS: Record<ExperienceLevel, string> = {
+  iniciante: 'Star',
+  intermedio: 'TrendingUp',
+  avancado: 'Trophy',
+}
 
-const EQUIPMENTS: { value: Equipment; title: string; description: string; icon: string }[] = [
-  { value: 'nenhum', title: 'Sem equipamento', description: 'Treinos com o peso do corpo, em casa.', icon: 'Home' },
-  { value: 'halteres', title: 'Halteres', description: 'Um par de halteres ou kettlebells.', icon: 'Dumbbell' },
-  { value: 'ginasio', title: 'Ginásio', description: 'Acesso a máquinas, barras e cardio.', icon: 'Hammer' },
-]
+const EQUIPMENT_ORDER: Equipment[] = ['nenhum', 'halteres', 'ginasio']
+const EQUIPMENT_ICONS: Record<Equipment, string> = {
+  nenhum: 'Home',
+  halteres: 'Dumbbell',
+  ginasio: 'Hammer',
+}
 
-const DIETS: { value: DietPreference; label: string }[] = [
-  { value: 'sem_preferencia', label: 'Sem preferência' },
-  { value: 'mediterranica', label: 'Mediterrânica' },
-  { value: 'vegetariano', label: 'Vegetariana' },
-  { value: 'vegan', label: 'Vegana' },
-]
+const DIET_ORDER: DietPreference[] = ['sem_preferencia', 'mediterranica', 'vegetariano', 'vegan']
+
+const TOTAL_STEPS = 5
 
 interface Draft {
   name: string
@@ -62,8 +62,6 @@ const INITIAL_DRAFT: Draft = {
   dietPreference: 'sem_preferencia',
 }
 
-const STEP_TITLES = ['Identidade', 'Objetivo', 'Treino', 'Corpo', 'Resumo']
-
 function toProfile(draft: Draft): UserProfile {
   return {
     name: draft.name.trim(),
@@ -78,12 +76,13 @@ function toProfile(draft: Draft): UserProfile {
     dietPreference: draft.dietPreference,
     createdAt: new Date().toISOString(),
     avatarVariant: 0,
-    avatarHue: 195,
+    avatarHue: 24,
   }
 }
 
 export function OnboardingPage() {
   const navigate = useNavigate()
+  const { t, n } = useI18n()
   const [step, setStep] = useState(0)
   const [draft, setDraft] = useState<Draft>(INITIAL_DRAFT)
   const [touched, setTouched] = useState(false)
@@ -92,15 +91,15 @@ export function OnboardingPage() {
 
   const errors = useMemo(() => {
     const result: Partial<Record<keyof Draft, string>> = {}
-    if (!draft.name.trim()) result.name = 'Escreve o teu nome para personalizarmos a jornada.'
+    if (!draft.name.trim()) result.name = t.onboarding.nameError
     const weight = Number(draft.weightKg)
     const height = Number(draft.heightCm)
     const age = Number(draft.age)
-    if (!Number.isFinite(weight) || weight < 30 || weight > 300) result.weightKg = 'Peso entre 30 e 300 kg.'
-    if (!Number.isFinite(height) || height < 120 || height > 230) result.heightCm = 'Altura entre 120 e 230 cm.'
-    if (!Number.isFinite(age) || age < 14 || age > 100) result.age = 'Idade entre 14 e 100 anos.'
+    if (!Number.isFinite(weight) || weight < 30 || weight > 300) result.weightKg = t.onboarding.weightError
+    if (!Number.isFinite(height) || height < 120 || height > 230) result.heightCm = t.onboarding.heightError
+    if (!Number.isFinite(age) || age < 14 || age > 100) result.age = t.onboarding.ageError
     return result
-  }, [draft])
+  }, [draft, t])
 
   const stepValid = (index: number): boolean => {
     if (index === 0) return !errors.name
@@ -117,7 +116,7 @@ export function OnboardingPage() {
     setTouched(true)
     if (!stepValid(step)) return
     setTouched(false)
-    setStep((current) => Math.min(STEP_TITLES.length - 1, current + 1))
+    setStep((current) => Math.min(TOTAL_STEPS - 1, current + 1))
   }
 
   const goBack = () => setStep((current) => Math.max(0, current - 1))
@@ -131,15 +130,13 @@ export function OnboardingPage() {
     <div className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col gap-6 px-5 py-8">
       <header className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="flex items-center gap-2 font-display text-xl font-bold tracking-widest text-ink">
-            <Icon name="Zap" size={20} className="text-cyan-electric" />
-            ASCEND
+          <span className="flex items-center gap-2 font-display text-xl font-bold tracking-[0.2em] text-ink">
+            <Icon name="Zap" size={20} className="text-ember" />
+            {t.app.name}
           </span>
-          <span className="text-sm tabular-nums text-ink-muted">
-            Passo {step + 1} de {STEP_TITLES.length}
-          </span>
+          <span className="text-sm tabular-nums text-ink-muted">{t.onboarding.stepOf(step + 1, TOTAL_STEPS)}</span>
         </div>
-        <ProgressBar value={step + 1} max={STEP_TITLES.length} tone="xp" height="sm" label="Progresso do onboarding" />
+        <ProgressBar value={step + 1} max={TOTAL_STEPS} tone="xp" height="sm" label={t.onboarding.progressLabel} />
       </header>
 
       <Card className="flex-1 p-6" key={step}>
@@ -147,19 +144,17 @@ export function OnboardingPage() {
           {step === 0 && (
             <>
               <div>
-                <h1 className="text-2xl font-bold text-ink">Bem-vindo, herói.</h1>
-                <p className="mt-1.5 leading-relaxed text-ink-muted">
-                  Antes de começarmos, como te chamas? É o nome que vais ver na tua base todos os dias.
-                </p>
+                <h1 className="text-2xl font-bold text-ink">{t.onboarding.welcomeTitle}</h1>
+                <p className="mt-1.5 leading-relaxed text-ink-muted">{t.onboarding.welcomeText}</p>
               </div>
-              <Field label="O teu nome" error={touched ? errors.name : undefined}>
+              <Field label={t.onboarding.nameLabel} error={touched ? errors.name : undefined}>
                 {(id) => (
                   <TextInput
                     id={id}
                     value={draft.name}
                     autoFocus
                     maxLength={24}
-                    placeholder="Ex.: Kai"
+                    placeholder={t.onboarding.namePlaceholder}
                     onChange={(event) => patch({ name: event.target.value })}
                     onKeyDown={(event) => {
                       if (event.key === 'Enter') goNext()
@@ -173,18 +168,18 @@ export function OnboardingPage() {
           {step === 1 && (
             <>
               <div>
-                <h1 className="text-2xl font-bold text-ink">Qual é o teu objetivo?</h1>
-                <p className="mt-1.5 text-ink-muted">Define as tuas metas de calorias e o tipo de plano.</p>
+                <h1 className="text-2xl font-bold text-ink">{t.onboarding.goalTitle}</h1>
+                <p className="mt-1.5 text-ink-muted">{t.onboarding.goalText}</p>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
-                {GOALS.map((goal) => (
+                {GOAL_ORDER.map((goal) => (
                   <OptionCard
-                    key={goal.value}
-                    selected={draft.goal === goal.value}
-                    onSelect={() => patch({ goal: goal.value })}
-                    icon={goal.icon}
-                    title={goal.title}
-                    description={goal.description}
+                    key={goal}
+                    selected={draft.goal === goal}
+                    onSelect={() => patch({ goal })}
+                    icon={GOAL_ICONS[goal]}
+                    title={t.goals[goal]}
+                    description={t.goalDescriptions[goal]}
                   />
                 ))}
               </div>
@@ -194,28 +189,28 @@ export function OnboardingPage() {
           {step === 2 && (
             <>
               <div>
-                <h1 className="text-2xl font-bold text-ink">Como treinas?</h1>
-                <p className="mt-1.5 text-ink-muted">Vamos montar um plano semanal à tua medida.</p>
+                <h1 className="text-2xl font-bold text-ink">{t.onboarding.trainingTitle}</h1>
+                <p className="mt-1.5 text-ink-muted">{t.onboarding.trainingText}</p>
               </div>
 
               <div className="space-y-3">
-                <p className="text-sm font-medium text-ink-muted">Nível de experiência</p>
+                <p className="text-sm font-medium text-ink-muted">{t.onboarding.experienceLabel}</p>
                 <div className="grid gap-3 sm:grid-cols-3">
-                  {LEVELS.map((level) => (
+                  {LEVEL_ORDER.map((level) => (
                     <OptionCard
-                      key={level.value}
-                      selected={draft.level === level.value}
-                      onSelect={() => patch({ level: level.value })}
-                      icon={level.icon}
-                      title={level.title}
-                      description={level.description}
+                      key={level}
+                      selected={draft.level === level}
+                      onSelect={() => patch({ level })}
+                      icon={LEVEL_ICONS[level]}
+                      title={t.levels[level]}
+                      description={t.levelDescriptions[level]}
                     />
                   ))}
                 </div>
               </div>
 
               <div className="space-y-3">
-                <p className="text-sm font-medium text-ink-muted">Dias disponíveis por semana</p>
+                <p className="text-sm font-medium text-ink-muted">{t.onboarding.daysLabel}</p>
                 <div className="flex flex-wrap gap-2">
                   {[2, 3, 4, 5, 6].map((days) => (
                     <button
@@ -225,8 +220,8 @@ export function OnboardingPage() {
                       onClick={() => patch({ daysPerWeek: days })}
                       className={
                         draft.daysPerWeek === days
-                          ? 'size-12 rounded-xl border border-cyan-electric/70 bg-cyan-electric/10 font-display text-lg font-bold text-cyan-electric'
-                          : 'size-12 rounded-xl border border-night-600 bg-night-800/60 font-display text-lg font-bold text-ink-muted transition-colors hover:border-night-500 hover:text-ink'
+                          ? 'size-12 rounded-xl border border-ember/70 bg-ember/10 font-display text-lg font-bold text-ember'
+                          : 'size-12 rounded-xl border border-void-600 bg-void-800/60 font-display text-lg font-bold text-ink-muted transition-colors hover:border-void-500 hover:text-ink'
                       }
                     >
                       {days}
@@ -236,16 +231,16 @@ export function OnboardingPage() {
               </div>
 
               <div className="space-y-3">
-                <p className="text-sm font-medium text-ink-muted">Equipamento disponível</p>
+                <p className="text-sm font-medium text-ink-muted">{t.onboarding.equipmentLabel}</p>
                 <div className="grid gap-3 sm:grid-cols-3">
-                  {EQUIPMENTS.map((equipment) => (
+                  {EQUIPMENT_ORDER.map((equipment) => (
                     <OptionCard
-                      key={equipment.value}
-                      selected={draft.equipment === equipment.value}
-                      onSelect={() => patch({ equipment: equipment.value })}
-                      icon={equipment.icon}
-                      title={equipment.title}
-                      description={equipment.description}
+                      key={equipment}
+                      selected={draft.equipment === equipment}
+                      onSelect={() => patch({ equipment })}
+                      icon={EQUIPMENT_ICONS[equipment]}
+                      title={t.equipment[equipment]}
+                      description={t.equipmentDescriptions[equipment]}
                     />
                   ))}
                 </div>
@@ -256,13 +251,11 @@ export function OnboardingPage() {
           {step === 3 && (
             <>
               <div>
-                <h1 className="text-2xl font-bold text-ink">Os teus dados</h1>
-                <p className="mt-1.5 text-ink-muted">
-                  Servem apenas para estimar calorias e macros. Ficam guardados neste dispositivo.
-                </p>
+                <h1 className="text-2xl font-bold text-ink">{t.onboarding.bodyTitle}</h1>
+                <p className="mt-1.5 text-ink-muted">{t.onboarding.bodyText}</p>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Peso (kg)" error={touched ? errors.weightKg : undefined}>
+                <Field label={t.onboarding.weightLabel} error={touched ? errors.weightKg : undefined}>
                   {(id) => (
                     <TextInput
                       id={id}
@@ -275,7 +268,7 @@ export function OnboardingPage() {
                     />
                   )}
                 </Field>
-                <Field label="Altura (cm)" error={touched ? errors.heightCm : undefined}>
+                <Field label={t.onboarding.heightLabel} error={touched ? errors.heightCm : undefined}>
                   {(id) => (
                     <TextInput
                       id={id}
@@ -287,7 +280,7 @@ export function OnboardingPage() {
                     />
                   )}
                 </Field>
-                <Field label="Idade" error={touched ? errors.age : undefined}>
+                <Field label={t.onboarding.ageLabel} error={touched ? errors.age : undefined}>
                   {(id) => (
                     <TextInput
                       id={id}
@@ -299,28 +292,24 @@ export function OnboardingPage() {
                     />
                   )}
                 </Field>
-                <Field label="Sexo biológico" hint="Usado apenas na fórmula de metabolismo basal.">
+                <Field label={t.onboarding.sexLabel} hint={t.onboarding.sexHint}>
                   {(id) => (
-                    <Select
-                      id={id}
-                      value={draft.sex}
-                      onChange={(event) => patch({ sex: event.target.value as Sex })}
-                    >
-                      <option value="masculino">Masculino</option>
-                      <option value="feminino">Feminino</option>
+                    <Select id={id} value={draft.sex} onChange={(event) => patch({ sex: event.target.value as Sex })}>
+                      <option value="masculino">{t.sexes.masculino}</option>
+                      <option value="feminino">{t.sexes.feminino}</option>
                     </Select>
                   )}
                 </Field>
-                <Field label="Preferência alimentar (opcional)">
+                <Field label={t.onboarding.dietLabel}>
                   {(id) => (
                     <Select
                       id={id}
                       value={draft.dietPreference}
                       onChange={(event) => patch({ dietPreference: event.target.value as DietPreference })}
                     >
-                      {DIETS.map((diet) => (
-                        <option key={diet.value} value={diet.value}>
-                          {diet.label}
+                      {DIET_ORDER.map((diet) => (
+                        <option key={diet} value={diet}>
+                          {t.diets[diet]}
                         </option>
                       ))}
                     </Select>
@@ -333,49 +322,46 @@ export function OnboardingPage() {
           {step === 4 && targets && (
             <>
               <div>
-                <h1 className="text-2xl font-bold text-ink">Tudo pronto, {draft.name.trim()}.</h1>
-                <p className="mt-1.5 leading-relaxed text-ink-muted">
-                  Com base nos teus dados, esta é a nossa estimativa diária. Podes ajustá-la mais tarde no perfil.
-                </p>
+                <h1 className="text-2xl font-bold text-ink">{t.onboarding.summaryTitle(draft.name.trim())}</h1>
+                <p className="mt-1.5 leading-relaxed text-ink-muted">{t.onboarding.summaryText}</p>
               </div>
 
-              <div className="rounded-2xl border border-cyan-electric/30 bg-cyan-electric/5 p-5 text-center">
-                <p className="text-sm font-medium text-ink-muted">Meta calórica diária</p>
-                <p className="font-display text-5xl font-bold text-cyan-electric">
-                  {formatNumber(targets.calories)}
-                  <span className="ml-1 text-xl text-ink-muted">kcal</span>
+              <div className="rounded-2xl border border-ember/30 bg-ember/5 p-5 text-center">
+                <p className="text-sm font-medium text-ink-muted">{t.onboarding.calorieGoal}</p>
+                <p className="font-display text-5xl font-bold text-ember">
+                  {n(targets.calories)}
+                  <span className="ml-1 text-xl text-ink-muted">{t.units.kcal}</span>
                 </p>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { label: 'Proteína', value: targets.proteinG, color: 'text-cyan-electric' },
-                  { label: 'Hidratos', value: targets.carbsG, color: 'text-violet-soft' },
-                  { label: 'Gordura', value: targets.fatG, color: 'text-gold' },
+                  { label: t.macros.protein, value: targets.proteinG, color: 'text-ember' },
+                  { label: t.macros.carbs, value: targets.carbsG, color: 'text-crimson-soft' },
+                  { label: t.macros.fat, value: targets.fatG, color: 'text-gold' },
                 ].map((macro) => (
-                  <div key={macro.label} className="rounded-xl border border-night-600 bg-night-900/40 p-4 text-center">
+                  <div key={macro.label} className="rounded-xl border border-void-600 bg-void-900/40 p-4 text-center">
                     <p className="text-xs font-medium text-ink-muted">{macro.label}</p>
-                    <p className={`font-display text-2xl font-bold ${macro.color}`}>{macro.value} g</p>
+                    <p className={`font-display text-2xl font-bold ${macro.color}`}>
+                      {macro.value} {t.units.grams}
+                    </p>
                   </div>
                 ))}
               </div>
 
-              <div className="rounded-xl border border-night-600 bg-night-900/40 p-4">
+              <div className="rounded-xl border border-void-600 bg-void-900/40 p-4">
                 <p className="flex items-center gap-2 text-sm font-semibold text-ink">
                   <Icon name="Sparkles" size={16} className="text-gold" />
-                  O que acontece a seguir
+                  {t.onboarding.whatsNext}
                 </p>
                 <ul className="mt-2 space-y-1.5 text-sm text-ink-muted">
-                  <li>· Plano semanal de {draft.daysPerWeek} treinos gerado automaticamente</li>
-                  <li>· 3 missões diárias e desafios semanais prontos a começar</li>
-                  <li>· Nível 1 — cada treino, refeição e missão dá XP</li>
+                  <li>· {t.onboarding.nextPlan(draft.daysPerWeek)}</li>
+                  <li>· {t.onboarding.nextQuests}</li>
+                  <li>· {t.onboarding.nextLevel}</li>
                 </ul>
               </div>
 
-              <Disclaimer>
-                Estas são estimativas para gestão pessoal e não constituem aconselhamento médico ou nutricional.
-                Se tens alguma condição de saúde, consulta um profissional antes de mudar treino ou alimentação.
-              </Disclaimer>
+              <Disclaimer>{t.disclaimer.onboarding}</Disclaimer>
             </>
           )}
         </div>
@@ -383,15 +369,15 @@ export function OnboardingPage() {
 
       <div className="flex items-center justify-between gap-3">
         <Button icon="ArrowLeft" onClick={goBack} disabled={step === 0}>
-          Voltar
+          {t.common.back}
         </Button>
-        {step < STEP_TITLES.length - 1 ? (
+        {step < TOTAL_STEPS - 1 ? (
           <Button variant="primary" iconRight="ArrowRight" onClick={goNext}>
-            Continuar
+            {t.common.next}
           </Button>
         ) : (
           <Button variant="primary" size="lg" icon="Zap" onClick={finish}>
-            Iniciar Jornada
+            {t.onboarding.finish}
           </Button>
         )}
       </div>

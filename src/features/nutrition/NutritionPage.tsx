@@ -1,16 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
-import { CATEGORY_LABELS, getFood, searchFoods } from '@/data/foods'
+import { getFood, searchFoods } from '@/data/foods'
 import { Button, IconButton } from '@/components/ui/Button'
 import { Card, CardBody, CardHeader } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
 import { Badge, Disclaimer, EmptyState, Field, SearchInput, Select, TextInput } from '@/components/ui/Misc'
 import { MacroBar, ProgressRing } from '@/components/ui/Progress'
 import { Modal } from '@/components/ui/Modal'
-import { formatNumber } from '@/lib/cn'
+import { useI18n } from '@/i18n'
 import { today } from '@/services/dates'
 import { suggestMeals } from '@/services/suggestions'
 import {
-  MEAL_LABELS,
   MEAL_ORDER,
   checkProteinBonus,
   entryMacros,
@@ -19,6 +18,8 @@ import {
 } from '@/store/nutritionStore'
 import { useUserStore } from '@/store/userStore'
 import type { Food, MealType } from '@/types'
+
+const WATER_GOAL_ML = 2500
 
 function AddFoodModal({
   open,
@@ -29,6 +30,7 @@ function AddFoodModal({
   onClose: () => void
   mealType: MealType
 }) {
+  const { t, n, lang, loc } = useI18n()
   const diet = useUserStore((state) => state.profile?.dietPreference ?? 'sem_preferencia')
   const targets = useUserStore((state) => state.targets)
   const addEntry = useNutritionStore((state) => state.addEntry)
@@ -47,11 +49,12 @@ function AddFoodModal({
     }
   }, [open, mealType])
 
-  const results = useMemo(() => searchFoods(query, diet).slice(0, 40), [query, diet])
+  const results = useMemo(() => searchFoods(query, diet, lang).slice(0, 40), [query, diet, lang])
   const quantity = Number(grams)
-  const preview = food && Number.isFinite(quantity) && quantity > 0
-    ? entryMacros({ id: '', date: '', mealType: selectedMeal, foodId: food.id, grams: quantity })
-    : null
+  const preview =
+    food && Number.isFinite(quantity) && quantity > 0
+      ? entryMacros({ id: '', date: '', mealType: selectedMeal, foodId: food.id, grams: quantity })
+      : null
 
   const confirm = () => {
     if (!food || !Number.isFinite(quantity) || quantity <= 0) return
@@ -64,17 +67,17 @@ function AddFoodModal({
     <Modal
       open={open}
       onClose={onClose}
-      title="Registar alimento"
-      description="Pesquisa no catálogo e ajusta a quantidade."
+      title={t.nutrition.addTitle}
+      description={t.nutrition.addDescription}
       footer={
         <div className="flex items-center justify-between gap-3">
           <span className="text-sm text-ink-muted">
-            {preview ? `${formatNumber(preview.calories)} kcal · ${preview.proteinG} g proteína` : 'Escolhe um alimento'}
+            {preview ? t.nutrition.preview(n(preview.calories), preview.proteinG) : t.nutrition.pickFood}
           </span>
           <div className="flex gap-2">
-            <Button onClick={onClose}>Cancelar</Button>
+            <Button onClick={onClose}>{t.common.cancel}</Button>
             <Button variant="primary" icon="Plus" onClick={confirm} disabled={!preview}>
-              Adicionar
+              {t.common.add}
             </Button>
           </div>
         </div>
@@ -82,7 +85,7 @@ function AddFoodModal({
     >
       <div className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-2">
-          <Field label="Refeição">
+          <Field label={t.nutrition.mealLabel}>
             {(id) => (
               <Select
                 id={id}
@@ -91,13 +94,16 @@ function AddFoodModal({
               >
                 {MEAL_ORDER.map((meal) => (
                   <option key={meal} value={meal}>
-                    {MEAL_LABELS[meal]}
+                    {t.meals[meal]}
                   </option>
                 ))}
               </Select>
             )}
           </Field>
-          <Field label="Quantidade (g)" hint={food ? `Porção habitual: ${food.portionLabel}` : undefined}>
+          <Field
+            label={t.nutrition.quantityLabel}
+            hint={food ? t.nutrition.commonPortionHint(loc(food.portionLabel)) : undefined}
+          >
             {(id) => (
               <TextInput
                 id={id}
@@ -112,25 +118,29 @@ function AddFoodModal({
         </div>
 
         {food && (
-          <div className="flex items-center justify-between gap-3 rounded-xl border border-cyan-electric/40 bg-cyan-electric/5 p-3.5">
+          <div className="flex items-center justify-between gap-3 rounded-xl border border-ember/40 bg-ember/5 p-3.5">
             <div className="min-w-0">
-              <p className="truncate font-medium text-ink">{food.name}</p>
+              <p className="truncate font-medium text-ink">{loc(food.name)}</p>
               <p className="text-xs text-ink-muted">
-                {food.per100g.calories} kcal / 100 g · P {food.per100g.proteinG} · H {food.per100g.carbsG} · G{' '}
-                {food.per100g.fatG}
+                {t.nutrition.per100g(
+                  food.per100g.calories,
+                  food.per100g.proteinG,
+                  food.per100g.carbsG,
+                  food.per100g.fatG,
+                )}
               </p>
             </div>
             <Button size="sm" onClick={() => setGrams(String(food.commonPortionG))}>
-              Porção habitual
+              {t.nutrition.commonPortion}
             </Button>
           </div>
         )}
 
         <SearchInput
           value={query}
-          placeholder="Pesquisar alimento…"
+          placeholder={t.nutrition.searchPlaceholder}
           onChange={(event) => setQuery(event.target.value)}
-          aria-label="Pesquisar alimento"
+          aria-label={t.nutrition.searchAria}
         />
 
         <ul className="max-h-72 space-y-1.5 overflow-y-auto pr-1">
@@ -144,25 +154,23 @@ function AddFoodModal({
                 }}
                 className={
                   food?.id === item.id
-                    ? 'flex w-full items-center gap-3 rounded-xl border border-cyan-electric/60 bg-cyan-electric/10 p-3 text-left'
-                    : 'flex w-full items-center gap-3 rounded-xl border border-night-600 bg-night-800/50 p-3 text-left transition-colors hover:border-night-500'
+                    ? 'flex w-full items-center gap-3 rounded-xl border border-ember/60 bg-ember/10 p-3 text-left'
+                    : 'flex w-full items-center gap-3 rounded-xl border border-void-600 bg-void-800/50 p-3 text-left transition-colors hover:border-void-500'
                 }
               >
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium text-ink">{item.name}</span>
-                  <span className="text-xs text-ink-faint">{item.portionLabel}</span>
+                  <span className="block truncate text-sm font-medium text-ink">{loc(item.name)}</span>
+                  <span className="text-xs text-ink-faint">{loc(item.portionLabel)}</span>
                 </span>
-                <Badge tone="neutral">{CATEGORY_LABELS[item.category]}</Badge>
-                <span className="shrink-0 text-sm font-semibold tabular-nums text-cyan-electric">
-                  {item.per100g.calories} kcal
+                <Badge tone="neutral">{t.foodCategories[item.category]}</Badge>
+                <span className="shrink-0 text-sm font-semibold tabular-nums text-ember">
+                  {item.per100g.calories} {t.units.kcal}
                 </span>
               </button>
             </li>
           ))}
           {results.length === 0 && (
-            <li className="py-6 text-center text-sm text-ink-faint">
-              Nenhum alimento encontrado para “{query}”.
-            </li>
+            <li className="py-6 text-center text-sm text-ink-faint">{t.nutrition.noResults(query)}</li>
           )}
         </ul>
       </div>
@@ -171,28 +179,38 @@ function AddFoodModal({
 }
 
 function WaterCard() {
+  const { t } = useI18n()
   const addWater = useNutritionStore((state) => state.addWater)
   const waterByDate = useNutritionStore((state) => state.waterByDate)
   const water = waterByDate[today()] ?? 0
-  const goal = 2500
 
   return (
     <Card>
-      <CardHeader title="Hidratação" subtitle={`Meta sugerida: ${goal / 1000} L`} icon="Droplets" />
+      <CardHeader
+        title={t.nutrition.hydration}
+        subtitle={t.nutrition.suggestedGoal(String(WATER_GOAL_ML / 1000).replace('.', ','))}
+        icon="Droplets"
+      />
       <CardBody className="space-y-3 pt-3">
         <div className="flex items-baseline gap-2">
-          <span className="font-display text-4xl font-bold tabular-nums text-cyan-electric">
+          <span className="font-display text-4xl font-bold tabular-nums text-ember">
             {(water / 1000).toFixed(2).replace('.', ',')}
           </span>
-          <span className="text-ink-muted">L hoje</span>
+          <span className="text-ink-muted">{t.nutrition.litresToday}</span>
         </div>
-        <MacroBar label="Progresso" value={water} target={goal} unit="ml" tone="cyan" />
+        <MacroBar
+          label={t.nutrition.progress}
+          value={water}
+          target={WATER_GOAL_ML}
+          unit={t.units.ml}
+          tone="ember"
+        />
         <div className="flex gap-2">
           <Button size="sm" icon="Plus" onClick={() => addWater(250)}>
-            250 ml
+            250 {t.units.ml}
           </Button>
           <Button size="sm" icon="Plus" onClick={() => addWater(500)}>
-            500 ml
+            500 {t.units.ml}
           </Button>
         </div>
       </CardBody>
@@ -201,6 +219,7 @@ function WaterCard() {
 }
 
 export function NutritionPage() {
+  const { t, n, lang, loc } = useI18n()
   const profile = useUserStore((state) => state.profile)
   const targets = useUserStore((state) => state.targets)
   const entries = useNutritionStore((state) => state.entries)
@@ -216,8 +235,8 @@ export function NutritionPage() {
   const remaining = remainingMacros(totals, targets)
 
   const suggestions = useMemo(
-    () => suggestMeals(remaining, profile?.dietPreference ?? 'sem_preferencia'),
-    [remaining, profile?.dietPreference],
+    () => suggestMeals(remaining, profile?.dietPreference ?? 'sem_preferencia', t, lang),
+    [remaining, profile?.dietPreference, t, lang],
   )
 
   if (!targets) return null
@@ -228,40 +247,42 @@ export function NutritionPage() {
     <div className="space-y-5">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-ink">Nutrição</h1>
-          <p className="mt-1 text-ink-muted">
-            {formatNumber(remaining.calories)} kcal restantes de {formatNumber(targets.calories)}
-          </p>
+          <h1 className="slash-divider text-3xl font-bold text-ink">{t.nutrition.title}</h1>
+          <p className="mt-3 text-ink-muted">{t.nutrition.remainingOf(n(remaining.calories), n(targets.calories))}</p>
         </div>
         <Button variant="primary" icon="Plus" onClick={() => setAdding('almoco')}>
-          Registar refeição
+          {t.nutrition.logMeal}
         </Button>
       </header>
 
       <div className="grid gap-5 lg:grid-cols-[1fr_20rem]">
         <Card>
-          <CardHeader title="Resumo do dia" subtitle="Calorias e macronutrientes" icon="UtensilsCrossed" />
+          <CardHeader
+            title={t.nutrition.daySummary}
+            subtitle={t.nutrition.caloriesAndMacros}
+            icon="UtensilsCrossed"
+          />
           <CardBody className="pt-3">
             <div className="flex flex-col items-center gap-6 sm:flex-row">
               <ProgressRing
                 value={totals.calories}
                 max={targets.calories}
                 size={160}
-                tone={overTarget ? 'warn' : 'cyan'}
-                label={`${formatNumber(totals.calories)} de ${formatNumber(targets.calories)} kcal`}
+                tone={overTarget ? 'warn' : 'ember'}
+                label={`${n(totals.calories)} / ${n(targets.calories)} ${t.units.kcal}`}
               >
-                <span className="font-display text-4xl font-bold tabular-nums text-ink">
-                  {formatNumber(totals.calories)}
+                <span className="font-display text-4xl font-bold tabular-nums text-ink">{n(totals.calories)}</span>
+                <span className="text-xs text-ink-muted">
+                  {t.common.of} {n(targets.calories)} {t.units.kcal}
                 </span>
-                <span className="text-xs text-ink-muted">de {formatNumber(targets.calories)} kcal</span>
               </ProgressRing>
               <div className="w-full flex-1 space-y-4">
-                <MacroBar label="Proteína" value={totals.proteinG} target={targets.proteinG} tone="cyan" />
-                <MacroBar label="Hidratos" value={totals.carbsG} target={targets.carbsG} tone="violet" />
-                <MacroBar label="Gordura" value={totals.fatG} target={targets.fatG} tone="gold" />
+                <MacroBar label={t.macros.protein} value={totals.proteinG} target={targets.proteinG} tone="ember" />
+                <MacroBar label={t.macros.carbs} value={totals.carbsG} target={targets.carbsG} tone="crimson" />
+                <MacroBar label={t.macros.fat} value={totals.fatG} target={targets.fatG} tone="gold" />
                 {overTarget && (
                   <Badge tone="warn" icon="AlertTriangle">
-                    Acima da meta estimada — sem problema, ajusta amanhã.
+                    {t.nutrition.overTarget}
                   </Badge>
                 )}
               </div>
@@ -273,11 +294,7 @@ export function NutritionPage() {
       </div>
 
       <Card>
-        <CardHeader
-          title="Sugestões para hoje"
-          subtitle="Combinações do catálogo com base no que falta"
-          icon="Sparkles"
-        />
+        <CardHeader title={t.nutrition.suggestions} subtitle={t.nutrition.suggestionsSubtitle} icon="Sparkles" />
         <CardBody className="space-y-3 pt-3">
           {suggestions.message ? (
             <p className="rounded-xl border border-good/35 bg-good/5 p-4 text-sm leading-relaxed text-ink">
@@ -285,46 +302,57 @@ export function NutritionPage() {
             </p>
           ) : (
             <>
-              <p className="text-sm font-medium text-cyan-electric">{suggestions.suggestions[0]?.headline}</p>
+              <p className="text-sm font-medium text-ember">{suggestions.suggestions[0]?.headline}</p>
               <ul className="space-y-2">
                 {suggestions.suggestions.map((suggestion) => (
                   <li
                     key={suggestion.id}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-night-600 bg-night-800/50 p-3.5"
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-void-600 bg-void-800/50 p-3.5"
                   >
                     <div className="min-w-0">
                       <p className="font-medium text-ink">{suggestion.detail}</p>
                       <p className="mt-0.5 text-xs text-ink-faint">
-                        {suggestion.foodIds.map((id) => getFood(id)?.name).filter(Boolean).join(' · ')}
+                        {suggestion.foodIds
+                          .map((id) => {
+                            const item = getFood(id)
+                            return item ? loc(item.name) : null
+                          })
+                          .filter(Boolean)
+                          .join(' · ')}
                       </p>
                     </div>
                     <div className="flex shrink-0 gap-2">
-                      <Badge tone="cyan">{formatNumber(suggestion.totals.calories)} kcal</Badge>
-                      <Badge tone="neutral">P {suggestion.totals.proteinG} g</Badge>
+                      <Badge tone="ember">
+                        {n(suggestion.totals.calories)} {t.units.kcal}
+                      </Badge>
+                      <Badge tone="neutral">
+                        P {suggestion.totals.proteinG} {t.units.grams}
+                      </Badge>
                     </div>
                   </li>
                 ))}
               </ul>
             </>
           )}
-          <Disclaimer>
-            Sugestões automáticas geradas a partir do catálogo local. Não substituem aconselhamento clínico
-            ou nutricional.
-          </Disclaimer>
+          <Disclaimer>{t.disclaimer.suggestions}</Disclaimer>
         </CardBody>
       </Card>
 
       <Card>
-        <CardHeader title="Diário de hoje" subtitle={`${todayEntries.length} registos`} icon="ListChecks" />
+        <CardHeader
+          title={t.nutrition.diary}
+          subtitle={t.nutrition.entriesCount(todayEntries.length)}
+          icon="ListChecks"
+        />
         <CardBody className="space-y-4 pt-3">
           {todayEntries.length === 0 && (
             <EmptyState
               icon="UtensilsCrossed"
-              title="Ainda não registaste nada hoje"
-              message="Adiciona a primeira refeição para começares a acompanhar calorias e macros."
+              title={t.nutrition.emptyTitle}
+              message={t.nutrition.emptyText}
               action={
                 <Button variant="primary" icon="Plus" onClick={() => setAdding('pequeno_almoco')}>
-                  Registar refeição
+                  {t.nutrition.logMeal}
                 </Button>
               }
             />
@@ -338,33 +366,41 @@ export function NutritionPage() {
             return (
               <section key={meal}>
                 <div className="mb-2 flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-ink">{MEAL_LABELS[meal]}</h3>
+                  <h3 className="text-sm font-semibold text-ink">{t.meals[meal]}</h3>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs tabular-nums text-ink-muted">{formatNumber(mealTotal)} kcal</span>
-                    <IconButton icon="Plus" label={`Adicionar a ${MEAL_LABELS[meal]}`} size="sm" onClick={() => setAdding(meal)} />
+                    <span className="text-xs tabular-nums text-ink-muted">
+                      {n(mealTotal)} {t.units.kcal}
+                    </span>
+                    <IconButton
+                      icon="Plus"
+                      label={t.nutrition.addToMeal(t.meals[meal])}
+                      size="sm"
+                      onClick={() => setAdding(meal)}
+                    />
                   </div>
                 </div>
                 <ul className="space-y-1.5">
                   {mealEntries.map((entry) => {
                     const food = getFood(entry.foodId)
                     const macros = entryMacros(entry)
+                    const foodName = food ? loc(food.name) : entry.foodId
                     return (
                       <li
                         key={entry.id}
-                        className="flex items-center gap-3 rounded-xl border border-night-600 bg-night-800/40 p-3"
+                        className="flex items-center gap-3 rounded-xl border border-void-600 bg-void-800/40 p-3"
                       >
                         <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium text-ink">{food?.name ?? 'Alimento'}</p>
+                          <p className="truncate text-sm font-medium text-ink">{foodName}</p>
                           <p className="text-xs text-ink-faint">
-                            {entry.grams} g · P {macros.proteinG} · H {macros.carbsG} · G {macros.fatG}
+                            {t.nutrition.entryMacros(entry.grams, macros.proteinG, macros.carbsG, macros.fatG)}
                           </p>
                         </div>
-                        <span className="shrink-0 text-sm font-semibold tabular-nums text-cyan-electric">
-                          {formatNumber(macros.calories)} kcal
+                        <span className="shrink-0 text-sm font-semibold tabular-nums text-ember">
+                          {n(macros.calories)} {t.units.kcal}
                         </span>
                         <IconButton
                           icon="Trash2"
-                          label={`Remover ${food?.name ?? 'alimento'}`}
+                          label={t.nutrition.removeAria(foodName)}
                           size="sm"
                           onClick={() => removeEntry(entry.id)}
                         />
@@ -377,10 +413,10 @@ export function NutritionPage() {
           })}
 
           {todayEntries.length > 0 && (
-            <div className="flex flex-wrap gap-2 border-t border-night-700 pt-4">
+            <div className="flex flex-wrap gap-2 border-t border-void-700 pt-4">
               {MEAL_ORDER.map((meal) => (
                 <Button key={meal} size="sm" icon="Plus" onClick={() => setAdding(meal)}>
-                  {MEAL_LABELS[meal]}
+                  {t.meals[meal]}
                 </Button>
               ))}
             </div>
@@ -390,8 +426,7 @@ export function NutritionPage() {
 
       <p className="flex items-start gap-2 text-xs leading-relaxed text-ink-faint">
         <Icon name="Info" size={14} className="mt-0.5 shrink-0" />
-        Os valores nutricionais do catálogo são aproximados e servem para orientação. Consulta o rótulo do
-        produto para valores exatos.
+        {t.disclaimer.foodValues}
       </p>
 
       <AddFoodModal open={adding !== null} mealType={adding ?? 'almoco'} onClose={() => setAdding(null)} />

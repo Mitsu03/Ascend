@@ -1,3 +1,4 @@
+import { localized as l } from '@/i18n/types'
 import type { CosmeticItem, CosmeticSlot, Rarity } from '@/types'
 
 /**
@@ -8,97 +9,115 @@ export const COSMETICS: CosmeticItem[] = [
   // Molduras do avatar
   {
     id: 'moldura-ferro',
-    name: 'Moldura de Ferro',
+    name: l('Moldura de Aço', 'Steel Frame'),
     slot: 'frame',
     rarity: 'comum',
-    description: 'Um contorno sóbrio para quem começou a levar a sério.',
+    description: l(
+      'Um contorno sóbrio para quem começou a levar a sério.',
+      'A restrained outline for someone starting to take this seriously.',
+    ),
     price: 120,
-    value: '#64748b',
+    value: '#7b8494',
   },
   {
     id: 'moldura-aurora',
-    name: 'Moldura Aurora',
+    name: l('Moldura Aurora', 'Dawn Frame'),
     slot: 'frame',
     rarity: 'raro',
-    description: 'Contorno em gradiente ciano-violeta, como o céu antes do treino da manhã.',
+    description: l(
+      'Gradiente âmbar e carmesim, como o céu antes do treino da manhã.',
+      'An amber and crimson gradient, like the sky before a morning session.',
+    ),
     price: 260,
-    value: 'linear-gradient(135deg, #22d3ee, #7c3aed)',
+    value: 'linear-gradient(135deg, #ff7a1a, #d1244a)',
   },
   {
     id: 'moldura-solar',
-    name: 'Moldura Solar',
+    name: l('Moldura Solar', 'Solar Frame'),
     slot: 'frame',
     rarity: 'epico',
-    description: 'Ouro fundido. Reservada a quem não falha.',
+    description: l('Ouro fundido. Reservada a quem não falha.', 'Molten gold. Reserved for those who never miss.'),
     price: 480,
-    value: 'linear-gradient(135deg, #fbbf24, #f97316)',
+    value: 'linear-gradient(135deg, #ffb020, #ff5a1f)',
   },
 
   // Títulos
   {
     id: 'titulo-novato',
-    name: 'Novato Determinado',
+    name: l('Alma Determinada', 'Determined Soul'),
     slot: 'title',
     rarity: 'comum',
-    description: 'Todo o herói começa aqui.',
+    description: l('Todo o herói começa aqui.', 'Every hero starts here.'),
     price: 80,
-    value: 'Novato Determinado',
+    value: 'title',
   },
   {
     id: 'titulo-lamina',
-    name: 'Lâmina do Amanhecer',
+    name: l('Lâmina do Amanhecer', 'Blade of Dawn'),
     slot: 'title',
     rarity: 'raro',
-    description: 'Para quem treina antes de o mundo acordar.',
+    description: l(
+      'Para quem treina antes de o mundo acordar.',
+      'For those who train before the world wakes up.',
+    ),
     price: 240,
-    value: 'Lâmina do Amanhecer',
+    value: 'title',
   },
   {
     id: 'titulo-guardiao-descanso',
-    name: 'Guardião do Descanso',
+    name: l('Guardião do Descanso', 'Guardian of Rest'),
     slot: 'title',
     rarity: 'raro',
-    description: 'Sabe que a recuperação também é treino.',
+    description: l(
+      'Sabe que a recuperação também é treino.',
+      'Knows that recovery is training too.',
+    ),
     price: 240,
-    value: 'Guardião do Descanso',
+    value: 'title',
   },
   {
     id: 'titulo-lenda',
-    name: 'Lenda em Ascensão',
+    name: l('Lenda em Ascensão', 'Rising Legend'),
     slot: 'title',
     rarity: 'epico',
-    description: 'O nome que aparece nas histórias que se contam no ginásio.',
+    description: l(
+      'O nome que aparece nas histórias que se contam no ginásio.',
+      'The name that shows up in the stories people tell at the gym.',
+    ),
     price: 520,
-    value: 'Lenda em Ascensão',
+    value: 'title',
   },
 
   // Auras
   {
     id: 'aura-ciano',
-    name: 'Aura Ciano',
+    name: l('Aura Espectral', 'Spectral Aura'),
     slot: 'aura',
     rarity: 'comum',
-    description: 'Brilho elétrico e sereno.',
+    description: l('Brilho branco-azulado e sereno.', 'A calm blue-white glow.'),
     price: 140,
-    value: '#22d3ee',
+    value: '#8fd4ff',
   },
   {
-    id: 'aura-violeta',
-    name: 'Aura Violeta',
+    id: 'aura-carmesim',
+    name: l('Aura Carmesim', 'Crimson Aura'),
     slot: 'aura',
     rarity: 'raro',
-    description: 'Energia profunda de fim de tarde.',
+    description: l('Energia profunda de fim de tarde.', 'Deep late-afternoon energy.'),
     price: 280,
-    value: '#a855f7',
+    value: '#e0325c',
   },
   {
     id: 'aura-dourada',
-    name: 'Aura Dourada',
+    name: l('Aura Incandescente', 'Blazing Aura'),
     slot: 'aura',
     rarity: 'epico',
-    description: 'A luz de quem já provou muito a si próprio.',
+    description: l(
+      'A luz de quem já provou muito a si próprio.',
+      'The light of someone who has proved plenty to themselves.',
+    ),
     price: 500,
-    value: '#fbbf24',
+    value: '#ff7a1a',
   },
 ]
 
@@ -110,21 +129,11 @@ export function getCosmetic(id: string): CosmeticItem | undefined {
   return COSMETIC_BY_ID[id]
 }
 
-export const SLOT_LABELS: Record<CosmeticSlot, string> = {
-  frame: 'Molduras',
-  title: 'Títulos',
-  aura: 'Auras',
-}
-
-export const RARITY_LABELS: Record<Rarity, string> = {
-  comum: 'Comum',
-  raro: 'Raro',
-  epico: 'Épico',
-}
+export const SLOT_ORDER: CosmeticSlot[] = ['frame', 'title', 'aura']
 
 export const RARITY_CLASSES: Record<Rarity, string> = {
-  comum: 'text-ink-muted border-night-600',
-  raro: 'text-cyan-soft border-cyan-electric/45',
+  comum: 'text-ink-muted border-void-600',
+  raro: 'text-spirit border-ember/45',
   epico: 'text-gold-soft border-gold/50',
 }
 

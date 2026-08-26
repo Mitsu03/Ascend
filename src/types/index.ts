@@ -1,3 +1,5 @@
+import type { Localized } from '@/i18n/types'
+
 /**
  * Modelo de domínio da Ascend.
  * Todas as datas em formato 'YYYY-MM-DD' salvo indicação em contrário.
@@ -84,11 +86,11 @@ export type MuscleGroup =
 
 export interface Exercise {
   id: string
-  name: string
+  name: Localized
   muscleGroup: MuscleGroup
   equipment: Equipment
   difficulty: ExperienceLevel
-  description: string
+  description: Localized
 }
 
 export interface WorkoutExercise {
@@ -100,8 +102,9 @@ export interface WorkoutExercise {
 
 export interface WorkoutDay {
   id: string
-  name: string
-  focus: string
+  /** Nos treinos personalizados o texto do utilizador é usado nas duas línguas. */
+  name: Localized
+  focus: Localized
   /** 0 = Domingo … 6 = Sábado */
   dayOfWeek: number
   exercises: WorkoutExercise[]
@@ -112,7 +115,7 @@ export interface WorkoutDay {
 export interface WorkoutSessionLog {
   id: string
   workoutDayId: string
-  workoutName: string
+  workoutName: Localized
   date: string
   durationSeconds: number
   completedSets: number
@@ -150,7 +153,7 @@ export type MealType = 'pequeno_almoco' | 'almoco' | 'lanche' | 'jantar' | 'snac
 
 export interface Food {
   id: string
-  name: string
+  name: Localized
   category: FoodCategory
   /** Valores por 100 g (ou 100 ml em bebidas) */
   per100g: {
@@ -160,7 +163,7 @@ export interface Food {
     fatG: number
   }
   commonPortionG: number
-  portionLabel: string
+  portionLabel: Localized
   /** Dietas com que é compatível. Vazio = compatível com todas. */
   diets: DietPreference[]
 }
@@ -197,9 +200,9 @@ export interface QuestTemplate {
   id: string
   type: QuestType
   period: QuestPeriod
-  title: string
-  description: string
-  unit: string
+  title: Localized
+  description: Localized
+  unit: Localized
   /** Alvo base; pode ser ajustado ao perfil pelo gerador */
   baseTarget: number
   rewardXp: number
@@ -215,9 +218,9 @@ export interface Quest {
   templateId: string
   type: QuestType
   period: QuestPeriod
-  title: string
-  description: string
-  unit: string
+  title: Localized
+  description: Localized
+  unit: Localized
   target: number
   progress: number
   rewardXp: number
@@ -237,8 +240,8 @@ export interface Quest {
 
 export interface Achievement {
   id: string
-  title: string
-  description: string
+  title: Localized
+  description: Localized
   icon: string
   target: number
   metric:
@@ -267,10 +270,10 @@ export type Rarity = 'comum' | 'raro' | 'epico'
 
 export interface CosmeticItem {
   id: string
-  name: string
+  name: Localized
   slot: CosmeticSlot
   rarity: Rarity
-  description: string
+  description: Localized
   price: number
   /** Valor aplicado pela UI (cor, gradiente ou texto) */
   value: string

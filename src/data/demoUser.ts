@@ -24,7 +24,7 @@ export const DEMO_PROFILE: UserProfile = {
   dietPreference: 'sem_preferencia',
   createdAt: new Date().toISOString(),
   avatarVariant: 1,
-  avatarHue: 190,
+  avatarHue: 24,
 }
 
 export interface DemoData {
@@ -168,7 +168,7 @@ export function buildDemoData(): DemoData {
         progress = quest.period === 'semanal' ? Math.min(quest.target, 2) : 0
         break
       case 'proteina':
-        progress = quest.unit === 'g' ? Math.round(proteinToday) : Math.min(quest.target, 3)
+        progress = quest.period === 'diaria' ? Math.round(proteinToday) : Math.min(quest.target, 3)
         break
       case 'agua':
         progress = quest.period === 'diaria' ? waterByDate[now] : 9000

@@ -1,14 +1,15 @@
+import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { Icon } from '@/components/ui/Icon'
 import { useToastStore } from '@/store/toastStore'
 import type { ToastKind } from '@/store/toastStore'
 
-const KIND_STYLES: Record<ToastKind, { border: string; icon: string; text: string }> = {
-  info: { border: 'border-night-500', icon: 'text-cyan-electric', text: 'Info' },
-  sucesso: { border: 'border-good/45', icon: 'text-good', text: 'Sucesso' },
-  nivel: { border: 'border-gold/60 glow-gold', icon: 'text-gold', text: 'Novo nível' },
-  conquista: { border: 'border-violet-soft/50 glow-violet', icon: 'text-violet-soft', text: 'Conquista' },
-  aviso: { border: 'border-warn/45', icon: 'text-warn', text: 'Aviso' },
+const KIND_STYLES: Record<ToastKind, { border: string; icon: string }> = {
+  info: { border: 'border-void-500', icon: 'text-spirit' },
+  sucesso: { border: 'border-good/45', icon: 'text-good' },
+  nivel: { border: 'border-gold/60 glow-gold', icon: 'text-gold' },
+  conquista: { border: 'border-crimson-soft/50 glow-crimson', icon: 'text-crimson-soft' },
+  aviso: { border: 'border-warn/45', icon: 'text-warn' },
 }
 
 const DEFAULT_ICON: Record<ToastKind, string> = {
@@ -20,6 +21,7 @@ const DEFAULT_ICON: Record<ToastKind, string> = {
 }
 
 export function Toaster() {
+  const { t } = useI18n()
   const toasts = useToastStore((state) => state.toasts)
   const dismiss = useToastStore((state) => state.dismiss)
 
@@ -37,7 +39,7 @@ export function Toaster() {
           <div
             key={toast.id}
             className={cn(
-              'pointer-events-auto flex animate-rise items-start gap-3 rounded-xl border bg-night-800/95 p-3.5 shadow-xl backdrop-blur',
+              'pointer-events-auto flex animate-rise items-start gap-3 rounded-xl border bg-void-800/95 p-3.5 shadow-xl backdrop-blur',
               style.border,
             )}
           >
@@ -51,7 +53,7 @@ export function Toaster() {
             <button
               type="button"
               onClick={() => dismiss(toast.id)}
-              aria-label="Fechar notificação"
+              aria-label={t.common.dismissNotification}
               className="shrink-0 rounded-md p-1 text-ink-faint transition-colors hover:text-ink"
             >
               <Icon name="X" size={14} />

@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { getFood } from '@/data/foods'
+import { getDictionary } from '@/i18n'
 import { today, weekDates } from '@/services/dates'
 import { createPersistStorage } from '@/services/storage'
 import { useGameStore } from '@/store/gameStore'
@@ -10,15 +11,12 @@ import type { DailyTotals, MacroTargets, MealEntry, MealType } from '@/types'
 
 export const EMPTY_TOTALS: DailyTotals = { calories: 0, proteinG: 0, carbsG: 0, fatG: 0 }
 
-export const MEAL_LABELS: Record<MealType, string> = {
-  pequeno_almoco: 'Pequeno-almoço',
-  almoco: 'Almoço',
-  lanche: 'Lanche',
-  jantar: 'Jantar',
-  snack: 'Snack',
-}
-
 export const MEAL_ORDER: MealType[] = ['pequeno_almoco', 'almoco', 'lanche', 'jantar', 'snack']
+
+/** Missões de proteína medidas em gramas no próprio dia. */
+const PROTEIN_GRAM_QUESTS = new Set(['d-proteina', 'd-pequeno-almoco'])
+/** Missões de proteína medidas em dias cumpridos. */
+const PROTEIN_DAY_QUESTS = new Set(['w-proteina', 's-forja'])
 
 interface NutritionStore {
   entries: MealEntry[]
@@ -93,9 +91,9 @@ export const useNutritionStore = create<NutritionStore>()(
 
         const quests = useQuestStore.getState()
         const totals = get().totalsForDate(date)
-        // As missões de proteína usam o total do dia, não o incremento.
-        for (const quest of [...quests.daily, ...quests.weekly]) {
-          if (quest.type === 'proteina' && quest.unit === 'g' && quest.date === date && !quest.completed) {
+        // As missões diárias de proteína usam o total do dia, não o incremento.
+        for (const quest of quests.daily) {
+          if (PROTEIN_GRAM_QUESTS.has(quest.templateId) && quest.date === date && !quest.completed) {
             quests.setProgress(quest.id, totals.proteinG)
           }
         }
@@ -159,15 +157,16 @@ export function checkProteinBonus(targets: MacroTargets | null, date = today()):
   game.bumpAttribute('disciplina')
   // Missões semanais/especiais de proteína contam dias, não gramas.
   const quests = useQuestStore.getState()
-  for (const quest of [...quests.weekly]) {
-    if (quest.type === 'proteina' && quest.unit === 'dias' && !quest.completed) {
+  for (const quest of quests.weekly) {
+    if (PROTEIN_DAY_QUESTS.has(quest.templateId) && !quest.completed) {
       quests.setProgress(quest.id, quest.progress + 1)
     }
   }
+  const t = getDictionary()
   toast({
     kind: 'sucesso',
-    title: 'Meta de proteína atingida',
-    description: '+25 XP · Disciplina +1',
+    title: t.toasts.proteinGoal,
+    description: t.toasts.proteinGoalDetail,
     icon: 'Beef',
   })
   game.checkAchievements()

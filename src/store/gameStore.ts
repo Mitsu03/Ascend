@@ -2,9 +2,10 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { ACHIEVEMENTS } from '@/data/achievements'
 import { getCosmetic } from '@/data/cosmetics'
-import { levelFromXp, titleForLevel } from '@/services/calculations'
+import { levelFromXp, titleKeyForLevel } from '@/services/calculations'
 import { daysBetween, today } from '@/services/dates'
-import { STREAK_BROKEN_MESSAGE, levelUpLine } from '@/services/narrative'
+import { levelUpLine } from '@/services/narrative'
+import { getDictionary, pick } from '@/i18n'
 import { createPersistStorage } from '@/services/storage'
 import { toast } from '@/store/toastStore'
 import type { AttributeKey, CosmeticSlot, GameState } from '@/types'
@@ -71,10 +72,14 @@ export const useGameStore = create<GameStore>()(
         }))
         const after = levelFromXp(get().xp).level
         if (after > before && !options?.silent) {
+          const t = getDictionary()
           toast({
             kind: 'nivel',
-            title: `Nível ${after} alcançado!`,
-            description: `${titleForLevel(after)} — ${levelUpLine(after)}`,
+            title: t.toasts.levelUp(after),
+            description: t.toasts.levelUpDetail(
+              t.levelTitles[titleKeyForLevel(after)],
+              levelUpLine(after, t),
+            ),
             icon: 'Sparkles',
           })
         }
@@ -131,8 +136,14 @@ export const useGameStore = create<GameStore>()(
           return
         }
         if (state.streak > 0) {
+          const t = getDictionary()
           set({ streak: 0, streakStatus: 'quebrada' })
-          toast({ kind: 'aviso', title: 'Sequência reiniciada', description: STREAK_BROKEN_MESSAGE, icon: 'Flame' })
+          toast({
+            kind: 'aviso',
+            title: t.toasts.streakReset,
+            description: t.narrative.streakBroken,
+            icon: 'Flame',
+          })
         } else {
           set({ streakStatus: 'nova' })
         }
@@ -147,11 +158,12 @@ export const useGameStore = create<GameStore>()(
         const iso = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(
           yesterday.getDate(),
         ).padStart(2, '0')}`
+        const t = getDictionary()
         set({ lastActiveDate: iso, recoveryAvailable: false, streakStatus: 'ativa' })
         toast({
           kind: 'sucesso',
-          title: 'Dia de Recuperação usado',
-          description: 'A tua sequência ficou intacta. Volta a treinar hoje para a fazer crescer.',
+          title: t.toasts.recoveryUsed,
+          description: t.toasts.recoveryUsedDetail,
           icon: 'HeartPulse',
         })
       },
@@ -177,10 +189,11 @@ export const useGameStore = create<GameStore>()(
         const cosmetic = getCosmetic(id)
         set({ inventory: [...state.inventory, id] })
         if (!options?.silent && cosmetic) {
+          const t = getDictionary()
           toast({
             kind: 'conquista',
-            title: 'Novo cosmético desbloqueado',
-            description: `${cosmetic.name} — ${cosmetic.description}`,
+            title: t.toasts.cosmeticUnlocked,
+            description: t.toasts.cosmeticDetail(pick(cosmetic.name), pick(cosmetic.description)),
             icon: 'Gift',
           })
         }
@@ -221,14 +234,15 @@ export const useGameStore = create<GameStore>()(
             },
           }))
 
+          const t = getDictionary()
           for (const achievement of pending) {
             unlockedNow.push(achievement.id)
             get().addXp(achievement.rewardXp, { silent: true })
             get().addCoins(achievement.rewardCoins)
             toast({
               kind: 'conquista',
-              title: `Conquista: ${achievement.title}`,
-              description: `${achievement.description} +${achievement.rewardXp} XP`,
+              title: t.toasts.achievement(pick(achievement.title)),
+              description: t.toasts.achievementDetail(pick(achievement.description), achievement.rewardXp),
               icon: achievement.icon,
             })
           }

@@ -1,4 +1,6 @@
 import { EQUIPMENT_RANK, EXERCISES } from '@/data/exercises'
+import { localized as l } from '@/i18n/types'
+import type { Localized } from '@/i18n/types'
 import type { Exercise, ExperienceLevel, Goal, MuscleGroup, UserProfile, WorkoutDay, WorkoutExercise } from '@/types'
 
 /** Gera o plano semanal a partir das respostas do onboarding. */
@@ -23,42 +25,42 @@ const GOAL_SCHEME: Record<Goal, SetScheme> = {
 }
 
 interface SplitDay {
-  name: string
-  focus: string
+  name: Localized
+  focus: Localized
   groups: MuscleGroup[]
   includeCardio: boolean
 }
 
 const SPLITS: Record<number, SplitDay[]> = {
   2: [
-    { name: 'Corpo Inteiro A', focus: 'Força global', groups: ['pernas', 'peito', 'costas', 'core'], includeCardio: true },
-    { name: 'Corpo Inteiro B', focus: 'Potência e core', groups: ['pernas', 'ombros', 'costas', 'bracos', 'core'], includeCardio: true },
+    { name: l('Corpo Inteiro A', 'Full Body A'), focus: l('Força global', 'Overall strength'), groups: ['pernas', 'peito', 'costas', 'core'], includeCardio: true },
+    { name: l('Corpo Inteiro B', 'Full Body B'), focus: l('Potência e core', 'Power and core'), groups: ['pernas', 'ombros', 'costas', 'bracos', 'core'], includeCardio: true },
   ],
   3: [
-    { name: 'Corpo Inteiro A', focus: 'Empurrar', groups: ['peito', 'ombros', 'bracos', 'core'], includeCardio: false },
-    { name: 'Corpo Inteiro B', focus: 'Puxar', groups: ['costas', 'bracos', 'core'], includeCardio: true },
-    { name: 'Corpo Inteiro C', focus: 'Pernas e core', groups: ['pernas', 'core', 'corpo_inteiro'], includeCardio: true },
+    { name: l('Corpo Inteiro A', 'Full Body A'), focus: l('Empurrar', 'Push'), groups: ['peito', 'ombros', 'bracos', 'core'], includeCardio: false },
+    { name: l('Corpo Inteiro B', 'Full Body B'), focus: l('Puxar', 'Pull'), groups: ['costas', 'bracos', 'core'], includeCardio: true },
+    { name: l('Corpo Inteiro C', 'Full Body C'), focus: l('Pernas e core', 'Legs and core'), groups: ['pernas', 'core', 'corpo_inteiro'], includeCardio: true },
   ],
   4: [
-    { name: 'Superior A', focus: 'Peito, ombros e tríceps', groups: ['peito', 'ombros', 'bracos'], includeCardio: false },
-    { name: 'Inferior A', focus: 'Quadríceps e glúteos', groups: ['pernas', 'core'], includeCardio: false },
-    { name: 'Superior B', focus: 'Costas e bíceps', groups: ['costas', 'bracos', 'ombros'], includeCardio: false },
-    { name: 'Inferior B', focus: 'Posterior e core', groups: ['pernas', 'core', 'corpo_inteiro'], includeCardio: true },
+    { name: l('Superior A', 'Upper A'), focus: l('Peito, ombros e tríceps', 'Chest, shoulders and triceps'), groups: ['peito', 'ombros', 'bracos'], includeCardio: false },
+    { name: l('Inferior A', 'Lower A'), focus: l('Quadríceps e glúteos', 'Quads and glutes'), groups: ['pernas', 'core'], includeCardio: false },
+    { name: l('Superior B', 'Upper B'), focus: l('Costas e bíceps', 'Back and biceps'), groups: ['costas', 'bracos', 'ombros'], includeCardio: false },
+    { name: l('Inferior B', 'Lower B'), focus: l('Posterior e core', 'Posterior chain and core'), groups: ['pernas', 'core', 'corpo_inteiro'], includeCardio: true },
   ],
   5: [
-    { name: 'Empurrar', focus: 'Peito, ombros e tríceps', groups: ['peito', 'ombros', 'bracos'], includeCardio: false },
-    { name: 'Puxar', focus: 'Costas e bíceps', groups: ['costas', 'bracos'], includeCardio: false },
-    { name: 'Pernas', focus: 'Membros inferiores', groups: ['pernas', 'core'], includeCardio: false },
-    { name: 'Superior', focus: 'Volume no tronco', groups: ['peito', 'costas', 'ombros'], includeCardio: false },
-    { name: 'Cardio & Core', focus: 'Condição física', groups: ['cardio', 'core', 'corpo_inteiro'], includeCardio: true },
+    { name: l('Empurrar', 'Push'), focus: l('Peito, ombros e tríceps', 'Chest, shoulders and triceps'), groups: ['peito', 'ombros', 'bracos'], includeCardio: false },
+    { name: l('Puxar', 'Pull'), focus: l('Costas e bíceps', 'Back and biceps'), groups: ['costas', 'bracos'], includeCardio: false },
+    { name: l('Pernas', 'Legs'), focus: l('Membros inferiores', 'Lower body'), groups: ['pernas', 'core'], includeCardio: false },
+    { name: l('Superior', 'Upper'), focus: l('Volume no tronco', 'Upper-body volume'), groups: ['peito', 'costas', 'ombros'], includeCardio: false },
+    { name: l('Cardio e Core', 'Cardio & Core'), focus: l('Condição física', 'Conditioning'), groups: ['cardio', 'core', 'corpo_inteiro'], includeCardio: true },
   ],
   6: [
-    { name: 'Empurrar A', focus: 'Peito e ombros', groups: ['peito', 'ombros', 'bracos'], includeCardio: false },
-    { name: 'Puxar A', focus: 'Costas e bíceps', groups: ['costas', 'bracos'], includeCardio: false },
-    { name: 'Pernas A', focus: 'Quadríceps', groups: ['pernas', 'core'], includeCardio: false },
-    { name: 'Empurrar B', focus: 'Tríceps e peito', groups: ['peito', 'bracos', 'ombros'], includeCardio: false },
-    { name: 'Puxar B', focus: 'Dorsais e trapézio', groups: ['costas', 'bracos'], includeCardio: false },
-    { name: 'Pernas B & Cardio', focus: 'Posterior e condição', groups: ['pernas', 'cardio', 'core'], includeCardio: true },
+    { name: l('Empurrar A', 'Push A'), focus: l('Peito e ombros', 'Chest and shoulders'), groups: ['peito', 'ombros', 'bracos'], includeCardio: false },
+    { name: l('Puxar A', 'Pull A'), focus: l('Costas e bíceps', 'Back and biceps'), groups: ['costas', 'bracos'], includeCardio: false },
+    { name: l('Pernas A', 'Legs A'), focus: l('Quadríceps', 'Quads'), groups: ['pernas', 'core'], includeCardio: false },
+    { name: l('Empurrar B', 'Push B'), focus: l('Tríceps e peito', 'Triceps and chest'), groups: ['peito', 'bracos', 'ombros'], includeCardio: false },
+    { name: l('Puxar B', 'Pull B'), focus: l('Dorsais e trapézio', 'Lats and traps'), groups: ['costas', 'bracos'], includeCardio: false },
+    { name: l('Pernas B e Cardio', 'Legs B & Cardio'), focus: l('Posterior e condição', 'Posterior chain and conditioning'), groups: ['pernas', 'cardio', 'core'], includeCardio: true },
   ],
 }
 

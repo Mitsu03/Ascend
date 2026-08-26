@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { getDictionary, pick } from '@/i18n'
 import { startOfWeek, today } from '@/services/dates'
 import { generateDailyQuests, generateWeeklyQuests, replacementQuest } from '@/services/questGenerator'
 import { createPersistStorage } from '@/services/storage'
@@ -30,10 +31,11 @@ function awardQuest(quest: Quest): void {
   game.incrementCounter('quests')
   game.registerActivity()
   if (quest.rewardItem) game.unlockCosmetic(quest.rewardItem)
+  const t = getDictionary()
   toast({
     kind: 'sucesso',
-    title: `Missão concluída: ${quest.title}`,
-    description: `+${quest.rewardXp} XP · +${quest.rewardCoins} moedas`,
+    title: t.toasts.questDone(pick(quest.title)),
+    description: t.toasts.questReward(quest.rewardXp, quest.rewardCoins),
     icon: 'Target',
   })
   game.checkAchievements()
@@ -105,10 +107,11 @@ export const useQuestStore = create<QuestStore>()(
       replaceQuest: (questId, profile, targets) => {
         const state = get()
         if (state.replacementsUsed.includes(questId)) {
+          const t = getDictionary()
           toast({
             kind: 'aviso',
-            title: 'Já substituíste esta missão',
-            description: 'Cada missão só pode ser trocada uma vez por período.',
+            title: t.toasts.questAlreadyReplaced,
+            description: t.toasts.questAlreadyReplacedDetail,
             icon: 'RefreshCw',
           })
           return
@@ -127,7 +130,12 @@ export const useQuestStore = create<QuestStore>()(
           weekly: isDaily ? state.weekly : nextList,
           replacementsUsed: [...state.replacementsUsed, questId, replacement.id],
         })
-        toast({ kind: 'info', title: 'Missão substituída', description: replacement.title, icon: 'RefreshCw' })
+        toast({
+          kind: 'info',
+          title: getDictionary().toasts.questReplaced,
+          description: pick(replacement.title),
+          icon: 'RefreshCw',
+        })
       },
 
       acceptQuest: (questId) =>

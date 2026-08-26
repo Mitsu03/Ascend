@@ -95,23 +95,33 @@ export function levelFromXp(xp: number): LevelInfo {
   }
 }
 
-export const LEVEL_TITLES: { minLevel: number; title: string }[] = [
-  { minLevel: 1, title: 'Despertar' },
-  { minLevel: 3, title: 'Aprendiz de Ferro' },
-  { minLevel: 5, title: 'Guardião da Rotina' },
-  { minLevel: 7, title: 'Lâmina do Amanhecer' },
-  { minLevel: 10, title: 'Sentinela de Aço' },
-  { minLevel: 14, title: 'Mestre da Disciplina' },
-  { minLevel: 18, title: 'Titã Ascendente' },
-  { minLevel: 25, title: 'Lenda em Ascensão' },
+export type LevelTitleKey =
+  | 'despertar'
+  | 'aprendiz'
+  | 'guardiao'
+  | 'lamina'
+  | 'sentinela'
+  | 'mestre'
+  | 'tita'
+  | 'lenda'
+
+export const LEVEL_TITLES: { minLevel: number; key: LevelTitleKey }[] = [
+  { minLevel: 1, key: 'despertar' },
+  { minLevel: 3, key: 'aprendiz' },
+  { minLevel: 5, key: 'guardiao' },
+  { minLevel: 7, key: 'lamina' },
+  { minLevel: 10, key: 'sentinela' },
+  { minLevel: 14, key: 'mestre' },
+  { minLevel: 18, key: 'tita' },
+  { minLevel: 25, key: 'lenda' },
 ]
 
-export function titleForLevel(level: number): string {
-  let title = LEVEL_TITLES[0].title
+export function titleKeyForLevel(level: number): LevelTitleKey {
+  let key: LevelTitleKey = LEVEL_TITLES[0].key
   for (const entry of LEVEL_TITLES) {
-    if (level >= entry.minLevel) title = entry.title
+    if (level >= entry.minLevel) key = entry.key
   }
-  return title
+  return key
 }
 
 // ---------------------------------------------------------------- Recompensas

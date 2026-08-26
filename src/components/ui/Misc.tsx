@@ -5,13 +5,13 @@ import { Icon } from '@/components/ui/Icon'
 
 // ------------------------------------------------------------------ Badge
 
-type BadgeTone = 'neutral' | 'cyan' | 'gold' | 'violet' | 'good' | 'warn'
+type BadgeTone = 'neutral' | 'ember' | 'gold' | 'crimson' | 'good' | 'warn'
 
 const BADGE_TONES: Record<BadgeTone, string> = {
-  neutral: 'border-night-500 text-ink-muted',
-  cyan: 'border-cyan-electric/40 text-cyan-soft bg-cyan-electric/10',
+  neutral: 'border-void-500 text-ink-muted',
+  ember: 'border-ember/40 text-spirit bg-ember/10',
   gold: 'border-gold/45 text-gold-soft bg-gold/10',
-  violet: 'border-violet-soft/40 text-violet-soft bg-violet-deep/15',
+  crimson: 'border-crimson-soft/40 text-crimson-soft bg-crimson/15',
   good: 'border-good/40 text-good bg-good/10',
   warn: 'border-warn/40 text-warn bg-warn/10',
 }
@@ -56,7 +56,7 @@ export function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 px-6 py-10 text-center">
-      <span className="flex size-14 items-center justify-center rounded-2xl bg-night-700 text-ink-faint">
+      <span className="flex size-14 items-center justify-center rounded-2xl bg-void-700 text-ink-faint">
         <Icon name={icon} size={24} />
       </span>
       <div>
@@ -95,7 +95,7 @@ export function Field({ label, hint, error, children }: FieldProps) {
 }
 
 const CONTROL_CLASS =
-  'w-full rounded-xl border border-night-600 bg-night-900/70 px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint transition-colors focus:border-cyan-electric focus:outline-none'
+  'w-full rounded-xl border border-void-600 bg-void-900/70 px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint transition-colors focus:border-ember focus:outline-none'
 
 export function TextInput({ className, ...rest }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(CONTROL_CLASS, className)} {...rest} />
@@ -140,13 +140,13 @@ export function OptionCard({ selected, onSelect, icon, title, description, class
       className={cn(
         'flex w-full items-start gap-3 rounded-xl border p-4 text-left transition-all duration-150',
         selected
-          ? 'border-cyan-electric/70 bg-cyan-electric/10 glow-cyan'
-          : 'border-night-600 bg-night-800/60 hover:border-night-500 hover:bg-night-700/60',
+          ? 'border-ember/70 bg-ember/10 glow-ember'
+          : 'border-void-600 bg-void-800/60 hover:border-void-500 hover:bg-void-700/60',
         className,
       )}
     >
       {icon && (
-        <span className={cn('mt-0.5 shrink-0', selected ? 'text-cyan-electric' : 'text-ink-faint')}>
+        <span className={cn('mt-0.5 shrink-0', selected ? 'text-ember' : 'text-ink-faint')}>
           <Icon name={icon} size={20} />
         </span>
       )}
@@ -171,7 +171,7 @@ export function Tabs<T extends string>({ value, onChange, options, className }: 
   return (
     <div
       role="tablist"
-      className={cn('inline-flex gap-1 rounded-xl border border-night-600 bg-night-800/70 p-1', className)}
+      className={cn('inline-flex gap-1 rounded-xl border border-void-600 bg-void-800/70 p-1', className)}
     >
       {options.map((option) => {
         const active = option.value === value
@@ -184,7 +184,7 @@ export function Tabs<T extends string>({ value, onChange, options, className }: 
             onClick={() => onChange(option.value)}
             className={cn(
               'inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-150',
-              active ? 'bg-night-600 text-ink' : 'text-ink-muted hover:text-ink',
+              active ? 'bg-void-600 text-ink' : 'text-ink-muted hover:text-ink',
             )}
           >
             {option.icon && <Icon name={option.icon} size={15} />}
@@ -200,7 +200,7 @@ export function Tabs<T extends string>({ value, onChange, options, className }: 
 
 export function Disclaimer({ children }: { children: ReactNode }) {
   return (
-    <p className="flex items-start gap-2 rounded-xl border border-night-600 bg-night-900/50 p-3 text-xs leading-relaxed text-ink-faint">
+    <p className="flex items-start gap-2 rounded-xl border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-faint">
       <span className="mt-0.5 shrink-0">
         <Icon name="Info" size={14} />
       </span>
@@ -223,9 +223,9 @@ export function Stat({
   tone?: BadgeTone
 }) {
   const color =
-    tone === 'gold' ? 'text-gold' : tone === 'cyan' ? 'text-cyan-electric' : tone === 'violet' ? 'text-violet-soft' : 'text-ink'
+    tone === 'gold' ? 'text-gold' : tone === 'ember' ? 'text-ember' : tone === 'crimson' ? 'text-crimson-soft' : 'text-ink'
   return (
-    <div className="rounded-xl border border-night-600/70 bg-night-900/40 p-3">
+    <div className="rounded-xl border border-void-600/70 bg-void-900/40 p-3">
       <div className="flex items-center gap-1.5 text-xs font-medium text-ink-muted">
         {icon && <Icon name={icon} size={13} />}
         {label}

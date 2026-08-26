@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
 import { Toaster } from '@/components/ui/Toaster'
+import { LOCALE_TAG, useI18n } from '@/i18n'
 import { bootstrapSession } from '@/services/session'
 import { useUserStore } from '@/store/userStore'
 import { DashboardPage } from '@/features/dashboard/DashboardPage'
@@ -17,6 +18,11 @@ const ProfilePage = lazy(() =>
   import('@/features/profile/ProfilePage').then((module) => ({ default: module.ProfilePage })),
 )
 
+function ProfileFallback() {
+  const { t } = useI18n()
+  return <p className="py-16 text-center text-ink-muted">{t.app.loadingProfile}</p>
+}
+
 function RequireProfile({ children }: { children: React.ReactNode }) {
   const profile = useUserStore((state) => state.profile)
   const location = useLocation()
@@ -25,7 +31,13 @@ function RequireProfile({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const { lang } = useI18n()
   const profile = useUserStore((state) => state.profile)
+
+  // Mantém o atributo lang do documento em sincronia com o idioma escolhido.
+  useEffect(() => {
+    document.documentElement.lang = LOCALE_TAG[lang]
+  }, [lang])
 
   useEffect(() => {
     if (profile) bootstrapSession()
@@ -59,7 +71,7 @@ export default function App() {
           <Route
             path="/perfil"
             element={
-              <Suspense fallback={<p className="py-16 text-center text-ink-muted">A carregar o perfil…</p>}>
+              <Suspense fallback={<ProfileFallback />}>
                 <ProfilePage />
               </Suspense>
             }

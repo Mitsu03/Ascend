@@ -1,4 +1,5 @@
 import { getCosmetic } from '@/data/cosmetics'
+import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 
 /**
@@ -30,46 +31,44 @@ const HAIR_PATHS = [
 
 export function HeroAvatar({
   variant = 0,
-  hue = 190,
+  hue = 24,
   size = 120,
   frameId,
   auraId,
   className,
   animated = true,
 }: HeroAvatarProps) {
+  const { t } = useI18n()
   const frame = frameId ? getCosmetic(frameId) : undefined
   const aura = auraId ? getCosmetic(auraId) : undefined
   const hair = HAIR_PATHS[variant % HAIR_PATHS.length]
 
-  const skin = `hsl(${(hue + 200) % 360} 30% 78%)`
-  const hairColor = `hsl(${hue} 62% 52%)`
-  const hairShade = `hsl(${hue} 62% 38%)`
-  const suit = `hsl(${(hue + 40) % 360} 45% 30%)`
-  const suitAccent = `hsl(${hue} 80% 58%)`
-  const auraColor = aura?.value ?? `hsl(${hue} 90% 60%)`
+  const skin = `hsl(${(hue + 200) % 360} 26% 76%)`
+  const hairColor = `hsl(${hue} 78% 54%)`
+  const hairShade = `hsl(${hue} 78% 34%)`
+  const suit = '#111118'
+  const suitAccent = `hsl(${hue} 82% 56%)`
+  const auraColor = aura?.value ?? `hsl(${hue} 92% 58%)`
 
-  const frameStyle = frame
-    ? frame.value.startsWith('linear-gradient')
-      ? { background: frame.value }
-      : { background: frame.value }
-    : { background: 'var(--color-night-600)' }
+  const frameStyle = frame ? { background: frame.value } : { background: 'var(--color-void-600)' }
+  const gradientId = `avatar-${variant}-${hue}`
 
   return (
     <div
       className={cn('relative shrink-0', className)}
       style={{ width: size, height: size }}
       role="img"
-      aria-label="Avatar do herói"
+      aria-label={t.profile.avatarAria}
     >
       {/* Aura */}
       <div
         className={cn('absolute inset-0 rounded-full blur-xl', animated && 'animate-pulse-glow')}
-        style={{ background: auraColor, opacity: 0.32 }}
+        style={{ background: auraColor, opacity: 0.34 }}
         aria-hidden="true"
       />
       {/* Moldura */}
       <div className="absolute inset-0 rounded-full p-[3px]" style={frameStyle} aria-hidden="true">
-        <div className="size-full rounded-full bg-night-900" />
+        <div className="size-full rounded-full bg-void-950" />
       </div>
 
       <svg
@@ -79,28 +78,30 @@ export function HeroAvatar({
         aria-hidden="true"
       >
         <defs>
-          <clipPath id={`avatar-clip-${variant}-${hue}`}>
+          <clipPath id={`clip-${gradientId}`}>
             <circle cx="60" cy="60" r="57" />
           </clipPath>
-          <linearGradient id={`avatar-bg-${variant}-${hue}`} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="var(--color-night-700)" />
-            <stop offset="100%" stopColor="var(--color-night-850)" />
+          <linearGradient id={`bg-${gradientId}`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="var(--color-void-800)" />
+            <stop offset="100%" stopColor="var(--color-void-950)" />
           </linearGradient>
         </defs>
 
-        <g clipPath={`url(#avatar-clip-${variant}-${hue})`}>
-          <circle cx="60" cy="60" r="57" fill={`url(#avatar-bg-${variant}-${hue})`} />
-          {/* Raios de fundo — estética anime abstrata */}
-          <g opacity="0.16" fill={auraColor}>
-            <polygon points="60,60 4,26 4,44" />
-            <polygon points="60,60 116,26 116,44" />
-            <polygon points="60,60 12,104 30,112" />
-            <polygon points="60,60 108,104 90,112" />
+        <g clipPath={`url(#clip-${gradientId})`}>
+          <circle cx="60" cy="60" r="57" fill={`url(#bg-${gradientId})`} />
+
+          {/* Cortes diagonais de energia no fundo */}
+          <g opacity="0.2" fill={auraColor}>
+            <polygon points="60,60 4,20 4,40" />
+            <polygon points="60,60 116,22 116,42" />
+            <polygon points="60,60 10,106 28,114" />
+            <polygon points="60,60 110,106 92,114" />
           </g>
 
-          {/* Ombros / fato de treino */}
+          {/* Ombros / haori escuro */}
           <path d="M18 120 C22 96 38 86 60 86 C82 86 98 96 102 120 Z" fill={suit} />
-          <path d="M52 86 L60 100 L68 86 L64 120 L56 120 Z" fill={suitAccent} opacity="0.85" />
+          <path d="M18 120 C21 102 30 92 44 88 L52 120 Z" fill="#f5f5f7" opacity="0.9" />
+          <path d="M52 86 L60 100 L68 86 L64 120 L56 120 Z" fill={suitAccent} opacity="0.9" />
 
           {/* Pescoço */}
           <path d="M52 74 L68 74 L68 90 L60 94 L52 90 Z" fill={skin} />
@@ -113,15 +114,15 @@ export function HeroAvatar({
           <path d={hair} fill={hairShade} opacity="0.35" transform="translate(3,3) scale(0.98)" />
 
           {/* Olhos estilizados */}
-          <g fill="var(--color-night-950)">
+          <g fill="var(--color-void-950)">
             <path d="M46 52 q5 -6 11 0 q-5 5 -11 0 Z" />
             <path d="M63 52 q6 -6 11 0 q-5 5 -11 0 Z" />
           </g>
-          <circle cx="51.5" cy="51" r="1.6" fill={auraColor} />
-          <circle cx="68.5" cy="51" r="1.6" fill={auraColor} />
+          <circle cx="51.5" cy="51" r="1.7" fill={auraColor} />
+          <circle cx="68.5" cy="51" r="1.7" fill={auraColor} />
 
           {/* Sobrancelhas e boca */}
-          <g stroke="var(--color-night-950)" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.75">
+          <g stroke="var(--color-void-950)" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.8">
             <path d="M45 44 L57 46" />
             <path d="M75 44 L63 46" />
             <path d="M55 66 q5 4 10 0" />

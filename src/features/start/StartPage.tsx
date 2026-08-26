@@ -4,19 +4,21 @@ import { Card } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
 import { Disclaimer } from '@/components/ui/Misc'
 import { HeroAvatar } from '@/components/HeroAvatar'
+import { useI18n } from '@/i18n'
 import { loadDemoProfile } from '@/services/session'
 import { useUserStore } from '@/store/userStore'
 
-const HIGHLIGHTS = [
-  { icon: 'Dumbbell', title: 'Planos de treino', text: 'Plano semanal gerado a partir do teu objetivo e equipamento.' },
-  { icon: 'UtensilsCrossed', title: 'Calorias e macros', text: 'Registo rápido com catálogo de alimentos comuns em Portugal.' },
-  { icon: 'Target', title: 'Missões diárias', text: 'Objetivos curtos que dão XP, moedas e mantêm a sequência viva.' },
-  { icon: 'Trophy', title: 'Progresso visível', text: 'Níveis, atributos, conquistas e gráficos da tua evolução.' },
-]
-
 export function StartPage() {
   const navigate = useNavigate()
+  const { t } = useI18n()
   const hasProfile = useUserStore((state) => state.profile !== null)
+
+  const highlights = [
+    { icon: 'Dumbbell', title: t.start.highlights.workoutTitle, text: t.start.highlights.workoutText },
+    { icon: 'UtensilsCrossed', title: t.start.highlights.nutritionTitle, text: t.start.highlights.nutritionText },
+    { icon: 'Target', title: t.start.highlights.questsTitle, text: t.start.highlights.questsText },
+    { icon: 'Trophy', title: t.start.highlights.progressTitle, text: t.start.highlights.progressText },
+  ]
 
   const startDemo = () => {
     loadDemoProfile()
@@ -27,27 +29,24 @@ export function StartPage() {
     <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col justify-center gap-8 px-5 py-10">
       <header className="flex flex-col items-center gap-5 text-center">
         <div className="flex items-center gap-3">
-          <span className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-electric to-violet-deep">
-            <Icon name="Zap" size={24} className="text-night-950" strokeWidth={2.5} />
+          <span className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-ember to-crimson">
+            <Icon name="Zap" size={24} className="text-void-950" strokeWidth={2.5} />
           </span>
-          <span className="font-display text-4xl font-bold tracking-[0.2em] text-ink">ASCEND</span>
+          <span className="font-display text-4xl font-bold tracking-[0.24em] text-ink">{t.app.name}</span>
         </div>
         <div className="max-w-xl">
           <h1 className="text-balance text-3xl font-bold leading-tight text-ink sm:text-4xl">
-            Torna-te o protagonista da tua evolução
+            {t.start.headline}
           </h1>
-          <p className="mt-3 text-balance leading-relaxed text-ink-muted">
-            Treinos, nutrição e hábitos transformados numa jornada com níveis, missões e conquistas. Tudo
-            offline, sem contas nem subscrições.
-          </p>
+          <p className="mt-3 text-balance leading-relaxed text-ink-muted">{t.start.subheadline}</p>
         </div>
-        <HeroAvatar size={132} variant={1} hue={195} auraId="aura-ciano" frameId="moldura-aurora" />
+        <HeroAvatar size={132} variant={1} hue={24} auraId="aura-ciano" frameId="moldura-aurora" />
       </header>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        {HIGHLIGHTS.map((item) => (
+        {highlights.map((item) => (
           <Card key={item.title} className="flex items-start gap-3 p-4">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-night-700 text-cyan-electric">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-void-700 text-ember">
               <Icon name={item.icon} size={19} />
             </span>
             <div>
@@ -60,22 +59,19 @@ export function StartPage() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
         <Button variant="primary" size="lg" icon="Play" onClick={() => navigate('/onboarding')}>
-          Começar a minha jornada
+          {t.start.beginJourney}
         </Button>
         <Button variant="secondary" size="lg" icon="Sparkles" onClick={startDemo}>
-          Explorar com dados de demonstração
+          {t.start.exploreDemo}
         </Button>
         {hasProfile && (
           <Button variant="ghost" size="lg" icon="ArrowRight" onClick={() => navigate('/')}>
-            Continuar onde ficaste
+            {t.start.continue}
           </Button>
         )}
       </div>
 
-      <Disclaimer>
-        A Ascend calcula estimativas de calorias e macronutrientes para gestão pessoal. Não substitui
-        aconselhamento médico ou nutricional. Em caso de dúvida, fala com um profissional de saúde.
-      </Disclaimer>
+      <Disclaimer>{t.disclaimer.start}</Disclaimer>
     </div>
   )
 }

@@ -7,10 +7,10 @@ type Size = 'sm' | 'md' | 'lg'
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-gradient-to-r from-cyan-electric to-violet-soft text-night-950 font-semibold hover:brightness-110 active:brightness-95 shadow-[0_6px_24px_-10px_rgba(34,211,238,0.8)]',
-  secondary: 'border border-night-500 bg-night-700/60 text-ink hover:bg-night-700 hover:border-night-500',
-  ghost: 'text-ink-muted hover:text-ink hover:bg-night-700/60',
-  gold: 'bg-gradient-to-r from-gold to-gold-soft text-night-950 font-semibold hover:brightness-110',
+    'bg-gradient-to-r from-ember to-crimson-soft text-void-950 font-semibold hover:brightness-110 active:brightness-95 shadow-[0_6px_24px_-10px_rgba(34,211,238,0.8)]',
+  secondary: 'border border-void-500 bg-void-700/60 text-ink hover:bg-void-700 hover:border-void-500',
+  ghost: 'text-ink-muted hover:text-ink hover:bg-void-700/60',
+  gold: 'bg-gradient-to-r from-gold to-gold-soft text-void-950 font-semibold hover:brightness-110',
   danger: 'border border-bad/50 text-bad hover:bg-bad/10',
 }
 

@@ -5,18 +5,18 @@ interface ProgressBarProps {
   max: number
   className?: string
   /** Gradiente da barra */
-  tone?: 'xp' | 'cyan' | 'gold' | 'violet' | 'good' | 'warn'
+  tone?: 'xp' | 'ember' | 'gold' | 'crimson' | 'good' | 'warn'
   height?: 'sm' | 'md' | 'lg'
   label?: string
   showShimmer?: boolean
 }
 
 const TONES: Record<NonNullable<ProgressBarProps['tone']>, string> = {
-  xp: 'from-cyan-electric via-violet-soft to-gold',
-  cyan: 'from-cyan-electric to-cyan-soft',
+  xp: 'from-ember via-crimson-soft to-gold',
+  ember: 'from-ember to-spirit',
   gold: 'from-gold to-gold-soft',
-  violet: 'from-violet-deep to-violet-soft',
-  good: 'from-good to-cyan-soft',
+  crimson: 'from-crimson to-crimson-soft',
+  good: 'from-good to-spirit',
   warn: 'from-warn to-gold',
 }
 
@@ -26,7 +26,7 @@ export function ProgressBar({
   value,
   max,
   className,
-  tone = 'cyan',
+  tone = 'ember',
   height = 'md',
   label,
   showShimmer = false,
@@ -34,7 +34,7 @@ export function ProgressBar({
   const pct = percent(value, max)
   return (
     <div
-      className={cn('relative w-full overflow-hidden rounded-full bg-night-700', HEIGHTS[height], className)}
+      className={cn('relative w-full overflow-hidden rounded-full bg-void-700', HEIGHTS[height], className)}
       role="progressbar"
       aria-valuenow={Math.round(pct)}
       aria-valuemin={0}
@@ -63,15 +63,15 @@ interface ProgressRingProps {
   max: number
   size?: number
   strokeWidth?: number
-  tone?: 'cyan' | 'gold' | 'violet' | 'good' | 'warn'
+  tone?: 'ember' | 'gold' | 'crimson' | 'good' | 'warn'
   children?: React.ReactNode
   label?: string
 }
 
 const RING_COLORS: Record<NonNullable<ProgressRingProps['tone']>, string> = {
-  cyan: 'var(--color-cyan-electric)',
+  ember: 'var(--color-ember)',
   gold: 'var(--color-gold)',
-  violet: 'var(--color-violet-soft)',
+  crimson: 'var(--color-crimson-soft)',
   good: 'var(--color-good)',
   warn: 'var(--color-warn)',
 }
@@ -81,7 +81,7 @@ export function ProgressRing({
   max,
   size = 148,
   strokeWidth = 12,
-  tone = 'cyan',
+  tone = 'ember',
   children,
   label,
 }: ProgressRingProps) {
@@ -103,7 +103,7 @@ export function ProgressRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="var(--color-night-700)"
+          stroke="var(--color-void-700)"
           strokeWidth={strokeWidth}
         />
         <circle
@@ -132,7 +132,7 @@ interface MacroBarProps {
   tone?: NonNullable<ProgressBarProps['tone']>
 }
 
-export function MacroBar({ label, value, target, unit = 'g', tone = 'cyan' }: MacroBarProps) {
+export function MacroBar({ label, value, target, unit = 'g', tone = 'ember' }: MacroBarProps) {
   return (
     <div className="space-y-1.5">
       <div className="flex items-baseline justify-between text-sm">

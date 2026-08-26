@@ -1,11 +1,15 @@
+import { localized as l } from '@/i18n/types'
 import type { Achievement } from '@/types'
 
 /** As 10 conquistas iniciais da Ascend. */
 export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'primeiro-passo',
-    title: 'Primeiro Passo',
-    description: 'Completa o teu primeiro treino. Toda a jornada começa aqui.',
+    title: l('Primeiro Passo', 'First Step'),
+    description: l(
+      'Completa o teu primeiro treino. Toda a jornada começa aqui.',
+      'Complete your first session. Every journey starts here.',
+    ),
     icon: 'Footprints',
     target: 1,
     metric: 'workouts',
@@ -14,8 +18,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'chama-acesa',
-    title: 'Chama Acesa',
-    description: 'Mantém uma sequência de 3 dias ativos.',
+    title: l('Chama Acesa', 'Lit Flame'),
+    description: l('Mantém uma sequência de 3 dias ativos.', 'Keep a 3-day active streak.'),
     icon: 'Flame',
     target: 3,
     metric: 'streak',
@@ -24,8 +28,11 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'semana-de-ferro',
-    title: 'Semana de Ferro',
-    description: 'Sete dias consecutivos de atividade. A disciplina começa a ser hábito.',
+    title: l('Semana de Ferro', 'Week of Iron'),
+    description: l(
+      'Sete dias consecutivos de atividade. A disciplina começa a ser hábito.',
+      'Seven consecutive active days. Discipline is becoming habit.',
+    ),
     icon: 'CalendarCheck',
     target: 7,
     metric: 'streak',
@@ -34,8 +41,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'guerreiro-dedicado',
-    title: 'Guerreiro Dedicado',
-    description: 'Completa 10 treinos.',
+    title: l('Guerreiro Dedicado', 'Dedicated Warrior'),
+    description: l('Completa 10 treinos.', 'Complete 10 sessions.'),
     icon: 'Dumbbell',
     target: 10,
     metric: 'workouts',
@@ -44,8 +51,11 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'mestre-proteina',
-    title: 'Mestre da Proteína',
-    description: 'Atinge a meta diária de proteína em 5 dias.',
+    title: l('Mestre da Proteína', 'Protein Master'),
+    description: l(
+      'Atinge a meta diária de proteína em 5 dias.',
+      'Hit your daily protein target on 5 days.',
+    ),
     icon: 'Beef',
     target: 5,
     metric: 'proteinDays',
@@ -54,8 +64,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'ascensao',
-    title: 'Ascensão',
-    description: 'Alcança o nível 10.',
+    title: l('Ascensão', 'Ascension'),
+    description: l('Alcança o nível 10.', 'Reach level 10.'),
     icon: 'TrendingUp',
     target: 10,
     metric: 'level',
@@ -64,8 +74,8 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'cacador-missoes',
-    title: 'Caçador de Missões',
-    description: 'Conclui 20 missões.',
+    title: l('Caçador de Missões', 'Quest Hunter'),
+    description: l('Conclui 20 missões.', 'Complete 20 quests.'),
     icon: 'Target',
     target: 20,
     metric: 'quests',
@@ -74,8 +84,11 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'chef-heroi',
-    title: 'Chef Herói',
-    description: 'Regista 50 refeições no diário alimentar.',
+    title: l('Chef Herói', 'Hero Chef'),
+    description: l(
+      'Regista 50 refeições no diário alimentar.',
+      'Log 50 meals in your food diary.',
+    ),
     icon: 'UtensilsCrossed',
     target: 50,
     metric: 'meals',
@@ -84,8 +97,11 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'arquiteto',
-    title: 'Arquiteto do Treino',
-    description: 'Cria o teu primeiro treino personalizado.',
+    title: l('Arquiteto do Treino', 'Training Architect'),
+    description: l(
+      'Cria o teu primeiro treino personalizado.',
+      'Create your first custom session.',
+    ),
     icon: 'Hammer',
     target: 1,
     metric: 'customWorkouts',
@@ -94,8 +110,11 @@ export const ACHIEVEMENTS: Achievement[] = [
   },
   {
     id: 'observador',
-    title: 'Observador do Progresso',
-    description: 'Regista 5 pesagens e acompanha a evolução.',
+    title: l('Observador do Progresso', 'Progress Watcher'),
+    description: l(
+      'Regista 5 pesagens e acompanha a evolução.',
+      'Log 5 weigh-ins and follow your progress.',
+    ),
     icon: 'LineChart',
     target: 5,
     metric: 'weightLogs',

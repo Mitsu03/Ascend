@@ -1,17 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { EXERCISE_BY_ID, MUSCLE_LABELS } from '@/data/exercises'
+import { EXERCISE_BY_ID } from '@/data/exercises'
 import { Button, IconButton } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 import { Badge } from '@/components/ui/Misc'
 import { ConfirmDialog } from '@/components/ui/Modal'
 import { ProgressBar } from '@/components/ui/Progress'
 import { CelebrationScreen } from '@/features/workout/CelebrationScreen'
+import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { formatDuration } from '@/services/dates'
 import { useWorkoutStore } from '@/store/workoutStore'
 
 function RestTimer({ seconds, onDismiss }: { seconds: number; onDismiss: () => void }) {
+  const { t } = useI18n()
   const [remaining, setRemaining] = useState(seconds)
 
   useEffect(() => {
@@ -29,30 +31,27 @@ function RestTimer({ seconds, onDismiss }: { seconds: number; onDismiss: () => v
   }, [seconds])
 
   return (
-    <div className="fixed inset-x-4 bottom-24 z-40 mx-auto max-w-md animate-rise rounded-2xl border border-cyan-electric/45 bg-night-850/95 p-4 shadow-2xl backdrop-blur md:bottom-8">
+    <div className="fixed inset-x-4 bottom-24 z-40 mx-auto max-w-md animate-rise rounded-2xl border border-ember/45 bg-void-850/95 p-4 shadow-2xl backdrop-blur md:bottom-8">
       <div className="flex items-center gap-4">
-        <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-cyan-electric/15 text-cyan-electric">
+        <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-ember/15 text-ember">
           <Icon name="Timer" size={24} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium text-ink">
-            {remaining > 0 ? 'Descanso' : 'Pronto para a próxima série'}
-          </p>
-          <p className="font-display text-2xl font-bold tabular-nums text-cyan-electric">
-            {formatDuration(remaining)}
-          </p>
+          <p className="text-sm font-medium text-ink">{remaining > 0 ? t.session.rest : t.session.readyForNext}</p>
+          <p className="font-display text-2xl font-bold tabular-nums text-ember">{formatDuration(remaining)}</p>
         </div>
         <Button size="sm" onClick={onDismiss}>
-          {remaining > 0 ? 'Saltar' : 'Continuar'}
+          {remaining > 0 ? t.session.skip : t.session.continue}
         </Button>
       </div>
-      <ProgressBar value={seconds - remaining} max={seconds} tone="cyan" height="sm" className="mt-3" />
+      <ProgressBar value={seconds - remaining} max={seconds} tone="ember" height="sm" className="mt-3" />
     </div>
   )
 }
 
 export function WorkoutSessionPage() {
   const navigate = useNavigate()
+  const { t, loc } = useI18n()
   const activeSession = useWorkoutStore((state) => state.activeSession)
   const plan = useWorkoutStore((state) => state.plan)
   const lastResult = useWorkoutStore((state) => state.lastResult)
@@ -122,37 +121,35 @@ export function WorkoutSessionPage() {
 
   return (
     <div className="min-h-dvh pb-32">
-      <header className="sticky top-0 z-30 border-b border-night-700 bg-night-900/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-void-700 bg-void-900/90 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-3xl items-center gap-3 px-4 py-3">
-          <IconButton icon="ArrowLeft" label="Sair do treino" onClick={() => setConfirmExit(true)} />
+          <IconButton icon="ArrowLeft" label={t.session.exitAria} onClick={() => setConfirmExit(true)} />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-ink">{workout.name}</p>
-            <p className="truncate text-xs text-ink-faint">{workout.focus}</p>
+            <p className="truncate text-sm font-semibold text-ink">{loc(workout.name)}</p>
+            <p className="truncate text-xs text-ink-faint">{loc(workout.focus)}</p>
           </div>
           <div className="flex items-center gap-2">
             <span
               className={cn(
                 'font-display text-2xl font-bold tabular-nums',
-                activeSession.paused ? 'text-ink-faint' : 'text-cyan-electric',
+                activeSession.paused ? 'text-ink-faint' : 'text-ember',
               )}
             >
               {formatDuration(elapsed)}
             </span>
             <IconButton
               icon={activeSession.paused ? 'Play' : 'Pause'}
-              label={activeSession.paused ? 'Retomar cronómetro' : 'Pausar cronómetro'}
+              label={activeSession.paused ? t.session.resume : t.session.pause}
               onClick={togglePause}
             />
           </div>
         </div>
         <div className="mx-auto w-full max-w-3xl px-4 pb-3">
           <div className="flex items-center justify-between pb-1.5 text-xs text-ink-muted">
-            <span>Progresso do treino</span>
-            <span className="tabular-nums">
-              {completedSets} / {total} séries
-            </span>
+            <span>{t.session.progress}</span>
+            <span className="tabular-nums">{t.session.setsProgress(completedSets, total)}</span>
           </div>
-          <ProgressBar value={completedSets} max={total} tone="xp" height="md" showShimmer label="Progresso do treino" />
+          <ProgressBar value={completedSets} max={total} tone="xp" height="md" showShimmer label={t.session.progress} />
         </div>
       </header>
 
@@ -168,23 +165,25 @@ export function WorkoutSessionPage() {
               key={item.exerciseId}
               className={cn(
                 'rounded-2xl border p-4 transition-colors',
-                allDone ? 'border-good/40 bg-good/5' : 'border-night-600 bg-night-800/50',
+                allDone ? 'border-good/40 bg-good/5' : 'border-void-600 bg-void-800/50',
               )}
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <h2 className={cn('font-semibold', allDone ? 'text-good' : 'text-ink')}>
-                    {exercise?.name ?? item.exerciseId}
+                    {exercise ? loc(exercise.name) : item.exerciseId}
                   </h2>
                   <p className="mt-0.5 text-xs text-ink-faint">
-                    {exercise ? MUSCLE_LABELS[exercise.muscleGroup] : ''} · {item.sets} × {item.reps}
-                    {item.restSeconds > 0 && ` · ${item.restSeconds}s descanso`}
+                    {exercise ? t.muscles[exercise.muscleGroup] : ''} · {item.sets} × {item.reps}
+                    {item.restSeconds > 0 && ` · ${t.workout.restSeconds(item.restSeconds)}`}
                   </p>
                 </div>
-                {allDone && <Badge tone="good" icon="Check">Feito</Badge>}
+                {allDone && <Badge tone="good" icon="Check">{t.session.done}</Badge>}
               </div>
 
-              {exercise && <p className="mt-2 text-xs leading-relaxed text-ink-muted">{exercise.description}</p>}
+              {exercise && (
+                <p className="mt-2 text-xs leading-relaxed text-ink-muted">{loc(exercise.description)}</p>
+              )}
 
               <div className="mt-3 flex flex-wrap gap-2">
                 {checks.map((checked, setIndex) => (
@@ -193,13 +192,13 @@ export function WorkoutSessionPage() {
                     type="button"
                     role="checkbox"
                     aria-checked={checked}
-                    aria-label={`Série ${setIndex + 1} de ${exercise?.name ?? 'exercício'}`}
+                    aria-label={t.session.setAria(setIndex + 1, exercise ? loc(exercise.name) : item.exerciseId)}
                     onClick={() => handleToggle(exerciseIndex, setIndex, item.restSeconds)}
                     className={cn(
                       'flex h-11 min-w-16 items-center justify-center gap-1.5 rounded-xl border px-3 text-sm font-semibold transition-all duration-150',
                       checked
                         ? 'border-good/50 bg-good/15 text-good'
-                        : 'border-night-600 bg-night-900/60 text-ink-muted hover:border-cyan-electric/50 hover:text-ink',
+                        : 'border-void-600 bg-void-900/60 text-ink-muted hover:border-ember/50 hover:text-ink',
                     )}
                   >
                     <Icon name={checked ? 'Check' : 'Circle'} size={15} />
@@ -212,10 +211,10 @@ export function WorkoutSessionPage() {
         })}
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-night-700 bg-night-900/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-void-700 bg-void-900/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-3xl gap-2">
           <Button fullWidth onClick={() => setConfirmExit(true)}>
-            Sair sem guardar
+            {t.session.exitWithoutSaving}
           </Button>
           <Button
             variant="primary"
@@ -231,7 +230,7 @@ export function WorkoutSessionPage() {
             }}
             disabled={completedSets === 0}
           >
-            Terminar treino
+            {t.session.finish}
           </Button>
         </div>
       </div>
@@ -240,10 +239,10 @@ export function WorkoutSessionPage() {
 
       <ConfirmDialog
         open={confirmExit}
-        title="Sair do treino?"
-        message="A sessão atual não será guardada e não ganhas XP. Podes retomá-la mais tarde se preferires não sair."
-        confirmLabel="Sair"
-        cancelLabel="Continuar treino"
+        title={t.session.exitTitle}
+        message={t.session.exitMessage}
+        confirmLabel={t.session.exitConfirm}
+        cancelLabel={t.session.exitCancel}
         destructive
         onCancel={() => setConfirmExit(false)}
         onConfirm={() => {
@@ -254,10 +253,10 @@ export function WorkoutSessionPage() {
 
       <ConfirmDialog
         open={confirmFinish}
-        title="Terminar com séries por fazer?"
-        message={`Completaste ${completedSets} de ${total} séries. Vais receber XP proporcional ao que fizeste — sem penalizações.`}
-        confirmLabel="Terminar assim"
-        cancelLabel="Voltar ao treino"
+        title={t.session.finishEarlyTitle}
+        message={t.session.finishEarlyMessage(completedSets, total)}
+        confirmLabel={t.session.finishEarlyConfirm}
+        cancelLabel={t.session.finishEarlyCancel}
         onCancel={() => setConfirmFinish(false)}
         onConfirm={() => {
           setConfirmFinish(false)

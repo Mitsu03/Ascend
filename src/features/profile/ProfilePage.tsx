@@ -1,69 +1,62 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCosmetic } from '@/data/cosmetics'
 import { HeroAvatar } from '@/components/HeroAvatar'
+import { useHeroTitle } from '@/components/layout/AppShell'
 import { Button } from '@/components/ui/Button'
 import { Card, CardBody, CardHeader } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
-import { Badge, Disclaimer, Field, Select, Stat, TextInput } from '@/components/ui/Misc'
+import { Badge, Disclaimer, Field, OptionCard, Select, Stat, TextInput } from '@/components/ui/Misc'
 import { ConfirmDialog, Modal } from '@/components/ui/Modal'
 import { ProgressBar } from '@/components/ui/Progress'
 import { AchievementsGrid } from '@/features/profile/AchievementsGrid'
 import { InventoryPanel } from '@/features/profile/InventoryPanel'
 import { ProgressCharts, WeightChart } from '@/features/profile/ProgressCharts'
-import { cn, formatNumber } from '@/lib/cn'
-import { computeTargets, levelFromXp, titleForLevel } from '@/services/calculations'
+import { LANGUAGES, LANGUAGE_NAMES, useI18n } from '@/i18n'
+import { cn } from '@/lib/cn'
+import { computeTargets, levelFromXp } from '@/services/calculations'
 import { formatShortDate, today } from '@/services/dates'
 import { resetEverything } from '@/services/session'
 import { useBodyStore } from '@/store/bodyStore'
 import { useGameStore } from '@/store/gameStore'
 import { useNutritionStore } from '@/store/nutritionStore'
 import { useQuestStore } from '@/store/questStore'
+import { useSettingsStore } from '@/store/settingsStore'
 import { useUserStore } from '@/store/userStore'
 import { useWorkoutStore } from '@/store/workoutStore'
 import type { AttributeKey, DietPreference, Goal, UserProfile } from '@/types'
 
-const ATTRIBUTES: { key: AttributeKey; label: string; icon: string; description: string; tone: string }[] = [
-  { key: 'forca', label: 'Força', icon: 'Dumbbell', description: 'Sobe com treinos de força concluídos.', tone: 'cyan' },
-  { key: 'resistencia', label: 'Resistência', icon: 'Activity', description: 'Sobe com cardio e sessões longas.', tone: 'good' },
-  { key: 'disciplina', label: 'Disciplina', icon: 'Brain', description: 'Sobe com missões e sequências.', tone: 'violet' },
-  { key: 'energia', label: 'Energia', icon: 'Battery', description: 'Sobe com sono, água e recuperação.', tone: 'gold' },
+const ATTRIBUTES: { key: AttributeKey; icon: string; tone: 'ember' | 'good' | 'crimson' | 'gold' }[] = [
+  { key: 'forca', icon: 'Dumbbell', tone: 'ember' },
+  { key: 'resistencia', icon: 'Activity', tone: 'good' },
+  { key: 'disciplina', icon: 'Brain', tone: 'crimson' },
+  { key: 'energia', icon: 'Battery', tone: 'gold' },
 ]
 
 const ATTRIBUTE_COLORS: Record<string, string> = {
-  cyan: 'text-cyan-electric',
+  ember: 'text-ember',
   good: 'text-good',
-  violet: 'text-violet-soft',
+  crimson: 'text-crimson-soft',
   gold: 'text-gold',
 }
 
-const GOAL_LABELS: Record<Goal, string> = {
-  perder_gordura: 'Perder gordura',
-  ganhar_massa: 'Ganhar massa',
-  manter: 'Manter',
-  condicao_fisica: 'Melhorar condição física',
-}
+/** Matizes disponíveis para o cabelo do avatar. */
+const AVATAR_HUES = [24, 0, 320, 200, 145]
 
-const DIET_LABELS: Record<DietPreference, string> = {
-  sem_preferencia: 'Sem preferência',
-  mediterranica: 'Mediterrânica',
-  vegetariano: 'Vegetariana',
-  vegan: 'Vegana',
-}
+const GOAL_ORDER: Goal[] = ['perder_gordura', 'ganhar_massa', 'manter', 'condicao_fisica']
+const DIET_ORDER: DietPreference[] = ['sem_preferencia', 'mediterranica', 'vegetariano', 'vegan']
 
 function AvatarCard() {
+  const { t, n } = useI18n()
   const profile = useUserStore((state) => state.profile)!
   const setAvatar = useUserStore((state) => state.setAvatar)
   const xp = useGameStore((state) => state.xp)
   const coins = useGameStore((state) => state.coins)
   const equipped = useGameStore((state) => state.equipped)
   const info = levelFromXp(xp)
-  const title = equipped.title ? (getCosmetic(equipped.title)?.value ?? titleForLevel(info.level)) : titleForLevel(info.level)
-
-  const hues = [190, 265, 320, 35, 145]
+  const title = useHeroTitle(info.level)
 
   return (
-    <Card glow="violet">
+    <Card glow="crimson">
       <CardBody className="flex flex-col items-center gap-5 sm:flex-row sm:items-start">
         <div className="flex flex-col items-center gap-3">
           <HeroAvatar
@@ -78,14 +71,14 @@ function AvatarCard() {
               <button
                 key={variant}
                 type="button"
-                aria-label={`Penteado ${variant + 1}`}
+                aria-label={t.profile.hairAria(variant + 1)}
                 aria-pressed={profile.avatarVariant === variant}
                 onClick={() => setAvatar(variant, profile.avatarHue)}
                 className={cn(
                   'size-8 rounded-lg border text-xs font-semibold transition-colors',
                   profile.avatarVariant === variant
-                    ? 'border-cyan-electric bg-cyan-electric/15 text-cyan-electric'
-                    : 'border-night-600 text-ink-muted hover:text-ink',
+                    ? 'border-ember bg-ember/15 text-ember'
+                    : 'border-void-600 text-ink-muted hover:text-ink',
                 )}
               >
                 {variant + 1}
@@ -93,18 +86,18 @@ function AvatarCard() {
             ))}
           </div>
           <div className="flex gap-1.5">
-            {hues.map((hue) => (
+            {AVATAR_HUES.map((hue) => (
               <button
                 key={hue}
                 type="button"
-                aria-label={`Cor ${hue}`}
+                aria-label={t.profile.colourAria(hue)}
                 aria-pressed={profile.avatarHue === hue}
                 onClick={() => setAvatar(profile.avatarVariant, hue)}
                 className={cn(
                   'size-7 rounded-full border-2 transition-transform',
-                  profile.avatarHue === hue ? 'border-ink scale-110' : 'border-transparent',
+                  profile.avatarHue === hue ? 'scale-110 border-ink' : 'border-transparent',
                 )}
-                style={{ background: `hsl(${hue} 62% 52%)` }}
+                style={{ background: `hsl(${hue} 78% 54%)` }}
               />
             ))}
           </div>
@@ -112,21 +105,34 @@ function AvatarCard() {
 
         <div className="min-w-0 flex-1 text-center sm:text-left">
           <h1 className="font-display text-3xl font-bold text-ink">{profile.name}</h1>
-          <p className="mt-0.5 text-violet-soft">{title}</p>
+          <p className="mt-0.5 text-ember-soft">{title}</p>
           <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
-            <Badge tone="cyan" icon="TrendingUp">Nível {info.level}</Badge>
-            <Badge tone="gold" icon="Coins">{formatNumber(coins)} moedas</Badge>
-            <Badge tone="neutral" icon="Target">{GOAL_LABELS[profile.goal]}</Badge>
+            <Badge tone="ember" icon="TrendingUp">
+              {t.common.levelWithNumber(info.level)}
+            </Badge>
+            <Badge tone="gold" icon="Coins">
+              {n(coins)}
+            </Badge>
+            <Badge tone="neutral" icon="Target">
+              {t.goals[profile.goal]}
+            </Badge>
           </div>
 
           <div className="mt-4 space-y-1.5">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-ink-muted">Progresso do nível</span>
+              <span className="text-ink-muted">{t.common.levelProgress}</span>
               <span className="tabular-nums text-ink-faint">
-                {formatNumber(info.currentLevelXp)} / {formatNumber(info.nextLevelXp)} XP
+                {t.common.xpProgress(n(info.currentLevelXp), n(info.nextLevelXp))}
               </span>
             </div>
-            <ProgressBar value={info.currentLevelXp} max={info.nextLevelXp} tone="xp" height="lg" showShimmer label="XP" />
+            <ProgressBar
+              value={info.currentLevelXp}
+              max={info.nextLevelXp}
+              tone="xp"
+              height="lg"
+              showShimmer
+              label={t.common.levelProgress}
+            />
           </div>
         </div>
       </CardBody>
@@ -135,19 +141,20 @@ function AvatarCard() {
 }
 
 function AttributesCard() {
+  const { t } = useI18n()
   const attributes = useGameStore((state) => state.attributes)
   const max = Math.max(10, ...Object.values(attributes))
 
   return (
     <Card>
-      <CardHeader title="Atributos" subtitle="Evoluem com as tuas ações" icon="Shield" />
+      <CardHeader title={t.profile.attributesTitle} subtitle={t.profile.attributesSubtitle} icon="Shield" />
       <CardBody className="space-y-4 pt-3">
         {ATTRIBUTES.map((attribute) => (
           <div key={attribute.key}>
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-2 text-sm font-medium text-ink">
                 <Icon name={attribute.icon} size={15} className={ATTRIBUTE_COLORS[attribute.tone]} />
-                {attribute.label}
+                {t.attributes[attribute.key]}
               </span>
               <span className={cn('font-display text-lg font-bold tabular-nums', ATTRIBUTE_COLORS[attribute.tone])}>
                 {attributes[attribute.key]}
@@ -156,12 +163,12 @@ function AttributesCard() {
             <ProgressBar
               value={attributes[attribute.key]}
               max={max}
-              tone={attribute.tone === 'good' ? 'good' : attribute.tone === 'violet' ? 'violet' : attribute.tone === 'gold' ? 'gold' : 'cyan'}
+              tone={attribute.tone}
               height="sm"
               className="mt-1.5"
-              label={attribute.label}
+              label={t.attributes[attribute.key]}
             />
-            <p className="mt-1 text-[11px] text-ink-faint">{attribute.description}</p>
+            <p className="mt-1 text-[11px] text-ink-faint">{t.attributeHints[attribute.key]}</p>
           </div>
         ))}
       </CardBody>
@@ -170,6 +177,7 @@ function AttributesCard() {
 }
 
 function StatsCard() {
+  const { t } = useI18n()
   const counters = useGameStore((state) => state.counters)
   const bestStreak = useGameStore((state) => state.bestStreak)
   const streak = useGameStore((state) => state.streak)
@@ -179,20 +187,21 @@ function StatsCard() {
 
   return (
     <Card>
-      <CardHeader title="Estatísticas" subtitle="O teu percurso até aqui" icon="Award" />
+      <CardHeader title={t.profile.statsTitle} subtitle={t.profile.statsSubtitle} icon="Award" />
       <CardBody className="grid grid-cols-2 gap-3 pt-3 sm:grid-cols-3">
-        <Stat label="Treinos" value={counters.workouts} icon="Dumbbell" tone="cyan" />
-        <Stat label="Missões" value={counters.quests} icon="Target" tone="violet" />
-        <Stat label="Refeições" value={counters.meals} icon="UtensilsCrossed" />
-        <Stat label="Sequência atual" value={`${streak} d`} icon="Flame" tone="gold" />
-        <Stat label="Melhor sequência" value={`${bestStreak} d`} icon="Trophy" tone="gold" />
-        <Stat label="Tempo total" value={`${totalMinutes} min`} icon="Clock" tone="cyan" />
+        <Stat label={t.profile.statWorkouts} value={counters.workouts} icon="Dumbbell" tone="ember" />
+        <Stat label={t.profile.statQuests} value={counters.quests} icon="Target" tone="crimson" />
+        <Stat label={t.profile.statMeals} value={counters.meals} icon="UtensilsCrossed" />
+        <Stat label={t.profile.statStreak} value={`${streak} d`} icon="Flame" tone="gold" />
+        <Stat label={t.profile.statBestStreak} value={`${bestStreak} d`} icon="Trophy" tone="gold" />
+        <Stat label={t.profile.statTotalTime} value={`${totalMinutes} ${t.units.min}`} icon="Clock" tone="ember" />
       </CardBody>
     </Card>
   )
 }
 
 function BodyProgressCard() {
+  const { t } = useI18n()
   const logs = useBodyStore((state) => state.logs)
   const addLog = useBodyStore((state) => state.addLog)
   const [weight, setWeight] = useState('')
@@ -218,8 +227,8 @@ function BodyProgressCard() {
   return (
     <Card>
       <CardHeader
-        title="Progresso corporal"
-        subtitle={latest ? `Última pesagem: ${formatShortDate(latest.date)}` : 'Sem registos'}
+        title={t.profile.bodyTitle}
+        subtitle={latest ? t.profile.lastWeighIn(formatShortDate(latest.date)) : t.profile.noWeighIns}
         icon="Scale"
         action={
           logs.length > 1 ? (
@@ -234,7 +243,7 @@ function BodyProgressCard() {
         <WeightChart />
 
         <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
-          <Field label="Peso (kg)">
+          <Field label={t.profile.weightLabel}>
             {(id) => (
               <TextInput
                 id={id}
@@ -247,7 +256,7 @@ function BodyProgressCard() {
               />
             )}
           </Field>
-          <Field label="Cintura (cm, opcional)">
+          <Field label={t.profile.waistLabel}>
             {(id) => (
               <TextInput
                 id={id}
@@ -261,7 +270,7 @@ function BodyProgressCard() {
             )}
           </Field>
           <Button variant="primary" icon="Plus" onClick={submit} disabled={!weight}>
-            Registar
+            {t.profile.register}
           </Button>
         </div>
 
@@ -273,7 +282,7 @@ function BodyProgressCard() {
               .map((log) => (
                 <li
                   key={log.id}
-                  className="flex items-center justify-between rounded-lg border border-night-600 bg-night-800/40 px-3 py-2 text-sm"
+                  className="flex items-center justify-between rounded-lg border border-void-600 bg-void-800/40 px-3 py-2 text-sm"
                 >
                   <span className="text-ink-muted">{formatShortDate(log.date)}</span>
                   <span className="tabular-nums text-ink">
@@ -291,10 +300,13 @@ function BodyProgressCard() {
 
 function SettingsCard() {
   const navigate = useNavigate()
+  const { t, n } = useI18n()
   const profile = useUserStore((state) => state.profile)!
   const targets = useUserStore((state) => state.targets)
   const updateProfile = useUserStore((state) => state.updateProfile)
   const isDemo = useUserStore((state) => state.isDemo)
+  const language = useSettingsStore((state) => state.language)
+  const setLanguage = useSettingsStore((state) => state.setLanguage)
 
   const [editing, setEditing] = useState(false)
   const [confirmReset, setConfirmReset] = useState(false)
@@ -312,26 +324,48 @@ function SettingsCard() {
 
   const preview = computeTargets(draft as UserProfile)
 
+  const fields: [string, string][] = [
+    [t.profile.fieldGoal, t.goals[profile.goal]],
+    [t.profile.fieldDaysPerWeek, String(profile.daysPerWeek)],
+    [t.profile.fieldWeight, `${profile.weightKg} kg`],
+    [t.profile.fieldHeight, `${profile.heightCm} cm`],
+    [t.profile.fieldAge, t.profile.ageYears(profile.age)],
+    [t.profile.fieldDiet, t.diets[profile.dietPreference]],
+  ]
+
   return (
     <Card>
-      <CardHeader title="Definições" subtitle="Perfil, metas e dados" icon="Settings" />
+      <CardHeader title={t.profile.settingsTitle} subtitle={t.profile.settingsSubtitle} icon="Settings" />
       <CardBody className="space-y-4 pt-3">
         {isDemo && (
-          <Badge tone="violet" icon="Sparkles">
-            Estás a explorar o perfil de demonstração
+          <Badge tone="crimson" icon="Sparkles">
+            {t.profile.demoBadge}
           </Badge>
         )}
 
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-ink-muted">{t.profile.languageLabel}</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {LANGUAGES.map((code) => (
+              <OptionCard
+                key={code}
+                selected={language === code}
+                onSelect={() => setLanguage(code)}
+                icon="Globe"
+                title={LANGUAGE_NAMES[code]}
+                description={code === 'pt' ? 'Português de Portugal' : 'English (UK)'}
+              />
+            ))}
+          </div>
+          <p className="text-xs text-ink-faint">{t.profile.languageHint}</p>
+        </div>
+
         <dl className="grid gap-2 text-sm sm:grid-cols-2">
-          {[
-            ['Objetivo', GOAL_LABELS[profile.goal]],
-            ['Dias por semana', `${profile.daysPerWeek}`],
-            ['Peso', `${profile.weightKg} kg`],
-            ['Altura', `${profile.heightCm} cm`],
-            ['Idade', `${profile.age} anos`],
-            ['Preferência alimentar', DIET_LABELS[profile.dietPreference]],
-          ].map(([label, value]) => (
-            <div key={label} className="flex justify-between rounded-lg border border-night-600 bg-night-800/40 px-3 py-2">
+          {fields.map(([label, value]) => (
+            <div
+              key={label}
+              className="flex justify-between rounded-lg border border-void-600 bg-void-800/40 px-3 py-2"
+            >
               <dt className="text-ink-muted">{label}</dt>
               <dd className="font-medium text-ink">{value}</dd>
             </div>
@@ -339,46 +373,42 @@ function SettingsCard() {
         </dl>
 
         {targets && (
-          <div className="rounded-xl border border-night-600 bg-night-900/40 p-3.5 text-sm">
-            <p className="font-medium text-ink">Metas diárias estimadas</p>
+          <div className="rounded-xl border border-void-600 bg-void-900/40 p-3.5 text-sm">
+            <p className="font-medium text-ink">{t.profile.dailyTargets}</p>
             <p className="mt-1 tabular-nums text-ink-muted">
-              {formatNumber(targets.calories)} kcal · P {targets.proteinG} g · H {targets.carbsG} g · G{' '}
-              {targets.fatG} g
+              {t.profile.targetsSummary(n(targets.calories), targets.proteinG, targets.carbsG, targets.fatG)}
             </p>
           </div>
         )}
 
         <div className="flex flex-wrap gap-2">
           <Button icon="Pencil" onClick={openEdit}>
-            Editar perfil
+            {t.profile.editProfile}
           </Button>
           <Button variant="danger" icon="Trash2" onClick={() => setConfirmReset(true)}>
-            Repor dados
+            {t.profile.resetData}
           </Button>
         </div>
 
-        <Disclaimer>
-          Os cálculos são estimativas para gestão pessoal e não constituem aconselhamento médico ou
-          nutricional. Todos os dados ficam apenas neste dispositivo.
-        </Disclaimer>
+        <Disclaimer>{t.disclaimer.settings}</Disclaimer>
       </CardBody>
 
       <Modal
         open={editing}
         onClose={() => setEditing(false)}
-        title="Editar perfil"
-        description="Alterar estes valores recalcula as tuas metas."
+        title={t.profile.editTitle}
+        description={t.profile.editDescription}
         footer={
           <div className="flex justify-end gap-2">
-            <Button onClick={() => setEditing(false)}>Cancelar</Button>
+            <Button onClick={() => setEditing(false)}>{t.common.cancel}</Button>
             <Button variant="primary" icon="Check" onClick={save}>
-              Guardar
+              {t.common.save}
             </Button>
           </div>
         }
       >
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Nome">
+          <Field label={t.profile.nameLabel}>
             {(id) => (
               <TextInput
                 id={id}
@@ -388,22 +418,22 @@ function SettingsCard() {
               />
             )}
           </Field>
-          <Field label="Objetivo">
+          <Field label={t.profile.fieldGoal}>
             {(id) => (
               <Select
                 id={id}
                 value={draft.goal}
                 onChange={(event) => setDraft({ ...draft, goal: event.target.value as Goal })}
               >
-                {Object.entries(GOAL_LABELS).map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
+                {GOAL_ORDER.map((goal) => (
+                  <option key={goal} value={goal}>
+                    {t.goals[goal]}
                   </option>
                 ))}
               </Select>
             )}
           </Field>
-          <Field label="Peso (kg)">
+          <Field label={t.profile.weightLabel}>
             {(id) => (
               <TextInput
                 id={id}
@@ -414,7 +444,7 @@ function SettingsCard() {
               />
             )}
           </Field>
-          <Field label="Altura (cm)">
+          <Field label={t.onboarding.heightLabel}>
             {(id) => (
               <TextInput
                 id={id}
@@ -424,7 +454,7 @@ function SettingsCard() {
               />
             )}
           </Field>
-          <Field label="Idade">
+          <Field label={t.profile.fieldAge}>
             {(id) => (
               <TextInput
                 id={id}
@@ -434,7 +464,7 @@ function SettingsCard() {
               />
             )}
           </Field>
-          <Field label="Dias de treino por semana">
+          <Field label={t.profile.daysLabel}>
             {(id) => (
               <Select
                 id={id}
@@ -443,22 +473,22 @@ function SettingsCard() {
               >
                 {[2, 3, 4, 5, 6].map((days) => (
                   <option key={days} value={days}>
-                    {days} dias
+                    {t.profile.daysOption(days)}
                   </option>
                 ))}
               </Select>
             )}
           </Field>
-          <Field label="Preferência alimentar">
+          <Field label={t.profile.fieldDiet}>
             {(id) => (
               <Select
                 id={id}
                 value={draft.dietPreference}
                 onChange={(event) => setDraft({ ...draft, dietPreference: event.target.value as DietPreference })}
               >
-                {Object.entries(DIET_LABELS).map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
+                {DIET_ORDER.map((diet) => (
+                  <option key={diet} value={diet}>
+                    {t.diets[diet]}
                   </option>
                 ))}
               </Select>
@@ -466,20 +496,19 @@ function SettingsCard() {
           </Field>
         </div>
 
-        <div className="mt-4 rounded-xl border border-cyan-electric/30 bg-cyan-electric/5 p-3.5 text-sm">
-          <p className="font-medium text-ink">Novas metas estimadas</p>
+        <div className="mt-4 rounded-xl border border-ember/30 bg-ember/5 p-3.5 text-sm">
+          <p className="font-medium text-ink">{t.profile.newTargets}</p>
           <p className="mt-1 tabular-nums text-ink-muted">
-            {formatNumber(preview.calories)} kcal · P {preview.proteinG} g · H {preview.carbsG} g · G{' '}
-            {preview.fatG} g
+            {t.profile.targetsSummary(n(preview.calories), preview.proteinG, preview.carbsG, preview.fatG)}
           </p>
         </div>
       </Modal>
 
       <ConfirmDialog
         open={confirmReset}
-        title="Repor todos os dados?"
-        message="Perfil, plano, histórico, missões e conquistas serão apagados deste dispositivo. Esta ação não pode ser desfeita."
-        confirmLabel="Apagar tudo"
+        title={t.profile.resetTitle}
+        message={t.profile.resetMessage}
+        confirmLabel={t.profile.resetConfirm}
         destructive
         onCancel={() => setConfirmReset(false)}
         onConfirm={() => {
@@ -493,6 +522,7 @@ function SettingsCard() {
 }
 
 export function ProfilePage() {
+  const { t } = useI18n()
   const profile = useUserStore((state) => state.profile)
   // Toca nas stores para que a página reaja a alterações vindas de outras áreas.
   useNutritionStore((state) => state.entries.length)
@@ -503,8 +533,8 @@ export function ProfilePage() {
   return (
     <div className="space-y-5">
       <div className="hidden md:block">
-        <h1 className="text-3xl font-bold text-ink">Perfil</h1>
-        <p className="mt-1 text-ink-muted">O teu progresso, atributos e conquistas</p>
+        <h1 className="slash-divider text-3xl font-bold text-ink">{t.profile.title}</h1>
+        <p className="mt-3 text-ink-muted">{t.profile.subtitle}</p>
       </div>
 
       <AvatarCard />

@@ -2,13 +2,13 @@ import type { ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 import { Icon } from '@/components/ui/Icon'
 
-type Glow = 'none' | 'cyan' | 'gold' | 'violet'
+type Glow = 'none' | 'ember' | 'gold' | 'crimson'
 
 const GLOW_CLASS: Record<Glow, string> = {
   none: '',
-  cyan: 'glow-cyan',
+  ember: 'glow-ember',
   gold: 'glow-gold',
-  violet: 'glow-violet',
+  crimson: 'glow-crimson',
 }
 
 interface CardProps {
@@ -22,7 +22,7 @@ export function Card({ children, className, glow = 'none', as: Tag = 'div' }: Ca
   return (
     <Tag
       className={cn(
-        'rounded-2xl border border-night-600/70 bg-night-800/70 backdrop-blur-sm',
+        'rounded-2xl border border-void-600/70 bg-void-800/70 backdrop-blur-sm',
         GLOW_CLASS[glow],
         className,
       )}
@@ -45,7 +45,7 @@ export function CardHeader({ title, subtitle, icon, action, className }: CardHea
     <div className={cn('flex items-start justify-between gap-3 px-5 pt-5', className)}>
       <div className="flex min-w-0 items-center gap-3">
         {icon && (
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-night-700 text-cyan-electric">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-void-700 text-ember">
             <Icon name={icon} size={18} />
           </span>
         )}

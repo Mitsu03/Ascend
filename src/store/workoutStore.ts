@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { BONUS_REWARD_POOL, getCosmetic } from '@/data/cosmetics'
 import { BONUS_REWARD_CHANCE, workoutRewards } from '@/services/calculations'
+import { getDictionary, pick } from '@/i18n'
 import { dayOfWeek, today } from '@/services/dates'
 import { totalSets as sumSets } from '@/services/planGenerator'
 import { createPersistStorage } from '@/services/storage'
@@ -168,10 +169,11 @@ export const useWorkoutStore = create<WorkoutStore>()(
         const levelAfter = useGameStore.getState().level
         const cosmetic = bonusRewardId ? getCosmetic(bonusRewardId) : undefined
         if (cosmetic) {
+          const t = getDictionary()
           toast({
             kind: 'conquista',
-            title: 'Recompensa surpresa!',
-            description: `${cosmetic.name} foi adicionado ao teu inventário.`,
+            title: t.toasts.surpriseReward,
+            description: t.toasts.surpriseRewardDetail(pick(cosmetic.name)),
             icon: 'Gift',
           })
         }

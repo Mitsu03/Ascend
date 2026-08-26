@@ -1,4 +1,7 @@
 import { FOODS } from '@/data/foods'
+import { localized as l } from '@/i18n/types'
+import type { Dictionary } from '@/i18n'
+import type { Language, Localized } from '@/i18n/types'
 import type { DailyTotals, DietPreference, Food, MealSuggestion } from '@/types'
 
 /**
@@ -37,21 +40,81 @@ function sumTotals(items: DailyTotals[]): DailyTotals {
 }
 
 /** Combinações base — a mais adequada é escolhida pelo macro em falta. */
-const COMBOS: { foodIds: string[]; label: string; focus: 'proteina' | 'hidratos' | 'gordura' | 'equilibrado' }[] = [
-  { foodIds: ['skyr', 'aveia', 'banana'], label: 'Iogurte skyr + aveia + banana', focus: 'proteina' },
-  { foodIds: ['peito-frango', 'arroz-cozido', 'brocolos'], label: 'Frango + arroz + brócolos', focus: 'equilibrado' },
-  { foodIds: ['atum-lata', 'pao-integral', 'tomate'], label: 'Tosta de atum com tomate', focus: 'proteina' },
-  { foodIds: ['ovos', 'pao-mistura', 'abacate'], label: 'Ovos + pão + abacate', focus: 'gordura' },
-  { foodIds: ['whey', 'leite-meio-gordo'], label: 'Batido de proteína com leite', focus: 'proteina' },
-  { foodIds: ['tofu', 'quinoa', 'espinafres'], label: 'Tofu salteado + quinoa + espinafres', focus: 'proteina' },
-  { foodIds: ['lentilhas', 'salada-mista', 'azeite'], label: 'Lentilhas com salada e fio de azeite', focus: 'equilibrado' },
-  { foodIds: ['batata-doce', 'peito-frango'], label: 'Batata-doce assada + frango', focus: 'hidratos' },
-  { foodIds: ['requeijao', 'tostas-integrais', 'morangos'], label: 'Requeijão + tostas + morangos', focus: 'hidratos' },
-  { foodIds: ['amendoas', 'maca'], label: 'Maçã com amêndoas', focus: 'gordura' },
-  { foodIds: ['salmao', 'batata-cozida', 'salada-mista'], label: 'Salmão + batata + salada', focus: 'gordura' },
-  { foodIds: ['grao-de-bico', 'courgette', 'azeite'], label: 'Grão salteado com courgette', focus: 'equilibrado' },
-  { foodIds: ['barra-proteina'], label: 'Barra de proteína', focus: 'proteina' },
-  { foodIds: ['sopa-legumes', 'pao-integral'], label: 'Sopa de legumes + pão', focus: 'hidratos' },
+const COMBOS: {
+  foodIds: string[]
+  label: Localized
+  focus: 'proteina' | 'hidratos' | 'gordura' | 'equilibrado'
+}[] = [
+  {
+    foodIds: ['skyr', 'aveia', 'banana'],
+    label: l('Iogurte skyr + aveia + banana', 'Skyr yoghurt + oats + banana'),
+    focus: 'proteina',
+  },
+  {
+    foodIds: ['peito-frango', 'arroz-cozido', 'brocolos'],
+    label: l('Frango + arroz + brócolos', 'Chicken + rice + broccoli'),
+    focus: 'equilibrado',
+  },
+  {
+    foodIds: ['atum-lata', 'pao-integral', 'tomate'],
+    label: l('Tosta de atum com tomate', 'Tuna and tomato on wholemeal toast'),
+    focus: 'proteina',
+  },
+  {
+    foodIds: ['ovos', 'pao-mistura', 'abacate'],
+    label: l('Ovos + pão + abacate', 'Eggs + bread + avocado'),
+    focus: 'gordura',
+  },
+  {
+    foodIds: ['whey', 'leite-meio-gordo'],
+    label: l('Batido de proteína com leite', 'Protein shake with milk'),
+    focus: 'proteina',
+  },
+  {
+    foodIds: ['tofu', 'quinoa', 'espinafres'],
+    label: l('Tofu salteado + quinoa + espinafres', 'Sautéed tofu + quinoa + spinach'),
+    focus: 'proteina',
+  },
+  {
+    foodIds: ['lentilhas', 'salada-mista', 'azeite'],
+    label: l('Lentilhas com salada e fio de azeite', 'Lentils with salad and a drizzle of olive oil'),
+    focus: 'equilibrado',
+  },
+  {
+    foodIds: ['batata-doce', 'peito-frango'],
+    label: l('Batata-doce assada + frango', 'Baked sweet potato + chicken'),
+    focus: 'hidratos',
+  },
+  {
+    foodIds: ['requeijao', 'tostas-integrais', 'morangos'],
+    label: l('Requeijão + tostas + morangos', 'Curd cheese + crispbread + strawberries'),
+    focus: 'hidratos',
+  },
+  {
+    foodIds: ['amendoas', 'maca'],
+    label: l('Maçã com amêndoas', 'Apple with almonds'),
+    focus: 'gordura',
+  },
+  {
+    foodIds: ['salmao', 'batata-cozida', 'salada-mista'],
+    label: l('Salmão + batata + salada', 'Salmon + potato + salad'),
+    focus: 'gordura',
+  },
+  {
+    foodIds: ['grao-de-bico', 'courgette', 'azeite'],
+    label: l('Grão salteado com courgette', 'Sautéed chickpeas with courgette'),
+    focus: 'equilibrado',
+  },
+  {
+    foodIds: ['barra-proteina'],
+    label: l('Barra de proteína', 'Protein bar'),
+    focus: 'proteina',
+  },
+  {
+    foodIds: ['sopa-legumes', 'pao-integral'],
+    label: l('Sopa de legumes + pão', 'Vegetable soup + bread'),
+    focus: 'hidratos',
+  },
 ]
 
 const FOOD_MAP = new Map(FOODS.map((food) => [food.id, food]))
@@ -85,15 +148,15 @@ function dominantGap(remaining: Remaining): 'proteina' | 'hidratos' | 'gordura' 
   return 'equilibrado'
 }
 
-function gapSentence(remaining: Remaining): string {
+function gapSentence(remaining: Remaining, t: Dictionary): string {
   const parts: string[] = []
-  if (remaining.proteinG >= 5) parts.push(`${remaining.proteinG} g de proteína`)
-  if (remaining.carbsG >= 10) parts.push(`${remaining.carbsG} g de hidratos`)
-  if (remaining.fatG >= 5) parts.push(`${remaining.fatG} g de gordura`)
-  if (parts.length === 0) return `Faltam ${remaining.calories} kcal.`
-  const last = parts.pop()
-  const list = parts.length > 0 ? `${parts.join(', ')} e ${last}` : last
-  return `Faltam ${list}.`
+  if (remaining.proteinG >= 5) parts.push(t.nutrition.gapProtein(remaining.proteinG))
+  if (remaining.carbsG >= 10) parts.push(t.nutrition.gapCarbs(remaining.carbsG))
+  if (remaining.fatG >= 5) parts.push(t.nutrition.gapFat(remaining.fatG))
+  if (parts.length === 0) return t.nutrition.gapCalories(remaining.calories)
+  const last = parts.pop() as string
+  const list = parts.length > 0 ? `${parts.join(', ')}${t.nutrition.listJoin}${last}` : last
+  return t.nutrition.gapSentence(list)
 }
 
 export interface SuggestionResult {
@@ -102,19 +165,21 @@ export interface SuggestionResult {
   suggestions: MealSuggestion[]
 }
 
-export function suggestMeals(remaining: Remaining, diet: DietPreference = 'sem_preferencia'): SuggestionResult {
+export function suggestMeals(
+  remaining: Remaining,
+  diet: DietPreference,
+  t: Dictionary,
+  language: Language,
+): SuggestionResult {
   if (remaining.calories < 100) {
     return {
-      message:
-        remaining.calories <= 0
-          ? 'Meta calórica atingida. Ótimo trabalho — o resto do dia é para recuperar.'
-          : 'Estás praticamente na meta. Se tiveres fome, opta por algo leve como fruta ou iogurte.',
+      message: remaining.calories <= 0 ? t.nutrition.goalReached : t.nutrition.almostThere,
       suggestions: [],
     }
   }
 
   const focus = dominantGap(remaining)
-  const headline = gapSentence(remaining)
+  const headline = gapSentence(remaining, t)
 
   const compatible = COMBOS.filter((combo) => comboIsCompatible(combo.foodIds, diet))
   const ranked = [...compatible].sort((a, b) => {
@@ -132,7 +197,7 @@ export function suggestMeals(remaining: Remaining, diet: DietPreference = 'sem_p
     suggestions.push({
       id: combo.foodIds.join('+'),
       headline,
-      detail: combo.label,
+      detail: combo.label[language],
       foodIds: combo.foodIds,
       totals,
     })
@@ -144,7 +209,7 @@ export function suggestMeals(remaining: Remaining, diet: DietPreference = 'sem_p
     suggestions.push({
       id: combo.foodIds.join('+'),
       headline,
-      detail: combo.label,
+      detail: combo.label[language],
       foodIds: combo.foodIds,
       totals,
     })

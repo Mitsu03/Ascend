@@ -13,6 +13,7 @@ import {
 } from 'recharts'
 import { Card, CardBody, CardHeader } from '@/components/ui/Card'
 import { EmptyState, Tabs } from '@/components/ui/Misc'
+import { useI18n } from '@/i18n'
 import { addDays, formatShortDate, lastNDays, startOfWeek, today } from '@/services/dates'
 import { useBodyStore } from '@/store/bodyStore'
 import { useGameStore } from '@/store/gameStore'
@@ -23,21 +24,22 @@ import { useWorkoutStore } from '@/store/workoutStore'
 const AXIS_STYLE = { fill: 'var(--color-ink-faint)', fontSize: 11 }
 
 const TOOLTIP_STYLE = {
-  backgroundColor: 'var(--color-night-800)',
-  border: '1px solid var(--color-night-600)',
+  backgroundColor: 'var(--color-void-800)',
+  border: '1px solid var(--color-void-600)',
   borderRadius: '0.75rem',
   color: 'var(--color-ink)',
   fontSize: '0.8rem',
 }
 
 export function WeightChart() {
+  const { t } = useI18n()
   const logs = useBodyStore((state) => state.logs)
 
   const data = useMemo(
     () =>
       [...logs]
         .sort((a, b) => a.date.localeCompare(b.date))
-        .map((log) => ({ date: formatShortDate(log.date), peso: log.weightKg })),
+        .map((log) => ({ date: formatShortDate(log.date), value: log.weightKg })),
     [logs],
   )
 
@@ -45,13 +47,13 @@ export function WeightChart() {
     return (
       <EmptyState
         icon="Scale"
-        title="Poucos registos"
-        message="Regista pelo menos duas pesagens para veres a evolução no gráfico."
+        title={t.profile.fewLogs}
+        message={t.profile.fewLogsText}
       />
     )
   }
 
-  const values = data.map((point) => point.peso)
+  const values = data.map((point) => point.value)
   const min = Math.floor(Math.min(...values) - 1)
   const max = Math.ceil(Math.max(...values) + 1)
 
@@ -59,7 +61,7 @@ export function WeightChart() {
     <div className="h-64 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
-          <CartesianGrid stroke="var(--color-night-700)" vertical={false} />
+          <CartesianGrid stroke="var(--color-void-700)" vertical={false} />
           <XAxis dataKey="date" tick={AXIS_STYLE} tickLine={false} axisLine={false} />
           <YAxis
             domain={[min, max]}
@@ -69,13 +71,13 @@ export function WeightChart() {
             width={48}
             tickFormatter={(value: number) => value.toFixed(1)}
           />
-          <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value} kg`, 'Peso']} />
+          <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value} kg`, t.profile.chartWeight]} />
           <Line
             type="monotone"
-            dataKey="peso"
-            stroke="var(--color-cyan-electric)"
+            dataKey="value"
+            stroke="var(--color-ember)"
             strokeWidth={2.5}
-            dot={{ fill: 'var(--color-cyan-electric)', r: 3 }}
+            dot={{ fill: 'var(--color-ember)', r: 3 }}
             activeDot={{ r: 5 }}
           />
         </LineChart>
@@ -85,6 +87,7 @@ export function WeightChart() {
 }
 
 function CaloriesChart() {
+  const { t } = useI18n()
   const entries = useNutritionStore((state) => state.entries)
   const targets = useUserStore((state) => state.targets)
 
@@ -92,7 +95,7 @@ function CaloriesChart() {
     () =>
       lastNDays(7).map((date) => ({
         date: formatShortDate(date),
-        kcal: sumEntries(entries.filter((entry) => entry.date === date)).calories,
+        value: sumEntries(entries.filter((entry) => entry.date === date)).calories,
       })),
     [entries],
   )
@@ -101,19 +104,19 @@ function CaloriesChart() {
     <div className="h-64 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
-          <CartesianGrid stroke="var(--color-night-700)" vertical={false} />
+          <CartesianGrid stroke="var(--color-void-700)" vertical={false} />
           <XAxis dataKey="date" tick={AXIS_STYLE} tickLine={false} axisLine={false} />
           <YAxis tick={AXIS_STYLE} tickLine={false} axisLine={false} width={52} />
-          <Tooltip cursor={{ fill: 'var(--color-night-700)', opacity: 0.4 }} contentStyle={TOOLTIP_STYLE} />
           {targets && (
             <ReferenceLine
               y={targets.calories}
               stroke="var(--color-gold)"
               strokeDasharray="4 4"
-              label={{ value: 'Meta', fill: 'var(--color-gold)', fontSize: 11, position: 'right' }}
+              label={{ value: t.profile.chartTarget, fill: 'var(--color-gold)', fontSize: 11, position: 'right' }}
             />
           )}
-          <Bar dataKey="kcal" fill="var(--color-violet-soft)" radius={[6, 6, 0, 0]} />
+          <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value} kcal`, t.profile.chartCalories]} />
+          <Bar dataKey="value" fill="var(--color-crimson-soft)" radius={[6, 6, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -121,6 +124,7 @@ function CaloriesChart() {
 }
 
 function WorkoutsChart() {
+  const { t } = useI18n()
   const history = useWorkoutStore((state) => state.history)
 
   const data = useMemo(() => {
@@ -129,19 +133,23 @@ function WorkoutsChart() {
       const weekStart = addDays(currentWeek, -7 * (3 - index))
       const weekEnd = addDays(weekStart, 6)
       const count = history.filter((log) => log.date >= weekStart && log.date <= weekEnd).length
-      return { semana: index === 3 ? 'Esta semana' : `${formatShortDate(weekStart)}`, treinos: count }
+      return { label: index === 3 ? t.profile.chartThisWeek : formatShortDate(weekStart), value: count }
     })
-  }, [history])
+  }, [history, t])
 
   return (
     <div className="h-64 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
-          <CartesianGrid stroke="var(--color-night-700)" vertical={false} />
-          <XAxis dataKey="semana" tick={AXIS_STYLE} tickLine={false} axisLine={false} />
+          <CartesianGrid stroke="var(--color-void-700)" vertical={false} />
+          <XAxis dataKey="label" tick={AXIS_STYLE} tickLine={false} axisLine={false} />
           <YAxis allowDecimals={false} tick={AXIS_STYLE} tickLine={false} axisLine={false} width={40} />
-          <Tooltip cursor={{ fill: 'var(--color-night-700)', opacity: 0.4 }} contentStyle={TOOLTIP_STYLE} />
-          <Bar dataKey="treinos" fill="var(--color-cyan-electric)" radius={[6, 6, 0, 0]} />
+          <Tooltip
+            cursor={{ fill: 'var(--color-void-700)', opacity: 0.4 }}
+            contentStyle={TOOLTIP_STYLE}
+            formatter={(value) => [value, t.profile.chartWorkouts]}
+          />
+          <Bar dataKey="value" fill="var(--color-ember)" radius={[6, 6, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -149,13 +157,14 @@ function WorkoutsChart() {
 }
 
 function XpChart() {
+  const { t } = useI18n()
   const xpByDate = useGameStore((state) => state.xpByDate)
 
   const data = useMemo(() => {
     let cumulative = 0
     return lastNDays(14).map((date) => {
       cumulative += xpByDate[date] ?? 0
-      return { date: formatShortDate(date), xp: cumulative }
+      return { date: formatShortDate(date), value: cumulative }
     })
   }, [xpByDate])
 
@@ -163,11 +172,11 @@ function XpChart() {
     <div className="h-64 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
-          <CartesianGrid stroke="var(--color-night-700)" vertical={false} />
+          <CartesianGrid stroke="var(--color-void-700)" vertical={false} />
           <XAxis dataKey="date" tick={AXIS_STYLE} tickLine={false} axisLine={false} interval={1} />
           <YAxis tick={AXIS_STYLE} tickLine={false} axisLine={false} width={52} />
-          <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value} XP`, 'Acumulado']} />
-          <Line type="monotone" dataKey="xp" stroke="var(--color-gold)" strokeWidth={2.5} dot={false} />
+          <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value) => [`${value} XP`, t.profile.chartCumulative]} />
+          <Line type="monotone" dataKey="value" stroke="var(--color-gold)" strokeWidth={2.5} dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>
@@ -175,22 +184,23 @@ function XpChart() {
 }
 
 export function ProgressCharts() {
+  const { t } = useI18n()
   const [tab, setTab] = useState<'calorias' | 'treinos' | 'xp'>('calorias')
 
   return (
     <Card>
       <CardHeader
-        title="Evolução"
-        subtitle="Últimos dias em números"
+        title={t.profile.chartsTitle}
+        subtitle={t.profile.chartsSubtitle}
         icon="LineChart"
         action={
           <Tabs
             value={tab}
             onChange={setTab}
             options={[
-              { value: 'calorias', label: 'Calorias' },
-              { value: 'treinos', label: 'Treinos' },
-              { value: 'xp', label: 'XP' },
+              { value: 'calorias', label: t.profile.chartCalories },
+              { value: 'treinos', label: t.profile.chartWorkouts },
+              { value: 'xp', label: t.profile.chartXp },
             ]}
           />
         }

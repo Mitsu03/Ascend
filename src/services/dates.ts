@@ -1,16 +1,12 @@
+import { LOCALE_TAG } from '@/i18n/types'
+import type { Language } from '@/i18n/types'
+import { useSettingsStore } from '@/store/settingsStore'
+
 /** Utilitários de data. Trabalhamos sempre com a data local do utilizador. */
 
-export const WEEKDAY_LONG = [
-  'Domingo',
-  'Segunda-feira',
-  'Terça-feira',
-  'Quarta-feira',
-  'Quinta-feira',
-  'Sexta-feira',
-  'Sábado',
-] as const
-
-export const WEEKDAY_SHORT = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'] as const
+function activeLocale(language?: Language): string {
+  return LOCALE_TAG[language ?? useSettingsStore.getState().language]
+}
 
 /** 'YYYY-MM-DD' na timezone local. */
 export function toISODate(date: Date = new Date()): string {
@@ -64,14 +60,14 @@ export function dayOfWeek(iso: string): number {
   return fromISODate(iso).getDay()
 }
 
-export function formatShortDate(iso: string): string {
+export function formatShortDate(iso: string, language?: Language): string {
   const date = fromISODate(iso)
-  return date.toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' })
+  return date.toLocaleDateString(activeLocale(language), { day: '2-digit', month: 'short' })
 }
 
-export function formatLongDate(iso: string): string {
+export function formatLongDate(iso: string, language?: Language): string {
   const date = fromISODate(iso)
-  return date.toLocaleDateString('pt-PT', {
+  return date.toLocaleDateString(activeLocale(language), {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
@@ -89,9 +85,11 @@ export function formatDuration(totalSeconds: number): string {
   return hours > 0 ? `${hours}:${mm}:${ss}` : `${mm}:${ss}`
 }
 
-export function greetingForHour(hour: number = new Date().getHours()): string {
-  if (hour < 6) return 'Boa madrugada'
-  if (hour < 13) return 'Bom dia'
-  if (hour < 20) return 'Boa tarde'
-  return 'Boa noite'
+export type GreetingKey = 'earlyMorning' | 'morning' | 'afternoon' | 'evening'
+
+export function greetingKeyForHour(hour: number = new Date().getHours()): GreetingKey {
+  if (hour < 6) return 'earlyMorning'
+  if (hour < 13) return 'morning'
+  if (hour < 20) return 'afternoon'
+  return 'evening'
 }
