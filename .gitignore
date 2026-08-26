@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Imagens pessoais colocadas pelo utilizador (ver public/art/LICENSE.md)
+public/assets/*
+!public/assets/.gitkeep
