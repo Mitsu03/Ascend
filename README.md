@@ -26,11 +26,20 @@ Na página de Nutrição, o botão **Registar por fotografia** abre um modo de c
 - **Código de barras** — lê o código da embalagem com a câmara (via `BarcodeDetector`, disponível no Chrome, Edge e Android; nos restantes navegadores escreve-se o código à mão) e consulta o [Open Food Facts](https://world.openfoodfacts.org/), uma base de dados pública e gratuita. Os valores nutricionais registados são os reais do produto. É a única funcionalidade da app que precisa de ligação à internet.
 - **Fotografia** — tira uma foto ao prato com a câmara ou escolhe uma imagem. A miniatura fica anexada à refeição no diário.
 
-O **reconhecimento automático do prato está desligado por omissão**, e é importante perceber porquê: não existe hoje um modelo de visão gratuito e fiável que corra offline no browser, e o MVP não depende de APIs pagas. Sem reconhecimento, a foto serve de registo visual e os alimentos são escolhidos por ti.
+O **reconhecimento automático do prato está desligado por omissão** — não vem com nenhuma chave embutida, porque numa PWA tudo o que está no código é público. Ligas o teu próprio serviço em **Perfil › Definições › Reconhecimento por fotografia**, e há opções **gratuitas**:
 
-Quem quiser reconhecimento automático pode ligar um serviço próprio em **Perfil › Definições › Reconhecimento por fotografia**: basta um endpoint compatível com a API de chat da OpenAI, o nome do modelo e uma chave. A chave fica guardada apenas neste dispositivo e só é enviada para o endpoint indicado. A app envia a foto, recebe os alimentos e as porções estimadas, e mostra-os para confirmação antes de registar — as estimativas nunca entram no diário sem passares os olhos por elas.
+| Serviço | Custo | Onde obter a chave |
+| --- | --- | --- |
+| **Google Gemini** (recomendado) | Nível gratuito com limites diários generosos | [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
+| **OpenRouter** | Modelos terminados em `:free` | [openrouter.ai/models?q=free](https://openrouter.ai/models?q=free) |
+| **Groq** | Nível gratuito, limites por minuto mais apertados | [console.groq.com](https://console.groq.com/docs/models) |
+| **OpenAI** | Pago por utilização | [platform.openai.com](https://platform.openai.com/api-keys) |
 
-O código está isolado em `src/services/foodVision.ts`; trocar de fornecedor é implementar essa interface.
+Os três primeiros são gratuitos e todos permitem chamadas diretas a partir do browser (CORS aberto, verificado). Escolhe o serviço no painel, cola a chave e o endpoint e o modelo são preenchidos automaticamente — nos serviços que agregam vários modelos tens de copiar o nome exato de um modelo com visão.
+
+**Sobre a chave:** fica guardada neste browser e é legível por quem tenha acesso ao dispositivo. Por isso a recomendação é um serviço de nível gratuito sem cartão associado — no pior caso gasta-se a quota, não dinheiro.
+
+A app envia a foto, recebe os alimentos e as porções estimadas, e mostra-os para confirmação com as gramas editáveis. As estimativas nunca entram no diário sem passares os olhos por elas. O código está isolado em `src/services/foodVision.ts` e os serviços em `src/services/visionProviders.ts`.
 
 ### Idiomas
 

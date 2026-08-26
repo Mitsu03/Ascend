@@ -34,7 +34,16 @@ export interface FoodGuess {
 }
 
 export class VisionNotConfiguredError extends Error {}
-export class VisionRequestError extends Error {}
+
+export class VisionRequestError extends Error {
+  /** Mensagem devolvida pelo serviço, quando existe — distingue chave errada de modelo errado. */
+  detail?: string
+
+  constructor(message: string, detail?: string) {
+    super(message)
+    this.detail = detail
+  }
+}
 
 const SYSTEM_PROMPT = [
   'You identify foods in a photo of a meal and estimate portion weights.',
@@ -119,13 +128,20 @@ export async function recogniseFood(
 ): Promise<FoodGuess[]> {
   if (!visionIsConfigured(config)) throw new VisionNotConfiguredError()
 
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${config.apiKey.trim()}`,
+  }
+  // O OpenRouter pede estes cabeçalhos para atribuir o tráfego à aplicação.
+  if (config.endpoint.includes('openrouter.ai')) {
+    headers['HTTP-Referer'] = window.location.origin
+    headers['X-Title'] = 'Ascend'
+  }
+
   const response = await fetch(config.endpoint.trim(), {
     method: 'POST',
     signal,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${config.apiKey.trim()}`,
-    },
+    headers,
     body: JSON.stringify({
       model: config.model.trim(),
       max_tokens: 700,
@@ -146,7 +162,15 @@ export async function recogniseFood(
   })
 
   if (!response.ok) {
-    throw new VisionRequestError(`HTTP ${response.status}`)
+    // A mensagem do serviço é o que distingue "modelo errado" de "chave errada".
+    let detail: string | undefined
+    try {
+      const failure = (await response.json()) as { error?: { message?: string } | string }
+      detail = typeof failure.error === 'string' ? failure.error : failure.error?.message
+    } catch {
+      /* corpo não é JSON — fica só o código de estado */
+    }
+    throw new VisionRequestError(`HTTP ${response.status}`, detail)
   }
 
   const body = (await response.json()) as {

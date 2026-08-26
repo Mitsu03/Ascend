@@ -480,6 +480,15 @@ export const pt = {
     visionTitle: 'Reconhecimento por fotografia',
     visionHint:
       'Opcional. Liga um serviço de visão compatível com a API da OpenAI para estimar alimentos a partir de fotos. A chave fica guardada apenas neste dispositivo e só é enviada para o endpoint indicado.',
+    visionProvider: 'Serviço',
+    visionFree: 'Gratuito',
+    visionPaid: 'Pago',
+    visionGetKey: 'Obter chave',
+    visionModelPlaceholder: 'Nome exato do modelo',
+    visionModelRequired: 'Indica o nome do modelo do serviço escolhido.',
+    visionKeyInBrowser:
+      'A chave fica guardada neste browser e é legível por quem tenha acesso ao dispositivo. Prefere um serviço de nível gratuito, sem cartão associado.',
+    visionErrorDetail: (detail: string) => `Resposta do serviço: ${detail}`,
     visionEndpoint: 'Endpoint',
     visionModel: 'Modelo',
     visionKey: 'Chave de API',

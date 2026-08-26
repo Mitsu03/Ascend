@@ -475,6 +475,15 @@ export const en: Dictionary = {
     visionTitle: 'Photo recognition',
     visionHint:
       'Optional. Connect an OpenAI-compatible vision service to estimate foods from photos. The key is stored on this device only and is sent solely to the endpoint you provide.',
+    visionProvider: 'Service',
+    visionFree: 'Free',
+    visionPaid: 'Paid',
+    visionGetKey: 'Get a key',
+    visionModelPlaceholder: 'Exact model name',
+    visionModelRequired: 'Enter the model name for the service you picked.',
+    visionKeyInBrowser:
+      'The key is stored in this browser and is readable by anyone with access to the device. Prefer a free-tier service with no card attached.',
+    visionErrorDetail: (detail: string) => `Service replied: ${detail}`,
     visionEndpoint: 'Endpoint',
     visionModel: 'Model',
     visionKey: 'API key',

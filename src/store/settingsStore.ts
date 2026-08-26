@@ -18,8 +18,10 @@ interface SettingsStore {
 /** A app é em português de Portugal; o inglês é uma escolha explícita nas Definições. */
 export const DEFAULT_LANGUAGE: Language = 'pt'
 
-export const DEFAULT_VISION_ENDPOINT = 'https://api.openai.com/v1/chat/completions'
-export const DEFAULT_VISION_MODEL = 'gpt-4o-mini'
+/** Pré-preenchimento do painel de definições: o serviço gratuito recomendado. */
+export const DEFAULT_VISION_ENDPOINT =
+  'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions'
+export const DEFAULT_VISION_MODEL = 'gemini-2.0-flash'
 
 export const useSettingsStore = create<SettingsStore>()(
   persist(

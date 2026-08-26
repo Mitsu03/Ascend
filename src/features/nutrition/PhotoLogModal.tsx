@@ -7,6 +7,7 @@ import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import {
   VisionNotConfiguredError,
+  VisionRequestError,
   recogniseFood,
   visionIsConfigured,
 } from '@/services/foodVision'
@@ -111,9 +112,13 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
       if (guesses.length === 0) setError(t.photoLog.noFoodFound)
     } catch (cause) {
       setStatus('error')
-      setError(
-        cause instanceof VisionNotConfiguredError ? t.photoLog.notConfigured : t.photoLog.analysisFailed,
-      )
+      if (cause instanceof VisionNotConfiguredError) {
+        setError(t.photoLog.notConfigured)
+      } else if (cause instanceof VisionRequestError && cause.detail) {
+        setError(`${t.photoLog.analysisFailed} ${t.photoLog.visionErrorDetail(cause.detail)}`)
+      } else {
+        setError(t.photoLog.analysisFailed)
+      }
     }
   }
 

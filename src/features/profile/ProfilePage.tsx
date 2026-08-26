@@ -16,6 +16,7 @@ import { cn } from '@/lib/cn'
 import { computeTargets, levelFromXp } from '@/services/calculations'
 import { formatShortDate, today } from '@/services/dates'
 import { visionIsConfigured } from '@/services/foodVision'
+import { VISION_PRESETS, presetForEndpoint } from '@/services/visionProviders'
 import { resetEverything } from '@/services/session'
 import { useBodyStore } from '@/store/bodyStore'
 import { useGameStore } from '@/store/gameStore'
@@ -300,7 +301,7 @@ function BodyProgressCard() {
 }
 
 function VisionSettingsCard() {
-  const { t } = useI18n()
+  const { t, loc } = useI18n()
   const vision = useSettingsStore((state) => state.vision)
   const setVision = useSettingsStore((state) => state.setVision)
   const active = visionIsConfigured(vision)
@@ -308,6 +309,15 @@ function VisionSettingsCard() {
   const [endpoint, setEndpoint] = useState(vision?.endpoint ?? DEFAULT_VISION_ENDPOINT)
   const [model, setModel] = useState(vision?.model ?? DEFAULT_VISION_MODEL)
   const [apiKey, setApiKey] = useState(vision?.apiKey ?? '')
+
+  const preset = presetForEndpoint(endpoint)
+
+  const applyPreset = (id: string) => {
+    const chosen = VISION_PRESETS.find((item) => item.id === id)
+    if (!chosen) return
+    setEndpoint(chosen.endpoint)
+    setModel(chosen.suggestedModel)
+  }
 
   const save = () => setVision({ endpoint: endpoint.trim(), model: model.trim(), apiKey: apiKey.trim() })
 
@@ -329,6 +339,33 @@ function VisionSettingsCard() {
         }
       />
       <CardBody className="space-y-4 pt-3">
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-ink-muted">{t.photoLog.visionProvider}</p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {VISION_PRESETS.map((item) => (
+              <OptionCard
+                key={item.id}
+                selected={preset?.id === item.id}
+                onSelect={() => applyPreset(item.id)}
+                icon={item.free ? 'Sparkles' : 'Coins'}
+                title={`${item.name} · ${item.free ? t.photoLog.visionFree : t.photoLog.visionPaid}`}
+                description={loc(item.note)}
+              />
+            ))}
+          </div>
+          {preset && (
+            <a
+              href={preset.keyUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-ember hover:underline"
+            >
+              {t.photoLog.visionGetKey}
+              <Icon name="ArrowRight" size={14} />
+            </a>
+          )}
+        </div>
+
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label={t.photoLog.visionEndpoint}>
             {(id) => (
@@ -340,18 +377,21 @@ function VisionSettingsCard() {
               />
             )}
           </Field>
-          <Field label={t.photoLog.visionModel}>
+          <Field
+            label={t.photoLog.visionModel}
+            hint={!model.trim() ? t.photoLog.visionModelRequired : undefined}
+          >
             {(id) => (
               <TextInput
                 id={id}
                 value={model}
-                placeholder={DEFAULT_VISION_MODEL}
+                placeholder={t.photoLog.visionModelPlaceholder}
                 onChange={(event) => setModel(event.target.value)}
               />
             )}
           </Field>
         </div>
-        <Field label={t.photoLog.visionKey} hint={t.photoLog.visionKeyWarning}>
+        <Field label={t.photoLog.visionKey} hint={t.photoLog.visionKeyInBrowser}>
           {(id) => (
             <TextInput
               id={id}
@@ -365,7 +405,12 @@ function VisionSettingsCard() {
         </Field>
 
         <div className="flex flex-wrap gap-2">
-          <Button variant="primary" icon="Check" onClick={save} disabled={!apiKey.trim()}>
+          <Button
+            variant="primary"
+            icon="Check"
+            onClick={save}
+            disabled={!apiKey.trim() || !model.trim() || !endpoint.trim()}
+          >
             {t.photoLog.visionSave}
           </Button>
           {active && (
