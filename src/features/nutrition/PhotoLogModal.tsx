@@ -19,7 +19,15 @@ import {
   isValidBarcode,
   lookupBarcode,
 } from '@/services/openFoodFacts'
-import { cameraIsSupported, captureFrame, fileToImages, openCamera } from '@/services/photos'
+import { isNative } from '@/lib/native'
+import {
+  cameraIsSupported,
+  captureFrame,
+  captureWithNativeCamera,
+  fileToImages,
+  openCamera,
+  pickFromNativeGallery,
+} from '@/services/photos'
 import { MEAL_ORDER, checkProteinBonus, useNutritionStore } from '@/store/nutritionStore'
 import { useSettingsStore } from '@/store/settingsStore'
 import { useUserStore } from '@/store/userStore'
@@ -40,13 +48,15 @@ interface Selection extends FoodGuess {
 }
 
 export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
-  const { t, n, loc } = useI18n()
+  const { t, n, loc, lang } = useI18n()
   const vision = useSettingsStore((state) => state.vision)
   const targets = useUserStore((state) => state.targets)
   const addEntry = useNutritionStore((state) => state.addEntry)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const stopCameraRef = useRef<(() => void) | null>(null)
+  /** Análise em curso, para o botão de cancelar e para o fecho do modal. */
+  const analysisRef = useRef<AbortController | null>(null)
   const scanTimerRef = useRef<number | null>(null)
 
   const [mode, setMode] = useState<Mode>('foto')
@@ -59,6 +69,11 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
 
   const configured = visionIsConfigured(vision)
 
+  const cancelAnalysis = useCallback(() => {
+    analysisRef.current?.abort()
+    analysisRef.current = null
+  }, [])
+
   const stopCamera = useCallback(() => {
     if (scanTimerRef.current !== null) {
       window.clearInterval(scanTimerRef.current)
@@ -70,12 +85,13 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
 
   const reset = useCallback(() => {
     stopCamera()
+    cancelAnalysis()
     setStatus('idle')
     setError(null)
     setThumbnail(null)
     setSelections([])
     setManualCode('')
-  }, [stopCamera])
+  }, [cancelAnalysis, stopCamera])
 
   useEffect(() => {
     if (open) {
@@ -89,8 +105,8 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
 
   useEffect(() => stopCamera, [stopCamera])
 
-  const registerFood = (food: Food, grams: number, photo?: string) => {
-    addEntry(selectedMeal, food, grams, { photo })
+  const registerFood = (food: Food, grams: number, options?: { photo?: string; photoGroupId?: string }) => {
+    addEntry(selectedMeal, food, grams, options)
     checkProteinBonus(targets)
   }
 
@@ -105,12 +121,21 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
       return
     }
     setStatus('analysing')
+    const controller = new AbortController()
+    analysisRef.current = controller
     try {
-      const guesses = await recogniseFood(images.analysis, vision)
+      const guesses = await recogniseFood(images.analysis, vision, lang, controller.signal)
       setSelections(guesses.map((guess) => ({ ...guess, chosen: true })))
       setStatus('results')
       if (guesses.length === 0) setError(t.photoLog.noFoodFound)
     } catch (cause) {
+      // Cancelamento pedido pelo utilizador não é falha: a foto fica anexada e
+      // ele escolhe os alimentos à mão, como no modo sem endpoint.
+      if (controller.signal.aborted) {
+        setStatus('results')
+        setSelections([])
+        return
+      }
       setStatus('error')
       if (cause instanceof VisionNotConfiguredError) {
         setError(t.photoLog.notConfigured)
@@ -119,11 +144,27 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
       } else {
         setError(t.photoLog.analysisFailed)
       }
+    } finally {
+      if (analysisRef.current === controller) analysisRef.current = null
     }
   }
 
   const startCamera = async () => {
     setError(null)
+
+    // No wrapper nativo abre-se a câmara do sistema: a pré-visualização dentro
+    // da webview fica preta (ver `captureWithNativeCamera`).
+    if (isNative && mode === 'foto') {
+      try {
+        const images = await captureWithNativeCamera()
+        if (images) void analyse(images)
+      } catch {
+        setStatus('error')
+        setError(t.photoLog.cameraDenied)
+      }
+      return
+    }
+
     try {
       const { stream, stop } = await openCamera()
       stopCameraRef.current = stop
@@ -147,6 +188,18 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
     const images = captureFrame(videoRef.current)
     stopCamera()
     void analyse(images)
+  }
+
+  /** Galeria do sistema no wrapper nativo; no browser é o `<input type="file">`. */
+  const openGallery = async () => {
+    setError(null)
+    try {
+      const images = await pickFromNativeGallery()
+      if (images) void analyse(images)
+    } catch {
+      setStatus('error')
+      setError(t.photoLog.readFailed)
+    }
   }
 
   const pickFile = async (file: File | undefined) => {
@@ -222,9 +275,15 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
 
   const confirm = () => {
     const chosen = selections.filter((item) => item.chosen)
+    // Todos os alimentos desta fotografia partilham um grupo: a miniatura fica
+    // guardada uma só vez (duplicá-la esgotava a quota do storage) mas o diário
+    // mostra-a à frente do grupo inteiro, não só do primeiro alimento.
+    const photoGroupId = thumbnail ? `photo-${Date.now()}` : undefined
     chosen.forEach((item, index) => {
-      // A miniatura fica só no primeiro registo, para não duplicar a imagem.
-      registerFood(item.food, item.grams, index === 0 ? (thumbnail ?? undefined) : undefined)
+      registerFood(item.food, item.grams, {
+        photo: index === 0 ? (thumbnail ?? undefined) : undefined,
+        photoGroupId,
+      })
     })
     onClose()
   }
@@ -298,8 +357,12 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
           </div>
         </div>
 
-        {mode === 'foto' && !configured && status === 'idle' && (
-          <p className="rounded-xl border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-muted">
+        {/* Aviso, não nota de rodapé: sem chave o "Registar" nunca liga, e antes
+            disto o utilizador só descobria isso ao carregar num botão inerte.
+            Sem condição de `status` para continuar visível depois da foto. */}
+        {mode === 'foto' && !configured && (
+          <p className="flex items-start gap-2 rounded-xl border border-warn/40 bg-warn/5 p-3 text-sm leading-relaxed text-ink">
+            <Icon name="AlertTriangle" size={16} className="mt-0.5 shrink-0 text-warn" />
             {t.photoLog.manualModeNote}
           </p>
         )}
@@ -333,24 +396,29 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
 
         {status === 'idle' && (
           <div className="flex flex-wrap gap-2">
-            {cameraIsSupported() && (
+            {cameraIsSupported() && (mode === 'foto' || barcodeScanningIsSupported()) && (
               <Button variant="primary" icon="Camera" onClick={startCamera}>
                 {mode === 'foto' ? t.photoLog.openCamera : t.photoLog.scanBarcode}
               </Button>
             )}
-            {mode === 'foto' && (
-              <label className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-xl border border-void-500 bg-void-700/60 px-4 text-sm text-ink transition-colors hover:bg-void-700">
-                <Icon name="Image" size={17} />
-                {t.photoLog.chooseFile}
-                <input
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                  className="sr-only"
-                  onChange={(event) => void pickFile(event.target.files?.[0])}
-                />
-              </label>
-            )}
+            {mode === 'foto' &&
+              (isNative ? (
+                <Button icon="Image" onClick={openGallery}>
+                  {t.photoLog.chooseFile}
+                </Button>
+              ) : (
+                <label className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-xl border border-void-500 bg-void-700/60 px-4 text-sm text-ink transition-colors hover:bg-void-700">
+                  <Icon name="Image" size={17} />
+                  {t.photoLog.chooseFile}
+                  {/* Sem `capture`: este botão é a galeria, não a câmara. */}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="sr-only"
+                    onChange={(event) => void pickFile(event.target.files?.[0])}
+                  />
+                </label>
+              ))}
             {mode === 'codigo' && (
               <div className="flex w-full gap-2 sm:w-auto">
                 <TextInput
@@ -375,7 +443,10 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
         {status === 'analysing' && (
           <div className="flex items-center gap-3 rounded-xl border border-ember/35 bg-ember/5 p-4">
             <Icon name="Sparkles" size={18} className="animate-pulse-glow text-ember" />
-            <p className="text-sm text-ink">{t.photoLog.analysing}</p>
+            <p className="flex-1 text-sm text-ink">{t.photoLog.analysing}</p>
+            <Button size="sm" onClick={cancelAnalysis}>
+              {t.common.cancel}
+            </Button>
           </div>
         )}
 

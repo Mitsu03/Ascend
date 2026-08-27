@@ -1,30 +1,305 @@
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ArtIcon } from '@/components/ArtIcon'
-import { EXERCISE_BY_ID } from '@/data/exercises'
-import { BladeSlashes, InkWash, SpiritMotes, TwilightSky } from '@/components/art/SpiritArt'
-import { HeroAvatar } from '@/components/HeroAvatar'
-import { useHeroTitle } from '@/components/layout/AppShell'
+import { ScreenBackdrop } from '@/components/layout/ScreenBackdrop'
+import { OrderRow } from '@/features/quests/OrderRow'
+import { HeaderIdentity, HeaderTally, ScreenHeader } from '@/components/layout/ScreenHeader'
 import { Button } from '@/components/ui/Button'
-import { Card, CardBody, CardHeader } from '@/components/ui/Card'
+import { Card } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
-import { Badge, EmptyState, Stat } from '@/components/ui/Misc'
-import { MacroBar, ProgressBar, ProgressRing } from '@/components/ui/Progress'
-import { QuestCard } from '@/features/quests/QuestCard'
 import { useI18n } from '@/i18n'
-import { levelFromXp, maskStageForLevel } from '@/services/calculations'
-import { formatLongDate, greetingKeyForHour, today } from '@/services/dates'
+import { cn } from '@/lib/cn'
+import { WATER_GOAL_ML, levelFromXp, workoutRewards } from '@/services/calculations'
+import { formatLongDate, today } from '@/services/dates'
 import { narrativeForDay } from '@/services/narrative'
 import { estimateDuration, totalSets } from '@/services/planGenerator'
 import { useGameStore } from '@/store/gameStore'
 import { useNutritionStore } from '@/store/nutritionStore'
 import { useQuestStore } from '@/store/questStore'
-import { useArt, useArtStore } from '@/store/artStore'
 import { useUserStore } from '@/store/userStore'
 import { useWorkoutStore } from '@/store/workoutStore'
-import type { ArtIconName } from '@/data/artIcons'
-import type { Quest } from '@/types'
+import type { Dictionary } from '@/i18n'
+import type { Quest, WorkoutDay } from '@/types'
 
+/** Rótulo de secção: maiúsculas pequenas, muito espaçadas, cor apagada. */
+function Eyebrow({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <span className={cn('text-[10.5px] font-semibold tracking-[0.16em] text-ink-muted', className)}>{children}</span>
+  )
+}
+
+/** Barra fina de progresso, no gradiente carmim→brasa do tema. */
+function ThinBar({
+  value,
+  max,
+  height,
+  color,
+  rounded = false,
+  sweep = false,
+  label,
+}: {
+  value: number
+  max: number
+  height: number
+  color: string
+  rounded?: boolean
+  sweep?: boolean
+  label: string
+}) {
+  const pct = max > 0 ? Math.min(100, Math.max(0, (value / max) * 100)) : 0
+
+  return (
+    <div
+      className={cn('relative bg-void-700', rounded && 'overflow-hidden rounded-full')}
+      style={{ height }}
+      role="progressbar"
+      aria-valuenow={Math.round(value)}
+      aria-valuemin={0}
+      aria-valuemax={Math.round(max)}
+      aria-label={label}
+    >
+      <div
+        className={cn('absolute inset-y-0 left-0 overflow-hidden', rounded && 'rounded-full')}
+        style={{ width: `${pct}%`, background: color, boxShadow: sweep ? '0 0 14px rgba(255,122,26,.9)' : undefined }}
+      >
+        {/* Brilho a atravessar: só na barra de patente, que é a que se olha. */}
+        {sweep && (
+          <span className="absolute inset-y-0 w-[34%] animate-sweep bg-gradient-to-r from-transparent via-white/70 to-transparent" />
+        )}
+      </div>
+    </div>
+  )
+}
+
+const BAR_EMBER = 'linear-gradient(90deg,#b81236,#ff7a1a)'
+
+/**
+ * O cartão herói do Quartel: a ordem do dia. É o único elemento do ecrã com
+ * moldura acesa e sombra projetada, porque é o único que se espera que seja
+ * tocado — tudo o resto abaixo é leitura.
+ */
+function OrderOfTheDayCard() {
+  const navigate = useNavigate()
+  const { t, n, loc } = useI18n()
+  const plan = useWorkoutStore((state) => state.plan)
+  const workoutForDate = useWorkoutStore((state) => state.workoutForDate)
+  const isCompletedOn = useWorkoutStore((state) => state.isCompletedOn)
+  const startSession = useWorkoutStore((state) => state.startSession)
+  const activeSession = useWorkoutStore((state) => state.activeSession)
+  const xp = useGameStore((state) => state.xp)
+
+  const info = levelFromXp(xp)
+  const workout = workoutForDate(today())
+  const done = workout ? isCompletedOn(workout.id, today()) : false
+  const resuming = Boolean(activeSession && workout && activeSession.workoutDayId === workout.id)
+
+  const sets = workout ? totalSets(workout.exercises) : 0
+  const minutes = workout ? estimateDuration(workout.exercises) : 0
+  // A promessa do cartão é a recompensa de uma sessão perfeita — é isso que
+  // faz sentido anunciar antes de começar.
+  const reward = workoutRewards(sets, sets, minutes * 60)
+
+  const ctaLabel = resuming ? t.dashboard.ctaResume : done ? t.dashboard.ctaTrainAgain : t.dashboard.ctaStart
+
+  const openSession = () => {
+    if (!workout) {
+      navigate('/treino')
+      return
+    }
+    if (!resuming) startSession(workout.id)
+    navigate('/treino/sessao')
+  }
+
+  return (
+    <section
+      className="relative overflow-hidden rounded-[22px] border border-ember/40 px-[22px] pt-[22px] shadow-[0_20px_60px_-22px_rgba(255,122,26,.55)]"
+      style={{ background: 'linear-gradient(165deg,#181820,#0d0d13)' }}
+    >
+      {/* Arte do cartão: a lâmina em diagonal, o kanji da divisão a sair pelo
+          fundo e uma borboleta do inferno pousada no canto. */}
+      <ArtIcon
+        name="katana"
+        size={190}
+        className="pointer-events-none absolute -top-[30px] -right-10 rotate-[14deg] text-ember opacity-5"
+      />
+      <span
+        className="pointer-events-none absolute -bottom-[26px] -left-2 font-kanji text-[150px] leading-[0.78] text-ink/[0.045]"
+        aria-hidden="true"
+      >
+        隊
+      </span>
+      <ArtIcon
+        name="hell-butterfly"
+        size={20}
+        className="pointer-events-none absolute top-5 right-5 -rotate-[16deg] text-crimson-soft opacity-55"
+      />
+      <span className="pointer-events-none absolute bottom-[70px] left-10 size-[3px] animate-mote rounded-full bg-ember-soft" />
+      <span className="pointer-events-none absolute bottom-[60px] left-[120px] size-[2px] animate-mote rounded-full bg-spirit [animation-delay:2.5s]" />
+
+      <div className="relative">
+        <p className="text-[10.5px] font-bold tracking-[0.24em] text-ember-soft">{t.dashboard.orderOfTheDay}</p>
+        <h1 className="mt-[9px] font-display text-[44px] leading-[1.02] font-bold text-ink [text-shadow:4px_4px_0_rgba(184,18,54,.55)]">
+          {workout ? loc(workout.name) : t.dashboard.restDay}
+        </h1>
+        <p className="mt-[7px] text-[13px] font-semibold text-ember-soft">
+          {workout ? loc(workout.focus) : t.dashboard.noWorkoutToday}
+        </p>
+        <p className="mt-[9px] text-[12.5px] leading-[1.5] text-ink-muted">
+          {workout
+            ? t.dashboard.workoutMeta(workout.exercises.length, sets, minutes)
+            : plan.length === 0
+              ? t.dashboard.noPlanText
+              : t.dashboard.restDayText}
+        </p>
+
+        {workout && (
+          <div className="mt-3.5 flex gap-[7px]">
+            <span className="rounded-full bg-ember/[0.13] px-[11px] py-1.5 text-[11.5px] font-bold text-ember-soft">
+              {t.dashboard.rewardXp(n(reward.xp))}
+            </span>
+            <span className="rounded-full bg-gold/[0.13] px-[11px] py-1.5 text-[11.5px] font-bold text-gold-soft">
+              {t.dashboard.rewardCoins(n(reward.coins))}
+            </span>
+          </div>
+        )}
+
+        <button
+          type="button"
+          onClick={openSession}
+          className="mt-[18px] h-14 w-full rounded-[15px] bg-gradient-to-br from-ember to-crimson font-display text-[19px] font-bold tracking-[0.06em] text-void-900 shadow-[0_12px_32px_-10px_rgba(255,122,26,.9)] transition-opacity active:opacity-90"
+        >
+          {workout ? ctaLabel : t.dashboard.seeWeeklyPlan}
+        </button>
+      </div>
+
+      {/* Rodapé sangrado: a patente e o reiatsu que falta para a seguinte. */}
+      <div className="relative mt-[22px] -mx-[22px]">
+        <div className="flex items-baseline justify-between px-[22px] pb-[7px]">
+          <span className="text-[10px] font-semibold tracking-[0.14em] whitespace-nowrap text-ink-muted">
+            {t.dashboard.rankLabel(String(info.level).padStart(2, '0'))}
+          </span>
+          <span className="font-display text-[13px] font-semibold tabular-nums text-ember-soft">
+            {n(info.currentLevelXp)} / {n(info.nextLevelXp)}
+          </span>
+        </div>
+        <ThinBar
+          value={info.currentLevelXp}
+          max={info.nextLevelXp}
+          height={3}
+          color={BAR_EMBER}
+          sweep
+          label={t.common.levelProgress}
+        />
+      </div>
+    </section>
+  )
+}
+
+/** Linha de macro do cartão de rações: rótulo, valor e a sua própria barra. */
+function MacroLine({ label, text, value, max, color }: {
+  label: string
+  text: string
+  value: number
+  max: number
+  color: string
+}) {
+  return (
+    <div>
+      <div className="flex items-baseline justify-between">
+        <span className="text-[11.5px] text-ink-soft">{label}</span>
+        <span className="text-[11.5px] font-semibold tabular-nums text-ink">{text}</span>
+      </div>
+      <div className="mt-1.5">
+        <ThinBar value={value} max={max} height={5} color={color} rounded label={label} />
+      </div>
+    </div>
+  )
+}
+
+/** Resumo do dia em comida e água, com atalho para o registo. */
+function RationsCard() {
+  const { t, n, d } = useI18n()
+  const targets = useUserStore((state) => state.targets)
+  const entries = useNutritionStore((state) => state.entries)
+  const totalsForDate = useNutritionStore((state) => state.totalsForDate)
+  const waterForDate = useNutritionStore((state) => state.waterForDate)
+
+  const totals = useMemo(() => totalsForDate(today()), [entries, totalsForDate])
+  const water = waterForDate(today())
+  if (!targets) return null
+
+  const diff = targets.calories - totals.calories
+
+  return (
+    <section className="mt-[18px] rounded-[18px] border border-void-700/90 bg-void-825 px-[18px] py-4">
+      <div className="flex items-baseline justify-between">
+        <Eyebrow>{t.dashboard.rationsToday}</Eyebrow>
+        <Link to="/nutricao" className="text-[11.5px] font-semibold text-ember">
+          {t.dashboard.register}
+        </Link>
+      </div>
+
+      <div className="mt-2 flex items-end gap-[9px]">
+        <span className="font-display text-[34px] leading-[0.9] font-bold tabular-nums text-ink">
+          {n(totals.calories)}
+        </span>
+        <span className="pb-[3px] text-xs text-ink-muted">{t.dashboard.ofKcal(n(targets.calories))}</span>
+        <span className="ml-auto pb-[3px] text-[11.5px] font-bold text-ember-soft">
+          {diff >= 0 ? t.dashboard.missingKcal(n(diff)) : t.dashboard.overKcal(n(-diff))}
+        </span>
+      </div>
+
+      <div className="mt-[11px]">
+        <ThinBar value={totals.calories} max={targets.calories} height={4} color={BAR_EMBER} label={t.units.kcal} />
+      </div>
+
+      <div className="mt-[15px] flex flex-col gap-[11px]">
+        <MacroLine
+          label={t.macros.protein}
+          text={t.dashboard.amountOf(n(totals.proteinG), n(targets.proteinG), t.units.grams)}
+          value={totals.proteinG}
+          max={targets.proteinG}
+          color="#ff7a1a"
+        />
+        <MacroLine
+          label={t.dashboard.water}
+          text={t.dashboard.amountOf(d(water / 1000, 1), d(WATER_GOAL_ML / 1000, 1), 'L')}
+          value={water}
+          max={WATER_GOAL_ML}
+          color="#8fd4ff"
+        />
+      </div>
+    </section>
+  )
+}
+
+function DailyOrders() {
+  const { t } = useI18n()
+  const daily = useQuestStore((state) => state.daily)
+  const done = daily.filter((quest) => quest.completed).length
+
+  if (daily.length === 0) return null
+
+  return (
+    // Em desktop esta é a primeira peça da coluna direita e alinha com o topo
+    // do cartão herói; em mobile vem a seguir às rações e precisa do respiro.
+    <section className="mt-[18px] md:mt-0">
+      <div className="flex items-baseline justify-between">
+        <Eyebrow>{t.dashboard.ordersHeading(done, daily.length)}</Eyebrow>
+        <Link to="/missoes" className="text-[11.5px] font-semibold text-ember">
+          {t.dashboard.seeAll}
+        </Link>
+      </div>
+      <div className="mt-2.5 flex flex-col gap-[7px]">
+        {daily.map((quest) => (
+          <OrderRow key={quest.id} quest={quest} />
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/** Dias de serviço seguidos e a licença de recuperação. */
 function StreakCard() {
   const { t } = useI18n()
   const streak = useGameStore((state) => state.streak)
@@ -34,32 +309,30 @@ function StreakCard() {
   const useRecoveryDay = useGameStore((state) => state.useRecoveryDay)
 
   return (
-    <Card className="flex flex-col justify-between p-5" glow={streak >= 7 ? 'gold' : 'none'}>
+    <Card className="mt-[18px] flex flex-col justify-between rounded-[18px] border-void-700/90 bg-void-825 p-[18px]">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm font-medium text-ink-muted">{t.dashboard.streak}</p>
-          <p className="font-display text-4xl font-bold text-warn">
+          <Eyebrow>{t.dashboard.streak}</Eyebrow>
+          <p className="mt-1.5 font-display text-[34px] leading-[0.9] font-bold text-warn">
             {streak}
-            <span className="ml-1.5 text-base font-medium text-ink-muted">
+            <span className="ml-1.5 text-xs font-medium text-ink-muted">
               {streak === 1 ? t.common.day : t.common.days}
             </span>
           </p>
-          <p className="mt-1 text-xs text-ink-faint">{t.dashboard.bestStreak(bestStreak)}</p>
+          <p className="mt-2 text-[11.5px] text-ink-faint">{t.dashboard.bestStreak(bestStreak)}</p>
         </div>
-        <span className="flex size-12 items-center justify-center rounded-2xl bg-warn/10 text-warn">
-          <Icon name="Flame" size={26} />
-        </span>
+        <ArtIcon name="fire-ray" size={30} className="text-warn opacity-40" />
       </div>
 
       {status === 'em_risco' && recoveryAvailable ? (
         <div className="mt-4 rounded-xl border border-warn/40 bg-warn/5 p-3">
-          <p className="text-xs leading-relaxed text-ink-muted">{t.narrative.streakAtRisk}</p>
+          <p className="text-[11.5px] leading-relaxed text-ink-muted">{t.narrative.streakAtRisk}</p>
           <Button size="sm" variant="gold" icon="HeartPulse" className="mt-2.5" onClick={useRecoveryDay}>
             {t.dashboard.useRecovery}
           </Button>
         </div>
       ) : (
-        <p className="mt-4 text-xs leading-relaxed text-ink-faint">
+        <p className="mt-3.5 text-[11.5px] leading-relaxed text-ink-faint">
           {recoveryAvailable ? t.dashboard.recoveryAvailable : t.dashboard.recoveryUsed}
         </p>
       )}
@@ -67,304 +340,42 @@ function StreakCard() {
   )
 }
 
-function NextWorkoutCard() {
-  const navigate = useNavigate()
-  const { t, loc } = useI18n()
-  const plan = useWorkoutStore((state) => state.plan)
-  const workoutForDate = useWorkoutStore((state) => state.workoutForDate)
-  const isCompletedOn = useWorkoutStore((state) => state.isCompletedOn)
-  const startSession = useWorkoutStore((state) => state.startSession)
-
-  const workout = workoutForDate(today())
-  const done = workout ? isCompletedOn(workout.id, today()) : false
-
-  if (plan.length === 0) {
-    return (
-      <Card>
-        <EmptyState
-          icon="Dumbbell"
-          title={t.dashboard.noPlanTitle}
-          message={t.dashboard.noPlanText}
-          action={
-            <Button variant="primary" icon="Plus" onClick={() => navigate('/treino')}>
-              {t.dashboard.goToWorkout}
-            </Button>
-          }
-        />
-      </Card>
-    )
-  }
-
-  if (!workout) {
-    const nextDay = [...plan].sort((a, b) => a.dayOfWeek - b.dayOfWeek)[0]
-    return (
-      <Card>
-        <CardHeader title={t.dashboard.restDay} subtitle={t.dashboard.noWorkoutToday} icon="Moon" />
-        <CardBody className="pt-3">
-          <p className="text-sm leading-relaxed text-ink-muted">
-            {t.dashboard.restDayText} <strong className="text-ink">{loc(nextDay.name)}</strong>.
-          </p>
-          <Button className="mt-4" icon="CalendarDays" onClick={() => navigate('/treino')}>
-            {t.dashboard.seeWeeklyPlan}
-          </Button>
-        </CardBody>
-      </Card>
-    )
-  }
-
-  const exercises = workout.exercises.slice(0, 4)
-
+/** A frase do dia, sobre uma mancha de tinta. */
+function NarrativeLine({ text }: { text: string }) {
   return (
-    <Card glow={done ? 'none' : 'ember'}>
-      <CardHeader
-        title={loc(workout.name)}
-        subtitle={loc(workout.focus)}
-        icon="Dumbbell"
-        action={done ? <Badge tone="good" icon="CheckCircle2">{t.dashboard.done}</Badge> : undefined}
-      />
-      <CardBody className="space-y-4 pt-3">
-        <div className="flex flex-wrap gap-2">
-          <Badge icon="ListChecks">{t.workout.exercises(workout.exercises.length)}</Badge>
-          <Badge icon="Timer">{t.workout.approxMinutes(estimateDuration(workout.exercises))}</Badge>
-          <Badge icon="Activity">{t.workout.sets(totalSets(workout.exercises))}</Badge>
-        </div>
-
-        <ul className="space-y-1.5 text-sm">
-          {exercises.map((item) => (
-            <li key={item.exerciseId} className="flex items-center justify-between gap-3">
-              <span className="truncate text-ink-muted">
-                {EXERCISE_BY_ID[item.exerciseId] ? loc(EXERCISE_BY_ID[item.exerciseId].name) : item.exerciseId}
-              </span>
-              <span className="shrink-0 tabular-nums text-ink-faint">
-                {item.sets} × {item.reps}
-              </span>
-            </li>
-          ))}
-          {workout.exercises.length > exercises.length && (
-            <li className="text-xs text-ink-faint">
-              {t.dashboard.moreExercises(workout.exercises.length - exercises.length)}
-            </li>
-          )}
-        </ul>
-
-        <div className="flex gap-2">
-          <Button
-            variant={done ? 'secondary' : 'primary'}
-            icon="Play"
-            fullWidth
-            onClick={() => {
-              startSession(workout.id)
-              navigate('/treino/sessao')
-            }}
-          >
-            {done ? t.dashboard.trainAgain : t.dashboard.startWorkout}
-          </Button>
-          <Button icon="CalendarDays" onClick={() => navigate('/treino')}>
-            {t.dashboard.plan}
-          </Button>
-        </div>
-      </CardBody>
-    </Card>
-  )
-}
-
-function NutritionCard() {
-  const { t, n, d } = useI18n()
-  const targets = useUserStore((state) => state.targets)
-  const entries = useNutritionStore((state) => state.entries)
-  const totalsForDate = useNutritionStore((state) => state.totalsForDate)
-  const waterForDate = useNutritionStore((state) => state.waterForDate)
-
-  const totals = useMemo(() => totalsForDate(today()), [entries, totalsForDate])
-  const water = waterForDate(today())
-
-  if (!targets) return null
-  const remaining = Math.max(0, targets.calories - totals.calories)
-
-  return (
-    <Card>
-      <CardHeader
-        title={t.dashboard.caloriesToday}
-        subtitle={t.dashboard.caloriesRemaining(n(remaining))}
-        icon="UtensilsCrossed"
-      />
-      <CardBody className="pt-3">
-        <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-center">
-          <ProgressRing
-            value={totals.calories}
-            max={targets.calories}
-            size={140}
-            tone={totals.calories > targets.calories * 1.05 ? 'warn' : 'ember'}
-            label={`${n(totals.calories)} / ${n(targets.calories)} ${t.units.kcal}`}
-          >
-            <span className="font-display text-3xl font-bold tabular-nums text-ink">{n(totals.calories)}</span>
-            <span className="text-xs text-ink-muted">
-              {t.common.of} {n(targets.calories)} {t.units.kcal}
-            </span>
-          </ProgressRing>
-
-          <div className="w-full flex-1 space-y-3">
-            <MacroBar label={t.macros.protein} value={totals.proteinG} target={targets.proteinG} tone="ember" />
-            <MacroBar label={t.macros.carbs} value={totals.carbsG} target={targets.carbsG} tone="crimson" />
-            <MacroBar label={t.macros.fat} value={totals.fatG} target={targets.fatG} tone="gold" />
-            <div className="flex items-center justify-between pt-1 text-xs text-ink-faint">
-              <span className="flex items-center gap-1.5">
-                <Icon name="Droplets" size={13} />
-                {t.dashboard.waterToday}
-              </span>
-              <span className="tabular-nums">{t.common.litres(d(water / 1000, 2))}</span>
-            </div>
-          </div>
-        </div>
-        <Link
-          to="/nutricao"
-          className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-ember hover:underline"
-        >
-          {t.dashboard.logMeal}
-          <Icon name="ArrowRight" size={15} />
-        </Link>
-      </CardBody>
-    </Card>
-  )
-}
-
-function HeroCard() {
-  const banner = useArt('dashboard')
-  const scrim = useArtStore((state) => state.scrim)
-  const { t, n } = useI18n()
-  const profile = useUserStore((state) => state.profile)!
-  const xp = useGameStore((state) => state.xp)
-  const coins = useGameStore((state) => state.coins)
-  const equipped = useGameStore((state) => state.equipped)
-  const info = levelFromXp(xp)
-  const title = useHeroTitle(info.level)
-
-  return (
-    <Card glow="crimson" edge className="relative overflow-hidden">
-      {/* Faixa escolhida pelo utilizador, atrás do conteúdo do cartão. */}
-      {banner && (
-        <>
-          <div
-            className="art-layer bg-cover bg-center"
-            style={{ backgroundImage: `url(${banner})` }}
-            aria-hidden="true"
-          />
-          <div
-            className="art-layer"
-            style={{
-              backgroundColor: `color-mix(in oklab, var(--color-void-900) ${scrim * 100}%, transparent)`,
-            }}
-            aria-hidden="true"
-          />
-        </>
-      )}
-      {/* Marca de água: lâmina em diagonal no canto do cartão. */}
-      <span
-        className="pointer-events-none absolute -bottom-8 -right-6 rotate-12 text-ember/[0.07]"
-        aria-hidden="true"
-      >
-        <ArtIcon name="katana" size={200} />
+    <Card className="mt-[18px] flex items-start gap-3.5 rounded-[18px] border-ember/25 bg-ember/5 p-4">
+      <span className="mt-0.5 shrink-0 text-ember">
+        <Icon name="Sparkles" size={16} />
       </span>
-      {/* Crepúsculo, cortes de lâmina e partículas por trás do herói. */}
-      <div className="art-layer">
-        <TwilightSky opacity={0.4} ridges={false} />
-      </div>
-      <div className="art-layer">
-        <BladeSlashes tone="crimson" opacity={0.35} />
-      </div>
-      <SpiritMotes count={6} />
-      <div className="art-layer ink-grain" />
-      <div className="art-layer bg-gradient-to-r from-void-900/85 via-void-900/55 to-void-900/80" aria-hidden="true" />
-
-      <div className="relative flex flex-col gap-5 p-5 sm:flex-row sm:items-center">
-        <HeroAvatar
-          size={112}
-          variant={profile.avatarVariant}
-          hue={profile.avatarHue}
-          frameId={equipped.frame}
-          auraId={equipped.aura}
-          maskStage={profile.showMask === false ? undefined : maskStageForLevel(info.level)}
-          emblemId={profile.avatarEmblem as ArtIconName | undefined}
-          divisionId={profile.divisionId}
-        />
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ink-muted">
-            {t.dashboard.greeting(t.greetings[greetingKeyForHour()])}
-          </p>
-          <h1 className="text-glow-ember truncate font-display text-4xl font-bold leading-tight text-ink">
-            {profile.name}
-          </h1>
-          <p className="mt-1 flex items-center gap-2 text-sm font-medium text-ember-soft">
-            <span className="h-px w-6 bg-gradient-to-r from-ember to-transparent" aria-hidden="true" />
-            {title}
-          </p>
-
-          <div className="mt-4 space-y-1.5">
-            <div className="flex items-center justify-between text-xs font-medium">
-              <span className="text-ink-muted">{t.common.levelWithNumber(info.level)}</span>
-              <span className="tabular-nums text-ink-faint">
-                {t.common.xpProgress(n(info.currentLevelXp), n(info.nextLevelXp))}
-              </span>
-            </div>
-            <ProgressBar
-              value={info.currentLevelXp}
-              max={info.nextLevelXp}
-              tone="xp"
-              height="lg"
-              showShimmer
-              label={t.common.levelProgress}
-            />
-          </div>
-        </div>
-
-        <div className="flex shrink-0 gap-3 sm:flex-col">
-          <Stat label={t.common.coins} value={n(coins)} icon="Coins" tone="gold" />
-          <Stat label={t.common.level} value={info.level} icon="TrendingUp" tone="ember" />
-        </div>
-      </div>
+      <p className="text-[12.5px] leading-relaxed text-balance text-ink">{text}</p>
     </Card>
   )
 }
 
-function QuestsCard() {
-  const { t } = useI18n()
-  const daily = useQuestStore((state) => state.daily)
-  const setProgress = useQuestStore((state) => state.setProgress)
-  const addWater = useNutritionStore((state) => state.addWater)
-  const done = daily.filter((quest) => quest.completed).length
-
-  const handleProgress = (quest: Quest, amount: number) => {
-    if (quest.type === 'agua') {
-      addWater(amount)
-      return
-    }
-    setProgress(quest.id, quest.progress + amount)
-  }
-
-  return (
-    <Card>
-      <CardHeader
-        title={t.dashboard.dailyQuests}
-        subtitle={t.common.completedOf(done, daily.length)}
-        icon="Target"
-        action={
-          <Link to="/missoes" className="text-sm font-medium text-ember hover:underline">
-            {t.dashboard.seeAll}
-          </Link>
-        }
-      />
-      <CardBody className="pt-3">
-        {daily.length === 0 ? (
-          <EmptyState icon="Target" title={t.dashboard.noQuests} message={t.dashboard.noQuestsText} />
-        ) : (
-          <ul className="space-y-2.5">
-            {daily.map((quest) => (
-              <QuestCard key={quest.id} quest={quest} compact onProgress={(amount) => handleProgress(quest, amount)} />
-            ))}
-          </ul>
-        )}
-      </CardBody>
-    </Card>
+function buildNarrative(
+  t: Dictionary,
+  args: {
+    streak: number
+    daily: Quest[]
+    workout: WorkoutDay | undefined
+    workoutDone: boolean
+    calories: number
+    protein: number
+    targetCalories: number
+    targetProtein: number
+  },
+): string {
+  return narrativeForDay(
+    {
+      streak: args.streak,
+      questsRemaining: args.daily.filter((quest) => !quest.completed).length,
+      workoutDoneToday: args.workoutDone,
+      hasWorkoutToday: Boolean(args.workout),
+      caloriesProgress: args.targetCalories ? args.calories / args.targetCalories : 0,
+      proteinProgress: args.targetProtein ? args.protein / args.targetProtein : 0,
+      levelUpToday: false,
+    },
+    t,
   )
 }
 
@@ -383,21 +394,28 @@ export function DashboardPage() {
   if (!profile) return null
 
   const workout = workoutForDate(today())
-  const narrative = narrativeForDay(
-    {
-      streak,
-      questsRemaining: daily.filter((quest) => !quest.completed).length,
-      workoutDoneToday: workout ? isCompletedOn(workout.id, today()) : false,
-      hasWorkoutToday: Boolean(workout),
-      caloriesProgress: targets ? totals.calories / targets.calories : 0,
-      proteinProgress: targets ? totals.proteinG / targets.proteinG : 0,
-      levelUpToday: false,
-    },
-    t,
-  )
+  const narrative = buildNarrative(t, {
+    streak,
+    daily,
+    workout,
+    workoutDone: workout ? isCompletedOn(workout.id, today()) : false,
+    calories: totals.calories,
+    protein: totals.proteinG,
+    targetCalories: targets?.calories ?? 0,
+    targetProtein: targets?.proteinG ?? 0,
+  })
 
   return (
-    <div className="space-y-5">
+    <>
+      <ScreenBackdrop screen="quartel" />
+
+      <ScreenHeader>
+        <HeaderIdentity />
+        <HeaderTally />
+      </ScreenHeader>
+
+      {/* Em desktop a barra lateral já diz quem se é; aqui sobra espaço para o
+          título da secção e a data por extenso. */}
       <div className="hidden items-end justify-between md:flex">
         <div>
           <h1 className="slash-divider font-display text-3xl font-bold text-ink">{t.dashboard.title}</h1>
@@ -406,29 +424,17 @@ export function DashboardPage() {
         <p className="text-sm text-ink-muted first-letter:uppercase">{formatLongDate(today())}</p>
       </div>
 
-      <HeroCard />
-
-      {/* Linha narrativa do dia, sobre uma mancha de tinta. */}
-      <Card className="relative flex items-start gap-3.5 overflow-hidden border-ember/25 bg-ember/5 p-4">
-        <span className="pointer-events-none absolute -right-8 -top-10 size-40" aria-hidden="true">
-          <InkWash tone="ember" opacity={0.12} />
-        </span>
-        <span className="relative mt-0.5 shrink-0 text-ember">
-          <Icon name="Sparkles" size={18} />
-        </span>
-        <p className="relative text-balance text-sm leading-relaxed text-ink">{narrative}</p>
-      </Card>
-
-      <div className="grid gap-5 lg:grid-cols-12">
-        <div className="space-y-5 lg:col-span-7">
-          <NutritionCard />
-          <QuestsCard />
+      <div className="px-5 pt-3.5 md:mt-6 md:grid md:grid-cols-12 md:gap-5 md:px-0 md:pt-0">
+        <div className="md:col-span-7">
+          <OrderOfTheDayCard />
+          <RationsCard />
         </div>
-        <div className="space-y-5 lg:col-span-5">
-          <NextWorkoutCard />
+        <div className="md:col-span-5">
+          <DailyOrders />
+          <NarrativeLine text={narrative} />
           <StreakCard />
         </div>
       </div>
-    </div>
+    </>
   )
 }

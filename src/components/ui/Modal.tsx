@@ -64,8 +64,22 @@ export function Modal({ open, onClose, title, description, children, footer, siz
           </div>
           <IconButton icon="X" label={t.common.close} onClick={onClose} size="sm" />
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">{children}</div>
-        {footer && <div className="border-t border-void-700 px-5 py-4">{footer}</div>}
+        <div
+          className={cn(
+            'min-h-0 flex-1 overflow-y-auto px-5 py-4',
+            // Em folha inferior, o último elemento encostaria ao indicador de
+            // início do iPhone, onde o sistema come os toques. Só quando não há
+            // rodapé — havendo, é o rodapé que leva a margem.
+            !footer && 'max-sm:pb-[calc(1rem+env(safe-area-inset-bottom))]',
+          )}
+        >
+          {children}
+        </div>
+        {footer && (
+          <div className="border-t border-void-700 px-5 py-4 max-sm:pb-[calc(1rem+env(safe-area-inset-bottom))]">
+            {footer}
+          </div>
+        )}
       </div>
     </div>,
     document.body,

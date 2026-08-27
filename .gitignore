@@ -26,3 +26,14 @@ dist-ssr
 # Imagens pessoais colocadas pelo utilizador (ver public/art/LICENSE.md)
 public/assets/*
 !public/assets/.gitkeep
+
+# Capacitor / iOS
+#
+# O projeto nativo (`ios/App`) faz parte do repositório, mas o que o Xcode e o
+# `cap sync` geram lá dentro não: `DerivedData` são 300+ MB de output de build,
+# `App/public` é a cópia do `dist` refeita a cada sync, e `xcuserdata` é estado
+# pessoal do Xcode de cada máquina.
+ios/DerivedData
+ios/App/App/public
+ios/App/build
+**/xcuserdata

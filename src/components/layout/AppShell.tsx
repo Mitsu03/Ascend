@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { ArtIcon } from '@/components/ArtIcon'
 import { DivisionSeal } from '@/components/DivisionSeal'
 import { HollowMask } from '@/components/art/HollowMask'
@@ -147,43 +147,46 @@ function Sidebar() {
   )
 }
 
+/**
+ * Barra de separadores. O ícone vive dentro de uma pílula de 34×24 que se
+ * acende no separador ativo — é a pílula, e não a cor do traço, que dá o
+ * estado, por isso continua a ler-se de relance mesmo em movimento.
+ */
 function BottomNav() {
   const { t } = useI18n()
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-void-700 bg-void-850/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-void-700 bg-void-850/95 pb-[calc(1.625rem+env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden"
       aria-label={t.app.mainNav}
     >
-      <div className="flex">
-        {navItems(t).map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            className={({ isActive }) =>
-              cn(
-                'flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition-colors',
-                isActive ? 'text-ember' : 'text-ink-faint hover:text-ink-muted',
-              )
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <span
-                  className={cn(
-                    'flex size-9 items-center justify-center rounded-xl transition-colors',
-                    isActive && 'bg-ember/15',
-                  )}
-                >
-                  <ArtIcon name={item.emblem} size={21} />
-                </span>
-                {item.label}
-              </>
-            )}
-          </NavLink>
-        ))}
-      </div>
+      {navItems(t).map((item) => (
+        <NavLink
+          key={item.to}
+          to={item.to}
+          end={item.end}
+          className={({ isActive }) =>
+            cn(
+              'flex flex-col items-center gap-1 py-2.5 text-[10px] font-semibold transition-colors',
+              isActive ? 'text-ember' : 'text-ink-muted',
+            )
+          }
+        >
+          {({ isActive }) => (
+            <>
+              <span
+                className={cn(
+                  'flex h-6 w-[34px] items-center justify-center rounded-lg transition-colors',
+                  isActive && 'bg-ember/[0.16]',
+                )}
+              >
+                <ArtIcon name={item.emblem} size={19} />
+              </span>
+              {item.label}
+            </>
+          )}
+        </NavLink>
+      ))}
     </nav>
   )
 }
@@ -195,7 +198,9 @@ function MobileHeader() {
   const divisionId = useUserStore((state) => state.profile?.divisionId)
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-void-700/70 bg-void-900/90 px-4 py-3 backdrop-blur-xl md:hidden">
+    // O `pt` inclui `safe-area-inset-top` para a barra não ficar por baixo do
+    // status bar / Dynamic Island na app nativa; no browser o inset é 0.
+    <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-void-700/70 bg-void-900/90 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] backdrop-blur-xl md:hidden">
       <Logo />
       <div className="flex items-center gap-2.5 text-xs font-semibold tabular-nums">
         <span className="flex items-center gap-1 text-warn">
@@ -212,12 +217,30 @@ function MobileHeader() {
   )
 }
 
+/**
+ * Ecrãs que trazem cabeçalho próprio. Nestes, a barra partilhada sai da
+ * frente: o cabeçalho faz parte da composição do ecrã (o medalhão do Quartel,
+ * a data das Rações) e duplicá-lo só roubava altura ao conteúdo.
+ */
+const SELF_HEADER_ROUTES = new Set(['/', '/treino', '/nutricao', '/missoes', '/perfil'])
+
 export function AppShell() {
+  const { pathname } = useLocation()
+  const ownsHeader = SELF_HEADER_ROUTES.has(pathname)
+
   return (
     <div className="min-h-dvh">
       <Sidebar />
-      <MobileHeader />
-      <main className="px-4 pb-28 pt-4 md:ml-64 md:px-8 md:pb-10 md:pt-8">
+      {!ownsHeader && <MobileHeader />}
+      <main
+        className={cn(
+          'pb-[104px] md:ml-64 md:px-8 md:pb-10 md:pt-8',
+          // Os ecrãs com cabeçalho próprio tratam do espaçamento de topo e das
+          // margens laterais, porque a arte de fundo tem de correr de bordo a
+          // bordo; os outros recebem-nos aqui.
+          ownsHeader ? '' : 'px-4 pt-4',
+        )}
+      >
         <div className="mx-auto w-full max-w-6xl">
           <Outlet />
         </div>

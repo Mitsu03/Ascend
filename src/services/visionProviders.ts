@@ -26,12 +26,18 @@ export const VISION_PRESETS: VisionProviderPreset[] = [
     id: 'gemini',
     name: 'Google Gemini',
     endpoint: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions',
-    suggestedModel: 'gemini-2.0-flash',
+    // Um "lite" de propósito: o gargalo do nível gratuito é o número de
+    // pedidos por dia, não os tokens. Os Flash de topo dão 20 pedidos diários
+    // — quatro refeições fotografadas e uma tentativa falhada chegam ao teto —
+    // enquanto os lite dão 500. Ler um prato não precisa do raciocínio dos
+    // outros: nos testes identificou os mesmos alimentos em 1,7 s em vez de
+    // 12 s, porque não gasta tokens a pensar antes de escrever.
+    suggestedModel: 'gemini-3.5-flash-lite',
     keyUrl: 'https://aistudio.google.com/apikey',
     free: true,
     note: localized(
-      'Nível gratuito com limites diários generosos e boa leitura de pratos. A opção recomendada.',
-      'Free tier with generous daily limits and solid plate reading. The recommended option.',
+      'Nível gratuito com 500 análises por dia e boa leitura de pratos. A opção recomendada. Os modelos Flash sem “lite” só dão 20 por dia.',
+      'Free tier with 500 analyses a day and solid plate reading. The recommended option. The Flash models without “lite” only allow 20 a day.',
     ),
   },
   {

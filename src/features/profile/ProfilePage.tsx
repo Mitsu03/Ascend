@@ -5,6 +5,7 @@ import { DivisionSeal } from '@/components/DivisionSeal'
 import { AVATAR_VARIANT_COUNT, HeroAvatar } from '@/components/HeroAvatar'
 import { SpiritMotes } from '@/components/art/SpiritArt'
 import { useHeroTitle } from '@/components/layout/AppShell'
+import { ScreenBackdrop } from '@/components/layout/ScreenBackdrop'
 import { Button } from '@/components/ui/Button'
 import { Card, CardBody, CardHeader } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
@@ -61,6 +62,141 @@ const AVATAR_VARIANTS = Array.from({ length: AVATAR_VARIANT_COUNT }, (_, index) 
 
 const GOAL_ORDER: Goal[] = ['perder_gordura', 'ganhar_massa', 'manter', 'condicao_fisica']
 const DIET_ORDER: DietPreference[] = ['sem_preferencia', 'mediterranica', 'vegetariano', 'vegan']
+
+/**
+ * O topo da ficha: o retrato dentro dos dois anéis carmim, a patente, e o
+ * reiatsu que falta para a seguinte.
+ *
+ * O retrato é o `HeroAvatar` que o utilizador configurou — com a máscara, o
+ * selo e a aura que tem equipados. O handoff pede expressamente para não
+ * mexer na arte deste ecrã, por isso o que muda aqui é só a moldura à volta.
+ */
+function ShinigamiHeader() {
+  const { t, n, loc } = useI18n()
+  const profile = useUserStore((state) => state.profile)!
+  const xp = useGameStore((state) => state.xp)
+  const equipped = useGameStore((state) => state.equipped)
+  const info = levelFromXp(xp)
+  const title = useHeroTitle(info.level)
+  const division = getDivision(profile.divisionId)
+  const maskStage = profile.showMask === false ? undefined : maskStageForLevel(info.level)
+  const pct = info.nextLevelXp > 0 ? Math.min(100, (info.currentLevelXp / info.nextLevelXp) * 100) : 0
+
+  return (
+    <div className="flex flex-col items-center px-5 pt-5 pb-[18px] md:pt-0">
+      <div className="relative flex size-28 items-center justify-center">
+        <span className="absolute inset-0 rounded-full border-2 border-crimson-soft/70" aria-hidden="true" />
+        <span className="absolute inset-[9px] rounded-full border border-crimson-soft/25" aria-hidden="true" />
+        <span
+          className="absolute inset-0 rounded-full"
+          style={{ background: 'radial-gradient(circle,rgba(232,54,92,.22),transparent 72%)' }}
+          aria-hidden="true"
+        />
+        <HeroAvatar
+          size={92}
+          variant={profile.avatarVariant}
+          hue={profile.avatarHue}
+          frameId={equipped.frame}
+          auraId={equipped.aura}
+          maskStage={maskStage}
+          emblemId={profile.avatarEmblem as ArtIconName | undefined}
+          divisionId={division.id}
+        />
+      </div>
+
+      <p className="mt-3.5 font-display text-[34px] leading-none font-bold text-ink [text-shadow:3px_3px_0_rgba(184,18,54,.55)]">
+        {profile.name}
+      </p>
+      <p className="mt-1.5 text-[13px] font-semibold text-ember-soft">
+        {t.profile.rankLine(title, String(info.level).padStart(2, '0'))}
+      </p>
+      <p className="mt-0.5 text-center text-[11.5px] text-ink-muted">
+        {loc(division.name)} · {loc(division.motto)}
+      </p>
+
+      <div className="mt-3.5 w-full max-w-[250px]">
+        <div className="flex justify-between text-[10px] font-semibold tracking-[0.1em] text-ink-muted">
+          <span>{t.profile.reiatsuCaption}</span>
+          <span className="tabular-nums">
+            {n(info.currentLevelXp)} / {n(info.nextLevelXp)}
+          </span>
+        </div>
+        <div
+          className="mt-1.5 h-[5px] rounded-full bg-void-700"
+          role="progressbar"
+          aria-valuenow={info.currentLevelXp}
+          aria-valuemin={0}
+          aria-valuemax={info.nextLevelXp}
+          aria-label={t.common.levelProgress}
+        >
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-crimson to-ember"
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/** As quatro artes, em cartões de quatro colunas. */
+function CombatArts() {
+  const { t } = useI18n()
+  const attributes = useGameStore((state) => state.attributes)
+
+  return (
+    <section className="px-5 md:px-0">
+      <span className="text-[10.5px] font-semibold tracking-[0.16em] text-ink-muted">{t.profile.combatArts}</span>
+      <div className="mt-[11px] grid grid-cols-4 gap-2">
+        {ATTRIBUTES.map((attribute) => (
+          <div
+            key={attribute.key}
+            className="flex flex-col items-center gap-[7px] rounded-[13px] border border-void-600 bg-void-800 px-1.5 py-[13px]"
+            title={t.attributeHints[attribute.key]}
+          >
+            <ArtIcon name={attribute.emblem} size={19} className={ATTRIBUTE_COLORS[attribute.tone]} />
+            <span className="font-display text-[23px] leading-none font-bold text-ink">
+              {attributes[attribute.key]}
+            </span>
+            <span className={cn('text-[9.5px] font-semibold', ATTRIBUTE_COLORS[attribute.tone])}>
+              {t.attributes[attribute.key]}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+/** Faixa de três números entre dois filetes: dias, treinos e kan. */
+function StatsStrip() {
+  const { t, n } = useI18n()
+  const counters = useGameStore((state) => state.counters)
+  const streak = useGameStore((state) => state.streak)
+  const coins = useGameStore((state) => state.coins)
+
+  const cells = [
+    { caption: t.profile.statDaysCaption, value: n(streak), tone: 'text-warn' },
+    { caption: t.profile.statWorkoutsCaption, value: n(counters.workouts), tone: 'text-ink' },
+    { caption: t.profile.statKanCaption, value: n(coins), tone: 'text-gold-soft' },
+  ]
+
+  return (
+    <div className="mx-5 mt-4 flex border-y border-void-700 md:mx-0">
+      {cells.map((cell, index) => (
+        <div
+          key={cell.caption}
+          className={cn('flex-1 py-[13px]', index > 0 && 'pl-3.5', index < cells.length - 1 && 'border-r border-void-700')}
+        >
+          <p className="text-[10px] font-semibold tracking-[0.14em] text-ink-muted">{cell.caption}</p>
+          <p className={cn('mt-[3px] font-display text-2xl leading-none font-bold tabular-nums', cell.tone)}>
+            {cell.value}
+          </p>
+        </div>
+      ))}
+    </div>
+  )
+}
 
 function AvatarCard() {
   const { t, n, loc } = useI18n()
@@ -312,42 +448,6 @@ function DivisionPanel() {
   )
 }
 
-
-function AttributesCard() {
-  const { t } = useI18n()
-  const attributes = useGameStore((state) => state.attributes)
-  const max = Math.max(10, ...Object.values(attributes))
-
-  return (
-    <Card>
-      <CardHeader title={t.profile.attributesTitle} subtitle={t.profile.attributesSubtitle} icon="Shield" />
-      <CardBody className="space-y-4 pt-3">
-        {ATTRIBUTES.map((attribute) => (
-          <div key={attribute.key}>
-            <div className="flex items-center justify-between">
-              <span className="flex items-center gap-2 text-sm font-medium text-ink">
-                <ArtIcon name={attribute.emblem} size={17} className={ATTRIBUTE_COLORS[attribute.tone]} />
-                {t.attributes[attribute.key]}
-              </span>
-              <span className={cn('font-display text-lg font-bold tabular-nums', ATTRIBUTE_COLORS[attribute.tone])}>
-                {attributes[attribute.key]}
-              </span>
-            </div>
-            <ProgressBar
-              value={attributes[attribute.key]}
-              max={max}
-              tone={attribute.tone}
-              height="sm"
-              className="mt-1.5"
-              label={t.attributes[attribute.key]}
-            />
-            <p className="mt-1 text-[11px] text-ink-faint">{t.attributeHints[attribute.key]}</p>
-          </div>
-        ))}
-      </CardBody>
-    </Card>
-  )
-}
 
 function StatsCard() {
   const { t } = useI18n()
@@ -833,27 +933,45 @@ export function ProfilePage() {
   if (!profile) return null
 
   return (
-    <div className="space-y-5">
+    <>
+      <ScreenBackdrop screen="ficha" />
+
       <div className="hidden md:block">
-        <h1 className="slash-divider text-3xl font-bold text-ink">{t.profile.title}</h1>
-        <p className="mt-3 text-ink-muted">{t.profile.subtitle}</p>
+        <h1 className="slash-divider font-display text-3xl font-bold text-ink">{t.profile.title}</h1>
+        <p className="mt-3.5 text-sm text-ink-muted">{t.profile.subtitle}</p>
       </div>
 
-      <AvatarCard />
-
-      <div className="grid gap-5 lg:grid-cols-2">
-        <AttributesCard />
-        <DivisionPanel />
-        <StatsCard />
+      {/* A ficha propriamente dita, tal como o protótipo a define. */}
+      <div className="pt-[calc(1.25rem+env(safe-area-inset-top))] md:mt-6 md:pt-0">
+        <ShinigamiHeader />
+        <CombatArts />
+        <StatsStrip />
       </div>
 
-      <BodyProgressCard />
-      <ProgressCharts />
-      <AchievementsGrid />
-      <InventoryPanel />
-      <ArtworkPanel />
-      <VisionSettingsCard />
-      <SettingsCard />
-    </div>
+      {/*
+        Tudo o que segue são painéis que o protótipo não cobre e a app tem.
+        `grid-cols-1` não é decorativo: sem coluna declarada, a faixa implícita
+        fica em `auto`, dimensiona-se ao conteúdo e não encolhe — os cartões
+        ficavam com 457 px dentro de um ecrã de 376 e a página ganhava scroll
+        lateral. `grid-cols-1` é `minmax(0, 1fr)`, que trava a faixa na largura
+        do contentor.
+      */}
+      <div className="space-y-5 px-5 pt-5 md:px-0">
+        <AchievementsGrid />
+
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <DivisionPanel />
+          <StatsCard />
+        </div>
+
+        <AvatarCard />
+        <BodyProgressCard />
+        <ProgressCharts />
+        <InventoryPanel />
+        <ArtworkPanel />
+        <VisionSettingsCard />
+        <SettingsCard />
+      </div>
+    </>
   )
 }

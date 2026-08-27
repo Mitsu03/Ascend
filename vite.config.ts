@@ -4,6 +4,14 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
+/**
+ * Build nativo (Capacitor). O service worker do PWA fica desligado dentro da
+ * WKWebView: os ficheiros já vêm no bundle da app, e um SW a servir uma cópia
+ * em cache só cria uma segunda fonte de verdade — a app deixaria de atualizar
+ * ao instalar uma versão nova pela TestFlight.
+ */
+const isNativeBuild = process.env.CAP_BUILD === '1'
+
 export default defineConfig({
   resolve: {
     alias: {
@@ -14,6 +22,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
+      disable: isNativeBuild,
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
