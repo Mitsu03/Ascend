@@ -13,6 +13,7 @@
   --color-void-950: #050507;
   --color-void-900: #0a0a0e;
   --color-void-850: #101017;
+  --color-void-825: #12121a;
   --color-void-800: #16161f;
   --color-void-700: #1f1f2b;
   --color-void-600: #2c2c3b;
@@ -33,6 +34,7 @@
 
   /* Texto e estado */
   --color-ink: #f2f3f7;
+  --color-ink-soft: #c9cbd8;
   --color-ink-muted: #a2a4b4;
   --color-ink-faint: #6f7183;
   --color-good: #3ddc97;
@@ -42,6 +44,8 @@
   /* Tipografia */
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Rajdhani', 'Inter', system-ui, sans-serif;
+  /* Kanji decorativo de fundo — nunca usado para texto que se leia. */
+  --font-kanji: 'Zen Old Mincho', 'Hiragino Mincho ProN', serif;
 
   /* Animações */
   --animate-float: float 6s ease-in-out infinite;
@@ -49,11 +53,32 @@
   --animate-rise: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   --animate-pop: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   --animate-shimmer: shimmer 2.6s linear infinite;
+  --animate-sweep: sweep 3.4s linear infinite;
   --animate-mote: mote-rise 9s linear infinite;
   --animate-aura: aura-breathe 5.5s ease-in-out infinite;
   --animate-rays: ray-spin 48s linear infinite;
   --animate-slash: slash-sweep 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-drift: ink-drift 30s ease-in-out infinite alternate;
+  --animate-demo-flip: demo-flip 2s ease-in-out infinite;
+}
+
+/*
+ * As duas posições de um exercício, alternadas. A troca é quase instantânea
+ * (0,2 s dos 2 s do ciclo) porque o que interessa é ver as duas posições, não
+ * a passagem entre elas — uma transição lenta faz o movimento parecer outro.
+ */
+@keyframes demo-flip {
+  0%,
+  40% {
+    opacity: 0;
+  }
+  50%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes float {
@@ -112,6 +137,19 @@
   }
   100% {
     transform: translateX(220%);
+  }
+}
+
+/*
+ * Brilho a atravessar uma barra de progresso cheia. Percorre mais do que a
+ * largura da barra para que haja uma pausa escura entre passagens.
+ */
+@keyframes sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(340%);
   }
 }
 
@@ -183,8 +221,39 @@
     border-color: var(--color-void-600);
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .animate-demo-flip {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
   html {
     color-scheme: dark;
+    /* O iOS aumenta o corpo do texto sozinho em orientação horizontal. */
+    -webkit-text-size-adjust: 100%;
+    /* Mata o zoom por duplo toque (e o atraso de 300 ms que vem com ele). */
+    touch-action: manipulation;
+  }
+
+  /*
+   * Numa app instalada, a seleção de texto não é uma funcionalidade: o toque
+   * longo num cartão abria a lupa e o menu «Copiar» por cima da interface, e
+   * arrastar a partir daí deixava a seleção presa. Os campos onde se escreve
+   * são a exceção — aí a seleção é precisamente o que se espera.
+   */
+  body {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  input,
+  textarea,
+  select,
+  [contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
   }
 
   body {

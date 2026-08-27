@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
+import { ScreenBackdrop } from '@/components/layout/ScreenBackdrop'
 import { Toaster } from '@/components/ui/Toaster'
 import { LOCALE_TAG, useI18n } from '@/i18n'
 import { bootstrapSession } from '@/services/session'
@@ -20,7 +21,14 @@ const ProfilePage = lazy(() =>
 
 function ProfileFallback() {
   const { t } = useI18n()
-  return <p className="py-16 text-center text-ink-muted">{t.app.loadingProfile}</p>
+  // O fundo entra já aqui: sem ele, o intervalo até o chunk chegar mostrava o
+  // gradiente global do body e a mudança de ecrã dava um salto de cor.
+  return (
+    <>
+      <ScreenBackdrop screen="ficha" />
+      <p className="py-16 text-center text-ink-muted">{t.app.loadingProfile}</p>
+    </>
+  )
 }
 
 function RequireProfile({ children }: { children: React.ReactNode }) {
