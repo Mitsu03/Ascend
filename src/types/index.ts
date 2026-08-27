@@ -192,6 +192,12 @@ export interface MealEntry {
   food?: Food
   /** Miniatura JPEG (data URL) da fotografia da refeição. */
   photo?: string
+  /**
+   * Identificador partilhado pelos registos criados a partir da mesma
+   * fotografia, para o diário os mostrar agrupados sob essa imagem. A
+   * miniatura é guardada uma só vez, em qualquer um dos membros do grupo.
+   */
+  photoGroupId?: string
 }
 
 /** Origem de um alimento registado, usada para o rótulo na UI. */

@@ -73,6 +73,8 @@ export function remainingMacros(totals: DailyTotals, targets: MacroTargets | nul
 interface AddEntryOptions {
   date?: string
   photo?: string
+  /** Partilhado pelos registos vindos da mesma fotografia. */
+  photoGroupId?: string
 }
 
 /** Máximo de fotografias guardadas; as mais antigas são libertadas. */
@@ -100,6 +102,7 @@ export const useNutritionStore = create<NutritionStore>()(
           // Alimentos externos guardam uma cópia; os do catálogo não precisam.
           food: fromCatalogue ? undefined : food,
           photo: options?.photo,
+          photoGroupId: options?.photoGroupId,
         }
         set((state) => {
           const entries = [entry, ...state.entries]
@@ -147,7 +150,25 @@ export const useNutritionStore = create<NutritionStore>()(
         game.checkAchievements()
       },
 
-      removeEntry: (id) => set((state) => ({ entries: state.entries.filter((entry) => entry.id !== id) })),
+      removeEntry: (id) =>
+        set((state) => {
+          const removed = state.entries.find((entry) => entry.id === id)
+          const entries = state.entries.filter((entry) => entry.id !== id)
+          // A miniatura vive num só registo do grupo; se for esse o apagado,
+          // passa para o irmão seguinte para o resto da refeição não ficar sem
+          // a fotografia que lhe deu origem.
+          if (removed?.photo && removed.photoGroupId) {
+            const heir = entries.find((entry) => entry.photoGroupId === removed.photoGroupId)
+            if (heir) {
+              return {
+                entries: entries.map((entry) =>
+                  entry.id === heir.id ? { ...entry, photo: removed.photo } : entry,
+                ),
+              }
+            }
+          }
+          return { entries }
+        }),
 
       addWater: (ml, date = today()) => {
         if (ml <= 0) return
