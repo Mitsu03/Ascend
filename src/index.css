@@ -284,20 +284,35 @@
     border-radius: 6px;
   }
 
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+  /*
+   * A barra de scroll desenhada é para quem tem rato. Ao toque, o sistema já
+   * mostra um indicador que aparece e desaparece sozinho; pintar por cima dele
+   * uma barra permanente de 10 px roubava largura ao conteúdo e deixava um
+   * risco claro colado à margem direita em todos os ecrãs.
+   */
+  @media (pointer: fine) {
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--color-void-900);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-void-600);
+      border-radius: 999px;
+      border: 2px solid var(--color-void-900);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-void-500);
+    }
   }
-  ::-webkit-scrollbar-track {
-    background: var(--color-void-900);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-void-600);
-    border-radius: 999px;
-    border: 2px solid var(--color-void-900);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-void-500);
+
+  @media (pointer: coarse) {
+    ::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
   }
 
   /* Remove as setas dos inputs numéricos para um visual mais limpo */

@@ -232,9 +232,15 @@ export function AppShell() {
     <div className="min-h-dvh">
       <Sidebar />
       {!ownsHeader && <MobileHeader />}
+      {/*
+        O `pb` inclui `safe-area-inset-bottom` porque a tab bar também o inclui:
+        com um valor fixo, o último elemento de cada ecrã ficava por baixo da
+        barra em telefones com indicador de home — 34 px no 16 Pro Max, e zero
+        no browser, que foi porque isto não se viu em desenvolvimento.
+      */}
       <main
         className={cn(
-          'pb-[104px] md:ml-64 md:px-8 md:pb-10 md:pt-8',
+          'pb-[calc(7rem+env(safe-area-inset-bottom))] md:ml-64 md:px-8 md:pb-10 md:pt-8',
           // Os ecrãs com cabeçalho próprio tratam do espaçamento de topo e das
           // margens laterais, porque a arte de fundo tem de correr de bordo a
           // bordo; os outros recebem-nos aqui.
