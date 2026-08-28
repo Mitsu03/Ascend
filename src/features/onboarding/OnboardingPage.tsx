@@ -135,13 +135,16 @@ export function OnboardingPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col gap-6 px-5 py-8">
+    // Fora do `AppShell`: as margens seguras são tratadas aqui. Sem elas o
+    // contador de passos ficava debaixo da Dynamic Island e a linha de botões
+    // «Voltar / Continuar» sobre o indicador de início.
+    <div className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col gap-6 pt-[calc(2rem+env(safe-area-inset-top))] pr-[calc(1.25rem+env(safe-area-inset-right))] pb-[calc(2rem+env(safe-area-inset-bottom))] pl-[calc(1.25rem+env(safe-area-inset-left))]">
       <header className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-2 font-display text-xl font-bold tracking-[0.2em] text-ink">
             <HollowMask size={22} />
             {t.app.name}
-            <span className="text-[10px] tracking-[0.4em] text-ember/70">{t.app.kanji}</span>
+            <span className="text-[10px] tracking-[0.4em] text-ember/85">{t.app.kanji}</span>
           </span>
           <span className="text-sm tabular-nums text-ink-muted">{t.onboarding.stepOf(step + 1, TOTAL_STEPS)}</span>
         </div>
@@ -163,6 +166,17 @@ export function OnboardingPage() {
                     value={draft.name}
                     autoFocus
                     maxLength={24}
+                    /*
+                     * Teclado certo à primeira: nome próprio com maiúscula
+                     * automática, sem correção ortográfica a trocar nomes por
+                     * palavras do dicionário, e a tecla Enter a dizer
+                     * «Continuar», que é o que ela faz aqui.
+                     */
+                    autoComplete="given-name"
+                    autoCapitalize="words"
+                    autoCorrect="off"
+                    spellCheck={false}
+                    enterKeyHint="next"
                     placeholder={t.onboarding.namePlaceholder}
                     onChange={(event) => patch({ name: event.target.value })}
                     onKeyDown={(event) => {

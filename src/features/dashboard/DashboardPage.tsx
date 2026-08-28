@@ -166,7 +166,9 @@ function OrderOfTheDayCard() {
         <button
           type="button"
           onClick={openSession}
-          className="mt-[18px] h-14 w-full rounded-[15px] bg-gradient-to-br from-ember to-crimson font-display text-[19px] font-bold tracking-[0.06em] text-void-900 shadow-[0_12px_32px_-10px_rgba(255,122,26,.9)] transition-opacity active:opacity-90"
+          // Ver nota do mesmo botão na sessão de treino: `void-950` cruza os
+          // 3:1 sobre o extremo carmim do gradiente, `void-900` ficava em 2,96.
+          className="mt-[18px] h-14 w-full rounded-[15px] bg-gradient-to-br from-ember to-crimson font-display text-[19px] font-bold tracking-[0.06em] text-void-950 shadow-[0_12px_32px_-10px_rgba(255,122,26,.9)] transition-opacity active:opacity-90"
         >
           {workout ? ctaLabel : t.dashboard.seeWeeklyPlan}
         </button>
@@ -234,7 +236,15 @@ function RationsCard() {
     <section className="mt-[18px] rounded-[18px] border border-void-700/90 bg-void-825 px-[18px] py-4">
       <div className="flex items-baseline justify-between">
         <Eyebrow>{t.dashboard.rationsToday}</Eyebrow>
-        <Link to="/nutricao" className="text-[11.5px] font-semibold text-ember">
+        {/*
+          Os atalhos destes cabeçalhos eram texto de 11,5 px sem qualquer
+          padding — cerca de 15 px de altura tocável. O `-my-2 -mr-2` põe a
+          área de toque nos 44 pt sem deslocar o texto do alinhamento.
+        */}
+        <Link
+          to="/nutricao"
+          className="tap-target -mr-2 -my-2 shrink-0 px-2 py-2 text-[11.5px] font-semibold text-ember active:opacity-90"
+        >
           {t.dashboard.register}
         </Link>
       </div>
@@ -286,7 +296,10 @@ function DailyOrders() {
     <section className="mt-[18px] md:mt-0">
       <div className="flex items-baseline justify-between">
         <Eyebrow>{t.dashboard.ordersHeading(done, daily.length)}</Eyebrow>
-        <Link to="/missoes" className="text-[11.5px] font-semibold text-ember">
+        <Link
+          to="/missoes"
+          className="tap-target -mr-2 -my-2 shrink-0 px-2 py-2 text-[11.5px] font-semibold text-ember active:opacity-90"
+        >
           {t.dashboard.seeAll}
         </Link>
       </div>

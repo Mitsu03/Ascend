@@ -524,21 +524,24 @@ export const pt = {
 
   artwork: {
     title: 'Imagens da aplicação',
-    subtitle: 'Personaliza os fundos e o avatar com imagens tuas',
-    slotStart: 'Fundo do ecrã inicial',
-    slotDashboard: 'Faixa do Quartel',
-    slotAvatar: 'Imagem de avatar',
+    subtitle: 'Personaliza o fundo e o retrato com imagens tuas',
+    slotApp: 'Fundo da app',
+    slotAppHint: 'A mesma imagem no Quartel, Dojo, Rações, Ordens e Shinigami',
+    slotAvatar: 'Retrato',
+    slotAvatarHint: 'Aparece na ficha de Shinigami e no cabeçalho',
     choose: 'Escolher imagem',
     replace: 'Substituir',
     remove: 'Remover',
     empty: 'A usar a ilustração original',
     fromFolder: 'Ficheiro encontrado em public/assets/',
-    scrimLabel: 'Escurecimento sobre os fundos',
+    scrimLabel: 'Escurecimento sobre o fundo',
     scrimHint: 'Mais escuro deixa o texto mais legível; mais claro deixa a imagem respirar.',
     tooLarge: 'A imagem é demasiado grande para o armazenamento local, mesmo depois de comprimida. Tenta uma com menos detalhe.',
     unreadable: 'Não foi possível ler esta imagem.',
+    notSaved:
+      'A imagem foi aplicada, mas não coube no armazenamento deste dispositivo e desaparece quando fechares a aplicação. Remove outra imagem ou escolhe uma com menos detalhe.',
     note:
-      'As imagens ficam guardadas apenas neste dispositivo. Em alternativa, podes colocar ficheiros na pasta public/assets/ do projeto com os nomes backdrop-start, backdrop-dashboard e avatar.',
+      'As imagens ficam guardadas apenas neste dispositivo. Em alternativa, podes colocar ficheiros na pasta public/assets/ do projeto com os nomes backdrop e avatar.',
     licenceNote:
       'Os emblemas ilustrativos da aplicação são de game-icons.net (Lorc, Delapouite e DarkZaitzev), usados sob licença Creative Commons BY 3.0. A máscara de Hollow, o avatar e o restante material gráfico são originais.',
   },
@@ -583,6 +586,8 @@ export const pt = {
     visionTitle: 'Reconhecimento por fotografia',
     visionHint:
       'Opcional. Liga um serviço de visão compatível com a API da OpenAI para estimar alimentos a partir de fotos. A chave fica guardada apenas neste dispositivo e só é enviada para o endpoint indicado.',
+    /* Resumo curto para a linha das Definições, onde há duas linhas de 147 px. */
+    visionRowHint: 'Estima alimentos a partir de fotos',
     visionProvider: 'Serviço',
     visionFree: 'Gratuito',
     visionPaid: 'Pago',
@@ -647,6 +652,16 @@ export const pt = {
     statDaysCaption: 'DIAS',
     statWorkoutsCaption: 'TREINOS',
     statKanCaption: 'KAN',
+
+    // ── Secções da ficha ──────────────────────────────────────────────────
+    // A ficha estava toda numa coluna só, com onze painéis empilhados ao mesmo
+    // nível. Passa a ter quatro faces, escolhidas por um seletor que fica
+    // colado ao topo enquanto se percorre a secção.
+    sectionsAria: 'Secções da ficha',
+    sectionProgress: 'Progresso',
+    sectionAchievements: 'Conquistas',
+    sectionArsenal: 'Arsenal',
+    sectionSettings: 'Definições',
 
     title: 'Ficha de Shinigami',
     subtitle: 'Patente, divisão, artes de combate e conquistas',

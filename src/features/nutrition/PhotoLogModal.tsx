@@ -327,7 +327,9 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
                   reset()
                 }}
                 className={cn(
-                  'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
+                  // 30 px de altura no desenho original; `tap-target` leva o
+                  // alvo aos 44 pt e o `gap-2` do contentor evita sobreposição.
+                  'tap-target inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3.5 text-xs font-medium transition-colors active:opacity-90',
                   mode === item.value
                     ? 'border-ember/60 bg-ember/10 text-ember'
                     : 'border-void-600 text-ink-muted hover:text-ink',
@@ -441,7 +443,9 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
         )}
 
         {status === 'analysing' && (
-          <div className="flex items-center gap-3 rounded-xl border border-ember/35 bg-ember/5 p-4">
+          // A análise pode demorar segundos: quem ouve o ecrã tem de saber que
+          // ela começou, senão o modal fica calado enquanto trabalha.
+          <div role="status" className="flex items-center gap-3 rounded-xl border border-ember/35 bg-ember/5 p-4">
             <Icon name="Sparkles" size={18} className="animate-pulse-glow text-ember" />
             <p className="flex-1 text-sm text-ink">{t.photoLog.analysing}</p>
             <Button size="sm" onClick={cancelAnalysis}>
@@ -451,7 +455,9 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
         )}
 
         {error && (
-          <p className="flex items-start gap-2 rounded-xl border border-warn/40 bg-warn/5 p-3 text-sm text-ink">
+          // Sem `role="alert"` a falha da câmara ou do código de barras só
+          // existia para quem a visse.
+          <p role="alert" className="flex items-start gap-2 rounded-xl border border-warn/40 bg-warn/5 p-3 text-sm text-ink">
             <Icon name="AlertTriangle" size={16} className="mt-0.5 shrink-0 text-warn" />
             {error}
           </p>
@@ -506,7 +512,10 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
                       min={1}
                       value={item.grams}
                       onChange={(event) => setGrams(index, Number(event.target.value))}
-                      className="w-20 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
+                      // Herdava os 12 px do rótulo — o `index.css` põe-no nos
+                      // 16 px ao toque (senão o iOS faz zoom) e o `min-h-11`
+                      // dá-lhe os 44 pt de altura.
+                      className="min-h-11 w-20 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
                       aria-label={t.photoLog.gramsAria(loc(item.food.name))}
                     />
                     {t.units.grams}

@@ -14,9 +14,21 @@
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      As fontes vêm de fora e a app usa-se no ginásio, muitas vezes sem rede.
+      Uma folha de estilo é bloqueante: numa ligação que não responde (wifi de
+      ginásio com portal, avião, cave) o primeiro render ficava à espera do
+      tempo-limite da rede com o ecrã vazio. Com `media="print"` o browser
+      descarrega-a sem bloquear e promove-a a `all` quando chegar; se nunca
+      chegar, a app abre na fonte do sistema, que é a alternativa declarada em
+      `--font-sans`. As fontes ainda deviam passar a ser servidas do próprio
+      pacote — ver o relatório.
+    -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&family=Zen+Old+Mincho:wght@700&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
     <title>Ascend — Gotei 13</title>
   </head>

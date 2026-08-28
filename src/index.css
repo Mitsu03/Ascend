@@ -36,7 +36,13 @@
   --color-ink: #f2f3f7;
   --color-ink-soft: #c9cbd8;
   --color-ink-muted: #a2a4b4;
-  --color-ink-faint: #6f7183;
+  /*
+   * O tom `faint` era #6f7183: 4,4:1 sobre o preto do fundo e 4,0:1 sobre o
+   * cinzento dos cartões — abaixo dos 4,5:1 que a WCAG AA pede para corpo de
+   * texto, e é justamente em corpo de texto pequeno (notas, dicas, legendas)
+   * que ele se usa. Este está em 5,1:1 sobre o fundo e 4,6:1 sobre os cartões.
+   */
+  --color-ink-faint: #7e8093;
   --color-good: #3ddc97;
   --color-warn: #ff9f1c;
   --color-bad: #ff5468;
@@ -226,6 +232,30 @@
       animation: none;
       opacity: 0;
     }
+  }
+
+  /*
+   * Barra de separadores: uma única fonte para a altura.
+   *
+   * O `1.625rem` que aqui estava era uma aproximação à mão do indicador de
+   * início, feita antes de o inset ser lido. Depois de o inset passar a entrar
+   * na conta, o número passou a ser somado duas vezes: num 16 Pro Max davam
+   * 26 px fixos + 34 px de inset = 60 px de vazio por baixo dos rótulos, e a
+   * barra parecia flutuar acima do fundo do ecrã.
+   *
+   * Medido no Simulador, iPhone 16 Pro Max, iOS 26.5: a barra dava 106 pt e a
+   * nativa do iOS tem 83 pt (49 pt de conteúdo + 34 pt de safe area). Estava
+   * 23 pt mais alta — era isso que se via como «o menu está acima do normal»,
+   * não a folga de baixo.
+   *
+   * Duas correções: o conteúdo do item desce de 63 pt para 49 pt (o valor das
+   * HIG) e a folga de baixo passa a ser só o inset, sem os 8 pt que lhe andava
+   * a somar — numa tab bar nativa é a safe area que faz toda a folga. Fica em
+   * 1 pt de filete + 49 + 34 = 84 pt, contra os 83 pt da nativa.
+   */
+  :root {
+    --tab-bar-pad: env(safe-area-inset-bottom);
+    --tab-bar: calc(3.125rem + env(safe-area-inset-bottom));
   }
 
   html {
@@ -432,6 +462,48 @@
   }
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+
+  /*
+   * Alvo de toque de 44×44 pt sem mexer no desenho do controlo.
+   *
+   * As HIG pedem 44 pt em tudo o que se toca, mas há controlos que só fazem
+   * sentido pequenos — o «×» de um registo do diário, uma pastilha de filtro.
+   * O pseudo-elemento é invisível, está centrado no controlo e cresce até aos
+   * 44 pt; é ele que apanha o dedo. Quem usa isto tem de garantir que o
+   * espaçamento até ao controlo vizinho chega para as duas áreas não se
+   * sobreporem — caso contrário toca-se no botão errado.
+   */
+  .tap-target {
+    position: relative;
+  }
+  .tap-target::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+}
+
+/*
+ * Fora de qualquer `@layer` de propósito: as utilidades do Tailwind vivem numa
+ * camada e uma regra sem camada ganha-lhes sempre, seja qual for a classe de
+ * corpo de texto que o campo traga.
+ *
+ * O iOS faz zoom à página inteira quando se foca um campo com corpo de texto
+ * abaixo de 16 px — e depois fica lá, com o layout deslocado. Todos os campos
+ * da app estavam em 14 px (`text-sm`) e alguns dos de dentro dos modais
+ * herdavam 12 px do rótulo. Ao toque, nenhum desce dos 16 px; com rato o
+ * desenho original mantém-se.
+ */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
   }
 }
 

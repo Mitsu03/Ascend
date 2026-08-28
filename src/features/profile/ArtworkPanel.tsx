@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/Misc'
 import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { ART_SLOTS, ArtTooLargeError, prepareArt } from '@/services/userArt'
-import { DEFAULT_SCRIM, useArt, useArtStore } from '@/store/artStore'
+import { DEFAULT_SCRIM, MIN_SCRIM, artPersisted, useArt, useArtStore } from '@/store/artStore'
 import type { ArtSlot } from '@/services/userArt'
 
 function SlotRow({ slot }: { slot: ArtSlot }) {
@@ -18,9 +18,13 @@ function SlotRow({ slot }: { slot: ArtSlot }) {
   const [error, setError] = useState<string | null>(null)
 
   const labels: Record<ArtSlot, string> = {
-    start: t.artwork.slotStart,
-    dashboard: t.artwork.slotDashboard,
+    app: t.artwork.slotApp,
     avatar: t.artwork.slotAvatar,
+  }
+
+  const hints: Record<ArtSlot, string> = {
+    app: t.artwork.slotAppHint,
+    avatar: t.artwork.slotAvatarHint,
   }
 
   const pick = async (file: File | undefined) => {
@@ -28,6 +32,9 @@ function SlotRow({ slot }: { slot: ArtSlot }) {
     setError(null)
     try {
       setArt(slot, await prepareArt(file, slot))
+      // A imagem já está aplicada, mas pode não ter cabido no disco — nesse
+      // caso desaparece no arranque seguinte, e o utilizador tem de saber.
+      if (!artPersisted(slot)) setError(t.artwork.notSaved)
     } catch (cause) {
       setError(cause instanceof ArtTooLargeError ? t.artwork.tooLarge : t.artwork.unreadable)
     }
@@ -58,7 +65,7 @@ function SlotRow({ slot }: { slot: ArtSlot }) {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <label className="inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-lg border border-void-500 bg-void-700/60 px-3 text-sm text-ink transition-colors hover:bg-void-700">
+          <label className="tap-target inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-lg border border-void-500 bg-void-700/60 px-3 text-sm text-ink transition-colors hover:bg-void-700 active:opacity-90">
             <Icon name="Image" size={15} />
             {uploaded ? t.artwork.replace : t.artwork.choose}
             <input
@@ -75,28 +82,27 @@ function SlotRow({ slot }: { slot: ArtSlot }) {
           )}
         </div>
       </div>
+
+      {/* Onde é que a imagem aparece. Vai por baixo da linha, à largura toda:
+          espremido entre a miniatura e o botão sobrava-lhe um terço do ecrã e
+          partia-se em quatro linhas. */}
+      <p className="mt-2.5 text-xs leading-relaxed text-ink-muted">{hints[slot]}</p>
     </li>
   )
 }
 
-export function ArtworkPanel() {
+/**
+ * `bare` rende só o conteúdo, sem a moldura de cartão nem o cabeçalho: é a
+ * forma usada quando o painel abre dentro de uma folha, que já traz título e
+ * descrição próprios. Sem isto o título aparecia duas vezes.
+ */
+export function ArtworkPanel({ bare = false }: { bare?: boolean }) {
   const { t } = useI18n()
   const scrim = useArtStore((state) => state.scrim)
   const setScrim = useArtStore((state) => state.setScrim)
 
-  return (
-    <Card>
-      <CardHeader
-        title={t.artwork.title}
-        subtitle={t.artwork.subtitle}
-        icon="Image"
-        action={
-          scrim !== DEFAULT_SCRIM ? (
-            <Badge tone="neutral">{Math.round(scrim * 100)}%</Badge>
-          ) : undefined
-        }
-      />
-      <CardBody className="space-y-4 pt-3">
+  const content = (
+    <div className="space-y-4">
         <ul className="space-y-2">
           {ART_SLOTS.map((slot) => (
             <SlotRow key={slot} slot={slot} />
@@ -110,12 +116,14 @@ export function ArtworkPanel() {
           <input
             id="art-scrim"
             type="range"
-            min={0}
+            min={MIN_SCRIM * 100}
             max={90}
             step={5}
             value={Math.round(scrim * 100)}
             onChange={(event) => setScrim(Number(event.target.value) / 100)}
-            className="w-full accent-ember"
+            // Um cursor de 20 px de altura é difícil de agarrar com o polegar;
+            // a caixa passa a 44 pt e o traço fica centrado nela.
+            className="h-11 w-full accent-ember"
           />
           <p className="text-xs text-ink-faint">{t.artwork.scrimHint}</p>
         </div>
@@ -124,11 +132,26 @@ export function ArtworkPanel() {
           <Icon name="Info" size={14} className="mt-0.5 shrink-0" />
           {t.artwork.note}
         </p>
-        <p className="flex items-start gap-2 text-xs leading-relaxed text-ink-faint">
-          <Icon name="Scale" size={14} className="mt-0.5 shrink-0" />
-          {t.artwork.licenceNote}
-        </p>
-      </CardBody>
+      <p className="flex items-start gap-2 text-xs leading-relaxed text-ink-faint">
+        <Icon name="Scale" size={14} className="mt-0.5 shrink-0" />
+        {t.artwork.licenceNote}
+      </p>
+    </div>
+  )
+
+  if (bare) return content
+
+  return (
+    <Card>
+      <CardHeader
+        title={t.artwork.title}
+        subtitle={t.artwork.subtitle}
+        icon="Image"
+        action={
+          scrim !== DEFAULT_SCRIM ? <Badge tone="neutral">{Math.round(scrim * 100)}%</Badge> : undefined
+        }
+      />
+      <CardBody className="pt-3">{content}</CardBody>
     </Card>
   )
 }

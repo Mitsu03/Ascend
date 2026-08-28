@@ -47,7 +47,7 @@ function RestCard({ seconds, onDismiss }: { seconds: number; onDismiss: () => vo
         <button
           type="button"
           onClick={onDismiss}
-          className="h-10 shrink-0 rounded-[10px] border border-void-600 bg-void-700 px-3.5 text-xs font-semibold text-ink transition-opacity active:opacity-90"
+          className="h-11 shrink-0 rounded-[10px] border border-void-600 bg-void-700 px-4 text-xs font-semibold text-ink transition-opacity active:opacity-90"
         >
           {remaining > 0 ? t.session.skip : t.session.continue}
         </button>
@@ -181,13 +181,17 @@ export function WorkoutSessionPage() {
       : t.session.nextExerciseCta
 
   return (
-    <div className="flex min-h-dvh flex-col bg-void-900">
+    // Ecrã de sessão: corre fora do `AppShell` e trata sozinho das margens
+    // seguras, laterais incluídas (o projeto permite treinar em horizontal).
+    <div className="flex min-h-dvh flex-col bg-void-900 pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)]">
       <header className="flex items-center justify-between gap-3 px-5 pt-[calc(1.25rem+env(safe-area-inset-top))]">
         <button
           type="button"
           onClick={() => setConfirmExit(true)}
           aria-label={t.session.exitAria}
-          className="flex size-[34px] shrink-0 items-center justify-center rounded-[11px] border border-void-600 text-ink-muted"
+          // 34 px de desenho, 44 pt de toque: treina-se com as mãos suadas e
+          // estes dois botões de canto eram os mais pequenos da app.
+          className="tap-target flex size-[34px] shrink-0 items-center justify-center rounded-[11px] border border-void-600 text-ink-muted active:opacity-90"
         >
           <Icon name="X" size={15} />
         </button>
@@ -222,7 +226,7 @@ export function WorkoutSessionPage() {
             type="button"
             onClick={togglePause}
             aria-label={activeSession.paused ? t.session.resume : t.session.pause}
-            className="flex size-[34px] items-center justify-center rounded-[11px] border border-void-600 text-ink-muted"
+            className="tap-target flex size-[34px] items-center justify-center rounded-[11px] border border-void-600 text-ink-muted active:opacity-90"
           >
             <Icon name={activeSession.paused ? 'Play' : 'Pause'} size={13} />
           </button>
@@ -262,7 +266,10 @@ export function WorkoutSessionPage() {
             <button
               type="button"
               onClick={() => setShowDemo((open) => !open)}
-              className="shrink-0 text-[11px] font-semibold text-ember"
+              aria-expanded={showDemo}
+              // Era texto solto de 11 px: ~15 px de altura tocável. O `-mr-2`
+              // devolve o alinhamento à direita que o padding lhe tirou.
+              className="tap-target -mr-2 shrink-0 px-2 py-1.5 text-[11px] font-semibold text-ember active:opacity-90"
             >
               {showDemo ? t.session.hideDemo : t.session.showDemo}
             </button>
@@ -298,7 +305,13 @@ export function WorkoutSessionPage() {
 
       {rest && <RestCard key={rest.key} seconds={rest.seconds} onDismiss={() => setRest(null)} />}
 
-      <div className="px-5 pb-[calc(1.625rem+env(safe-area-inset-bottom))]">
+      {/*
+        Mesma correção da barra de separadores: o `1.625rem` era o indicador de
+        início estimado à mão e passou a somar-se ao inset verdadeiro — 60 px de
+        vazio por baixo do último botão num 16 Pro Max. Aqui não há barra
+        nenhuma, só a margem do ecrã: 12 px de respiro mais o inset, 46 px.
+      */}
+      <div className="px-5 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <div className="mb-3 flex items-center justify-between">
           <span className="text-[10.5px] font-semibold tracking-[0.16em] text-ink-muted">
             {t.session.setsCaption} · {t.session.setsLabel(completedSets, total)}
@@ -340,7 +353,11 @@ export function WorkoutSessionPage() {
         <button
           type="button"
           onClick={mainAction}
-          className="mt-2 h-16 w-full rounded-[18px] bg-gradient-to-br from-ember to-crimson font-display text-xl font-bold tracking-[0.05em] text-void-900 shadow-[0_14px_36px_-10px_rgba(255,122,26,.9)] transition-opacity active:opacity-90"
+          // `text-void-950` em vez de `text-void-900`: no extremo carmim do
+          // gradiente o preto mais claro dava 2,96:1, um fio abaixo dos 3:1 que
+          // a WCAG pede a texto grande. Com este fica em 3,03:1 e a diferença
+          // de cor não se vê.
+          className="mt-2 h-16 w-full rounded-[18px] bg-gradient-to-br from-ember to-crimson font-display text-xl font-bold tracking-[0.05em] text-void-950 shadow-[0_14px_36px_-10px_rgba(255,122,26,.9)] transition-opacity active:opacity-90"
         >
           {mainLabel}
         </button>
@@ -359,7 +376,9 @@ export function WorkoutSessionPage() {
           <button
             type="button"
             onClick={finish}
-            className="mt-2.5 w-full py-1 text-center text-[11.5px] font-semibold text-ink-muted"
+            // Termina a sessão a meio: tinha 24 px de altura tocável, mesmo por
+            // baixo do botão principal de 64 px. Agora tem 44.
+            className="mt-1 min-h-11 w-full text-center text-[11.5px] font-semibold text-ink-muted active:opacity-90"
           >
             {t.session.finish}
           </button>

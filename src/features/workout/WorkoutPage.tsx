@@ -141,7 +141,9 @@ function WorkoutCard({ workout }: { workout: WorkoutDay }) {
           if (!resuming) startSession(workout.id)
           navigate('/treino/sessao')
         }}
-        className="mt-4 h-[54px] w-full rounded-[14px] bg-gradient-to-br from-ember to-crimson font-display text-[18px] font-bold tracking-[0.05em] text-void-900 shadow-[0_12px_30px_-10px_rgba(255,122,26,.85)] transition-opacity active:opacity-90"
+        // `void-950` pelos 3:1 sobre o extremo carmim do gradiente — ver a nota
+        // do botão gémeo em `WorkoutSessionPage`.
+        className="mt-4 h-[54px] w-full rounded-[14px] bg-gradient-to-br from-ember to-crimson font-display text-[18px] font-bold tracking-[0.05em] text-void-950 shadow-[0_12px_30px_-10px_rgba(255,122,26,.85)] transition-opacity active:opacity-90"
       >
         {label}
       </button>
@@ -183,11 +185,18 @@ function ExerciseList({ workout }: { workout: WorkoutDay }) {
                 aria-expanded={open}
                 className="flex w-full items-center gap-2.5 px-[13px] py-3 text-left"
               >
+                {/*
+                  Nome e ficha técnica cortavam a uma linha. Em português a
+                  ficha é mais comprida — «Corpo inteiro · Sem equipamento ·
+                  descanso 90 s» pede 245 px e tinha 223, e o tempo de descanso
+                  ficava sempre de fora. Quebram as duas: o exercício é o que se
+                  vem aqui ler.
+                */}
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[13px] font-medium text-ink">
+                  <span className="block text-[13px] font-medium text-ink">
                     {exercise ? loc(exercise.name) : item.exerciseId}
                   </span>
-                  <span className="mt-0.5 block truncate text-[10.5px] text-ink-muted">
+                  <span className="mt-0.5 block text-[10.5px] text-ink-muted">
                     {exercise
                       ? t.workout.exerciseMeta(
                           t.muscles[exercise.muscleGroup],

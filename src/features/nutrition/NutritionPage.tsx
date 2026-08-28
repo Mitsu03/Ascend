@@ -74,11 +74,12 @@ function AddFoodModal({
       title={t.nutrition.addTitle}
       description={t.nutrition.addDescription}
       footer={
-        <div className="flex items-center justify-between gap-3">
-          <span className="text-sm text-ink-muted">
+        // Ver a nota do rodapé gémeo em `CustomWorkoutModal`.
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <span className="min-w-0 text-sm text-ink-muted">
             {preview ? t.nutrition.preview(n(preview.calories), preview.proteinG) : t.nutrition.pickFood}
           </span>
-          <div className="flex gap-2">
+          <div className="ml-auto flex shrink-0 gap-2">
             <Button onClick={onClose}>{t.common.cancel}</Button>
             <Button variant="primary" icon="Plus" onClick={confirm} disabled={!preview}>
               {t.common.add}
@@ -162,13 +163,22 @@ function AddFoodModal({
                     : 'flex w-full items-center gap-3 rounded-xl border border-void-600 bg-void-800/50 p-3 text-left transition-colors hover:border-void-500'
                 }
               >
+                {/*
+                  O nome do alimento cortava a uma linha: «Carne picada de vaca
+                  (90% magra)» perdia 86 px dos seus 237 e ficava «Carne picada
+                  de vaca (…» — sem a informação que a distingue das outras. A
+                  categoria e as calorias deixam de disputar a mesma linha e o
+                  nome passa a quebrar.
+                */}
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium text-ink">{loc(item.name)}</span>
+                  <span className="block text-sm font-medium text-ink">{loc(item.name)}</span>
                   <span className="text-xs text-ink-faint">{loc(item.portionLabel)}</span>
                 </span>
-                <Badge tone="neutral">{t.foodCategories[item.category]}</Badge>
-                <span className="shrink-0 text-sm font-semibold tabular-nums text-ember">
-                  {item.per100g.calories} {t.units.kcal}
+                <span className="flex shrink-0 flex-col items-end gap-1">
+                  <span className="text-sm font-semibold tabular-nums text-ember">
+                    {item.per100g.calories} {t.units.kcal}
+                  </span>
+                  <Badge tone="neutral">{t.foodCategories[item.category]}</Badge>
                 </span>
               </button>
             </li>
@@ -294,7 +304,9 @@ function WaterCard() {
               key={ml}
               type="button"
               onClick={() => addWater(ml)}
-              className="h-[34px] rounded-[10px] border border-spirit/40 bg-spirit/10 px-[11px] text-[11.5px] font-semibold text-spirit transition-opacity active:opacity-90"
+              // Registar água é dos gestos mais repetidos e faz-se de pé, no
+              // ginásio: 34 px passam a 44 pt cheios, sem truques.
+              className="h-11 rounded-[10px] border border-spirit/40 bg-spirit/10 px-3.5 text-[11.5px] font-semibold text-spirit transition-opacity active:opacity-90"
             >
               +{ml}
             </button>
@@ -359,7 +371,10 @@ function EntryRow({ entry, onRemove }: { entry: MealEntry; onRemove: () => void 
   const foodName = food ? loc(food.name) : entry.foodId
 
   return (
-    <div className="flex items-center gap-2.5">
+    // `py-1.5` põe a linha nos 41 px; com os 8 px de intervalo entre linhas, as
+    // áreas de toque de dois «×» consecutivos (44 pt cada) ficam a 49 px de
+    // distância e não se sobrepõem — senão apagava-se o registo errado.
+    <div className="flex items-center gap-2.5 py-1.5">
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[12.5px] text-ink">{foodName}</span>
         <span className="mt-px block truncate text-[10.5px] text-ink-muted">
@@ -373,7 +388,9 @@ function EntryRow({ entry, onRemove }: { entry: MealEntry; onRemove: () => void 
         type="button"
         onClick={onRemove}
         aria-label={t.nutrition.removeAria(foodName)}
-        className="flex size-6 shrink-0 items-center justify-center rounded-[7px] bg-void-700 text-ink-muted"
+        // Apagar um registo é a ação destrutiva mais frequente da app e tinha
+        // 24 px de alvo. O desenho mantém-se; o alvo vai aos 44 pt.
+        className="tap-target flex size-6 shrink-0 items-center justify-center rounded-[7px] bg-void-700 text-ink-muted active:opacity-90"
       >
         <Icon name="X" size={11} />
       </button>
@@ -542,7 +559,7 @@ export function NutritionPage() {
                       type="button"
                       onClick={() => setAdding(meal)}
                       aria-label={t.nutrition.addToMeal(t.meals[meal])}
-                      className="flex size-[26px] items-center justify-center rounded-lg border border-void-600 bg-void-800 text-ember"
+                      className="tap-target flex size-[26px] items-center justify-center rounded-lg border border-void-600 bg-void-800 text-ember active:opacity-90"
                     >
                       <Icon name="Plus" size={14} />
                     </button>

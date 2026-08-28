@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArtIcon } from '@/components/ArtIcon'
 import { DivisionSeal } from '@/components/DivisionSeal'
@@ -9,9 +10,8 @@ import { ScreenBackdrop } from '@/components/layout/ScreenBackdrop'
 import { Button } from '@/components/ui/Button'
 import { Card, CardBody, CardHeader } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
-import { Badge, Disclaimer, Field, OptionCard, Select, Stat, TextInput } from '@/components/ui/Misc'
+import { Badge, Disclaimer, Field, OptionCard, Select, Stat, Tabs, TextInput } from '@/components/ui/Misc'
 import { ConfirmDialog, Modal } from '@/components/ui/Modal'
-import { ProgressBar } from '@/components/ui/Progress'
 import { AchievementsGrid } from '@/features/profile/AchievementsGrid'
 import { ArtworkPanel } from '@/features/profile/ArtworkPanel'
 import { InventoryPanel } from '@/features/profile/InventoryPanel'
@@ -29,6 +29,7 @@ import { useBodyStore } from '@/store/bodyStore'
 import { useGameStore } from '@/store/gameStore'
 import { useNutritionStore } from '@/store/nutritionStore'
 import { useQuestStore } from '@/store/questStore'
+import { DEFAULT_SCRIM, useArtStore } from '@/store/artStore'
 import { DEFAULT_VISION_ENDPOINT, DEFAULT_VISION_MODEL, useSettingsStore } from '@/store/settingsStore'
 import { useUserStore } from '@/store/userStore'
 import { useWorkoutStore } from '@/store/workoutStore'
@@ -199,15 +200,13 @@ function StatsStrip() {
 }
 
 function AvatarCard() {
-  const { t, n, loc } = useI18n()
+  const { t, loc } = useI18n()
   const profile = useUserStore((state) => state.profile)!
   const setAvatar = useUserStore((state) => state.setAvatar)
   const updateProfile = useUserStore((state) => state.updateProfile)
   const xp = useGameStore((state) => state.xp)
-  const coins = useGameStore((state) => state.coins)
   const equipped = useGameStore((state) => state.equipped)
   const info = levelFromXp(xp)
-  const title = useHeroTitle(info.level)
   const division = getDivision(profile.divisionId)
 
   const emblemId = profile.avatarEmblem as ArtIconName | undefined
@@ -225,7 +224,7 @@ function AvatarCard() {
       <SpiritMotes count={5} />
       <div className="art-layer ink-grain" />
 
-      <CardBody className="relative flex flex-col items-center gap-5 sm:flex-row sm:items-start">
+      <CardBody className="relative flex flex-col items-center gap-5">
         <div className="flex flex-col items-center gap-3">
           <HeroAvatar
             size={156}
@@ -249,7 +248,8 @@ function AvatarCard() {
               aria-pressed={!emblemId}
               onClick={() => updateProfile({ avatarEmblem: undefined })}
               className={cn(
-                'rounded-md px-3 py-1 text-xs font-medium transition-colors',
+                // 26 px de altura no original; 36 no desenho e 44 pt de alvo.
+                'tap-target inline-flex min-h-9 items-center rounded-md px-3.5 text-xs font-medium transition-colors active:opacity-90',
                 emblemId ? 'text-ink-muted hover:text-ink' : 'bg-ember/15 text-ember',
               )}
             >
@@ -260,7 +260,8 @@ function AvatarCard() {
               aria-pressed={Boolean(emblemId)}
               onClick={() => updateProfile({ avatarEmblem: emblemId ?? AVATAR_EMBLEMS[0].id })}
               className={cn(
-                'rounded-md px-3 py-1 text-xs font-medium transition-colors',
+                // 26 px de altura no original; 36 no desenho e 44 pt de alvo.
+                'tap-target inline-flex min-h-9 items-center rounded-md px-3.5 text-xs font-medium transition-colors active:opacity-90',
                 emblemId ? 'bg-ember/15 text-ember' : 'text-ink-muted hover:text-ink',
               )}
             >
@@ -275,7 +276,13 @@ function AvatarCard() {
                   <p className="mb-1 text-[10px] uppercase tracking-widest text-ink-faint">
                     {t.profile.emblemFamilies[family]}
                   </p>
-                  <div className="grid grid-cols-6 gap-1.5">
+                  {/*
+                    Cinco colunas em vez de seis: com 36 px por célula não havia
+                    largura para as separar o suficiente e cada emblema ficava
+                    abaixo dos 44 pt. A 44 pt cabem cinco (5×44 + 4×6 = 244 px
+                    dentro dos 252 disponíveis) e o alvo é real, não estendido.
+                  */}
+                  <div className="grid grid-cols-5 gap-1.5">
                     {AVATAR_EMBLEMS.filter((emblem) => emblem.family === family).map((emblem) => (
                       <button
                         key={emblem.id}
@@ -285,13 +292,13 @@ function AvatarCard() {
                         aria-pressed={emblemId === emblem.id}
                         onClick={() => updateProfile({ avatarEmblem: emblem.id })}
                         className={cn(
-                          'flex size-9 items-center justify-center rounded-lg border transition-colors',
+                          'flex size-11 items-center justify-center rounded-lg border transition-colors active:opacity-90',
                           emblemId === emblem.id
                             ? 'border-ember bg-ember/15 text-ember'
                             : 'border-void-600 text-ink-muted hover:border-void-500 hover:text-ink',
                         )}
                       >
-                        <ArtIcon name={emblem.id} size={20} />
+                        <ArtIcon name={emblem.id} size={22} />
                       </button>
                     ))}
                   </div>
@@ -309,7 +316,9 @@ function AvatarCard() {
                     aria-pressed={profile.avatarVariant === variant}
                     onClick={() => setAvatar(variant, profile.avatarHue)}
                     className={cn(
-                      'size-8 rounded-lg border text-xs font-semibold transition-colors',
+                      // 32 → 44 pt. Oito variantes em quatro colunas dão
+                      // 4×44 + 3×6 = 194 px, dentro da largura do cartão.
+                      'size-11 rounded-lg border text-xs font-semibold transition-colors active:opacity-90',
                       profile.avatarVariant === variant
                         ? 'border-ember bg-ember/15 text-ember'
                         : 'border-void-600 text-ink-muted hover:border-void-500 hover:text-ink',
@@ -319,7 +328,12 @@ function AvatarCard() {
                   </button>
                 ))}
               </div>
-              <div className="grid grid-cols-8 gap-1.5">
+              {/*
+                A amostra de cor continua a ter 32 px — é o que o cartão pede —
+                mas o botão à volta dela tem 44 pt. Oito cores em quatro
+                colunas, duas filas.
+              */}
+              <div className="grid grid-cols-4 gap-1.5">
                 {AVATAR_HUES.map((hue) => (
                   <button
                     key={hue}
@@ -327,23 +341,30 @@ function AvatarCard() {
                     aria-label={t.profile.colourAria(hue)}
                     aria-pressed={profile.avatarHue === hue}
                     onClick={() => setAvatar(profile.avatarVariant, hue)}
-                    className={cn(
-                      'size-6 rounded-full border-2 transition-transform',
-                      profile.avatarHue === hue ? 'scale-110 border-ink' : 'border-transparent hover:scale-105',
-                    )}
-                    style={{ background: `hsl(${hue} 78% 54%)` }}
-                  />
+                    className="flex size-11 items-center justify-center active:opacity-90"
+                  >
+                    <span
+                      className={cn(
+                        'size-8 rounded-full border-2 transition-transform',
+                        profile.avatarHue === hue ? 'scale-110 border-ink' : 'border-transparent',
+                      )}
+                      style={{ background: `hsl(${hue} 78% 54%)` }}
+                    />
+                  </button>
                 ))}
               </div>
 
               {/* A máscara só se liga depois de a patente a desbloquear. */}
               {unlockedStage ? (
-                <label className="flex cursor-pointer items-center gap-2 text-xs text-ink-muted">
+                // A caixa tinha 14 px. O rótulo inteiro já era tocável; agora a
+                // linha tem 44 pt de altura e a caixa 20 px, que é o mínimo
+                // para se ver se está ligada.
+                <label className="flex min-h-11 cursor-pointer items-center gap-2 text-xs text-ink-muted">
                   <input
                     type="checkbox"
                     checked={wearsMask}
                     onChange={(event) => updateProfile({ showMask: event.target.checked })}
-                    className="size-3.5 accent-[var(--color-ember)]"
+                    className="size-5 accent-[var(--color-ember)]"
                   />
                   {t.profile.maskShow}
                   <span className="text-ink-faint">· {t.profile.maskStages[unlockedStage]}</span>
@@ -355,47 +376,16 @@ function AvatarCard() {
           )}
         </div>
 
-        <div className="min-w-0 flex-1 text-center sm:text-left">
-          <div className="flex items-center justify-center gap-3 sm:justify-start">
-            <DivisionSeal divisionId={division.id} size={46} />
-            <div className="min-w-0">
-              <h1 className="text-glow-ember font-display text-4xl font-bold leading-tight text-ink">{profile.name}</h1>
-              <p className="mt-1 flex items-center justify-center gap-2 text-ember-soft sm:justify-start">
-                <span className="h-px w-6 bg-gradient-to-r from-ember to-transparent" aria-hidden="true" />
-                {title}
-              </p>
-            </div>
-          </div>
-          <p className="mt-2 text-sm text-ink-muted">{t.rankNotes[titleKeyForLevel(info.level)]}</p>
-          <div className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start">
-            <Badge tone="ember" icon="TrendingUp">
-              {t.common.levelWithNumber(info.level)}
-            </Badge>
-            <Badge tone="gold" icon="Coins">
-              {n(coins)}
-            </Badge>
-            <Badge tone="neutral" icon="Target">
-              {t.goals[profile.goal]}
-            </Badge>
-          </div>
-
-          <div className="mt-4 space-y-1.5">
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-ink-muted">{t.common.levelProgress}</span>
-              <span className="tabular-nums text-ink-faint">
-                {t.common.xpProgress(n(info.currentLevelXp), n(info.nextLevelXp))}
-              </span>
-            </div>
-            <ProgressBar
-              value={info.currentLevelXp}
-              max={info.nextLevelXp}
-              tone="xp"
-              height="lg"
-              showShimmer
-              label={t.common.levelProgress}
-            />
-          </div>
-        </div>
+        {/*
+          A coluna da direita mostrava nome, patente, kan, objetivo e barra de
+          reiatsu — exatamente o que o cabeçalho de identidade já mostra no topo
+          da ficha, agora que ele ficou fixo por cima dos separadores. Eram
+          210 px de repetição em cada abertura do Arsenal. O que sobra aqui é só
+          a nota de patente, que não existe em mais lado nenhum.
+        */}
+        <p className="max-w-prose text-center text-sm text-ink-muted sm:text-left">
+          {t.rankNotes[titleKeyForLevel(info.level)]}
+        </p>
       </CardBody>
     </Card>
   )
@@ -571,7 +561,13 @@ function BodyProgressCard() {
   )
 }
 
-function VisionSettingsCard() {
+/**
+ * `bare` rende só o conteúdo, sem cartão nem cabeçalho — ver a nota igual no
+ * `ArtworkPanel`. Este painel abre numa folha a partir das Definições: 1 133 px
+ * de formulário que se preenche uma vez e nunca mais não podem ficar a somar-se
+ * ao scroll de quem só quer mudar o idioma.
+ */
+function VisionSettingsCard({ bare = false }: { bare?: boolean }) {
   const { t, loc } = useI18n()
   const vision = useSettingsStore((state) => state.vision)
   const setVision = useSettingsStore((state) => state.setVision)
@@ -597,19 +593,8 @@ function VisionSettingsCard() {
     setApiKey('')
   }
 
-  return (
-    <Card>
-      <CardHeader
-        title={t.photoLog.visionTitle}
-        subtitle={t.photoLog.visionHint}
-        icon="Camera"
-        action={
-          <Badge tone={active ? 'good' : 'neutral'} icon={active ? 'CheckCircle2' : 'Circle'}>
-            {active ? t.photoLog.visionEnabled : t.photoLog.visionDisabled}
-          </Badge>
-        }
-      />
-      <CardBody className="space-y-4 pt-3">
+  const content = (
+    <div className="space-y-4">
         <div className="space-y-2">
           <p className="text-sm font-medium text-ink-muted">{t.photoLog.visionProvider}</p>
           <div className="grid gap-2 sm:grid-cols-2">
@@ -695,7 +680,24 @@ function VisionSettingsCard() {
           <Icon name="Info" size={14} className="mt-0.5 shrink-0" />
           {t.photoLog.barcodeSourceNote}
         </p>
-      </CardBody>
+    </div>
+  )
+
+  if (bare) return content
+
+  return (
+    <Card>
+      <CardHeader
+        title={t.photoLog.visionTitle}
+        subtitle={t.photoLog.visionHint}
+        icon="Camera"
+        action={
+          <Badge tone={active ? 'good' : 'neutral'} icon={active ? 'CheckCircle2' : 'Circle'}>
+            {active ? t.photoLog.visionEnabled : t.photoLog.visionDisabled}
+          </Badge>
+        }
+      />
+      <CardBody className="pt-3">{content}</CardBody>
     </Card>
   )
 }
@@ -923,14 +925,209 @@ function SettingsCard() {
   )
 }
 
+/*
+ * As quatro faces da ficha.
+ *
+ * Antes eram onze painéis empilhados numa coluna só, todos ao mesmo nível de
+ * importância: cerca de 8 500 px, quase onze ecrãs de scroll para chegar às
+ * definições. Agrupá-los por intenção — o que progrediu, o que se ganhou, o que
+ * se veste, o que se configura — corta o percurso mais longo para pouco mais de
+ * dois ecrãs dentro de uma face.
+ *
+ * Escolheu-se separadores em vez de secções colapsáveis porque as quatro faces
+ * são mutuamente exclusivas na intenção (ninguém quer ver o inventário e as
+ * definições ao mesmo tempo) e porque colapsar mantinha na mesma onze
+ * cabeçalhos a percorrer. E em vez de folhas porque conquistas e inventário são
+ * conteúdo para percorrer, não formulários para preencher.
+ */
+const PROFILE_SECTIONS = ['progresso', 'conquistas', 'arsenal', 'ajustes'] as const
+type ProfileSection = (typeof PROFILE_SECTIONS)[number]
+
+const SECTIONS_NAME = 'ficha'
+
+/**
+ * Linha de definição que abre uma folha, como nas listas de Ajustes do iOS: o
+ * título diz o que é, o valor à direita diz como está, e o galão indica que há
+ * mais por trás. Substitui um painel inteiro aberto na página — a definição
+ * continua a um toque, mas deixa de ocupar mil pixels de scroll a quem só
+ * passa por aqui para mudar o idioma.
+ */
+function SettingRow({
+  icon,
+  title,
+  subtitle,
+  value,
+  onClick,
+}: {
+  icon: string
+  title: string
+  subtitle: string
+  value?: ReactNode
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex min-h-14 w-full items-center gap-3 rounded-xl border border-void-600 bg-void-800/40 p-3.5 text-left transition-colors hover:border-void-500 active:opacity-90"
+    >
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-void-700 text-ember">
+        <Icon name={icon} size={18} />
+      </span>
+      {/*
+        Título e resumo estavam ambos numa linha com `truncate`, dentro de
+        147 px: «Reconhecimento por fotografia» perdia 61 px e o resumo, que é
+        um parágrafo inteiro, aparecia com 147 dos seus 1 123 px — não dizia
+        nada a ninguém. O título passa a quebrar (é o que identifica a linha) e
+        o resumo tem duas linhas, com um texto próprio à medida.
+      */}
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-medium text-balance text-ink">{title}</span>
+        <span className="mt-0.5 line-clamp-2 block text-xs text-ink-muted">{subtitle}</span>
+      </span>
+      {value && <span className="shrink-0">{value}</span>}
+      <Icon name="ChevronRight" size={16} className="shrink-0 text-ink-faint" />
+    </button>
+  )
+}
+
+/**
+ * Painel de uma face, ligado ao separador que o comanda.
+ *
+ * Vive fora da `ProfilePage` de propósito: declarado lá dentro, seria um tipo
+ * de componente novo a cada render e o React desmontava e remontava a face
+ * inteira sempre que a página reagisse a uma alteração das stores — levando
+ * com ela o rascunho por gravar do peso, do perfil ou da chave de visão.
+ */
+function SectionPanel({
+  value,
+  active,
+  children,
+}: {
+  value: ProfileSection
+  active: ProfileSection
+  children: ReactNode
+}) {
+  if (value !== active) return null
+  return (
+    <div
+      // Os nomes têm de bater certo com os que o `Tabs` gera a partir de `name`.
+      id={`${SECTIONS_NAME}-panel-${value}`}
+      role="tabpanel"
+      aria-labelledby={`${SECTIONS_NAME}-tab-${value}`}
+      className="space-y-5"
+    >
+      {children}
+    </div>
+  )
+}
+
 export function ProfilePage() {
   const { t } = useI18n()
   const profile = useUserStore((state) => state.profile)
+  const [section, setSection] = useState<ProfileSection>('progresso')
+  const [sheet, setSheet] = useState<'arte' | 'visao' | null>(null)
+  const identityRef = useRef<HTMLDivElement>(null)
+  const tabsRef = useRef<HTMLDivElement>(null)
+  const sentinelRef = useRef<HTMLDivElement>(null)
+  const [stuck, setStuck] = useState(false)
+  const [barHeight, setBarHeight] = useState<number>()
+
+  /*
+   * O seletor colava com `top: env(safe-area-inset-top)` e ficava presente a
+   * 62 pt do topo — media-o no Simulador: `wrapTop=62`, com a faixa 0–62 a
+   * mostrar o conteúdo a passar por trás. Ou tapa o topo todo ou não cola.
+   *
+   * `top: 0` sozinho punha as pastilhas debaixo da Dynamic Island, e pôr-lhe o
+   * inset no `padding-top` só quando cola mudava a altura do elemento em fluxo
+   * — e o conteúdo abaixo saltava 62 pt no instante da colagem. Por isso, ao
+   * colar, a barra passa a `fixed` (fora do fluxo, pode crescer à vontade) e
+   * fica no lugar dela um espaçador com a altura natural. Uma sentinela de 1 px
+   * logo acima diz quando isso acontece.
+   */
+  useEffect(() => {
+    const node = sentinelRef.current
+    if (!node) return
+    const wide = window.matchMedia('(min-width: 768px)')
+    const observer = new IntersectionObserver(
+      ([entry]) => setStuck(!entry.isIntersecting && !wide.matches),
+      { threshold: 0 },
+    )
+    observer.observe(node)
+    const onWide = () => {
+      if (wide.matches) setStuck(false)
+    }
+    wide.addEventListener('change', onWide)
+    return () => {
+      observer.disconnect()
+      wide.removeEventListener('change', onWide)
+    }
+  }, [])
+
+  // A altura do espaçador é a da barra em fluxo; com ela fixa, o valor medido
+  // já inclui o inset e não serve.
+  useEffect(() => {
+    const node = tabsRef.current
+    if (!node || stuck) return
+    const measure = () => setBarHeight(node.offsetHeight)
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [stuck])
+  const scrim = useArtStore((state) => state.scrim)
+  const vision = useSettingsStore((state) => state.vision)
   // Toca nas stores para que a página reaja a alterações vindas de outras áreas.
   useNutritionStore((state) => state.entries.length)
   useQuestStore((state) => state.daily.length)
 
+  /*
+   * Trocar de face a meio de uma lista longa deixava o scroll onde estava e a
+   * face nova abria a meio — ou já depois do fim, se fosse mais curta. Volta-se
+   * ao seletor, e só quando ele já tinha saído do ecrã: mexer no scroll de quem
+   * está no topo seria um salto sem motivo.
+   *
+   * Duas armadilhas, ambas apanhadas a medir no browser:
+   *
+   * 1. A posição tem de vir do bloco de identidade e não do próprio seletor.
+   *    Num elemento `sticky` o Chrome soma o deslocamento ao `offsetTop`, por
+   *    isso, com o seletor colado, `offsetTop` dava sempre o valor do scroll
+   *    atual e a comparação nunca era verdadeira.
+   * 2. O scroll tem de acontecer depois de o painel novo estar no DOM. Feito
+   *    dentro do `onClick`, o ancoramento de scroll do Chrome — que compensa
+   *    mudanças de altura acima da janela — desfazia-o assim que o React
+   *    trocava o conteúdo.
+   */
+  const pendingScroll = useRef(false)
+
+  const changeSection = (next: ProfileSection) => {
+    pendingScroll.current = true
+    setSection(next)
+  }
+
+  useEffect(() => {
+    if (!pendingScroll.current) return
+    pendingScroll.current = false
+    const identity = identityRef.current
+    if (!identity) return
+    // O sítio da sentinela: aí a barra fica no cimo da janela sem colar, e o
+    // primeiro cartão da face nova aparece logo por baixo dela.
+    const target = identity.offsetTop + identity.offsetHeight
+    if (window.scrollY <= target) return
+    window.scrollTo({
+      top: target,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+    })
+  }, [section])
+
   if (!profile) return null
+
+  const sectionLabels: Record<ProfileSection, string> = {
+    progresso: t.profile.sectionProgress,
+    conquistas: t.profile.sectionAchievements,
+    arsenal: t.profile.sectionArsenal,
+    ajustes: t.profile.sectionSettings,
+  }
 
   return (
     <>
@@ -941,37 +1138,132 @@ export function ProfilePage() {
         <p className="mt-3.5 text-sm text-ink-muted">{t.profile.subtitle}</p>
       </div>
 
-      {/* A ficha propriamente dita, tal como o protótipo a define. */}
-      <div className="pt-[calc(1.25rem+env(safe-area-inset-top))] md:mt-6 md:pt-0">
+      {/*
+        Identidade: fica acima dos separadores e é igual em todas as faces, que
+        é o que impede o seletor de se ler como uma segunda barra de navegação.
+        São 553 px — o seletor ainda entra no primeiro ecrã, sem scroll.
+      */}
+      <div ref={identityRef} className="pt-[calc(1.25rem+env(safe-area-inset-top))] md:mt-6 md:pt-0">
         <ShinigamiHeader />
         <CombatArts />
         <StatsStrip />
       </div>
 
+      {/* Sentinela: enquanto se vir, a barra ainda não chegou ao topo. */}
+      <div ref={sentinelRef} aria-hidden="true" className="h-px" />
+
       {/*
-        Tudo o que segue são painéis que o protótipo não cobre e a app tem.
-        `grid-cols-1` não é decorativo: sem coluna declarada, a faixa implícita
-        fica em `auto`, dimensiona-se ao conteúdo e não encolhe — os cartões
-        ficavam com 457 px dentro de um ecrã de 376 e a página ganhava scroll
-        lateral. `grid-cols-1` é `minmax(0, 1fr)`, que trava a faixa na largura
-        do contentor.
+        Espaçador com a altura natural da barra: com ela fixa, é isto que evita
+        que o conteúdo abaixo suba 71 pt de repente.
       */}
-      <div className="space-y-5 px-5 pt-5 md:px-0">
-        <AchievementsGrid />
-
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-          <DivisionPanel />
-          <StatsCard />
+      <div style={stuck && barHeight ? { height: barHeight } : undefined}>
+        <div
+          ref={tabsRef}
+          className={cn(
+            'z-30 border-b border-void-700/70 px-5 pt-4 pb-3 backdrop-blur-xl',
+            // Ao colar, tapa o ecrã de bordo a bordo desde o pixel 0 e empurra
+            // as pastilhas para baixo da Dynamic Island com o inset no padding.
+            // O preto opaco só faz falta aí: no meio do ecrã abria uma faixa
+            // cega no fundo da aplicação, agora que há uma imagem por trás.
+            stuck
+              ? 'fixed inset-x-0 top-0 bg-void-900 pt-[calc(0.75rem+env(safe-area-inset-top))]'
+              : 'relative',
+            'md:relative md:border-0 md:bg-transparent md:px-0 md:pt-4 md:backdrop-blur-none',
+          )}
+        >
+          <Tabs
+            fullWidth
+            name={SECTIONS_NAME}
+            label={t.profile.sectionsAria}
+            value={section}
+            onChange={changeSection}
+            options={PROFILE_SECTIONS.map((value) => ({ value, label: sectionLabels[value] }))}
+            className="md:max-w-md"
+          />
         </div>
-
-        <AvatarCard />
-        <BodyProgressCard />
-        <ProgressCharts />
-        <InventoryPanel />
-        <ArtworkPanel />
-        <VisionSettingsCard />
-        <SettingsCard />
       </div>
+
+      {/*
+        Os painéis empilham com `space-y-5` e não com uma grelha: numa grelha
+        sem coluna declarada a faixa implícita fica em `auto`, dimensiona-se ao
+        conteúdo e não encolhe — os cartões ficavam com 457 px dentro de um ecrã
+        de 376 e a página ganhava scroll lateral. Se alguma face voltar a ter
+        colunas, tem de trazer `grid-cols-1` explícito (que é `minmax(0, 1fr)`).
+      */}
+      <div className="px-5 pt-5 md:px-0">
+        {/* Progresso: os números que mudam com o treino e a alimentação. */}
+        <SectionPanel value="progresso" active={section}>
+          <StatsCard />
+          <BodyProgressCard />
+          <ProgressCharts />
+        </SectionPanel>
+
+        {/* Conquistas: a lista inteira, sozinha — era o painel mais alto. */}
+        <SectionPanel value="conquistas" active={section}>
+          <AchievementsGrid />
+        </SectionPanel>
+
+        {/* Arsenal: tudo o que muda o aspeto do Shinigami. */}
+        <SectionPanel value="arsenal" active={section}>
+          <AvatarCard />
+          <InventoryPanel />
+        </SectionPanel>
+
+        {/*
+          Ajustes, por ordem de frequência: idioma e dados do perfil primeiro,
+          divisão a seguir, e no fim a arte e a chave de visão, que se mexem uma
+          vez e nunca mais.
+        */}
+        <SectionPanel value="ajustes" active={section}>
+          <SettingsCard />
+          <DivisionPanel />
+          <div className="space-y-2">
+            <SettingRow
+              icon="Image"
+              title={t.artwork.title}
+              subtitle={t.artwork.subtitle}
+              value={
+                scrim !== DEFAULT_SCRIM ? (
+                  <Badge tone="neutral">{Math.round(scrim * 100)}%</Badge>
+                ) : undefined
+              }
+              onClick={() => setSheet('arte')}
+            />
+            <SettingRow
+              icon="Camera"
+              title={t.photoLog.visionTitle}
+              // O parágrafo inteiro (`visionHint`) fica para a folha, onde há
+              // largura para o ler; aqui vai o resumo de uma linha.
+              subtitle={t.photoLog.visionRowHint}
+              value={
+                <Badge
+                  tone={visionIsConfigured(vision) ? 'good' : 'neutral'}
+                  icon={visionIsConfigured(vision) ? 'CheckCircle2' : 'Circle'}
+                >
+                  {visionIsConfigured(vision) ? t.photoLog.visionEnabled : t.photoLog.visionDisabled}
+                </Badge>
+              }
+              onClick={() => setSheet('visao')}
+            />
+          </div>
+        </SectionPanel>
+      </div>
+
+      {/*
+        As duas folhas. Ficam fora dos painéis para o conteúdo não desaparecer
+        de baixo delas se a face mudar com a folha aberta.
+      */}
+      <Modal open={sheet === 'arte'} onClose={() => setSheet(null)} title={t.artwork.title} description={t.artwork.subtitle}>
+        <ArtworkPanel bare />
+      </Modal>
+      <Modal
+        open={sheet === 'visao'}
+        onClose={() => setSheet(null)}
+        title={t.photoLog.visionTitle}
+        description={t.photoLog.visionHint}
+      >
+        <VisionSettingsCard bare />
+      </Modal>
     </>
   )
 }

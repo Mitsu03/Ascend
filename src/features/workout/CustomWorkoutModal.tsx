@@ -105,9 +105,12 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
       description={t.builder.description}
       size="lg"
       footer={
-        <div className="flex items-center justify-between gap-3">
-          <span className="text-sm text-ink-muted">{t.builder.selectedCount(selected.length)}</span>
-          <div className="flex gap-2">
+        // Sem `flex-wrap`, «0 exercícios selecionados» passava a duas linhas e
+        // empurrava os botões — «Guardar treino» acabava 1 px fora da janela.
+        // Agora, quando não cabem lado a lado, os botões descem inteiros.
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <span className="min-w-0 text-sm text-ink-muted">{t.builder.selectedCount(selected.length)}</span>
+          <div className="ml-auto flex shrink-0 gap-2">
             <Button onClick={onClose}>{t.common.cancel}</Button>
             <Button variant="primary" icon="Check" onClick={save} disabled={selected.length === 0}>
               {t.builder.saveWorkout}
@@ -162,7 +165,7 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
                       max={8}
                       value={item.sets}
                       onChange={(event) => update(index, { sets: Math.max(1, Number(event.target.value)) })}
-                      className="w-14 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
+                      className="min-h-11 w-14 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
                       aria-label={t.builder.setsAria(exerciseName(item.exerciseId))}
                     />
                   </label>
@@ -172,7 +175,7 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
                       type="text"
                       value={item.reps}
                       onChange={(event) => update(index, { reps: event.target.value })}
-                      className="w-20 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
+                      className="min-h-11 w-20 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
                       aria-label={t.builder.repsAria(exerciseName(item.exerciseId))}
                     />
                   </label>
@@ -185,7 +188,7 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
                       step={15}
                       value={item.restSeconds}
                       onChange={(event) => update(index, { restSeconds: Math.max(0, Number(event.target.value)) })}
-                      className="w-16 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
+                      className="min-h-11 w-16 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
                       aria-label={t.builder.restAria(exerciseName(item.exerciseId))}
                     />
                     {t.units.seconds}
@@ -204,7 +207,12 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
             onChange={(event) => setQuery(event.target.value)}
             aria-label={t.builder.searchAria}
           />
-          <div className="flex flex-wrap gap-1.5">
+          {/*
+            As pastilhas tinham 26 px de altura. Passam a 36 no desenho, com
+            `tap-target` a completar os 44 pt; o `gap-2` é o que garante que as
+            áreas de duas pastilhas vizinhas não se tocam.
+          */}
+          <div className="flex flex-wrap gap-2">
             {GROUPS.map((item) => (
               <button
                 key={item}
@@ -213,8 +221,8 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
                 aria-pressed={group === item}
                 className={
                   group === item
-                    ? 'rounded-full border border-ember/60 bg-ember/10 px-3 py-1 text-xs font-medium text-ember'
-                    : 'rounded-full border border-void-600 px-3 py-1 text-xs font-medium text-ink-muted transition-colors hover:text-ink'
+                    ? 'tap-target inline-flex min-h-9 items-center rounded-full border border-ember/60 bg-ember/10 px-3.5 text-xs font-medium text-ember'
+                    : 'tap-target inline-flex min-h-9 items-center rounded-full border border-void-600 px-3.5 text-xs font-medium text-ink-muted transition-colors hover:text-ink active:opacity-90'
                 }
               >
                 {item === 'todos' ? t.common.all : t.muscles[item]}
@@ -233,13 +241,25 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
                     disabled={already}
                     className="flex w-full items-center gap-3 rounded-xl border border-void-600 bg-void-800/50 p-3 text-left transition-colors hover:border-void-500 disabled:opacity-45"
                   >
+                    {/*
+                      As duas pastilhas ficavam na linha do nome e comiam-na:
+                      num iPhone SE sobravam 28 a 137 px para o exercício, e a
+                      lista mostrava «Flexõe…», «Agach…», «Burpe…» — não se
+                      distinguia «Flexões diamante» de «Flexões inclinadas», que
+                      é exatamente a escolha que se vem aqui fazer. Passam para
+                      baixo, onde há a largura toda.
+                    */}
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-medium text-ink">{loc(exercise.name)}</span>
-                      <span className="mt-0.5 block truncate text-xs text-ink-faint">{loc(exercise.description)}</span>
+                      <span className="block text-sm font-medium text-ink">{loc(exercise.name)}</span>
+                      <span className="mt-0.5 line-clamp-2 block text-xs text-ink-faint">
+                        {loc(exercise.description)}
+                      </span>
+                      <span className="mt-1.5 flex flex-wrap gap-1.5">
+                        <Badge tone="neutral">{t.muscles[exercise.muscleGroup]}</Badge>
+                        <Badge tone="neutral">{t.equipment[exercise.equipment]}</Badge>
+                      </span>
                     </span>
-                    <Badge tone="neutral">{t.muscles[exercise.muscleGroup]}</Badge>
-                    <Badge tone="neutral">{t.equipment[exercise.equipment]}</Badge>
-                    <Icon name={already ? 'Check' : 'Plus'} size={16} />
+                    <Icon name={already ? 'Check' : 'Plus'} size={16} className="shrink-0" />
                   </button>
                 </li>
               )

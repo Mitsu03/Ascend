@@ -39,7 +39,10 @@ export function CelebrationScreen({ result, onClose }: CelebrationScreenProps) {
   const leveledUp = result.levelAfter > result.levelBefore
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-void-950/92 p-4 backdrop-blur-md">
+    // Ecrã inteiro e com scroll próprio: as margens seguras têm de entrar no
+    // padding, senão o painel de recompensa encosta ao topo por baixo da
+    // Dynamic Island e os dois botões finais caem sobre o indicador de início.
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overscroll-contain bg-void-950/92 pt-[calc(1rem+env(safe-area-inset-top))] pr-[calc(1rem+env(safe-area-inset-right))] pb-[calc(1rem+env(safe-area-inset-bottom))] pl-[calc(1rem+env(safe-area-inset-left))] backdrop-blur-md">
       {/* Explosão de energia e partículas a subir por trás do painel. */}
       <div className="art-layer" aria-hidden="true">
         <div className="absolute left-1/2 top-1/2 aspect-square w-[140vmin] -translate-x-1/2 -translate-y-1/2">

@@ -62,6 +62,12 @@ export function OrderRow({ quest, detailed = false }: { quest: Quest; detailed?:
 
       <span className="min-w-0">
         <span className={cn('block truncate text-[12.5px]', done ? 'text-good' : 'text-ink')}>{loc(quest.title)}</span>
+        {/*
+          Na forma detalhada, cumprida ou não distinguia-se só pelo verde e
+          pelo visto — e o visto está fora da árvore de acessibilidade. Sem
+          isto, quem ouve o ecrã não tinha como saber o estado da ordem.
+        */}
+        {detailed && done && <span className="sr-only">{t.dashboard.fulfilled}</span>}
         {detailed && (
           <span className="mt-1.5 block h-1 rounded-full bg-void-700">
             <span

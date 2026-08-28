@@ -8,7 +8,6 @@ import { Disclaimer } from '@/components/ui/Misc'
 import { HeroAvatar } from '@/components/HeroAvatar'
 import { useI18n } from '@/i18n'
 import { loadDemoProfile } from '@/services/session'
-import { useArt, useArtStore } from '@/store/artStore'
 import { useUserStore } from '@/store/userStore'
 import type { ArtIconName } from '@/data/artIcons'
 
@@ -16,8 +15,6 @@ export function StartPage() {
   const navigate = useNavigate()
   const { t } = useI18n()
   const hasProfile = useUserStore((state) => state.profile !== null)
-  const backdrop = useArt('start')
-  const scrim = useArtStore((state) => state.scrim)
 
   const highlights: { emblem: ArtIconName; title: string; text: string }[] = [
     { emblem: 'katana', title: t.start.highlights.workoutTitle, text: t.start.highlights.workoutText },
@@ -34,20 +31,13 @@ export function StartPage() {
   return (
     <div className="relative min-h-dvh overflow-hidden">
       {/*
-        Camadas de arte: a imagem do utilizador, quando existe, substitui o céu
-        desenhado; as restantes camadas mantêm-se por cima em qualquer caso.
+        Camadas de arte. Este ecrã fica sempre com o céu desenhado: é anterior a
+        haver conta, e a imagem que as Definições deixam escolher só vale para
+        os ecrãs de dentro da aplicação.
       */}
-      {backdrop ? (
-        <div
-          className="art-layer bg-cover bg-center"
-          style={{ backgroundImage: `url(${backdrop})` }}
-          aria-hidden="true"
-        />
-      ) : (
-        <div className="art-layer">
-          <TwilightSky />
-        </div>
-      )}
+      <div className="art-layer">
+        <TwilightSky />
+      </div>
       <div className="art-layer">
         <BladeSlashes opacity={0.8} animated />
       </div>
@@ -61,13 +51,6 @@ export function StartPage() {
         className="art-layer bg-gradient-to-b from-void-950/85 via-void-950/25 to-void-950/90"
         aria-hidden="true"
       />
-      {backdrop && (
-        <div
-          className="art-layer"
-          style={{ backgroundColor: `color-mix(in oklab, var(--color-void-950) ${scrim * 100}%, transparent)` }}
-          aria-hidden="true"
-        />
-      )}
       <div
         className="art-layer"
         style={{
@@ -77,7 +60,13 @@ export function StartPage() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto flex min-h-dvh w-full max-w-5xl flex-col justify-center gap-9 px-5 py-12">
+      {/*
+        Este ecrã vive fora do `AppShell` e tem de tratar das margens seguras
+        sozinho: com `py-12` fixo, o emblema ficava por baixo da Dynamic Island
+        e os botões de entrada caíam sobre o indicador de início, onde o sistema
+        come o toque. No browser os insets valem zero e sobram os 3 rem.
+      */}
+      <div className="relative mx-auto flex min-h-dvh w-full max-w-5xl flex-col justify-center gap-9 pt-[calc(3rem+env(safe-area-inset-top))] pr-[calc(1.25rem+env(safe-area-inset-right))] pb-[calc(3rem+env(safe-area-inset-bottom))] pl-[calc(1.25rem+env(safe-area-inset-left))]">
         <header className="flex flex-col items-center gap-6 text-center">
           <div className="flex items-center gap-3">
             <span className="relative flex size-11 items-center justify-center">
@@ -89,7 +78,7 @@ export function StartPage() {
             </span>
             <span className="leading-none">
               <span className="block font-display text-4xl font-bold tracking-[0.24em] text-ink">{t.app.name}</span>
-              <span className="mt-1 block text-xs tracking-[0.62em] text-ember/70">{t.app.kanji}</span>
+              <span className="mt-1 block text-xs tracking-[0.62em] text-ember/85">{t.app.kanji}</span>
             </span>
           </div>
 

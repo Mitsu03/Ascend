@@ -519,21 +519,24 @@ export const en: Dictionary = {
 
   artwork: {
     title: 'App imagery',
-    subtitle: 'Personalise the backgrounds and avatar with your own images',
-    slotStart: 'Start screen background',
-    slotDashboard: 'Barracks banner',
-    slotAvatar: 'Avatar image',
+    subtitle: 'Personalise the background and portrait with your own images',
+    slotApp: 'App background',
+    slotAppHint: 'The same image on Barracks, Dojo, Rations, Orders and Shinigami',
+    slotAvatar: 'Portrait',
+    slotAvatarHint: 'Shows on the Shinigami record and in the header',
     choose: 'Choose image',
     replace: 'Replace',
     remove: 'Remove',
     empty: 'Using the original illustration',
     fromFolder: 'File found in public/assets/',
-    scrimLabel: 'Darkening over backgrounds',
+    scrimLabel: 'Darkening over the background',
     scrimHint: 'Darker keeps text readable; lighter lets the image breathe.',
     tooLarge: 'That image is too large for local storage, even after compression. Try one with less detail.',
     unreadable: 'Could not read this image.',
+    notSaved:
+      'The image was applied, but it did not fit in this device’s storage and will be gone when you close the app. Remove another image or choose one with less detail.',
     note:
-      'Images are stored on this device only. Alternatively, drop files into the project folder public/assets/ named backdrop-start, backdrop-dashboard and avatar.',
+      'Images are stored on this device only. Alternatively, drop files into the project folder public/assets/ named backdrop and avatar.',
     licenceNote:
       'The illustrative emblems come from game-icons.net (Lorc, Delapouite and DarkZaitzev), used under a Creative Commons BY 3.0 licence. The Hollow mask, the avatar and all other artwork are original.',
   },
@@ -578,6 +581,7 @@ export const en: Dictionary = {
     visionTitle: 'Photo recognition',
     visionHint:
       'Optional. Connect an OpenAI-compatible vision service to estimate foods from photos. The key is stored on this device only and is sent solely to the endpoint you provide.',
+    visionRowHint: 'Estimate foods from photos',
     visionProvider: 'Service',
     visionFree: 'Free',
     visionPaid: 'Paid',
@@ -641,6 +645,13 @@ export const en: Dictionary = {
     statDaysCaption: 'DAYS',
     statWorkoutsCaption: 'SESSIONS',
     statKanCaption: 'KAN',
+
+    // ── Record sections ───────────────────────────────────────────────────
+    sectionsAria: 'Record sections',
+    sectionProgress: 'Progress',
+    sectionAchievements: 'Trophies',
+    sectionArsenal: 'Arsenal',
+    sectionSettings: 'Settings',
 
     title: 'Soul Reaper Record',
     subtitle: 'Rank, division, combat arts and achievements',

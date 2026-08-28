@@ -1,5 +1,6 @@
 import { ArtIcon } from '@/components/ArtIcon'
 import { cn } from '@/lib/cn'
+import { useArt, useArtStore } from '@/store/artStore'
 import type { ArtIconName } from '@/data/artIcons'
 
 /**
@@ -61,6 +62,15 @@ const BACKDROPS: Record<ScreenName, Backdrop> = {
 
 export function ScreenBackdrop({ screen }: { screen: ScreenName }) {
   const backdrop = BACKDROPS[screen]
+  /*
+   * O «Fundo da app» das Definições é uma imagem só, igual nos cinco ecrãs de
+   * dentro da aplicação. Antes havia um slot para o ecrã de entrada — que já
+   * não se alcança depois de haver perfil — e outro só para o Quartel; ambos
+   * foram substituídos por este.
+   */
+  const userArt = useArt('app')
+  const scrim = useArtStore((state) => state.scrim)
+  const showUserArt = Boolean(userArt)
 
   return (
     // O preto opaco tapa o gradiente global do `body`, que serve os ecrãs de
@@ -69,6 +79,28 @@ export function ScreenBackdrop({ screen }: { screen: ScreenName }) {
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-void-900 select-none"
       aria-hidden="true"
     >
+      {/*
+        A imagem do utilizador vai por baixo da aura, com o véu de contraste
+        por cima. O desfoque não é estética: sem ele, o detalhe fino da
+        fotografia passa entre as letras dos rótulos de 10-12 px e desfaz-lhes
+        o desenho, mesmo quando o rácio de contraste dá. O `scale` esconde a
+        borda que o desfoque come nos quatro lados.
+      */}
+      {showUserArt && (
+        <>
+          <div
+            className="absolute inset-0 scale-110 bg-cover bg-center blur-[6px]"
+            style={{ backgroundImage: `url(${userArt})` }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundColor: `color-mix(in oklab, var(--color-void-950) ${scrim * 100}%, transparent)`,
+            }}
+          />
+        </>
+      )}
+
       <div className="absolute inset-0" style={{ background: backdrop.aura }} />
 
       {backdrop.kanji && (

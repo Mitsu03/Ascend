@@ -37,3 +37,6 @@ ios/DerivedData
 ios/App/App/public
 ios/App/build
 **/xcuserdata
+
+# Archives e output de build na raiz (xcarchive do Xcode, 24 MB+)
+/build

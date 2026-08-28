@@ -54,8 +54,16 @@ export function HeaderIdentity() {
         />
         <ArtIcon name="crossed-swords" size={17} className="relative text-crimson-soft" />
       </span>
-      <span className="truncate text-xs font-semibold text-ink-muted">
-        {name} · {title}
+      {/*
+        Nome e patente estavam na mesma linha, separados por «·», dentro de
+        172 px num iPhone SE. Com um nome de 21 caracteres a patente ficava
+        cortada a meio («Alma Determin…») e com os 24 que o campo permite
+        desaparecia por inteiro. Em duas linhas cabem as duas: o nome, que é do
+        utilizador, fica sempre completo, e a patente só corta em último caso.
+      */}
+      <span className="min-w-0">
+        <span className="block truncate text-xs font-semibold text-ink">{name}</span>
+        <span className="block truncate text-[11px] text-ink-muted">{title}</span>
       </span>
     </div>
   )
@@ -69,14 +77,19 @@ export function HeaderTally() {
   const { t } = useI18n()
 
   return (
+    // Os números aparecem sozinhos, sem rótulo visível — o ícone é que diz o
+    // que são. Para quem ouve o ecrã, o rótulo vai num `sr-only`; sem ele o
+    // cabeçalho era lido como «5. 1 240.».
     <div className="flex shrink-0 items-center gap-3">
       <span className="flex items-center gap-1" title={t.dashboard.streak}>
         <ArtIcon name="fire-ray" size={13} className="text-warn" />
         <span className="font-display text-[15px] font-bold text-warn">{streak}</span>
+        <span className="sr-only">{t.dashboard.streak}</span>
       </span>
       <span className="flex items-center gap-1" title={t.common.coins}>
         <span className="size-2 rounded-full bg-gold" aria-hidden="true" />
         <span className="font-display text-[15px] font-bold tabular-nums text-gold">{n(coins)}</span>
+        <span className="sr-only">{t.common.coins}</span>
       </span>
     </div>
   )
@@ -96,7 +109,9 @@ export function HeaderAction({
     <button
       type="button"
       onClick={onClick}
-      className="flex shrink-0 items-center gap-1.5 rounded-full border border-void-600 bg-void-800/70 px-3 py-1.5 text-[11.5px] font-semibold text-ink-muted transition-colors active:opacity-90"
+      // A pílula tinha 28 px de altura. Passa a 36 no desenho e a 44 pt de área
+      // de toque — é o único botão deste cabeçalho e não tem vizinhos perto.
+      className="tap-target flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border border-void-600 bg-void-800/70 px-3.5 text-[11.5px] font-semibold text-ink-muted transition-colors active:opacity-90"
     >
       {icon && <Icon name={icon} size={13} />}
       {children}

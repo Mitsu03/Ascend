@@ -9,31 +9,39 @@
  *    projeto. A pasta está no `.gitignore`, por isso o conteúdo não é publicado.
  *
  * Sem nenhuma das duas, a app usa as suas ilustrações originais.
+ *
+ * São dois slots: `app` é o fundo único dos cinco ecrãs de dentro da aplicação
+ * (Quartel, Dojo, Rações, Ordens, Shinigami) e `avatar` é o retrato. Houve
+ * antes um slot por ecrã de entrada (`start`) e um só do Quartel (`dashboard`);
+ * ambos deram lugar a este fundo único — ver a migração em `artStore`, e os
+ * nomes antigos que `STATIC_BASENAME` continua a aceitar.
  */
 
-export type ArtSlot = 'start' | 'dashboard' | 'avatar'
+export type ArtSlot = 'app' | 'avatar'
 
-export const ART_SLOTS: ArtSlot[] = ['start', 'dashboard', 'avatar']
+export const ART_SLOTS: ArtSlot[] = ['app', 'avatar']
 
-/** Nome base procurado em `public/assets/` para cada slot. */
-const STATIC_BASENAME: Record<ArtSlot, string> = {
-  start: 'backdrop-start',
-  dashboard: 'backdrop-dashboard',
-  avatar: 'avatar',
+/**
+ * Nomes base procurados em `public/assets/`, por ordem, para cada slot. Os
+ * `backdrop-dashboard` e `backdrop-start` são os nomes da versão anterior:
+ * continuam a ser lidos para quem já tem lá o ficheiro, mas `backdrop` é o
+ * nome a usar de hoje em diante.
+ */
+const STATIC_BASENAME: Record<ArtSlot, string[]> = {
+  app: ['backdrop', 'backdrop-dashboard', 'backdrop-start'],
+  avatar: ['avatar'],
 }
 
 const STATIC_EXTENSIONS = ['webp', 'jpg', 'jpeg', 'png']
 
 /** Lado maior depois de recomprimir, por slot. Fundos precisam de mais detalhe. */
 const MAX_SIDE: Record<ArtSlot, number> = {
-  start: 1400,
-  dashboard: 1400,
+  app: 1400,
   avatar: 512,
 }
 
 const QUALITY: Record<ArtSlot, number> = {
-  start: 0.72,
-  dashboard: 0.72,
+  app: 0.72,
   avatar: 0.82,
 }
 
@@ -76,13 +84,15 @@ export async function prepareArt(file: File, slot: ArtSlot): Promise<string> {
  * Devolve null quando não existe nenhum — o caso normal.
  */
 export async function findStaticArt(slot: ArtSlot): Promise<string | null> {
-  for (const extension of STATIC_EXTENSIONS) {
-    const url = `${import.meta.env.BASE_URL}assets/${STATIC_BASENAME[slot]}.${extension}`
-    try {
-      await loadImageElement(url)
-      return url
-    } catch {
-      /* extensão seguinte */
+  for (const basename of STATIC_BASENAME[slot]) {
+    for (const extension of STATIC_EXTENSIONS) {
+      const url = `${import.meta.env.BASE_URL}assets/${basename}.${extension}`
+      try {
+        await loadImageElement(url)
+        return url
+      } catch {
+        /* extensão seguinte */
+      }
     }
   }
   return null

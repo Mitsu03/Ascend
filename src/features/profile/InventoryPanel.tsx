@@ -80,41 +80,53 @@ export function InventoryPanel() {
                         >
                           {slot === 'title' && <Icon name="Star" size={16} className="text-gold" />}
                         </span>
+                        {/*
+                          O botão passou para a linha do nome. Estava sozinho
+                          numa terceira linha por baixo da descrição, e com dez
+                          cosméticos empilhados isso somava ~340 px de altura só
+                          em linhas de um botão.
+                        */}
                         <div className="min-w-0 flex-1">
-                          <div className="flex flex-wrap items-center gap-1.5">
-                            <p className="truncate text-sm font-medium text-ink">{name}</p>
-                            <span
-                              className={cn(
-                                'rounded-full border px-1.5 py-px text-[10px] font-medium',
-                                RARITY_CLASSES[item.rarity],
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                              <p className="truncate text-sm font-medium text-ink">{name}</p>
+                              <span
+                                className={cn(
+                                  'rounded-full border px-1.5 py-px text-[10px] font-medium',
+                                  RARITY_CLASSES[item.rarity],
+                                )}
+                              >
+                                {t.rarities[item.rarity]}
+                              </span>
+                              {/*
+                                O estado equipado vê-se pela moldura acesa, pelo
+                                fundo e pelo botão que passa a dizer «Retirar».
+                                Para quem ouve o ecrã, fica aqui por escrito.
+                              */}
+                              {isEquipped && <span className="sr-only">{t.profile.equipped}</span>}
+                            </div>
+                            <span className="shrink-0">
+                              {!owned ? (
+                                <Button
+                                  size="sm"
+                                  variant="gold"
+                                  icon="Coins"
+                                  onClick={() => buy(item.id, item.price, name)}
+                                >
+                                  {n(item.price)}
+                                </Button>
+                              ) : isEquipped ? (
+                                <Button size="sm" variant="ghost" onClick={() => equipCosmetic(slot, undefined)}>
+                                  {t.profile.unequip}
+                                </Button>
+                              ) : (
+                                <Button size="sm" icon="Check" onClick={() => equipCosmetic(slot, item.id)}>
+                                  {t.profile.equip}
+                                </Button>
                               )}
-                            >
-                              {t.rarities[item.rarity]}
                             </span>
                           </div>
-                          <p className="mt-0.5 text-xs leading-relaxed text-ink-muted">{loc(item.description)}</p>
-
-                          <div className="mt-2.5 flex items-center gap-2">
-                            {!owned ? (
-                              <Button
-                                size="sm"
-                                variant="gold"
-                                icon="Coins"
-                                onClick={() => buy(item.id, item.price, name)}
-                              >
-                                {n(item.price)}
-                              </Button>
-                            ) : isEquipped ? (
-                              <Button size="sm" variant="ghost" onClick={() => equipCosmetic(slot, undefined)}>
-                                {t.profile.unequip}
-                              </Button>
-                            ) : (
-                              <Button size="sm" icon="Check" onClick={() => equipCosmetic(slot, item.id)}>
-                                {t.profile.equip}
-                              </Button>
-                            )}
-                            {isEquipped && <Badge tone="ember">{t.profile.equipped}</Badge>}
-                          </div>
+                          <p className="mt-1 text-xs leading-relaxed text-ink-muted">{loc(item.description)}</p>
                         </div>
                       </div>
                     </li>
