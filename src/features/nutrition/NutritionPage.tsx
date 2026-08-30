@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { getFood, searchFoods } from '@/data/foods'
 import { ArtIcon } from '@/components/ArtIcon'
 import { ScreenBackdrop } from '@/components/layout/ScreenBackdrop'
-import { HeaderAction, ScreenHeader, ScreenTitle } from '@/components/layout/ScreenHeader'
+import { ScreenHeader, ScreenTitle } from '@/components/layout/ScreenHeader'
 import { Button } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 import { Badge, Field, SearchInput, Select, TextInput } from '@/components/ui/Misc'
@@ -431,9 +431,6 @@ export function NutritionPage() {
 
       <ScreenHeader>
         <ScreenTitle>{t.nutrition.todayLabel}</ScreenTitle>
-        <HeaderAction icon="Camera" onClick={() => setPhotoLogging('almoco')}>
-          {t.nutrition.photoOrCode}
-        </HeaderAction>
       </ScreenHeader>
 
       <div className="hidden flex-wrap items-end justify-between gap-4 md:flex">
@@ -444,9 +441,6 @@ export function NutritionPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="secondary" icon="Camera" onClick={() => setPhotoLogging('almoco')}>
-            {t.photoLog.title}
-          </Button>
           <Button variant="primary" icon="Plus" onClick={() => setAdding('almoco')}>
             {t.nutrition.logMeal}
           </Button>
@@ -542,6 +536,29 @@ export function NutritionPage() {
           <span className="text-[10.5px] font-semibold tracking-[0.16em] text-ink-muted">
             {t.nutrition.diaryHeading(todayEntries.length)}
           </span>
+
+          {/*
+            Registar por fotografia é uma entrada do diário, não uma ação de
+            cabeçalho: fica onde o registo acontece, tracejada, a ler-se como
+            uma linha por preencher. O código de barras e a pesquisa continuam
+            a existir — dentro do modal e no botão «+» de cada refeição.
+          */}
+          <button
+            type="button"
+            onClick={() => setPhotoLogging('almoco')}
+            className="mt-[11px] flex h-[60px] w-full items-center gap-[11px] rounded-2xl border border-dashed border-void-600 px-3.5 text-left active:opacity-90"
+          >
+            <span
+              className="flex h-[26px] w-[34px] shrink-0 items-center justify-center rounded-md border-[1.5px] border-void-500"
+              aria-hidden="true"
+            >
+              <span className="size-[9px] rounded-full border-[1.5px] border-void-500" />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-[12.5px] font-semibold text-ink-soft">{t.nutrition.photoRow}</span>
+              <span className="mt-0.5 block text-[10.5px] text-ink-muted">{t.nutrition.photoRowHint}</span>
+            </span>
+          </button>
 
           {MEAL_ORDER.map((meal) => {
             const mealEntries = todayEntries.filter((entry) => entry.mealType === meal)

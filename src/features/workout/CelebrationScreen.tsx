@@ -1,17 +1,9 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ArtIcon } from '@/components/ArtIcon'
 import { HollowMask } from '@/components/art/HollowMask'
+import { SpiritMotes } from '@/components/art/SpiritArt'
 import { getCosmetic } from '@/data/cosmetics'
-import { BladeSlashes, InkWash, SpiritBurst, SpiritMotes } from '@/components/art/SpiritArt'
-import { Button } from '@/components/ui/Button'
-import { Icon } from '@/components/ui/Icon'
-import { Badge } from '@/components/ui/Misc'
-import { ProgressBar } from '@/components/ui/Progress'
 import { useI18n } from '@/i18n'
-import { levelFromXp, maskStageForLevel } from '@/services/calculations'
+import { levelFromXp, maskStageForLevel, titleKeyForLevel } from '@/services/calculations'
 import { formatDuration } from '@/services/dates'
-import { workoutDoneLine } from '@/services/narrative'
 import { useGameStore } from '@/store/gameStore'
 import type { SessionResult } from '@/store/workoutStore'
 
@@ -20,165 +12,171 @@ interface CelebrationScreenProps {
   onClose: () => void
 }
 
+/**
+ * Os selos guardam uma cor ou um gradiente em `value` e é isso que a bola do
+ * cartão mostra. Os títulos guardam a palavra `title`, que não é pintável — aí
+ * fica o gradiente da casa.
+ */
+function cosmeticSwatch(value: string): string {
+  return value.startsWith('#') || value.startsWith('linear-gradient')
+    ? value
+    : 'linear-gradient(135deg, #ff7a1a, #d1244a)'
+}
+
+/**
+ * Fim de sessão em ecrã inteiro, com a máscara ao centro.
+ *
+ * Era um painel modal sobre o ecrã anterior. O protótipo de design fixou a
+ * direção contrária — a máscara é o momento, e um cartão de 32 rem com o treino
+ * a espreitar por trás roubava-lhe a escala. Aqui não há tab bar nem fundo: só
+ * o preto da celebração, a coroa de raios e o osso.
+ *
+ * O que a app mostrava em cinco blocos (duração, séries, reiatsu, barra de
+ * patente, atributos) passa a uma linha de contexto e três colunas. A barra de
+ * progresso saiu: a patente já está escrita por extenso a seguir à máscara.
+ */
 export function CelebrationScreen({ result, onClose }: CelebrationScreenProps) {
-  const navigate = useNavigate()
   const { t, n, loc } = useI18n()
   const xp = useGameStore((state) => state.xp)
   const info = levelFromXp(xp)
-  const [barValue, setBarValue] = useState(0)
-
-  // A barra arranca a zero e anima até ao valor real.
-  useEffect(() => {
-    const id = window.setTimeout(() => setBarValue(info.currentLevelXp), 120)
-    return () => window.clearTimeout(id)
-  }, [info.currentLevelXp])
 
   const { log } = result
   const cosmetic = result.bonusRewardId ? getCosmetic(result.bonusRewardId) : undefined
-  const perfect = log.completedSets === log.totalSets
   const leveledUp = result.levelAfter > result.levelBefore
+  const level = leveledUp ? result.levelAfter : info.level
+
+  const { forca, resistencia, disciplina } = result.attributes
+  const arts = forca + resistencia + disciplina
+
+  /*
+   * Inteira, em qualquer patente. Na ficha a máscara segue a regra do posto e
+   * abaixo da décima nem chega a existir; aqui não é o rosto do utilizador — é
+   * o emblema da aplicação, o mesmo do ícone e do favicon. Translúcida deixava
+   * passar o halo carmim que tem por baixo, em vez de assentar sobre ele.
+   */
+  const stage = maskStageForLevel(level) ?? 'plena'
 
   return (
-    // Ecrã inteiro e com scroll próprio: as margens seguras têm de entrar no
-    // padding, senão o painel de recompensa encosta ao topo por baixo da
-    // Dynamic Island e os dois botões finais caem sobre o indicador de início.
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overscroll-contain bg-void-950/92 pt-[calc(1rem+env(safe-area-inset-top))] pr-[calc(1rem+env(safe-area-inset-right))] pb-[calc(1rem+env(safe-area-inset-bottom))] pl-[calc(1rem+env(safe-area-inset-left))] backdrop-blur-md">
-      {/* Explosão de energia e partículas a subir por trás do painel. */}
-      <div className="art-layer" aria-hidden="true">
-        <div className="absolute left-1/2 top-1/2 aspect-square w-[140vmin] -translate-x-1/2 -translate-y-1/2">
-          <SpiritBurst tone={perfect ? 'gold' : 'ember'} opacity={0.4} />
-        </div>
-      </div>
-      <SpiritMotes tone="gold" />
+    <div className="animate-pop fixed inset-0 z-50 flex justify-center bg-void-950">
+      {/*
+        A decoração vive dentro da coluna, não do ecrã. Num telemóvel de 402 px
+        a coroa de 470 px sai pelos lados e vê-se só a faixa do meio, que é o
+        desenho pretendido; solta no ecrã de um portátil abria-se como uma
+        estrela inteira por trás do texto.
+      */}
+      <div className="relative flex w-full max-w-[440px] flex-col overflow-hidden">
+        <div
+          className="pointer-events-none absolute left-1/2 top-[300px] -ml-[235px] -mt-[235px] size-[470px] opacity-[0.42]"
+          aria-hidden="true"
+          style={{
+            background:
+              'repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,122,26,.6) 0deg 0.6deg, transparent 0.6deg 3.4deg)',
+            WebkitMaskImage:
+              'radial-gradient(circle at 50% 50%, transparent 86px, rgba(0,0,0,.85) 132px, transparent 220px)',
+            maskImage: 'radial-gradient(circle at 50% 50%, transparent 86px, rgba(0,0,0,.85) 132px, transparent 220px)',
+          }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0"
+          aria-hidden="true"
+          style={{ background: 'radial-gradient(34rem 26rem at 50% 30%, rgba(184,18,54,.42), transparent 62%)' }}
+        />
+        <SpiritMotes tone="ember" count={3} />
 
-      <div className="relative w-full max-w-lg animate-pop overflow-hidden rounded-3xl border border-gold/40 bg-void-850 p-6 shadow-2xl glow-gold">
-        {/* Corte de lâmina e tinta a decorar o topo do painel. */}
-        <div className="art-layer">
-          <BladeSlashes tone="gold" opacity={0.22} animated />
-        </div>
-        <span className="pointer-events-none absolute -left-12 -top-14 size-52" aria-hidden="true">
-          <InkWash tone="crimson" opacity={0.16} />
-        </span>
-        <div className="art-layer ink-grain" />
+        {/*
+          O protótipo cabe nos 874 px do iPhone 16 Pro e não precisa de scroll.
+          Num SE de 667 px o cartão de recompensa caía fora do ecrã, por isso o
+          corpo rola — o rodapé com o botão fica fixo em baixo.
+        */}
+        <div className="relative flex flex-1 flex-col items-center overflow-y-auto overscroll-contain px-[22px] pt-[max(44px,calc(0.5rem+env(safe-area-inset-top)))] text-center">
+          <p className="text-[11px] font-bold tracking-[0.3em] text-ember-soft">
+            {leveledUp ? t.celebration.rankUpLabel : t.celebration.doneLabel}
+          </p>
 
-        <div className="relative space-y-5">
-          <div className="text-center">
-            {/*
-              Subir de patente é o momento em que a máscara aparece; nos
-              restantes treinos fica o emblema da lâmina.
-            */}
-            <span className="mx-auto flex size-16 items-center justify-center rounded-2xl bg-gold/15 text-gold ring-1 ring-gold/40">
-              {leveledUp ? (
-                <HollowMask size={40} stage={maskStageForLevel(result.levelAfter) ?? 'nascente'} />
-              ) : (
-                <ArtIcon name={perfect ? 'crossed-swords' : 'quick-slash'} size={34} />
-              )}
-            </span>
-            <h1 className="text-glow-gold mt-4 font-display text-3xl font-bold uppercase tracking-[0.1em] text-ink">
-              {t.celebration.title}
-            </h1>
-            <p className="mt-1.5 text-sm text-ink-muted">{workoutDoneLine(log.completedSets, t)}</p>
-          </div>
-
-          <div className="grid grid-cols-3 gap-2.5 text-center">
-            <div className="rounded-xl border border-void-600 bg-void-900/50 p-3">
-              <p className="text-[11px] font-medium text-ink-muted">{t.celebration.duration}</p>
-              <p className="font-display text-xl font-bold tabular-nums text-ink">
-                {formatDuration(log.durationSeconds)}
-              </p>
-            </div>
-            <div className="rounded-xl border border-void-600 bg-void-900/50 p-3">
-              <p className="text-[11px] font-medium text-ink-muted">{t.celebration.sets}</p>
-              <p className="font-display text-xl font-bold tabular-nums text-ink">
-                {log.completedSets}/{log.totalSets}
-              </p>
-            </div>
-            <div className="rounded-xl border border-void-600 bg-void-900/50 p-3">
-              <p className="text-[11px] font-medium text-ink-muted">{t.common.coins}</p>
-              <p className="font-display text-xl font-bold tabular-nums text-gold">+{log.coinsEarned}</p>
-            </div>
-          </div>
-
-          <div className="relative overflow-hidden rounded-2xl border border-ember/30 bg-ember/5 p-5 text-center">
-            <span className="pointer-events-none absolute inset-0" aria-hidden="true">
-              <SpiritMotes tone="ember" count={5} />
-            </span>
-            <p className="text-glow-gold relative font-display text-6xl font-bold leading-none text-gold">
-              +{n(log.xpEarned)}
-            </p>
-            <p className="relative mt-1 text-sm font-medium uppercase tracking-[0.2em] text-ink-muted">
-              {t.celebration.xpEarned}
-            </p>
-            {perfect && (
-              <Badge tone="good" icon="CheckCircle2" className="relative mt-3">
-                {t.celebration.perfect}
-              </Badge>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm">
-              <span className="font-medium text-ink">
-                {t.common.levelWithNumber(info.level)}
-                {leveledUp && <span className="ml-2 text-gold">{t.celebration.leveledUp}</span>}
-              </span>
-              <span className="tabular-nums text-ink-faint">
-                {t.common.xpProgress(n(info.currentLevelXp), n(info.nextLevelXp))}
-              </span>
-            </div>
-            <ProgressBar
-              value={barValue}
-              max={info.nextLevelXp}
-              tone="xp"
-              height="lg"
-              showShimmer
-              label={t.common.levelProgress}
+          <div className="relative mt-[22px] flex size-[176px] shrink-0 items-center justify-center">
+            {/* Poeira de reiatsu suspensa à volta do osso. */}
+            <div
+              className="pointer-events-none absolute -inset-4 rounded-full opacity-[0.55]"
+              aria-hidden="true"
+              style={{
+                backgroundImage: 'radial-gradient(rgba(255,122,26,.95) 1px, transparent 1.4px)',
+                backgroundSize: '6px 6px',
+                WebkitMaskImage: 'radial-gradient(circle, rgba(0,0,0,.9) 42%, transparent 74%)',
+                maskImage: 'radial-gradient(circle, rgba(0,0,0,.9) 42%, transparent 74%)',
+              }}
+            />
+            <HollowMask
+              size={168}
+              stage={stage}
+              className="relative [filter:drop-shadow(7px_7px_0_rgba(184,18,54,0.6))]"
             />
           </div>
 
-          <div className="flex flex-wrap justify-center gap-2">
-            <Badge tone="ember" icon="Zap">
-              {t.attributes.forca} +{result.attributes.forca}
-            </Badge>
-            <Badge tone="ember" icon="Activity">
-              {t.attributes.resistencia} +{result.attributes.resistencia}
-            </Badge>
-            {result.attributes.disciplina > 0 && (
-              <Badge tone="crimson" icon="Brain">
-                {t.attributes.disciplina} +{result.attributes.disciplina}
-              </Badge>
-            )}
-          </div>
+          <p className="mt-5 text-[11px] font-semibold tracking-[0.2em] text-ink-muted">
+            {t.dashboard.rankLabel(String(level).padStart(2, '0'))}
+          </p>
+          <h1 className="mt-1.5 font-display text-[44px] font-bold leading-none text-ink [text-shadow:5px_5px_0_rgba(184,18,54,0.6)]">
+            {t.levelTitles[titleKeyForLevel(level)]}
+          </h1>
+          <p className="mt-3 max-w-[31ch] text-[13px] leading-[1.6] text-pretty text-ink-muted">
+            {leveledUp ? t.celebration.rankUpLine : t.celebration.doneLine}
+          </p>
+          <p className="mt-2.5 font-display text-sm font-semibold tracking-[0.06em] text-good">
+            {t.celebration.setsInTime(log.completedSets, log.totalSets, formatDuration(log.durationSeconds))}
+          </p>
 
-          {cosmetic ? (
-            <div className="flex items-center gap-3 rounded-xl border border-crimson-soft/45 bg-crimson/10 p-4">
-              <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-crimson/30 text-crimson-soft">
-                <Icon name="Gift" size={22} />
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-ink">{t.celebration.surpriseReward(loc(cosmetic.name))}</p>
-                <p className="mt-0.5 text-xs leading-relaxed text-ink-muted">{loc(cosmetic.description)}</p>
-              </div>
+          <div className="mt-5 flex w-full border-y border-void-700">
+            <div className="flex-1 border-r border-void-700 py-3.5">
+              <p className="text-[10px] font-semibold tracking-[0.14em] text-ink-muted">{t.celebration.reiatsu}</p>
+              <p className="mt-1 font-display text-[25px] font-bold leading-none tabular-nums text-ember-soft">
+                +{n(log.xpEarned)}
+              </p>
             </div>
-          ) : (
-            <p className="text-center text-xs text-ink-faint">{t.celebration.noReward}</p>
-          )}
-
-          <div className="flex gap-2">
-            <Button variant="primary" size="lg" fullWidth icon="Home" onClick={onClose}>
-              {t.celebration.backToBase}
-            </Button>
-            <Button
-              size="lg"
-              icon="User"
-              onClick={() => {
-                onClose()
-                navigate('/perfil')
-              }}
-            >
-              {t.nav.profile}
-            </Button>
+            <div className="flex-1 border-r border-void-700 py-3.5">
+              <p className="text-[10px] font-semibold tracking-[0.14em] text-ink-muted">{t.celebration.kanLabel}</p>
+              <p className="mt-1 font-display text-[25px] font-bold leading-none tabular-nums text-gold-soft">
+                +{n(log.coinsEarned)}
+              </p>
+            </div>
+            <div className="flex-1 py-3.5">
+              <p className="text-[10px] font-semibold tracking-[0.14em] text-ink-muted">{t.celebration.arts}</p>
+              <p className="mt-1 font-display text-[25px] font-bold leading-none tabular-nums text-spirit">+{arts}</p>
+            </div>
           </div>
+
+          {cosmetic && (
+            // Cantos cortados a 18 px, como o cartão de recompensa do protótipo.
+            <div
+              className="mt-4 flex w-full items-center gap-[13px] border border-crimson-soft/55 p-[15px] text-left [clip-path:polygon(18px_0,100%_0,100%_calc(100%-18px),calc(100%-18px)_100%,0_100%,0_18px)]"
+              style={{ background: 'linear-gradient(140deg, rgba(232,54,92,.15), rgba(22,22,31,.9))' }}
+            >
+              <span
+                className="size-8 shrink-0 rounded-full shadow-[0_0_18px_rgba(255,122,26,.65)]"
+                style={{ background: cosmeticSwatch(cosmetic.value) }}
+                aria-hidden="true"
+              />
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-xl font-bold text-ink">{loc(cosmetic.name)}</p>
+                <p className="mt-px text-[11px] text-ink-muted">
+                  {t.celebration.cosmeticUnlocked(t.cosmeticSlotNames[cosmetic.slot])}
+                </p>
+              </div>
+              <span className="shrink-0 bg-crimson-soft/20 px-2 py-1 text-[10.5px] font-bold uppercase tracking-[0.06em] text-ember-soft">
+                {t.rarities[cosmetic.rarity]}
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div className="relative px-[22px] pt-[18px] pb-[calc(0.625rem+env(safe-area-inset-bottom))]">
+          <button
+            type="button"
+            onClick={onClose}
+            // `void-950` sobre o extremo carmim do gradiente, como no CTA do Quartel.
+            className="h-14 w-full rounded-[15px] bg-gradient-to-br from-ember to-crimson font-display text-[18px] font-bold tracking-[0.05em] text-void-950 shadow-[0_12px_32px_-10px_rgba(255,122,26,.9)] transition-opacity active:opacity-90"
+          >
+            {t.celebration.backToBase}
+          </button>
         </div>
       </div>
     </div>

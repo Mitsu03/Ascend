@@ -178,6 +178,13 @@ export const pt = {
     aura: 'Reiatsu',
   },
 
+  /* O nome de uma peça só, para quando se anuncia a que acabou de sair. */
+  cosmeticSlotNames: {
+    frame: 'Anel de retrato',
+    title: 'Título',
+    aura: 'Reiatsu',
+  },
+
   rarities: {
     comum: 'Hollow',
     raro: 'Adjuchas',
@@ -426,15 +433,16 @@ export const pt = {
   },
 
   celebration: {
-    title: 'Treino concluído',
-    duration: 'Duração',
-    sets: 'Séries',
-    xpEarned: 'Reiatsu ganho',
-    perfect: 'Todas as séries concluídas · bónus incluído',
-    leveledUp: 'Subiste de patente!',
-    surpriseReward: (name: string) => `Recompensa surpresa: ${name}`,
-    noReward: 'Sem recompensa cosmética desta vez — recebeste 15 kan extra em compensação.',
-    backToBase: 'Voltar ao quartel',
+    doneLabel: 'SESSÃO CONCLUÍDA',
+    rankUpLabel: 'SUBIDA DE PATENTE',
+    doneLine: 'O reiatsu consolida-se no descanso. Volta amanhã e a divisão nota.',
+    rankUpLine: 'A máscara começa a formar-se sobre o teu rosto. A divisão já te trata pelo posto.',
+    setsInTime: (done: number, total: number, time: string) => `${done} de ${total} séries em ${time}`,
+    reiatsu: 'REIATSU',
+    kanLabel: 'KAN',
+    arts: 'ARTES',
+    cosmeticUnlocked: (slot: string) => `${slot} · desbloqueado`,
+    backToBase: 'VOLTAR AO QUARTEL',
   },
 
   builder: {
@@ -463,7 +471,8 @@ export const pt = {
   nutrition: {
     // ── Ecrã das Rações (protótipo) ───────────────────────────────────────
     todayLabel: 'Rações · hoje',
-    photoOrCode: 'Foto · código',
+    photoRow: 'Fotografar refeição',
+    photoRowHint: 'A estimativa entra para confirmares',
     proteinBonus: (xp: number) => `Proteína +${xp}`,
     remainingHeading: 'FALTAM PARA A META',
     overHeading: 'ACIMA DA META',
