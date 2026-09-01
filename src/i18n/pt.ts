@@ -515,10 +515,10 @@ export const pt = {
     estimatedValues: 'Valores estimados',
     gramsAria: (food: string) => `Quantidade de ${food} em gramas`,
     disclaimer:
-      'As estimativas por fotografia são aproximadas e podem enganar-se na quantidade. Confirma sempre os valores antes de registar.',
-    visionTitle: 'Reconhecimento por fotografia',
+      'As estimativas automáticas são aproximadas e podem enganar-se na quantidade. Confirma sempre os valores antes de registar.',
+    visionTitle: 'Assistente de IA',
     visionHint:
-      'Opcional. Liga um serviço de visão compatível com a API da OpenAI para estimar alimentos a partir de fotos. A chave fica guardada apenas neste dispositivo e só é enviada para o endpoint indicado.',
+      'Opcional. Liga um serviço compatível com a API da OpenAI e desbloqueias três coisas: estimar alimentos a partir de fotos, descrever a refeição por escrito e gerar planos de treino a partir de um pedido. A chave fica guardada apenas neste dispositivo e só é enviada para o endpoint indicado.',
     visionProvider: 'Serviço',
     visionFree: 'Gratuito',
     visionPaid: 'Pago',

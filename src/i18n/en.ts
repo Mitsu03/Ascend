@@ -510,10 +510,10 @@ export const en: Dictionary = {
     estimatedValues: 'Estimated values',
     gramsAria: (food: string) => `Amount of ${food} in grams`,
     disclaimer:
-      'Photo estimates are approximate and can get portion sizes wrong. Always check the values before logging.',
-    visionTitle: 'Photo recognition',
+      'Automatic estimates are approximate and can get portion sizes wrong. Always check the values before logging.',
+    visionTitle: 'AI assistant',
     visionHint:
-      'Optional. Connect an OpenAI-compatible vision service to estimate foods from photos. The key is stored on this device only and is sent solely to the endpoint you provide.',
+      'Optional. Connect an OpenAI-compatible service and you unlock three things: estimating foods from photos, describing the meal in writing, and generating training plans from a request. The key is stored on this device only and is sent solely to the endpoint you provide.',
     visionProvider: 'Service',
     visionFree: 'Free',
     visionPaid: 'Paid',
