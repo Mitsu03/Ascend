@@ -460,6 +460,53 @@ export const pt = {
     noResults: 'Nenhum exercício encontrado.',
   },
 
+  aiPlan: {
+    title: 'Plano por IA',
+    description: 'Descreve o treino que queres e a IA monta o plano semanal.',
+    promptLabel: 'O que queres treinar?',
+    promptPlaceholder: 'Ex.: plano semanal, 3× por semana, para correr 5 km daqui a um mês',
+    examplesTitle: 'Exemplos',
+    examples: [
+      'Plano semanal, 3× por semana, para correr 5 km daqui a um mês',
+      'Quatro treinos por semana em casa, só com halteres, para ganhar massa',
+      'Dois treinos curtos por semana para voltar aos poucos depois de uma lesão no joelho',
+    ],
+    footerHint: 'A IA pode fazer algumas perguntas antes de montar o plano.',
+    ask: 'Continuar',
+    askingQuestions: 'A ver o que falta saber…',
+    questionsHint: 'Deixa em branco o que não souberes.',
+    answerPlaceholder: 'Ou escreve a tua resposta…',
+    answerAria: (question: string) => `Resposta livre a: ${question}`,
+    generate: 'Gerar plano',
+    regenerate: 'Gerar outra vez',
+    thinking: 'A montar o teu plano…',
+    daysCount: (n: number) => `${n} ${n === 1 ? 'treino proposto' : 'treinos propostos'}`,
+    newTag: 'novo',
+    newExercises: (n: number) =>
+      n === 1
+        ? '1 exercício novo será acrescentado ao teu catálogo.'
+        : `${n} exercícios novos serão acrescentados ao teu catálogo.`,
+    replaceLabel: 'Substituir o plano atual',
+    replaceOn: (n: number) =>
+      n === 1
+        ? 'O treino que tens agora é apagado. Não dá para desfazer.'
+        : `Os ${n} treinos que tens agora são apagados. Não dá para desfazer.`,
+    replaceOff: 'Os treinos novos juntam-se aos que já tens.',
+    save: 'Guardar plano',
+    confirmReplaceTitle: 'Substituir o plano atual?',
+    confirmReplaceMessage: (n: number) =>
+      n === 1
+        ? 'O treino do teu plano atual é apagado e substituído por este. O histórico de sessões já feitas mantém-se. Não dá para desfazer.'
+        : `Os ${n} treinos do teu plano atual são apagados e substituídos por este. O histórico de sessões já feitas mantém-se. Não dá para desfazer.`,
+    emptyPrompt: 'Escreve primeiro o que queres treinar.',
+    emptyPlan: 'A IA não devolveu nenhum treino utilizável. Tenta reformular o pedido.',
+    notConfigured:
+      'A geração de planos precisa de um serviço de IA ligado em Shinigami › Definições.',
+    failed: 'Não foi possível gerar o plano. Verifica a ligação e as definições.',
+    disclaimer:
+      'O plano é uma sugestão gerada automaticamente, não um programa supervisionado. Revê-o antes de guardar e ajusta o que não fizer sentido para ti.',
+  },
+
   nutrition: {
     // ── Ecrã das Rações (protótipo) ───────────────────────────────────────
     todayLabel: 'Rações · hoje',
@@ -548,7 +595,24 @@ export const pt = {
 
   photoLog: {
     title: 'Registar por fotografia',
-    description: 'Tira uma foto ao prato ou lê o código de barras da embalagem.',
+    titleGeneric: 'Registar refeição',
+    descriptionGeneric:
+      'Tira uma foto ao prato, escreve o que comeste ou lê o código de barras da embalagem.',
+    photographMeal: 'Fotografar refeição',
+    describeMeal: 'Descrever refeição',
+    modeText: 'Descrever',
+    textLabel: 'O que comeste?',
+    textHint: 'Podes escrever o prato inteiro — a IA separa os ingredientes.',
+    textPlaceholder: 'Ex.: bitoque com arroz, batatas fritas e um ovo estrelado',
+    textAnalyse: 'Analisar',
+    textAnalyseAgain: 'Analisar outra vez',
+    textFooterHint: 'Escreve a refeição e carrega em Analisar.',
+    barcodeFooterHint: 'Lê um código de barras para começar.',
+    noFoodInText: 'Não foi identificado nenhum alimento nesta descrição.',
+    textNotConfigured:
+      'Descrever a refeição por escrito precisa de um serviço de IA ligado em Shinigami › Definições.',
+    textFailed:
+      'Não foi possível analisar a descrição. Verifica a ligação e as definições.',
     modePhoto: 'Fotografia',
     modeBarcode: 'Código de barras',
     openCamera: 'Abrir câmara',
@@ -582,12 +646,13 @@ export const pt = {
     estimatedValues: 'Valores estimados',
     gramsAria: (food: string) => `Quantidade de ${food} em gramas`,
     disclaimer:
-      'As estimativas por fotografia são aproximadas e podem enganar-se na quantidade. Confirma sempre os valores antes de registar.',
-    visionTitle: 'Reconhecimento por fotografia',
+      'As estimativas automáticas são aproximadas e podem enganar-se na quantidade. Confirma sempre os valores antes de registar.',
+    visionTitle: 'Assistente de IA',
     visionHint:
-      'Opcional. Liga um serviço de visão compatível com a API da OpenAI para estimar alimentos a partir de fotos. A chave fica guardada apenas neste dispositivo e só é enviada para o endpoint indicado.',
+      'Opcional. Liga um serviço compatível com a API da OpenAI e desbloqueias três coisas: estimar alimentos a partir de fotos, descrever a refeição por escrito e gerar planos de treino a partir de um pedido. A chave fica guardada apenas neste dispositivo e só é enviada para o endpoint indicado.',
     /* Resumo curto para a linha das Definições, onde há duas linhas de 147 px. */
-    visionRowHint: 'Estima alimentos a partir de fotos',
+    visionRowHint: 'Fotos, descrições e planos de treino',
+
     visionProvider: 'Serviço',
     visionFree: 'Gratuito',
     visionPaid: 'Pago',

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { EXERCISE_BY_ID } from '@/data/exercises'
 import { Icon } from '@/components/ui/Icon'
 import { ConfirmDialog } from '@/components/ui/Modal'
 import { CelebrationScreen } from '@/features/workout/CelebrationScreen'
@@ -8,6 +7,7 @@ import { ExerciseDemo } from '@/features/workout/ExerciseDemo'
 import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { formatDuration } from '@/services/dates'
+import { useExerciseResolver } from '@/store/exerciseStore'
 import { useWorkoutStore } from '@/store/workoutStore'
 
 /**
@@ -62,6 +62,7 @@ function RestCard({ seconds, onDismiss }: { seconds: number; onDismiss: () => vo
 export function WorkoutSessionPage() {
   const navigate = useNavigate()
   const { t, loc } = useI18n()
+  const resolveExercise = useExerciseResolver()
   const activeSession = useWorkoutStore((state) => state.activeSession)
   const plan = useWorkoutStore((state) => state.plan)
   const lastResult = useWorkoutStore((state) => state.lastResult)
@@ -121,7 +122,7 @@ export function WorkoutSessionPage() {
 
   const index = Math.min(current, workout.exercises.length - 1)
   const item = workout.exercises[index]
-  const exercise = EXERCISE_BY_ID[item.exerciseId]
+  const exercise = resolveExercise(item.exerciseId)
   const name = exercise ? loc(exercise.name) : item.exerciseId
   const checks = activeSession.checked[index] ?? []
   const doneHere = checks.filter(Boolean).length
@@ -131,7 +132,7 @@ export function WorkoutSessionPage() {
   const allDone = completedSets === total
 
   const next = workout.exercises[index + 1]
-  const nextExercise = next ? EXERCISE_BY_ID[next.exerciseId] : undefined
+  const nextExercise = next ? resolveExercise(next.exerciseId) : undefined
 
   /** Marca uma série: arranca o descanso e avança quando a última fecha. */
   const markSet = (setIndex: number) => {

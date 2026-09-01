@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { EXERCISE_BY_ID } from '@/data/exercises'
 import { normalize } from '@/data/foods'
 import { useI18n } from '@/i18n'
 import { localized } from '@/i18n/types'
@@ -9,6 +8,7 @@ import { Icon } from '@/components/ui/Icon'
 import { Modal } from '@/components/ui/Modal'
 import { Badge, Field, SearchInput, Select, TextInput } from '@/components/ui/Misc'
 import { useUserStore } from '@/store/userStore'
+import { useExerciseResolver } from '@/store/exerciseStore'
 import { useWorkoutStore } from '@/store/workoutStore'
 import type { MuscleGroup, WorkoutDay, WorkoutExercise } from '@/types'
 
@@ -31,6 +31,7 @@ const GROUPS: (MuscleGroup | 'todos')[] = [
 
 export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
   const { t, lang, loc } = useI18n()
+  const resolveExercise = useExerciseResolver()
   const profile = useUserStore((state) => state.profile)
   const addCustomWorkout = useWorkoutStore((state) => state.addCustomWorkout)
 
@@ -93,7 +94,7 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
   }
 
   const exerciseName = (id: string) => {
-    const exercise = EXERCISE_BY_ID[id]
+    const exercise = resolveExercise(id)
     return exercise ? loc(exercise.name) : id
   }
 
