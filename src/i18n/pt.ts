@@ -528,7 +528,24 @@ export const pt = {
 
   photoLog: {
     title: 'Registar por fotografia',
-    description: 'Tira uma foto ao prato ou lê o código de barras da embalagem.',
+    titleGeneric: 'Registar refeição',
+    descriptionGeneric:
+      'Tira uma foto ao prato, escreve o que comeste ou lê o código de barras da embalagem.',
+    photographMeal: 'Fotografar refeição',
+    describeMeal: 'Descrever refeição',
+    modeText: 'Descrever',
+    textLabel: 'O que comeste?',
+    textHint: 'Podes escrever o prato inteiro — a IA separa os ingredientes.',
+    textPlaceholder: 'Ex.: bitoque com arroz, batatas fritas e um ovo estrelado',
+    textAnalyse: 'Analisar',
+    textAnalyseAgain: 'Analisar outra vez',
+    textFooterHint: 'Escreve a refeição e carrega em Analisar.',
+    barcodeFooterHint: 'Lê um código de barras para começar.',
+    noFoodInText: 'Não foi identificado nenhum alimento nesta descrição.',
+    textNotConfigured:
+      'Descrever a refeição por escrito precisa de um serviço de IA ligado em Shinigami › Definições.',
+    textFailed:
+      'Não foi possível analisar a descrição. Verifica a ligação e as definições.',
     modePhoto: 'Fotografia',
     modeBarcode: 'Código de barras',
     openCamera: 'Abrir câmara',

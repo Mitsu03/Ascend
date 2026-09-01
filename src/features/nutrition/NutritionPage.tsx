@@ -231,6 +231,7 @@ export function NutritionPage() {
 
   const [adding, setAdding] = useState<MealType | null>(null)
   const [photoLogging, setPhotoLogging] = useState<MealType | null>(null)
+  const [logMode, setLogMode] = useState<'foto' | 'texto'>('foto')
 
   const date = today()
   const todayEntries = useMemo(() => entriesForDate(date), [entries, entriesForDate, date])
@@ -254,8 +255,25 @@ export function NutritionPage() {
           <p className="mt-3 text-ink-muted">{t.nutrition.remainingOf(n(remaining.calories), n(targets.calories))}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="secondary" icon="Camera" onClick={() => setPhotoLogging('almoco')}>
-            {t.photoLog.title}
+          <Button
+            variant="secondary"
+            icon="Camera"
+            onClick={() => {
+              setLogMode('foto')
+              setPhotoLogging('almoco')
+            }}
+          >
+            {t.photoLog.photographMeal}
+          </Button>
+          <Button
+            variant="secondary"
+            icon="Pencil"
+            onClick={() => {
+              setLogMode('texto')
+              setPhotoLogging('almoco')
+            }}
+          >
+            {t.photoLog.describeMeal}
           </Button>
           <Button variant="primary" icon="Plus" onClick={() => setAdding('almoco')}>
             {t.nutrition.logMeal}
@@ -448,6 +466,7 @@ export function NutritionPage() {
       <PhotoLogModal
         open={photoLogging !== null}
         mealType={photoLogging ?? 'almoco'}
+        initialMode={logMode}
         onClose={() => setPhotoLogging(null)}
       />
     </div>

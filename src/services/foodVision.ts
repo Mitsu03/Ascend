@@ -1,26 +1,30 @@
 import { FOODS, normalize } from '@/data/foods'
 import { localized } from '@/i18n/types'
 import { stripDataUrl } from '@/services/photos'
+import {
+  AiNotConfiguredError,
+  AiRequestError,
+  aiIsConfigured,
+  chatJson,
+} from '@/services/aiClient'
+import type { AiConfig } from '@/services/aiClient'
 import type { Language } from '@/i18n/types'
 import type { Food } from '@/types'
 
 /**
- * Reconhecimento de alimentos a partir de uma fotografia.
+ * Reconhecimento de alimentos a partir de uma fotografia ou de uma descrição
+ * escrita.
  *
- * O MVP não inclui nenhum modelo de visão — não existe uma opção gratuita e
- * fiável que corra offline no browser. Em vez disso a app expõe uma camada de
- * provider: sem configuração, a foto fica anexada à refeição e o utilizador
- * escolhe os alimentos à mão; com um endpoint de visão configurado nas
- * Definições (a chave é do próprio utilizador e nunca sai deste dispositivo
- * a não ser para esse endpoint), a foto é analisada automaticamente.
+ * O MVP não inclui nenhum modelo — não existe uma opção gratuita e fiável que
+ * corra offline no browser. Em vez disso a app expõe uma camada de provider:
+ * sem configuração, a foto fica anexada à refeição e o utilizador escolhe os
+ * alimentos à mão; com um endpoint configurado nas Definições (a chave é do
+ * próprio utilizador e nunca sai deste dispositivo a não ser para esse
+ * endpoint), a foto ou o texto são analisados automaticamente.
  */
 
-export interface VisionConfig {
-  /** Endpoint compatível com a API de chat da OpenAI. */
-  endpoint: string
-  apiKey: string
-  model: string
-}
+/** Mantido como `VisionConfig` porque é o nome usado no armazenamento local. */
+export type VisionConfig = AiConfig
 
 export interface FoodGuess {
   food: Food
@@ -33,19 +37,11 @@ export interface FoodGuess {
   synthetic: boolean
 }
 
-export class VisionNotConfiguredError extends Error {}
+export const VisionNotConfiguredError = AiNotConfiguredError
+export const VisionRequestError = AiRequestError
+export const visionIsConfigured = aiIsConfigured
 
-export class VisionRequestError extends Error {
-  /** Mensagem devolvida pelo serviço, quando existe — distingue chave errada de modelo errado. */
-  detail?: string
-
-  constructor(message: string, detail?: string) {
-    super(message)
-    this.detail = detail
-  }
-}
-
-const SYSTEM_PROMPT = [
+const PHOTO_PROMPT = [
   'You identify foods in a photo of a meal and estimate portion weights.',
   'Reply with JSON only, no prose, in this exact shape:',
   '{"items":[{"name":"...","grams":123,"confidence":0.0,"calories":0,"protein":0,"carbs":0,"fat":0}]}',
@@ -53,6 +49,21 @@ const SYSTEM_PROMPT = [
   'grams: estimated edible weight of that item in the photo.',
   'calories/protein/carbs/fat: per 100 g of that food.',
   'confidence: 0 to 1. Return an empty items array if the photo has no food.',
+].join(' ')
+
+const TEXT_PROMPT = [
+  'You break a written meal description into its individual foods and estimate portion weights.',
+  'The description may be in European Portuguese or English and may name a composite dish',
+  '(e.g. "bitoque", "francesinha", "lasanha") — in that case list the ingredients that make it up,',
+  'each as its own item, instead of a single line for the whole dish.',
+  'Reply with JSON only, no prose, in this exact shape:',
+  '{"items":[{"name":"...","grams":123,"confidence":0.0,"calories":0,"protein":0,"carbs":0,"fat":0}]}',
+  'name: the food in English, singular, generic (e.g. "grilled chicken breast").',
+  'grams: estimated edible weight actually eaten. Honour any quantity the user gives',
+  '("2 eggs", "a bowl of", "200 g"); otherwise assume one typical portion.',
+  'calories/protein/carbs/fat: per 100 g of that food.',
+  'confidence: 0 to 1, lower when the description is vague.',
+  'Return an empty items array if the text names no food.',
 ].join(' ')
 
 interface VisionItem {
@@ -107,81 +118,8 @@ function syntheticFood(item: VisionItem, label: string): Food | null {
   }
 }
 
-/** Extrai o objeto JSON de uma resposta que pode vir embrulhada em ```json. */
-function parseJsonPayload(text: string): { items?: VisionItem[] } {
-  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/)
-  const candidate = (fenced ? fenced[1] : text).trim()
-  const start = candidate.indexOf('{')
-  const end = candidate.lastIndexOf('}')
-  if (start < 0 || end <= start) throw new VisionRequestError('resposta sem JSON')
-  return JSON.parse(candidate.slice(start, end + 1))
-}
-
-export function visionIsConfigured(config: VisionConfig | null): config is VisionConfig {
-  return Boolean(config?.endpoint?.trim() && config?.apiKey?.trim() && config?.model?.trim())
-}
-
-export async function recogniseFood(
-  imageDataUrl: string,
-  config: VisionConfig | null,
-  signal?: AbortSignal,
-): Promise<FoodGuess[]> {
-  if (!visionIsConfigured(config)) throw new VisionNotConfiguredError()
-
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${config.apiKey.trim()}`,
-  }
-  // O OpenRouter pede estes cabeçalhos para atribuir o tráfego à aplicação.
-  if (config.endpoint.includes('openrouter.ai')) {
-    headers['HTTP-Referer'] = window.location.origin
-    headers['X-Title'] = 'Ascend'
-  }
-
-  const response = await fetch(config.endpoint.trim(), {
-    method: 'POST',
-    signal,
-    headers,
-    body: JSON.stringify({
-      model: config.model.trim(),
-      max_tokens: 700,
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        {
-          role: 'user',
-          content: [
-            { type: 'text', text: 'Identify the foods and estimate portions.' },
-            {
-              type: 'image_url',
-              image_url: { url: `data:image/jpeg;base64,${stripDataUrl(imageDataUrl)}` },
-            },
-          ],
-        },
-      ],
-    }),
-  })
-
-  if (!response.ok) {
-    // A mensagem do serviço é o que distingue "modelo errado" de "chave errada".
-    let detail: string | undefined
-    try {
-      const failure = (await response.json()) as { error?: { message?: string } | string }
-      detail = typeof failure.error === 'string' ? failure.error : failure.error?.message
-    } catch {
-      /* corpo não é JSON — fica só o código de estado */
-    }
-    throw new VisionRequestError(`HTTP ${response.status}`, detail)
-  }
-
-  const body = (await response.json()) as {
-    choices?: { message?: { content?: string } }[]
-  }
-  const text = body.choices?.[0]?.message?.content
-  if (!text) throw new VisionRequestError('resposta vazia')
-
-  const parsed = parseJsonPayload(text)
-  const items = Array.isArray(parsed.items) ? parsed.items : []
-
+/** Converte a resposta do modelo em estimativas utilizáveis pela UI. */
+function guessesFrom(items: VisionItem[], limit: number): FoodGuess[] {
   const guesses: FoodGuess[] = []
   for (const item of items) {
     const label = item.name?.trim()
@@ -207,7 +145,58 @@ export async function recogniseFood(
   }
 
   // Ordena pelas estimativas mais fiáveis primeiro.
-  return guesses.sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0)).slice(0, 6)
+  return guesses.sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0)).slice(0, limit)
+}
+
+export async function recogniseFood(
+  imageDataUrl: string,
+  config: VisionConfig | null,
+  signal?: AbortSignal,
+): Promise<FoodGuess[]> {
+  const parsed = await chatJson<{ items?: VisionItem[] }>(
+    [
+      { role: 'system', content: PHOTO_PROMPT },
+      {
+        role: 'user',
+        content: [
+          { type: 'text', text: 'Identify the foods and estimate portions.' },
+          {
+            type: 'image_url',
+            image_url: { url: `data:image/jpeg;base64,${stripDataUrl(imageDataUrl)}` },
+          },
+        ],
+      },
+    ],
+    config,
+    { maxTokens: 700, signal, temperature: 0.2 },
+  )
+
+  return guessesFrom(Array.isArray(parsed.items) ? parsed.items : [], 6)
+}
+
+/**
+ * Alternativa à fotografia: o utilizador escreve o que comeu e o serviço
+ * devolve os ingredientes com gramas e valores por 100 g. Tal como na
+ * fotografia, nada entra no diário sem confirmação.
+ */
+export async function recogniseFoodFromText(
+  description: string,
+  config: VisionConfig | null,
+  signal?: AbortSignal,
+): Promise<FoodGuess[]> {
+  const text = description.trim()
+  if (!text) return []
+
+  const parsed = await chatJson<{ items?: VisionItem[] }>(
+    [
+      { role: 'system', content: TEXT_PROMPT },
+      { role: 'user', content: `Meal description: ${text}` },
+    ],
+    config,
+    { maxTokens: 900, signal, temperature: 0.2 },
+  )
+
+  return guessesFrom(Array.isArray(parsed.items) ? parsed.items : [], 10)
 }
 
 /** Rótulo mostrado na UI para uma estimativa. */

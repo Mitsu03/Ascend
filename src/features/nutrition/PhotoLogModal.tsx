@@ -2,13 +2,14 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button, IconButton } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 import { Modal } from '@/components/ui/Modal'
-import { Badge, Field, Select, TextInput } from '@/components/ui/Misc'
+import { Badge, Disclaimer, Field, Select, TextArea, TextInput } from '@/components/ui/Misc'
 import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import {
   VisionNotConfiguredError,
   VisionRequestError,
   recogniseFood,
+  recogniseFoodFromText,
   visionIsConfigured,
 } from '@/services/foodVision'
 import {
@@ -26,20 +27,22 @@ import { useUserStore } from '@/store/userStore'
 import type { FoodGuess } from '@/services/foodVision'
 import type { Food, MealType } from '@/types'
 
-type Mode = 'foto' | 'codigo'
+type Mode = 'foto' | 'codigo' | 'texto'
 type Status = 'idle' | 'camera' | 'analysing' | 'results' | 'error'
 
 interface PhotoLogModalProps {
   open: boolean
   onClose: () => void
   mealType: MealType
+  /** Separador aberto de raiz — a nutrição entra pela fotografia ou pelo texto. */
+  initialMode?: Mode
 }
 
 interface Selection extends FoodGuess {
   chosen: boolean
 }
 
-export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
+export function PhotoLogModal({ open, onClose, mealType, initialMode = 'foto' }: PhotoLogModalProps) {
   const { t, n, loc } = useI18n()
   const vision = useSettingsStore((state) => state.vision)
   const targets = useUserStore((state) => state.targets)
@@ -56,6 +59,7 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
   const [selections, setSelections] = useState<Selection[]>([])
   const [selectedMeal, setSelectedMeal] = useState<MealType>(mealType)
   const [manualCode, setManualCode] = useState('')
+  const [description, setDescription] = useState('')
 
   const configured = visionIsConfigured(vision)
 
@@ -75,17 +79,34 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
     setThumbnail(null)
     setSelections([])
     setManualCode('')
+    setDescription('')
   }, [stopCamera])
+
+  /**
+   * Trocar de separador limpa o resultado, nunca o que o utilizador escreveu:
+   * perder 300 caracteres por um toque errado no separador não é recuperável.
+   */
+  const switchMode = useCallback(
+    (next: Mode) => {
+      stopCamera()
+      setMode(next)
+      setStatus('idle')
+      setError(null)
+      setSelections([])
+      setThumbnail(null)
+    },
+    [stopCamera],
+  )
 
   useEffect(() => {
     if (open) {
       setSelectedMeal(mealType)
-      setMode('foto')
+      setMode(initialMode)
       reset()
     } else {
       stopCamera()
     }
-  }, [open, mealType, reset, stopCamera])
+  }, [open, mealType, initialMode, reset, stopCamera])
 
   useEffect(() => stopCamera, [stopCamera])
 
@@ -161,6 +182,30 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
     }
   }
 
+  // ------------------------------------------------------------------- Texto
+
+  const analyseText = async () => {
+    if (!description.trim()) return
+    setStatus('analysing')
+    setError(null)
+    setSelections([])
+    try {
+      const guesses = await recogniseFoodFromText(description, vision)
+      setSelections(guesses.map((guess) => ({ ...guess, chosen: true })))
+      setStatus('results')
+      if (guesses.length === 0) setError(t.photoLog.noFoodInText)
+    } catch (cause) {
+      setStatus('error')
+      if (cause instanceof VisionNotConfiguredError) {
+        setError(t.photoLog.textNotConfigured)
+      } else if (cause instanceof VisionRequestError && cause.detail) {
+        setError(`${t.photoLog.textFailed} ${t.photoLog.visionErrorDetail(cause.detail)}`)
+      } else {
+        setError(t.photoLog.textFailed)
+      }
+    }
+  }
+
   // -------------------------------------------------------- Código de barras
 
   const handleBarcode = useCallback(
@@ -232,19 +277,22 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
   const chosenCount = selections.filter((item) => item.chosen).length
   const modes: { value: Mode; label: string; icon: string }[] = [
     { value: 'foto', label: t.photoLog.modePhoto, icon: 'Camera' },
+    { value: 'texto', label: t.photoLog.modeText, icon: 'Pencil' },
     { value: 'codigo', label: t.photoLog.modeBarcode, icon: 'ScanBarcode' },
   ]
+  const hint =
+    mode === 'texto' ? t.photoLog.textFooterHint : mode === 'codigo' ? t.photoLog.barcodeFooterHint : t.photoLog.footerHint
 
   return (
     <Modal
       open={open}
       onClose={onClose}
-      title={t.photoLog.title}
-      description={t.photoLog.description}
+      title={t.photoLog.titleGeneric}
+      description={t.photoLog.descriptionGeneric}
       footer={
         <div className="flex items-center justify-between gap-3">
           <span className="text-sm text-ink-muted">
-            {selections.length > 0 ? t.photoLog.selectedCount(chosenCount) : t.photoLog.footerHint}
+            {selections.length > 0 ? t.photoLog.selectedCount(chosenCount) : hint}
           </span>
           <div className="flex gap-2">
             <Button onClick={onClose}>{t.common.cancel}</Button>
@@ -263,10 +311,7 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
                 key={item.value}
                 type="button"
                 aria-pressed={mode === item.value}
-                onClick={() => {
-                  setMode(item.value)
-                  reset()
-                }}
+                onClick={() => switchMode(item.value)}
                 className={cn(
                   'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
                   mode === item.value
@@ -304,13 +349,45 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
           </p>
         )}
 
+        {mode === 'texto' && !configured && (
+          <p className="rounded-xl border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-muted">
+            {t.photoLog.textNotConfigured}
+          </p>
+        )}
+
+        {mode === 'texto' && (
+          <div className="space-y-3">
+            <Field label={t.photoLog.textLabel} hint={t.photoLog.textHint}>
+              {(id) => (
+                <TextArea
+                  id={id}
+                  value={description}
+                  rows={3}
+                  maxLength={400}
+                  disabled={status === 'analysing'}
+                  placeholder={t.photoLog.textPlaceholder}
+                  onChange={(event) => setDescription(event.target.value)}
+                />
+              )}
+            </Field>
+            <Button
+              variant="primary"
+              icon="Sparkles"
+              onClick={() => void analyseText()}
+              disabled={!configured || !description.trim() || status === 'analysing'}
+            >
+              {selections.length > 0 ? t.photoLog.textAnalyseAgain : t.photoLog.textAnalyse}
+            </Button>
+          </div>
+        )}
+
         {mode === 'codigo' && !barcodeScanningIsSupported() && (
           <p className="rounded-xl border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-muted">
             {t.photoLog.barcodeUnsupported}
           </p>
         )}
 
-        {status === 'camera' && (
+        {mode !== 'texto' && status === 'camera' && (
           <div className="space-y-3">
             <div className="relative overflow-hidden rounded-2xl border border-void-600 bg-void-950">
               <video ref={videoRef} playsInline muted className="aspect-[4/3] w-full object-cover" />
@@ -331,7 +408,7 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
           </div>
         )}
 
-        {status === 'idle' && (
+        {mode !== 'texto' && status === 'idle' && (
           <div className="flex flex-wrap gap-2">
             {cameraIsSupported() && (
               <Button variant="primary" icon="Camera" onClick={startCamera}>
@@ -373,14 +450,21 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
         )}
 
         {status === 'analysing' && (
-          <div className="flex items-center gap-3 rounded-xl border border-ember/35 bg-ember/5 p-4">
+          <div
+            role="status"
+            aria-live="polite"
+            className="flex items-center gap-3 rounded-xl border border-ember/35 bg-ember/5 p-4"
+          >
             <Icon name="Sparkles" size={18} className="animate-pulse-glow text-ember" />
             <p className="text-sm text-ink">{t.photoLog.analysing}</p>
           </div>
         )}
 
         {error && (
-          <p className="flex items-start gap-2 rounded-xl border border-warn/40 bg-warn/5 p-3 text-sm text-ink">
+          <p
+            role="alert"
+            className="flex items-start gap-2 rounded-xl border border-warn/40 bg-warn/5 p-3 text-sm text-ink"
+          >
             <Icon name="AlertTriangle" size={16} className="mt-0.5 shrink-0 text-warn" />
             {error}
           </p>
@@ -451,10 +535,7 @@ export function PhotoLogModal({ open, onClose, mealType }: PhotoLogModalProps) {
           </ul>
         )}
 
-        <p className="flex items-start gap-2 rounded-xl border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-faint">
-          <Icon name="Info" size={14} className="mt-0.5 shrink-0" />
-          {t.photoLog.disclaimer}
-        </p>
+        <Disclaimer>{t.photoLog.disclaimer}</Disclaimer>
       </div>
     </Modal>
   )
