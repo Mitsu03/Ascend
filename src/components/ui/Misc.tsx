@@ -1,5 +1,12 @@
-import type { InputHTMLAttributes, KeyboardEvent, ReactNode, SelectHTMLAttributes } from 'react'
+import type {
+  InputHTMLAttributes,
+  KeyboardEvent,
+  ReactNode,
+  SelectHTMLAttributes,
+  TextareaHTMLAttributes,
+} from 'react'
 import { useId, useRef } from 'react'
+
 import { cn } from '@/lib/cn'
 import { Icon } from '@/components/ui/Icon'
 
@@ -108,6 +115,10 @@ const CONTROL_CLASS =
 
 export function TextInput({ className, ...rest }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(CONTROL_CLASS, className)} {...rest} />
+}
+
+export function TextArea({ className, ...rest }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return <textarea className={cn(CONTROL_CLASS, 'resize-y leading-relaxed', className)} {...rest} />
 }
 
 export function Select({ className, children, ...rest }: SelectHTMLAttributes<HTMLSelectElement>) {

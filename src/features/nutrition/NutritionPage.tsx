@@ -410,6 +410,7 @@ export function NutritionPage() {
 
   const [adding, setAdding] = useState<MealType | null>(null)
   const [photoLogging, setPhotoLogging] = useState<MealType | null>(null)
+  const [logMode, setLogMode] = useState<'foto' | 'texto'>('foto')
 
   const date = today()
   const todayEntries = useMemo(() => entriesForDate(date), [entriesForDate, date, entries])
@@ -545,7 +546,10 @@ export function NutritionPage() {
           */}
           <button
             type="button"
-            onClick={() => setPhotoLogging('almoco')}
+            onClick={() => {
+              setLogMode('foto')
+              setPhotoLogging('almoco')
+            }}
             className="mt-[11px] flex h-[60px] w-full items-center gap-[11px] rounded-2xl border border-dashed border-void-600 px-3.5 text-left active:opacity-90"
           >
             <span
@@ -557,6 +561,26 @@ export function NutritionPage() {
             <span className="min-w-0">
               <span className="block text-[12.5px] font-semibold text-ink-soft">{t.nutrition.photoRow}</span>
               <span className="mt-0.5 block text-[10.5px] text-ink-muted">{t.nutrition.photoRowHint}</span>
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setLogMode('texto')
+              setPhotoLogging('almoco')
+            }}
+            className="mt-[9px] flex h-[60px] w-full items-center gap-[11px] rounded-2xl border border-dashed border-void-600 px-3.5 text-left active:opacity-90"
+          >
+            <span
+              className="flex h-[26px] w-[34px] shrink-0 items-center justify-center rounded-md border-[1.5px] border-void-500"
+              aria-hidden="true"
+            >
+              <Icon name="Pencil" size={13} className="text-void-500" />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-[12.5px] font-semibold text-ink-soft">{t.nutrition.textRow}</span>
+              <span className="mt-0.5 block text-[10.5px] text-ink-muted">{t.nutrition.textRowHint}</span>
             </span>
           </button>
 
@@ -656,6 +680,7 @@ export function NutritionPage() {
       <PhotoLogModal
         open={photoLogging !== null}
         mealType={photoLogging ?? 'almoco'}
+        initialMode={logMode}
         onClose={() => setPhotoLogging(null)}
       />
     </>

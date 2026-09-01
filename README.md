@@ -16,19 +16,26 @@ Interface em **português de Portugal**, com **inglês** disponível nas defini�
 | --- | --- |
 | **Academia Shin'ō** (onboarding) | Wizard de 6 passos (nome, objetivo, como treinas, **divisão do Gotei**, dados corporais, juramento). Calcula calorias e macros e gera o plano semanal e as ordens. |
 | **Quartel da Divisão** (dashboard) | Saudação personalizada, selo da divisão, cartão de patente com barra de reiatsu animada, kan, dias de serviço, calorias vs meta, ordens do dia, próximo treino e uma frase narrativa adaptada ao estado do dia. |
-| **Dojo** (treino) | Calendário semanal, detalhe do treino com séries/reps/descanso/dificuldade, sessão guiada com cronómetro, checkboxes por série, temporizador de descanso e barra de progresso. Ecrã de celebração no fim com reiatsu, kan, artes de combate e recompensa aleatória — e a máscara de Hollow quando sobes de patente. Criador de treinos personalizados. |
-| **Rações** (nutrição) | Meta diária de calorias, anéis e barras de macros, registo rápido a partir de um catálogo de ~60 alimentos comuns em Portugal, registo por fotografia e código de barras, contador de água e sugestões de refeições com base no que falta para a meta. |
+| **Dojo** (treino) | Calendário semanal, detalhe do treino com séries/reps/descanso/dificuldade, sessão guiada com cronómetro, checkboxes por série, temporizador de descanso e barra de progresso. Ecrã de celebração no fim com reiatsu, kan, artes de combate e recompensa aleatória — e a máscara de Hollow quando sobes de patente. Criador de treinos personalizados e **gerador de planos por IA** a partir de um pedido escrito. |
+| **Rações** (nutrição) | Meta diária de calorias, anéis e barras de macros, registo rápido a partir de um catálogo de ~60 alimentos comuns em Portugal, registo **por escrito**, por fotografia e por código de barras, contador de água e sugestões de refeições com base no que falta para a meta. |
 | **Ordens da Divisão** | 3 ordens diárias, 2 semanais e uma Ordem do Capitão. Recompensas visíveis antes de cumprir (reiatsu, kan, cosméticos). Cada ordem pode ser substituída uma vez por período. |
 | **Ficha de Shinigami** (perfil) | Retrato em figura desenhada ou brasão de esquadrão, máscara de Hollow por patente, patente e divisão, as quatro artes de combate (Zanjutsu, Hohō, Kidō, Reiryoku), histórico de peso e medidas, gráficos de calorias/treinos/reiatsu, 10 conquistas e arsenal cosmético. |
 
-### Registo por fotografia e código de barras
+### O que a IA faz (opcional)
 
-Na página de Nutrição, o botão **Registar por fotografia** abre um modo de captura com dois separadores:
+A app funciona inteiramente offline. Ligar um serviço de IA é opcional e desbloqueia três coisas — o **plano de treino por IA** no Dojo, e no registo de refeições os separadores **Descrever** e **Fotografia**. A mesma chave serve as três.
 
+#### Registo de refeições
+
+Na página de Nutrição, os botões **Registar por fotografia** e **Descrever refeição** abrem o mesmo painel, com três separadores:
+
+- **Descrever** — escreves o que comeste em português corrente ("bitoque com arroz, batatas fritas e um ovo estrelado") e o serviço devolve os ingredientes separados, com as gramas estimadas e os valores por 100 g. Pratos compostos são decompostos em ingredientes em vez de ficarem numa linha só. Precisa do serviço de IA ligado.
 - **Código de barras** — lê o código da embalagem com a câmara (via `BarcodeDetector`, disponível no Chrome, Edge e Android; nos restantes navegadores escreve-se o código à mão) e consulta o [Open Food Facts](https://world.openfoodfacts.org/), uma base de dados pública e gratuita. Os valores nutricionais registados são os reais do produto. É a única funcionalidade da app que precisa de ligação à internet.
 - **Fotografia** — tira uma foto ao prato com a câmara ou escolhe uma imagem. A miniatura fica anexada à refeição no diário.
 
-O **reconhecimento automático do prato está desligado por omissão** — não vem com nenhuma chave embutida, porque numa PWA tudo o que está no código é público. Ligas o teu próprio serviço em **Shinigami › Definições › Reconhecimento por fotografia**, e há opções **gratuitas**:
+#### A chave é tua
+
+A IA **está desligada por omissão** — a app não vem com nenhuma chave embutida, porque numa PWA tudo o que está no código é público. Ligas o teu próprio serviço em **Shinigami › Definições › Assistente de IA**, e há opções **gratuitas**:
 
 | Serviço | Custo | Onde obter a chave |
 | --- | --- | --- |
@@ -41,7 +48,19 @@ Os três primeiros são gratuitos e todos permitem chamadas diretas a partir do 
 
 **Sobre a chave:** fica guardada neste browser e é legível por quem tenha acesso ao dispositivo. Por isso a recomendação é um serviço de nível gratuito sem cartão associado — no pior caso gasta-se a quota, não dinheiro.
 
-A app envia a foto, recebe os alimentos e as porções estimadas, e mostra-os para confirmação com as gramas editáveis. As estimativas nunca entram no diário sem passares os olhos por elas. O código está isolado em `src/services/foodVision.ts` e os serviços em `src/services/visionProviders.ts`.
+A app envia a foto ou a descrição, recebe os alimentos e as porções estimadas, e mostra-os para confirmação com as gramas editáveis. As estimativas nunca entram no diário sem passares os olhos por elas. O transporte está isolado em `src/services/aiClient.ts`, os prompts de alimentos em `src/services/foodVision.ts` e os serviços em `src/services/visionProviders.ts`.
+
+#### Plano de treino por IA
+
+No Dojo, **Plano por IA** abre um pedido em texto livre — por exemplo *"plano semanal, 3× por semana, para correr 5 km daqui a um mês"*. O fluxo tem três passos:
+
+1. **Pedido.** Escreves o que queres, ou escolhes um dos exemplos.
+2. **Perguntas.** Se faltar informação que mude o plano (dias disponíveis, ritmo atual, lesões), a IA faz até quatro perguntas, cada uma com sugestões clicáveis e espaço para resposta livre. Quando o pedido já é claro, este passo é saltado.
+3. **Pré-visualização.** Vês o plano proposto dia a dia, com séries, repetições e duração estimada, antes de decidir. Podes gerar outra vez, juntar os treinos ao plano que já tens ou substituí-lo por inteiro.
+
+A IA escolhe de preferência exercícios do catálogo local, mas pode criar os que faltarem — o catálogo não tem corrida no exterior nem séries de intervalos, que é precisamente o que um plano de 5 km pede. Esses exercícios ficam guardados no dispositivo (`src/store/exerciseStore.ts`) com o prefixo `ai:`, e nunca substituem um exercício do catálogo. A lógica está em `src/services/aiPlanner.ts`.
+
+> O plano é uma sugestão gerada automaticamente, não um programa supervisionado. Revê-o antes de guardar.
 
 ### O Gotei 13
 
@@ -230,7 +249,7 @@ src/
 │  ├─ start/                # ecrã inicial (demo vs jornada)
 │  ├─ onboarding/           # wizard de 6 passos, com a escolha da divisão
 │  ├─ dashboard/            # Quartel da Divisão
-│  ├─ workout/              # plano, sessão, celebração, criador de treinos
+│  ├─ workout/              # plano, sessão, celebração, criador de treinos, plano por IA
 │  ├─ nutrition/            # metas, registo, sugestões
 │  ├─ quests/               # ordens diárias, semanais e do capitão
 │  └─ profile/              # avatar, atributos, gráficos, conquistas, inventário
@@ -239,7 +258,9 @@ src/
 │  ├─ storage.ts            # adaptador de persistência (ver abaixo)
 │  ├─ photos.ts             # câmara, captura e compressão de imagens
 │  ├─ openFoodFacts.ts      # consulta de produtos por código de barras
-│  ├─ foodVision.ts         # reconhecimento por fotografia (opcional)
+│  ├─ aiClient.ts           # transporte partilhado para o serviço de IA (opcional)
+│  ├─ foodVision.ts         # alimentos a partir de foto ou de texto (opcional)
+│  ├─ aiPlanner.ts          # planos de treino a partir de um pedido escrito (opcional)
 │  ├─ calculations.ts       # Mifflin-St Jeor, macros, curva de reiatsu, patentes, máscara
 │  ├─ planGenerator.ts      # geração do plano semanal
 │  ├─ questGenerator.ts     # geração e substituição de ordens
@@ -247,7 +268,7 @@ src/
 │  ├─ narrative.ts          # frases do dia
 │  ├─ session.ts            # orquestração entre stores (arranque, reset, demo)
 │  └─ dates.ts              # utilitários de data em pt-PT
-├─ store/                   # zustand: user, game, workout, nutrition, quest, body, toast
+├─ store/                   # zustand: user, game, workout, exercise, nutrition, quest, body, toast
 └─ types/                   # modelo de domínio
 ```
 

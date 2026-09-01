@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { EXERCISE_BY_ID } from '@/data/exercises'
 import { ScreenBackdrop } from '@/components/layout/ScreenBackdrop'
 import { ScreenHeader, ScreenTitle } from '@/components/layout/ScreenHeader'
 import { Button, IconButton } from '@/components/ui/Button'
@@ -8,12 +7,14 @@ import { Card, CardBody, CardHeader } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
 import { Badge, EmptyState } from '@/components/ui/Misc'
 import { ConfirmDialog } from '@/components/ui/Modal'
+import { AiPlanModal } from '@/features/workout/AiPlanModal'
 import { CustomWorkoutModal } from '@/features/workout/CustomWorkoutModal'
 import { ExerciseDemo } from '@/features/workout/ExerciseDemo'
 import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { dayOfWeek, formatShortDate, today, weekDates } from '@/services/dates'
 import { estimateDuration, totalSets } from '@/services/planGenerator'
+import { useExerciseResolver } from '@/store/exerciseStore'
 import { useWorkoutStore } from '@/store/workoutStore'
 import type { WorkoutDay } from '@/types'
 
@@ -167,6 +168,7 @@ function WorkoutCard({ workout }: { workout: WorkoutDay }) {
 /** Lista de exercícios do treino. Abre para mostrar descrição e demonstração. */
 function ExerciseList({ workout }: { workout: WorkoutDay }) {
   const { t, loc } = useI18n()
+  const resolveExercise = useExerciseResolver()
   const [expanded, setExpanded] = useState<string | null>(null)
 
   return (
@@ -174,7 +176,7 @@ function ExerciseList({ workout }: { workout: WorkoutDay }) {
       <p className="mt-5 text-[10.5px] font-semibold tracking-[0.16em] text-ink-muted">{t.workout.exercisesHeading}</p>
       <ul className="mt-2.5 flex flex-col gap-[7px]">
         {workout.exercises.map((item) => {
-          const exercise = EXERCISE_BY_ID[item.exerciseId]
+          const exercise = resolveExercise(item.exerciseId)
           const open = expanded === item.exerciseId
 
           return (
@@ -277,6 +279,7 @@ export function WorkoutPage() {
   const plan = useWorkoutStore((state) => state.plan)
   const [selectedDay, setSelectedDay] = useState(dayOfWeek(today()))
   const [creating, setCreating] = useState(false)
+  const [generating, setGenerating] = useState(false)
 
   const workouts = useMemo(() => plan.filter((day) => day.dayOfWeek === selectedDay), [plan, selectedDay])
 
@@ -294,9 +297,14 @@ export function WorkoutPage() {
           <h1 className="slash-divider font-display text-3xl font-bold text-ink">{t.workout.title}</h1>
           <p className="mt-3.5 text-sm text-ink-muted">{t.workout.planCount(plan.length)}</p>
         </div>
-        <Button variant="secondary" icon="Hammer" onClick={() => setCreating(true)}>
-          {t.workout.createWorkout}
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="secondary" icon="Hammer" onClick={() => setCreating(true)}>
+            {t.workout.createWorkout}
+          </Button>
+          <Button variant="primary" icon="Sparkles" onClick={() => setGenerating(true)}>
+            {t.aiPlan.title}
+          </Button>
+        </div>
       </div>
 
       <div className="px-5 pt-4 md:mt-6 md:px-0 md:pt-0">
@@ -319,23 +327,34 @@ export function WorkoutPage() {
               title={t.workout.restDayTitle}
               message={t.workout.restDayText}
               action={
-                <Button variant="primary" icon="Hammer" onClick={() => setCreating(true)}>
-                  {t.workout.createForDay}
-                </Button>
+                <div className="flex flex-wrap justify-center gap-2">
+                  <Button variant="secondary" icon="Hammer" onClick={() => setCreating(true)}>
+                    {t.workout.createForDay}
+                  </Button>
+                  <Button variant="primary" icon="Sparkles" onClick={() => setGenerating(true)}>
+                    {t.aiPlan.title}
+                  </Button>
+                </div>
               }
             />
           </Card>
         )}
 
         {/* Criar treino não cabe no protótipo, mas tem de haver forma em mobile. */}
-        <Button variant="secondary" icon="Hammer" fullWidth className="mt-5 md:hidden" onClick={() => setCreating(true)}>
-          {t.workout.createWorkout}
-        </Button>
+        <div className="mt-5 flex flex-col gap-2 md:hidden">
+          <Button variant="primary" icon="Sparkles" fullWidth onClick={() => setGenerating(true)}>
+            {t.aiPlan.title}
+          </Button>
+          <Button variant="secondary" icon="Hammer" fullWidth onClick={() => setCreating(true)}>
+            {t.workout.createWorkout}
+          </Button>
+        </div>
 
         <HistoryCard />
       </div>
 
       <CustomWorkoutModal open={creating} onClose={() => setCreating(false)} />
+      <AiPlanModal open={generating} onClose={() => setGenerating(false)} />
     </>
   )
 }

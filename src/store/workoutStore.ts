@@ -26,6 +26,8 @@ interface WorkoutStore {
   lastResult: SessionResult | null
   setPlan: (plan: WorkoutDay[]) => void
   addCustomWorkout: (workout: WorkoutDay) => void
+  /** Aplica um plano gerado por IA, substituindo o atual ou juntando-se a ele. */
+  applyGeneratedPlan: (days: WorkoutDay[], options?: { replace?: boolean }) => void
   updateWorkout: (workout: WorkoutDay) => void
   removeWorkout: (id: string) => void
   startSession: (workoutDayId: string) => void
@@ -60,6 +62,14 @@ export const useWorkoutStore = create<WorkoutStore>()(
         set((state) => ({ plan: [...state.plan, workout] }))
         const game = useGameStore.getState()
         game.incrementCounter('customWorkouts')
+        game.checkAchievements()
+      },
+
+      applyGeneratedPlan: (days, { replace = false } = {}) => {
+        if (days.length === 0) return
+        set((state) => ({ plan: replace ? days : [...state.plan, ...days] }))
+        const game = useGameStore.getState()
+        game.incrementCounter('customWorkouts', days.length)
         game.checkAchievements()
       },
 
