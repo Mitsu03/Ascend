@@ -175,6 +175,12 @@ export const en: Dictionary = {
     aura: 'Reiatsu',
   },
 
+  cosmeticSlotNames: {
+    frame: 'Portrait ring',
+    title: 'Title',
+    aura: 'Reiatsu',
+  },
+
   rarities: {
     comum: 'Hollow',
     raro: 'Adjuchas',
@@ -422,15 +428,16 @@ export const en: Dictionary = {
   },
 
   celebration: {
-    title: 'Session complete',
-    duration: 'Duration',
-    sets: 'Sets',
-    xpEarned: 'Reiatsu earned',
-    perfect: 'All sets completed · bonus included',
-    leveledUp: 'You gained a rank!',
-    surpriseReward: (name: string) => `Surprise reward: ${name}`,
-    noReward: 'No cosmetic reward this time — you got 15 extra kan instead.',
-    backToBase: 'Back to the barracks',
+    doneLabel: 'SESSION COMPLETE',
+    rankUpLabel: 'RANK GAINED',
+    doneLine: 'Reiatsu settles while you rest. Come back tomorrow and the division notices.',
+    rankUpLine: 'The mask begins to form over your face. The division already calls you by your rank.',
+    setsInTime: (done: number, total: number, time: string) => `${done} of ${total} sets in ${time}`,
+    reiatsu: 'REIATSU',
+    kanLabel: 'KAN',
+    arts: 'ARTS',
+    cosmeticUnlocked: (slot: string) => `${slot} · unlocked`,
+    backToBase: 'BACK TO THE BARRACKS',
   },
 
   builder: {
@@ -505,7 +512,10 @@ export const en: Dictionary = {
   nutrition: {
     // ── Rations screen (prototype) ────────────────────────────────────────
     todayLabel: 'Rations · today',
-    photoOrCode: 'Photo · code',
+    photoRow: 'Photograph a meal',
+    photoRowHint: 'The estimate comes back for you to confirm',
+    textRow: 'Describe a meal',
+    textRowHint: 'You write the dish, the AI splits the ingredients',
     proteinBonus: (xp: number) => `Protein +${xp}`,
     remainingHeading: 'LEFT TO GOAL',
     overHeading: 'OVER GOAL',
