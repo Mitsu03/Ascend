@@ -1,30 +1,37 @@
 import { FOODS, normalize } from '@/data/foods'
-import { localized } from '@/i18n/types'
-import { stripDataUrl } from '@/services/photos'
+import { LANGUAGE_NAMES, localized } from '@/i18n/types'
 import {
   AiNotConfiguredError,
   AiRequestError,
   aiIsConfigured,
   chatJson,
 } from '@/services/aiClient'
+import { stripDataUrl } from '@/services/photos'
 import type { AiConfig } from '@/services/aiClient'
-import type { Language } from '@/i18n/types'
+import type { Language, Localized } from '@/i18n/types'
 import type { Food } from '@/types'
 
 /**
- * Reconhecimento de alimentos a partir de uma fotografia ou de uma descrição
- * escrita.
+ * Reconhecimento de alimentos a partir de uma fotografia.
  *
- * O MVP não inclui nenhum modelo — não existe uma opção gratuita e fiável que
- * corra offline no browser. Em vez disso a app expõe uma camada de provider:
- * sem configuração, a foto fica anexada à refeição e o utilizador escolhe os
- * alimentos à mão; com um endpoint configurado nas Definições (a chave é do
- * próprio utilizador e nunca sai deste dispositivo a não ser para esse
- * endpoint), a foto ou o texto são analisados automaticamente.
+ * O MVP não inclui nenhum modelo de visão — não existe uma opção gratuita e
+ * fiável que corra offline no browser. Em vez disso a app expõe uma camada de
+ * provider: sem configuração, a foto fica anexada à refeição e o utilizador
+ * escolhe os alimentos à mão; com um endpoint de visão configurado nas
+ * Definições (a chave é do próprio utilizador e nunca sai deste dispositivo
+ * a não ser para esse endpoint), a foto é analisada automaticamente.
  */
 
-/** Mantido como `VisionConfig` porque é o nome usado no armazenamento local. */
+/**
+ * O transporte — cabeçalhos, tempo limite, erros e a queda para o modelo
+ * seguinte — vive no `aiClient`, partilhado com o gerador de planos de treino.
+ * Aqui ficam só os prompts e a normalização dos alimentos. Os nomes antigos
+ * mantêm-se como alias porque as Definições e o perfil os importam assim.
+ */
 export type VisionConfig = AiConfig
+export const VisionNotConfiguredError = AiNotConfiguredError
+export const VisionRequestError = AiRequestError
+export const visionIsConfigured = aiIsConfigured
 
 export interface FoodGuess {
   food: Food
@@ -37,37 +44,54 @@ export interface FoodGuess {
   synthetic: boolean
 }
 
-export const VisionNotConfiguredError = AiNotConfiguredError
-export const VisionRequestError = AiRequestError
-export const visionIsConfigured = aiIsConfigured
+/**
+ * O nome em inglês é o que casa com o catálogo (`matchCatalogue`), por isso
+ * continua a ser pedido sempre; o `localName` é o que a UI mostra quando o
+ * alimento não existe no catálogo — sem ele a app em português acabava com
+ * uma lista de ingredientes em inglês.
+ */
+function shapeRules(language: Language): string[] {
+  return [
+    'Reply with JSON only, no prose, in this exact shape:',
+    '{"items":[{"name":"...","localName":"...","grams":123,"confidence":0.0,"calories":0,"protein":0,"carbs":0,"fat":0}]}',
+    'name: the food in English, singular, generic (e.g. "grilled chicken breast").',
+    `localName: the same food written in ${LANGUAGE_NAMES[language]}, singular, generic.`,
+    language === 'en' ? 'localName is identical to name.' : 'localName must never be in English.',
+    'calories/protein/carbs/fat: per 100 g of that food.',
+  ]
+}
 
-const PHOTO_PROMPT = [
-  'You identify foods in a photo of a meal and estimate portion weights.',
-  'Reply with JSON only, no prose, in this exact shape:',
-  '{"items":[{"name":"...","grams":123,"confidence":0.0,"calories":0,"protein":0,"carbs":0,"fat":0}]}',
-  'name: the food in English, singular, generic (e.g. "grilled chicken breast").',
-  'grams: estimated edible weight of that item in the photo.',
-  'calories/protein/carbs/fat: per 100 g of that food.',
-  'confidence: 0 to 1. Return an empty items array if the photo has no food.',
-].join(' ')
+function photoPrompt(language: Language): string {
+  return [
+    'You identify foods in a photo of a meal and estimate portion weights.',
+    ...shapeRules(language),
+    'grams: estimated edible weight of that item in the photo.',
+    'confidence: 0 to 1. Return an empty items array if the photo has no food.',
+  ].join(' ')
+}
 
-const TEXT_PROMPT = [
-  'You break a written meal description into its individual foods and estimate portion weights.',
-  'The description may be in European Portuguese or English and may name a composite dish',
-  '(e.g. "bitoque", "francesinha", "lasanha") — in that case list the ingredients that make it up,',
-  'each as its own item, instead of a single line for the whole dish.',
-  'Reply with JSON only, no prose, in this exact shape:',
-  '{"items":[{"name":"...","grams":123,"confidence":0.0,"calories":0,"protein":0,"carbs":0,"fat":0}]}',
-  'name: the food in English, singular, generic (e.g. "grilled chicken breast").',
-  'grams: estimated edible weight actually eaten. Honour any quantity the user gives',
-  '("2 eggs", "a bowl of", "200 g"); otherwise assume one typical portion.',
-  'calories/protein/carbs/fat: per 100 g of that food.',
-  'confidence: 0 to 1, lower when the description is vague.',
-  'Return an empty items array if the text names no food.',
-].join(' ')
+/**
+ * Um prato composto escrito à mão — "bitoque", "francesinha" — tem de sair
+ * decomposto em ingredientes: registado numa linha só, não há forma de o
+ * utilizador corrigir a quantidade da carne sem mexer no arroz.
+ */
+function textPrompt(language: Language): string {
+  return [
+    'You break a written meal description into its individual foods and estimate portion weights.',
+    `The description may be in ${LANGUAGE_NAMES[language]} or English and may name a composite dish`,
+    '(e.g. "bitoque", "francesinha", "lasanha") — in that case list the ingredients that make it up,',
+    'each as its own item, instead of a single line for the whole dish.',
+    ...shapeRules(language),
+    'grams: estimated edible weight actually eaten. Honour any quantity the user gives',
+    '("2 eggs", "a bowl of", "200 g"); otherwise assume one typical portion.',
+    'confidence: 0 to 1, lower when the description is vague.',
+    'Return an empty items array if the text names no food.',
+  ].join(' ')
+}
 
 interface VisionItem {
   name?: string
+  localName?: string
   grams?: number
   confidence?: number
   calories?: number
@@ -89,7 +113,20 @@ function matchCatalogue(label: string): Food | undefined {
   )
 }
 
-function syntheticFood(item: VisionItem, label: string): Food | null {
+/**
+ * O nome do alimento nas duas línguas: o inglês vem do modelo tal como o
+ * catálogo o escreveria, a língua ativa recebe o `localName` quando existe.
+ */
+function syntheticName(label: string, local: string, language: Language): Localized {
+  return language === 'pt' ? localized(local, label) : localized(label, local)
+}
+
+function syntheticFood(
+  item: VisionItem,
+  label: string,
+  local: string,
+  language: Language,
+): Food | null {
   const calories = item.calories
   const protein = item.protein
   const carbs = item.carbs
@@ -104,7 +141,7 @@ function syntheticFood(item: VisionItem, label: string): Food | null {
   }
   return {
     id: `vision:${normalize(label).replace(/\s+/g, '-')}`,
-    name: localized(label, label),
+    name: syntheticName(label, local, language),
     category: 'refeicao',
     per100g: {
       calories: Math.max(0, Math.round(calories)),
@@ -118,29 +155,33 @@ function syntheticFood(item: VisionItem, label: string): Food | null {
   }
 }
 
-/** Converte a resposta do modelo em estimativas utilizáveis pela UI. */
-function guessesFrom(items: VisionItem[], limit: number): FoodGuess[] {
+
+/** Converte a resposta do modelo em estimativas prontas para a UI. */
+function guessesFrom(items: VisionItem[], language: Language, limit: number): FoodGuess[] {
   const guesses: FoodGuess[] = []
   for (const item of items) {
-    const label = item.name?.trim()
+    // Modelos que ignoram o `name` em inglês devolvem só o nome na língua
+    // ativa; nesse caso ele serve para ambas as coisas.
+    const label = item.name?.trim() || item.localName?.trim()
     if (!label) continue
+    const local = item.localName?.trim() || label
     const grams = typeof item.grams === 'number' && item.grams > 0 ? Math.round(item.grams) : 100
 
-    const catalogue = matchCatalogue(label)
+    const catalogue = matchCatalogue(label) ?? matchCatalogue(local)
     if (catalogue) {
       guesses.push({
         food: catalogue,
         grams,
         confidence: item.confidence,
-        rawLabel: label,
+        rawLabel: local,
         synthetic: false,
       })
       continue
     }
 
-    const synthetic = syntheticFood(item, label)
+    const synthetic = syntheticFood(item, label, local, language)
     if (synthetic) {
-      guesses.push({ food: synthetic, grams, confidence: item.confidence, rawLabel: label, synthetic: true })
+      guesses.push({ food: synthetic, grams, confidence: item.confidence, rawLabel: local, synthetic: true })
     }
   }
 
@@ -148,14 +189,16 @@ function guessesFrom(items: VisionItem[], limit: number): FoodGuess[] {
   return guesses.sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0)).slice(0, limit)
 }
 
+/** Reconhece os alimentos de uma fotografia do prato. */
 export async function recogniseFood(
   imageDataUrl: string,
   config: VisionConfig | null,
+  language: Language,
   signal?: AbortSignal,
 ): Promise<FoodGuess[]> {
   const parsed = await chatJson<{ items?: VisionItem[] }>(
     [
-      { role: 'system', content: PHOTO_PROMPT },
+      { role: 'system', content: photoPrompt(language) },
       {
         role: 'user',
         content: [
@@ -168,10 +211,10 @@ export async function recogniseFood(
       },
     ],
     config,
-    { maxTokens: 700, signal, temperature: 0.2 },
+    { signal, temperature: 0.2 },
   )
 
-  return guessesFrom(Array.isArray(parsed.items) ? parsed.items : [], 6)
+  return guessesFrom(Array.isArray(parsed.items) ? parsed.items : [], language, 6)
 }
 
 /**
@@ -182,6 +225,7 @@ export async function recogniseFood(
 export async function recogniseFoodFromText(
   description: string,
   config: VisionConfig | null,
+  language: Language,
   signal?: AbortSignal,
 ): Promise<FoodGuess[]> {
   const text = description.trim()
@@ -189,14 +233,14 @@ export async function recogniseFoodFromText(
 
   const parsed = await chatJson<{ items?: VisionItem[] }>(
     [
-      { role: 'system', content: TEXT_PROMPT },
+      { role: 'system', content: textPrompt(language) },
       { role: 'user', content: `Meal description: ${text}` },
     ],
     config,
-    { maxTokens: 900, signal, temperature: 0.2 },
+    { signal, temperature: 0.2 },
   )
 
-  return guessesFrom(Array.isArray(parsed.items) ? parsed.items : [], 10)
+  return guessesFrom(Array.isArray(parsed.items) ? parsed.items : [], language, 10)
 }
 
 /** Rótulo mostrado na UI para uma estimativa. */

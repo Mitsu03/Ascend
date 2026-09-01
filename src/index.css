@@ -13,6 +13,7 @@
   --color-void-950: #050507;
   --color-void-900: #0a0a0e;
   --color-void-850: #101017;
+  --color-void-825: #12121a;
   --color-void-800: #16161f;
   --color-void-700: #1f1f2b;
   --color-void-600: #2c2c3b;
@@ -33,8 +34,15 @@
 
   /* Texto e estado */
   --color-ink: #f2f3f7;
+  --color-ink-soft: #c9cbd8;
   --color-ink-muted: #a2a4b4;
-  --color-ink-faint: #6f7183;
+  /*
+   * O tom `faint` era #6f7183: 4,4:1 sobre o preto do fundo e 4,0:1 sobre o
+   * cinzento dos cartões — abaixo dos 4,5:1 que a WCAG AA pede para corpo de
+   * texto, e é justamente em corpo de texto pequeno (notas, dicas, legendas)
+   * que ele se usa. Este está em 5,1:1 sobre o fundo e 4,6:1 sobre os cartões.
+   */
+  --color-ink-faint: #7e8093;
   --color-good: #3ddc97;
   --color-warn: #ff9f1c;
   --color-bad: #ff5468;
@@ -42,6 +50,8 @@
   /* Tipografia */
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Rajdhani', 'Inter', system-ui, sans-serif;
+  /* Kanji decorativo de fundo — nunca usado para texto que se leia. */
+  --font-kanji: 'Zen Old Mincho', 'Hiragino Mincho ProN', serif;
 
   /* Animações */
   --animate-float: float 6s ease-in-out infinite;
@@ -49,11 +59,32 @@
   --animate-rise: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   --animate-pop: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   --animate-shimmer: shimmer 2.6s linear infinite;
+  --animate-sweep: sweep 3.4s linear infinite;
   --animate-mote: mote-rise 9s linear infinite;
   --animate-aura: aura-breathe 5.5s ease-in-out infinite;
   --animate-rays: ray-spin 48s linear infinite;
   --animate-slash: slash-sweep 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-drift: ink-drift 30s ease-in-out infinite alternate;
+  --animate-demo-flip: demo-flip 2s ease-in-out infinite;
+}
+
+/*
+ * As duas posições de um exercício, alternadas. A troca é quase instantânea
+ * (0,2 s dos 2 s do ciclo) porque o que interessa é ver as duas posições, não
+ * a passagem entre elas — uma transição lenta faz o movimento parecer outro.
+ */
+@keyframes demo-flip {
+  0%,
+  40% {
+    opacity: 0;
+  }
+  50%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes float {
@@ -112,6 +143,19 @@
   }
   100% {
     transform: translateX(220%);
+  }
+}
+
+/*
+ * Brilho a atravessar uma barra de progresso cheia. Percorre mais do que a
+ * largura da barra para que haja uma pausa escura entre passagens.
+ */
+@keyframes sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(340%);
   }
 }
 
@@ -183,8 +227,63 @@
     border-color: var(--color-void-600);
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .animate-demo-flip {
+      animation: none;
+      opacity: 0;
+    }
+  }
+
+  /*
+   * Barra de separadores: uma única fonte para a altura.
+   *
+   * O `1.625rem` que aqui estava era uma aproximação à mão do indicador de
+   * início, feita antes de o inset ser lido. Depois de o inset passar a entrar
+   * na conta, o número passou a ser somado duas vezes: num 16 Pro Max davam
+   * 26 px fixos + 34 px de inset = 60 px de vazio por baixo dos rótulos, e a
+   * barra parecia flutuar acima do fundo do ecrã.
+   *
+   * Medido no Simulador, iPhone 16 Pro Max, iOS 26.5: a barra dava 106 pt e a
+   * nativa do iOS tem 83 pt (49 pt de conteúdo + 34 pt de safe area). Estava
+   * 23 pt mais alta — era isso que se via como «o menu está acima do normal»,
+   * não a folga de baixo.
+   *
+   * Duas correções: o conteúdo do item desce de 63 pt para 49 pt (o valor das
+   * HIG) e a folga de baixo passa a ser só o inset, sem os 8 pt que lhe andava
+   * a somar — numa tab bar nativa é a safe area que faz toda a folga. Fica em
+   * 1 pt de filete + 49 + 34 = 84 pt, contra os 83 pt da nativa.
+   */
+  :root {
+    --tab-bar-pad: env(safe-area-inset-bottom);
+    --tab-bar: calc(3.125rem + env(safe-area-inset-bottom));
+  }
+
   html {
     color-scheme: dark;
+    /* O iOS aumenta o corpo do texto sozinho em orientação horizontal. */
+    -webkit-text-size-adjust: 100%;
+    /* Mata o zoom por duplo toque (e o atraso de 300 ms que vem com ele). */
+    touch-action: manipulation;
+  }
+
+  /*
+   * Numa app instalada, a seleção de texto não é uma funcionalidade: o toque
+   * longo num cartão abria a lupa e o menu «Copiar» por cima da interface, e
+   * arrastar a partir daí deixava a seleção presa. Os campos onde se escreve
+   * são a exceção — aí a seleção é precisamente o que se espera.
+   */
+  body {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  input,
+  textarea,
+  select,
+  [contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
   }
 
   body {
@@ -215,20 +314,35 @@
     border-radius: 6px;
   }
 
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+  /*
+   * A barra de scroll desenhada é para quem tem rato. Ao toque, o sistema já
+   * mostra um indicador que aparece e desaparece sozinho; pintar por cima dele
+   * uma barra permanente de 10 px roubava largura ao conteúdo e deixava um
+   * risco claro colado à margem direita em todos os ecrãs.
+   */
+  @media (pointer: fine) {
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--color-void-900);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-void-600);
+      border-radius: 999px;
+      border: 2px solid var(--color-void-900);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-void-500);
+    }
   }
-  ::-webkit-scrollbar-track {
-    background: var(--color-void-900);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-void-600);
-    border-radius: 999px;
-    border: 2px solid var(--color-void-900);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-void-500);
+
+  @media (pointer: coarse) {
+    ::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
   }
 
   /* Remove as setas dos inputs numéricos para um visual mais limpo */
@@ -348,6 +462,48 @@
   }
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+
+  /*
+   * Alvo de toque de 44×44 pt sem mexer no desenho do controlo.
+   *
+   * As HIG pedem 44 pt em tudo o que se toca, mas há controlos que só fazem
+   * sentido pequenos — o «×» de um registo do diário, uma pastilha de filtro.
+   * O pseudo-elemento é invisível, está centrado no controlo e cresce até aos
+   * 44 pt; é ele que apanha o dedo. Quem usa isto tem de garantir que o
+   * espaçamento até ao controlo vizinho chega para as duas áreas não se
+   * sobreporem — caso contrário toca-se no botão errado.
+   */
+  .tap-target {
+    position: relative;
+  }
+  .tap-target::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+}
+
+/*
+ * Fora de qualquer `@layer` de propósito: as utilidades do Tailwind vivem numa
+ * camada e uma regra sem camada ganha-lhes sempre, seja qual for a classe de
+ * corpo de texto que o campo traga.
+ *
+ * O iOS faz zoom à página inteira quando se foca um campo com corpo de texto
+ * abaixo de 16 px — e depois fica lá, com o layout deslocado. Todos os campos
+ * da app estavam em 14 px (`text-sm`) e alguns dos de dentro dos modais
+ * herdavam 12 px do rótulo. Ao toque, nenhum desce dos 16 px; com rato o
+ * desenho original mantém-se.
+ */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
   }
 }
 

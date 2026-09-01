@@ -29,7 +29,13 @@ export function Toaster() {
 
   return (
     <div
-      className="pointer-events-none fixed bottom-24 right-4 z-[60] flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-2 md:bottom-6"
+      /*
+       * Os avisos pousam 8 px acima da barra de separadores, seja qual for a
+       * altura dela. Com um valor escrito à mão apareciam por baixo da barra em
+       * telefones com indicador de início e, depois de a barra encolher,
+       * ficariam a flutuar longe dela.
+       */
+      className="pointer-events-none fixed right-4 bottom-[calc(var(--tab-bar)+0.5rem)] z-[60] flex w-[min(24rem,calc(100vw-2rem))] flex-col gap-2 md:bottom-6"
       role="status"
       aria-live="polite"
     >
@@ -54,7 +60,7 @@ export function Toaster() {
               type="button"
               onClick={() => dismiss(toast.id)}
               aria-label={t.common.dismissNotification}
-              className="shrink-0 rounded-md p-1 text-ink-faint transition-colors hover:text-ink"
+              className="tap-target -m-1 flex size-8 shrink-0 items-center justify-center rounded-md text-ink-muted transition-colors hover:text-ink"
             >
               <Icon name="X" size={14} />
             </button>

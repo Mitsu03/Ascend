@@ -319,11 +319,33 @@ export const pt = {
     trainAgain: 'Treinar outra vez',
     plan: 'Plano',
     moreExercises: (n: number) => `+ ${n} exercícios`,
+
+    // ── Quartel (ecrã principal) ──────────────────────────────────────────
+    orderOfTheDay: 'ORDEM DO DIA',
+    rankLabel: (n: string) => `PATENTE ${n}`,
+    ctaStart: 'COMEÇAR',
+    ctaResume: 'CONTINUAR SESSÃO',
+    ctaTrainAgain: 'TREINAR OUTRA VEZ',
+    workoutMeta: (exercises: number, sets: number, minutes: number) =>
+      `${exercises} exercícios · ${sets} séries · ~${minutes} min`,
+    rewardXp: (n: string) => `+${n} reiatsu`,
+    rewardCoins: (n: string) => `+${n} kan`,
+    rationsToday: 'RAÇÕES DE HOJE',
+    register: 'Registar',
+    ofKcal: (n: string) => `de ${n} kcal`,
+    missingKcal: (n: string) => `faltam ${n} kcal`,
+    overKcal: (n: string) => `${n} kcal acima`,
+    amountOf: (value: string, target: string, unit: string) => `${value} de ${target} ${unit}`,
+    ordersHeading: (done: number, total: number) => `ORDENS DO DIA · ${done} de ${total}`,
+    fulfilled: 'CUMPRIDA',
+    water: 'Água',
   },
 
   workout: {
     title: 'Dojo',
     planCount: (n: number) => `${n} ${n === 1 ? 'treino' : 'treinos'} no plano semanal`,
+    demoCredit: (author: string, license: string) => `Vídeo de ${author} · ${license}`,
+    demoAlt: (exercise: string) => `Demonstração do movimento: ${exercise}`,
     createWorkout: 'Criar treino',
     weeklyPlan: 'Plano semanal',
     pickDay: 'Escolhe um dia para ver o treino',
@@ -332,6 +354,16 @@ export const pt = {
     exercises: (n: number) => `${n} exercícios`,
     sets: (n: number) => `${n} séries`,
     approxMinutes: (n: number) => `≈ ${n} min`,
+
+    // ── Dojo (plano da semana) ────────────────────────────────────────────
+    dojoSubtitle: 'Dojo · plano da semana',
+    todaysWorkout: 'TREINO DE HOJE',
+    exercisesHeading: 'EXERCÍCIOS',
+    startSession: 'COMEÇAR SESSÃO',
+    resumeSession: 'RETOMAR SESSÃO',
+    repeatSession: 'TREINAR OUTRA VEZ',
+    exerciseMeta: (group: string, equipment: string, rest: number) =>
+      `${group} · ${equipment} · descanso ${rest} s`,
     restSeconds: (n: number) => `${n}s descanso`,
     start: 'Iniciar treino',
     repeat: 'Repetir treino',
@@ -375,6 +407,22 @@ export const pt = {
       `Completaste ${done} de ${total} séries. Vais receber reiatsu proporcional ao que fizeste — sem penalizações.`,
     finishEarlyConfirm: 'Terminar assim',
     finishEarlyCancel: 'Voltar ao treino',
+
+    // ── Vista de sessão (protótipo) ───────────────────────────────────────
+    progressLabel: 'PROGRESSO',
+    setsLabel: (done: number, total: number) => `${done} de ${total}`,
+    setsCaption: 'SÉRIES',
+    setOfTotal: (current: number, total: number) => `série ${current} de ${total}`,
+    restCaption: 'DESCANSO',
+    restOf: (seconds: number) => `Descanso ${seconds} s`,
+    setDone: 'FEITA',
+    setDoneCta: (index: number) => `SÉRIE ${index} FEITA`,
+    nextExerciseCta: 'PRÓXIMO EXERCÍCIO',
+    finishCta: 'CONCLUIR SESSÃO',
+    upNext: 'A seguir',
+    endOfSession: 'Fim da sessão',
+    showDemo: 'ver movimento',
+    hideDemo: 'esconder movimento',
   },
 
   celebration: {
@@ -460,6 +508,21 @@ export const pt = {
   },
 
   nutrition: {
+    // ── Ecrã das Rações (protótipo) ───────────────────────────────────────
+    todayLabel: 'Rações · hoje',
+    photoOrCode: 'Foto · código',
+    proteinBonus: (xp: number) => `Proteína +${xp}`,
+    remainingHeading: 'FALTAM PARA A META',
+    overHeading: 'ACIMA DA META',
+    ofGoal: (eaten: string, goal: string) => `${eaten} de ${goal}`,
+    proteinGap: (grams: number) => `faltam ${grams} g de proteína`,
+    proteinMet: 'proteína cumprida',
+    hydrationCaption: 'HIDRATAÇÃO',
+    suggestionsCaption: 'SUGESTÕES',
+    diaryHeading: (n: number) => `DIÁRIO · ${n} ${n === 1 ? 'registo' : 'registos'}`,
+    noEntries: 'Sem registos.',
+    quickLog: (meal: string) => `REGISTO RÁPIDO NO ${meal.toUpperCase()}`,
+
     title: 'Rações do Gotei',
     remainingOf: (remaining: string, total: string) => `${remaining} kcal restantes de ${total}`,
     logMeal: 'Registar refeição',
@@ -492,6 +555,7 @@ export const pt = {
       `${kcal} kcal / 100 g · P ${p} · H ${c} · G ${f}`,
     entryMacros: (grams: number, p: number, c: number, f: number) =>
       `${grams} g · P ${p} · H ${c} · G ${f}`,
+    photoGroup: (n: number) => `${n} alimentos desta fotografia`,
     addToMeal: (meal: string) => `Adicionar a ${meal}`,
     removeAria: (food: string) => `Remover ${food}`,
     goalReached: 'Meta calórica atingida. Ótimo trabalho — o resto do dia é para recuperar.',
@@ -507,21 +571,24 @@ export const pt = {
 
   artwork: {
     title: 'Imagens da aplicação',
-    subtitle: 'Personaliza os fundos e o avatar com imagens tuas',
-    slotStart: 'Fundo do ecrã inicial',
-    slotDashboard: 'Faixa do Quartel',
-    slotAvatar: 'Imagem de avatar',
+    subtitle: 'Personaliza o fundo e o retrato com imagens tuas',
+    slotApp: 'Fundo da app',
+    slotAppHint: 'A mesma imagem no Quartel, Dojo, Rações, Ordens e Shinigami',
+    slotAvatar: 'Retrato',
+    slotAvatarHint: 'Aparece na ficha de Shinigami e no cabeçalho',
     choose: 'Escolher imagem',
     replace: 'Substituir',
     remove: 'Remover',
     empty: 'A usar a ilustração original',
     fromFolder: 'Ficheiro encontrado em public/assets/',
-    scrimLabel: 'Escurecimento sobre os fundos',
+    scrimLabel: 'Escurecimento sobre o fundo',
     scrimHint: 'Mais escuro deixa o texto mais legível; mais claro deixa a imagem respirar.',
     tooLarge: 'A imagem é demasiado grande para o armazenamento local, mesmo depois de comprimida. Tenta uma com menos detalhe.',
     unreadable: 'Não foi possível ler esta imagem.',
+    notSaved:
+      'A imagem foi aplicada, mas não coube no armazenamento deste dispositivo e desaparece quando fechares a aplicação. Remove outra imagem ou escolhe uma com menos detalhe.',
     note:
-      'As imagens ficam guardadas apenas neste dispositivo. Em alternativa, podes colocar ficheiros na pasta public/assets/ do projeto com os nomes backdrop-start, backdrop-dashboard e avatar.',
+      'As imagens ficam guardadas apenas neste dispositivo. Em alternativa, podes colocar ficheiros na pasta public/assets/ do projeto com os nomes backdrop e avatar.',
     licenceNote:
       'Os emblemas ilustrativos da aplicação são de game-icons.net (Lorc, Delapouite e DarkZaitzev), usados sob licença Creative Commons BY 3.0. A máscara de Hollow, o avatar e o restante material gráfico são originais.',
   },
@@ -583,6 +650,9 @@ export const pt = {
     visionTitle: 'Assistente de IA',
     visionHint:
       'Opcional. Liga um serviço compatível com a API da OpenAI e desbloqueias três coisas: estimar alimentos a partir de fotos, descrever a refeição por escrito e gerar planos de treino a partir de um pedido. A chave fica guardada apenas neste dispositivo e só é enviada para o endpoint indicado.',
+    /* Resumo curto para a linha das Definições, onde há duas linhas de 147 px. */
+    visionRowHint: 'Fotos, descrições e planos de treino',
+
     visionProvider: 'Serviço',
     visionFree: 'Gratuito',
     visionPaid: 'Pago',
@@ -630,9 +700,34 @@ export const pt = {
     hintProtein: 'Progride ao registar refeições',
     hintDiary: 'Progride ao registar refeições no diário',
     hintAuto: 'Progresso automático',
+
+    // ── Ecrã das Ordens (protótipo) ───────────────────────────────────────
+    captainOrder: 'ORDEM DO CAPITÃO',
+    captainOrderNote: 'Uma só ordem por semana, emitida pelo capitão da tua divisão.',
+    weeklyOrders: 'ORDENS DA SEMANA',
+    replacementsLeft: (n: number) => `${n} ${n === 1 ? 'substituição' : 'substituições'}`,
+    ofTarget: (progress: string, target: string, unit: string) => `${progress} / ${target} ${unit}`,
   },
 
   profile: {
+    // ── Ficha (protótipo) ─────────────────────────────────────────────────
+    rankLine: (title: string, rank: string) => `${title} · patente ${rank}`,
+    combatArts: 'ARTES DE COMBATE',
+    reiatsuCaption: 'REIATSU',
+    statDaysCaption: 'DIAS',
+    statWorkoutsCaption: 'TREINOS',
+    statKanCaption: 'KAN',
+
+    // ── Secções da ficha ──────────────────────────────────────────────────
+    // A ficha estava toda numa coluna só, com onze painéis empilhados ao mesmo
+    // nível. Passa a ter quatro faces, escolhidas por um seletor que fica
+    // colado ao topo enquanto se percorre a secção.
+    sectionsAria: 'Secções da ficha',
+    sectionProgress: 'Progresso',
+    sectionAchievements: 'Conquistas',
+    sectionArsenal: 'Arsenal',
+    sectionSettings: 'Definições',
+
     title: 'Ficha de Shinigami',
     subtitle: 'Patente, divisão, artes de combate e conquistas',
     hairAria: (n: number) => `Penteado ${n}`,

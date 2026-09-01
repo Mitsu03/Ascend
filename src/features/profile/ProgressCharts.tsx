@@ -106,7 +106,15 @@ function CaloriesChart() {
   return (
     <div className="h-64 w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: 0 }}>
+        {/*
+          `right: 44` reserva a faixa onde o rótulo da linha de meta assenta.
+          Com os 12 px antigos ele caía fora da área de desenho e o SVG
+          cortava-o: de «Meta» via-se um «M» e de «Target» um «Ta». Pô-lo
+          dentro do gráfico resolvia o corte mas deixava-o por cima das barras,
+          onde o ouro sobre carmim dá 2,25:1 — abaixo dos 4,5:1. Aqui fora fica
+          sobre o fundo do cartão, a 9,8:1.
+        */}
+        <BarChart data={data} margin={{ top: 8, right: 44, bottom: 0, left: 0 }}>
           <CartesianGrid stroke="var(--color-void-700)" vertical={false} />
           <XAxis dataKey="date" tick={AXIS_STYLE} tickLine={false} axisLine={false} />
           <YAxis tick={AXIS_STYLE} tickLine={false} axisLine={false} width={52} />

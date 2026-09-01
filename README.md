@@ -124,6 +124,78 @@ npm run lint         # oxlint
 
 A Ascend é uma PWA. Depois de `npm run build && npm run preview` (ou em produção), abre a app no Chrome ou Edge e usa **⋮ → Instalar Ascend**. Fica com janela própria, ícone no menu Iniciar e funciona offline.
 
+### Aplicação nativa iOS (Capacitor)
+
+O projeto tem um wrapper nativo em `ios/`, gerado com **Capacitor 8** e gerido por
+**Swift Package Manager** (não é preciso CocoaPods). A mesma base web corre dentro
+de uma `WKWebView`, servida a partir de `https://localhost` — contexto seguro, que a
+câmara exige, e uma origem que as APIs externas aceitam em CORS.
+
+Requisitos: **Xcode 16+** e, para publicar, uma conta Apple Developer.
+
+```bash
+npm run ios:sync     # build web (sem service worker) + copia para o projeto iOS
+npm run ios:open     # abre ios/App/App.xcodeproj no Xcode
+npm run ios:run      # sync + corre no simulador
+```
+
+O service worker do PWA fica **desligado** no build nativo (`CAP_BUILD=1`): os
+ficheiros já vêm dentro do `.app`, e um SW a servir uma cópia em cache criaria uma
+segunda fonte de verdade — a app deixaria de atualizar ao instalar uma versão nova.
+
+Correr `npm run ios:sync` sempre que o código web mudar. Mexer em
+`capacitor.config.ts`, adicionar plugins ou trocar ícones também exige sync.
+
+#### Ícones e splash
+
+São gerados a partir de `assets/icon-only.png` (1024×1024, sem canal alfa) e
+`assets/splash.png` (2732×2732), ambos derivados de `public/favicon.svg`:
+
+```bash
+npx @capacitor/assets generate --ios --iosProject ios/App \
+  --splashBackgroundColor '#050507' --splashBackgroundColorDark '#050507'
+```
+
+#### Chave de visão embutida na build (opcional)
+
+Por omissão a chave do reconhecimento por fotografia é colada à mão em cada
+dispositivo, no painel Shinigami › Definições, e fica só nesse dispositivo. Para
+uma build pessoal que já venha configurada, copiar `.env.example` para
+`.env.local` — que o git ignora — e preencher:
+
+```bash
+cp .env.example .env.local
+# preencher VITE_VISION_API_KEY
+npm run ios:sync
+```
+
+O valor entra como predefinição. Uma chave já configurada no dispositivo **ganha
+sempre** à da build: o `merge` da store só preenche o que está por configurar.
+
+**Não usar numa build para distribuir.** Qualquer variável `VITE_*` acaba dentro
+do bundle JavaScript e é legível por quem receba a app — numa entrega pela
+TestFlight, qualquer tester consegue extrair a chave.
+
+#### Publicar na TestFlight
+
+1. **Xcode → App → Signing & Capabilities → Team**: escolher a equipa de developer.
+   O `DEVELOPMENT_TEAM` é o único campo que fica por preencher no repositório.
+2. Criar a app no **App Store Connect** com o bundle ID `com.mitsu03.ascend`.
+3. Subir `MARKETING_VERSION` (versão visível) e/ou `CURRENT_PROJECT_VERSION` (build).
+   Cada envio para a TestFlight precisa de um número de build novo.
+4. **Product → Destination → Any iOS Device**, depois **Product → Archive**.
+5. No Organizer: **Distribute App → TestFlight & App Store**.
+
+Já está tratado no projeto:
+
+- `NSCameraUsageDescription` e `NSPhotoLibraryUsageDescription` em pt-PT — sem estas
+  strings a app rebenta ao abrir a câmara e o upload é rejeitado.
+- `ITSAppUsesNonExemptEncryption = false`, que evita o questionário de conformidade
+  de exportação a cada build.
+- `PrivacyInfo.xcprivacy` a declarar ausência de tracking e as razões de uso de
+  `UserDefaults` e timestamps de ficheiros (evita os avisos ITMS-91053).
+- Ícone de 1024 px sem canal alfa, requisito de validação da App Store.
+
 ### Primeira utilização
 
 No ecrã inicial há duas opções:
@@ -144,7 +216,8 @@ Para voltar ao início: **Shinigami → Definições → Repor dados**.
 - **recharts** para gráficos (carregado em chunk separado)
 - **BarcodeDetector** nativo e **Open Food Facts** para códigos de barras (sem dependências nem chaves)
 - **lucide-react** para ícones
-- **vite-plugin-pwa** para o manifesto e service worker
+- **vite-plugin-pwa** para o manifesto e service worker (desligado no build nativo)
+- **Capacitor 8** (SPM) para o wrapper nativo iOS, com os plugins `status-bar`, `splash-screen` e `keyboard`
 
 Sem backend e sem autenticação. A única chamada de rede é a consulta de códigos de barras ao Open Food Facts, e o reconhecimento por fotografia quando o ligas tu.
 

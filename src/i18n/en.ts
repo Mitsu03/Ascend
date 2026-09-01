@@ -315,11 +315,33 @@ export const en: Dictionary = {
     trainAgain: 'Train again',
     plan: 'Plan',
     moreExercises: (n: number) => `+ ${n} exercises`,
+
+    // ── Barracks (home screen) ────────────────────────────────────────────
+    orderOfTheDay: 'ORDER OF THE DAY',
+    rankLabel: (n: string) => `RANK ${n}`,
+    ctaStart: 'BEGIN',
+    ctaResume: 'RESUME SESSION',
+    ctaTrainAgain: 'TRAIN AGAIN',
+    workoutMeta: (exercises: number, sets: number, minutes: number) =>
+      `${exercises} exercises · ${sets} sets · ~${minutes} min`,
+    rewardXp: (n: string) => `+${n} reiatsu`,
+    rewardCoins: (n: string) => `+${n} kan`,
+    rationsToday: "TODAY'S RATIONS",
+    register: 'Log',
+    ofKcal: (n: string) => `of ${n} kcal`,
+    missingKcal: (n: string) => `${n} kcal left`,
+    overKcal: (n: string) => `${n} kcal over`,
+    amountOf: (value: string, target: string, unit: string) => `${value} of ${target} ${unit}`,
+    ordersHeading: (done: number, total: number) => `ORDERS OF THE DAY · ${done} of ${total}`,
+    fulfilled: 'DONE',
+    water: 'Water',
   },
 
   workout: {
     title: 'Dojo',
     planCount: (n: number) => `${n} ${n === 1 ? 'session' : 'sessions'} in your weekly plan`,
+    demoCredit: (author: string, license: string) => `Video by ${author} · ${license}`,
+    demoAlt: (exercise: string) => `Movement demo: ${exercise}`,
     createWorkout: 'Create session',
     weeklyPlan: 'Weekly plan',
     pickDay: 'Pick a day to see the session',
@@ -328,6 +350,16 @@ export const en: Dictionary = {
     exercises: (n: number) => `${n} exercises`,
     sets: (n: number) => `${n} sets`,
     approxMinutes: (n: number) => `≈ ${n} min`,
+
+    // ── Dojo (weekly plan) ────────────────────────────────────────────────
+    dojoSubtitle: 'Dojo · weekly plan',
+    todaysWorkout: "TODAY'S SESSION",
+    exercisesHeading: 'EXERCISES',
+    startSession: 'BEGIN SESSION',
+    resumeSession: 'RESUME SESSION',
+    repeatSession: 'TRAIN AGAIN',
+    exerciseMeta: (group: string, equipment: string, rest: number) =>
+      `${group} · ${equipment} · ${rest} s rest`,
     restSeconds: (n: number) => `${n}s rest`,
     start: 'Start session',
     repeat: 'Repeat session',
@@ -371,6 +403,22 @@ export const en: Dictionary = {
       `You completed ${done} of ${total} sets. You'll get reiatsu proportional to what you did — no penalties.`,
     finishEarlyConfirm: 'Finish anyway',
     finishEarlyCancel: 'Back to session',
+
+    // ── Session view (prototype) ──────────────────────────────────────────
+    progressLabel: 'PROGRESS',
+    setsLabel: (done: number, total: number) => `${done} of ${total}`,
+    setsCaption: 'SETS',
+    setOfTotal: (current: number, total: number) => `set ${current} of ${total}`,
+    restCaption: 'REST',
+    restOf: (seconds: number) => `${seconds} s rest`,
+    setDone: 'DONE',
+    setDoneCta: (index: number) => `SET ${index} DONE`,
+    nextExerciseCta: 'NEXT EXERCISE',
+    finishCta: 'FINISH SESSION',
+    upNext: 'Up next',
+    endOfSession: 'End of session',
+    showDemo: 'show movement',
+    hideDemo: 'hide movement',
   },
 
   celebration: {
@@ -455,6 +503,21 @@ export const en: Dictionary = {
   },
 
   nutrition: {
+    // ── Rations screen (prototype) ────────────────────────────────────────
+    todayLabel: 'Rations · today',
+    photoOrCode: 'Photo · code',
+    proteinBonus: (xp: number) => `Protein +${xp}`,
+    remainingHeading: 'LEFT TO GOAL',
+    overHeading: 'OVER GOAL',
+    ofGoal: (eaten: string, goal: string) => `${eaten} of ${goal}`,
+    proteinGap: (grams: number) => `${grams} g of protein to go`,
+    proteinMet: 'protein met',
+    hydrationCaption: 'HYDRATION',
+    suggestionsCaption: 'SUGGESTIONS',
+    diaryHeading: (n: number) => `DIARY · ${n} ${n === 1 ? 'entry' : 'entries'}`,
+    noEntries: 'No entries.',
+    quickLog: (meal: string) => `QUICK LOG INTO ${meal.toUpperCase()}`,
+
     title: 'Gotei Rations',
     remainingOf: (remaining: string, total: string) => `${remaining} kcal left of ${total}`,
     logMeal: 'Log a meal',
@@ -486,6 +549,7 @@ export const en: Dictionary = {
       `${kcal} kcal / 100 g · P ${p} · C ${c} · F ${f}`,
     entryMacros: (grams: number, p: number, c: number, f: number) =>
       `${grams} g · P ${p} · C ${c} · F ${f}`,
+    photoGroup: (n: number) => `${n} foods from this photo`,
     addToMeal: (meal: string) => `Add to ${meal}`,
     removeAria: (food: string) => `Remove ${food}`,
     goalReached: 'Calorie target reached. Great work — the rest of the day is for recovery.',
@@ -501,21 +565,24 @@ export const en: Dictionary = {
 
   artwork: {
     title: 'App imagery',
-    subtitle: 'Personalise the backgrounds and avatar with your own images',
-    slotStart: 'Start screen background',
-    slotDashboard: 'Barracks banner',
-    slotAvatar: 'Avatar image',
+    subtitle: 'Personalise the background and portrait with your own images',
+    slotApp: 'App background',
+    slotAppHint: 'The same image on Barracks, Dojo, Rations, Orders and Shinigami',
+    slotAvatar: 'Portrait',
+    slotAvatarHint: 'Shows on the Shinigami record and in the header',
     choose: 'Choose image',
     replace: 'Replace',
     remove: 'Remove',
     empty: 'Using the original illustration',
     fromFolder: 'File found in public/assets/',
-    scrimLabel: 'Darkening over backgrounds',
+    scrimLabel: 'Darkening over the background',
     scrimHint: 'Darker keeps text readable; lighter lets the image breathe.',
     tooLarge: 'That image is too large for local storage, even after compression. Try one with less detail.',
     unreadable: 'Could not read this image.',
+    notSaved:
+      'The image was applied, but it did not fit in this device’s storage and will be gone when you close the app. Remove another image or choose one with less detail.',
     note:
-      'Images are stored on this device only. Alternatively, drop files into the project folder public/assets/ named backdrop-start, backdrop-dashboard and avatar.',
+      'Images are stored on this device only. Alternatively, drop files into the project folder public/assets/ named backdrop and avatar.',
     licenceNote:
       'The illustrative emblems come from game-icons.net (Lorc, Delapouite and DarkZaitzev), used under a Creative Commons BY 3.0 licence. The Hollow mask, the avatar and all other artwork are original.',
   },
@@ -574,6 +641,8 @@ export const en: Dictionary = {
     visionTitle: 'AI assistant',
     visionHint:
       'Optional. Connect an OpenAI-compatible service and you unlock three things: estimating foods from photos, describing the meal in writing, and generating training plans from a request. The key is stored on this device only and is sent solely to the endpoint you provide.',
+    visionRowHint: 'Photos, descriptions and training plans',
+
     visionProvider: 'Service',
     visionFree: 'Free',
     visionPaid: 'Paid',
@@ -620,9 +689,31 @@ export const en: Dictionary = {
     hintProtein: 'Progresses when you log meals',
     hintDiary: 'Progresses when you log meals in the diary',
     hintAuto: 'Progresses automatically',
+
+    // ── Orders screen (prototype) ─────────────────────────────────────────
+    captainOrder: "CAPTAIN'S ORDER",
+    captainOrderNote: 'One order a week, issued by your division captain.',
+    weeklyOrders: 'ORDERS OF THE WEEK',
+    replacementsLeft: (n: number) => `${n} ${n === 1 ? 'swap' : 'swaps'}`,
+    ofTarget: (progress: string, target: string, unit: string) => `${progress} / ${target} ${unit}`,
   },
 
   profile: {
+    // ── Profile sheet (prototype) ─────────────────────────────────────────
+    rankLine: (title: string, rank: string) => `${title} · rank ${rank}`,
+    combatArts: 'COMBAT ARTS',
+    reiatsuCaption: 'REIATSU',
+    statDaysCaption: 'DAYS',
+    statWorkoutsCaption: 'SESSIONS',
+    statKanCaption: 'KAN',
+
+    // ── Record sections ───────────────────────────────────────────────────
+    sectionsAria: 'Record sections',
+    sectionProgress: 'Progress',
+    sectionAchievements: 'Trophies',
+    sectionArsenal: 'Arsenal',
+    sectionSettings: 'Settings',
+
     title: 'Soul Reaper Record',
     subtitle: 'Rank, division, combat arts and achievements',
     hairAria: (n: number) => `Hairstyle ${n}`,

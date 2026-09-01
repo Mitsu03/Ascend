@@ -55,6 +55,12 @@ export function computeTargets(profile: UserProfile): MacroTargets {
   return { calories, proteinG, carbsG, fatG }
 }
 
+/**
+ * Meta diária de água. Fica aqui e não no ecrã da nutrição porque o Quartel
+ * também a mostra — duas cópias do número davam duas metas diferentes.
+ */
+export const WATER_GOAL_ML = 2500
+
 // ---------------------------------------------------------------- Níveis e XP
 
 /** XP necessário para passar do nível `level` para o seguinte. */
