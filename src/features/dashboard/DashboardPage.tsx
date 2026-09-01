@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ArtIcon } from '@/components/ArtIcon'
-import { EXERCISE_BY_ID } from '@/data/exercises'
 import { BladeSlashes, InkWash, SpiritMotes, TwilightSky } from '@/components/art/SpiritArt'
 import { HeroAvatar } from '@/components/HeroAvatar'
 import { useHeroTitle } from '@/components/layout/AppShell'
@@ -21,6 +20,7 @@ import { useNutritionStore } from '@/store/nutritionStore'
 import { useQuestStore } from '@/store/questStore'
 import { useArt, useArtStore } from '@/store/artStore'
 import { useUserStore } from '@/store/userStore'
+import { useExerciseResolver } from '@/store/exerciseStore'
 import { useWorkoutStore } from '@/store/workoutStore'
 import type { ArtIconName } from '@/data/artIcons'
 import type { Quest } from '@/types'
@@ -69,7 +69,8 @@ function StreakCard() {
 
 function NextWorkoutCard() {
   const navigate = useNavigate()
-  const { t, loc } = useI18n()
+  const { t, lang, loc } = useI18n()
+  const resolveExercise = useExerciseResolver()
   const plan = useWorkoutStore((state) => state.plan)
   const workoutForDate = useWorkoutStore((state) => state.workoutForDate)
   const isCompletedOn = useWorkoutStore((state) => state.isCompletedOn)
@@ -133,7 +134,7 @@ function NextWorkoutCard() {
           {exercises.map((item) => (
             <li key={item.exerciseId} className="flex items-center justify-between gap-3">
               <span className="truncate text-ink-muted">
-                {EXERCISE_BY_ID[item.exerciseId] ? loc(EXERCISE_BY_ID[item.exerciseId].name) : item.exerciseId}
+                {resolveExercise(item.exerciseId)?.name[lang] ?? item.exerciseId}
               </span>
               <span className="shrink-0 tabular-nums text-ink-faint">
                 {item.sets} × {item.reps}

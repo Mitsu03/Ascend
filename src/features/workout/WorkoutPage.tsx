@@ -1,16 +1,17 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { EXERCISE_BY_ID } from '@/data/exercises'
 import { Button, IconButton } from '@/components/ui/Button'
 import { Card, CardBody, CardHeader } from '@/components/ui/Card'
 import { Icon } from '@/components/ui/Icon'
 import { Badge, EmptyState } from '@/components/ui/Misc'
 import { ConfirmDialog } from '@/components/ui/Modal'
+import { AiPlanModal } from '@/features/workout/AiPlanModal'
 import { CustomWorkoutModal } from '@/features/workout/CustomWorkoutModal'
 import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { dayOfWeek, formatShortDate, today, weekDates } from '@/services/dates'
 import { estimateDuration, totalSets } from '@/services/planGenerator'
+import { useExerciseResolver } from '@/store/exerciseStore'
 import { useWorkoutStore } from '@/store/workoutStore'
 import type { WorkoutDay } from '@/types'
 
@@ -78,6 +79,7 @@ function WeeklyCalendar({
 function WorkoutDetail({ workout }: { workout: WorkoutDay }) {
   const navigate = useNavigate()
   const { t, loc } = useI18n()
+  const resolveExercise = useExerciseResolver()
   const startSession = useWorkoutStore((state) => state.startSession)
   const removeWorkout = useWorkoutStore((state) => state.removeWorkout)
   const isCompletedOn = useWorkoutStore((state) => state.isCompletedOn)
@@ -117,7 +119,7 @@ function WorkoutDetail({ workout }: { workout: WorkoutDay }) {
 
         <ul className="space-y-2">
           {workout.exercises.map((item) => {
-            const exercise = EXERCISE_BY_ID[item.exerciseId]
+            const exercise = resolveExercise(item.exerciseId)
             const open = expanded === item.exerciseId
             return (
               <li key={item.exerciseId} className="rounded-xl border border-void-600 bg-void-800/40">
@@ -234,6 +236,7 @@ export function WorkoutPage() {
   const plan = useWorkoutStore((state) => state.plan)
   const [selectedDay, setSelectedDay] = useState(dayOfWeek(today()))
   const [creating, setCreating] = useState(false)
+  const [generating, setGenerating] = useState(false)
 
   const workouts = useMemo(() => plan.filter((day) => day.dayOfWeek === selectedDay), [plan, selectedDay])
 
@@ -244,9 +247,14 @@ export function WorkoutPage() {
           <h1 className="slash-divider text-3xl font-bold text-ink">{t.workout.title}</h1>
           <p className="mt-3 text-ink-muted">{t.workout.planCount(plan.length)}</p>
         </div>
-        <Button variant="secondary" icon="Hammer" onClick={() => setCreating(true)}>
-          {t.workout.createWorkout}
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="secondary" icon="Hammer" onClick={() => setCreating(true)}>
+            {t.workout.createWorkout}
+          </Button>
+          <Button variant="primary" icon="Sparkles" onClick={() => setGenerating(true)}>
+            {t.aiPlan.title}
+          </Button>
+        </div>
       </header>
 
       <Card>
@@ -269,9 +277,14 @@ export function WorkoutPage() {
             title={t.workout.restDayTitle}
             message={t.workout.restDayText}
             action={
-              <Button variant="primary" icon="Hammer" onClick={() => setCreating(true)}>
-                {t.workout.createForDay}
-              </Button>
+              <div className="flex flex-wrap justify-center gap-2">
+                <Button variant="secondary" icon="Hammer" onClick={() => setCreating(true)}>
+                  {t.workout.createForDay}
+                </Button>
+                <Button variant="primary" icon="Sparkles" onClick={() => setGenerating(true)}>
+                  {t.aiPlan.title}
+                </Button>
+              </div>
             }
           />
         </Card>
@@ -280,6 +293,7 @@ export function WorkoutPage() {
       <HistoryCard />
 
       <CustomWorkoutModal open={creating} onClose={() => setCreating(false)} />
+      <AiPlanModal open={generating} onClose={() => setGenerating(false)} />
     </div>
   )
 }

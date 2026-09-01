@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { EXERCISE_BY_ID } from '@/data/exercises'
 import { Button, IconButton } from '@/components/ui/Button'
 import { Icon } from '@/components/ui/Icon'
 import { Badge } from '@/components/ui/Misc'
@@ -10,6 +9,7 @@ import { CelebrationScreen } from '@/features/workout/CelebrationScreen'
 import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { formatDuration } from '@/services/dates'
+import { useExerciseResolver } from '@/store/exerciseStore'
 import { useWorkoutStore } from '@/store/workoutStore'
 
 function RestTimer({ seconds, onDismiss }: { seconds: number; onDismiss: () => void }) {
@@ -52,6 +52,7 @@ function RestTimer({ seconds, onDismiss }: { seconds: number; onDismiss: () => v
 export function WorkoutSessionPage() {
   const navigate = useNavigate()
   const { t, loc } = useI18n()
+  const resolveExercise = useExerciseResolver()
   const activeSession = useWorkoutStore((state) => state.activeSession)
   const plan = useWorkoutStore((state) => state.plan)
   const lastResult = useWorkoutStore((state) => state.lastResult)
@@ -155,7 +156,7 @@ export function WorkoutSessionPage() {
 
       <div className="mx-auto w-full max-w-3xl space-y-3 px-4 py-5">
         {workout.exercises.map((item, exerciseIndex) => {
-          const exercise = EXERCISE_BY_ID[item.exerciseId]
+          const exercise = resolveExercise(item.exerciseId)
           const checks = activeSession.checked[exerciseIndex] ?? []
           const doneHere = checks.filter(Boolean).length
           const allDone = doneHere === checks.length

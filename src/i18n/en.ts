@@ -408,6 +408,52 @@ export const en: Dictionary = {
     noResults: 'No exercises found.',
   },
 
+  aiPlan: {
+    title: 'AI plan',
+    description: 'Describe the training you want and the AI builds the weekly plan.',
+    promptLabel: 'What do you want to train for?',
+    promptPlaceholder: 'e.g. weekly plan, 3× a week, to run 5 km a month from now',
+    examplesTitle: 'Examples',
+    examples: [
+      'Weekly plan, 3× a week, to run 5 km a month from now',
+      'Four sessions a week at home with dumbbells only, to build muscle',
+      'Two short sessions a week to ease back in after a knee injury',
+    ],
+    footerHint: 'The AI may ask a few questions before building the plan.',
+    ask: 'Continue',
+    askingQuestions: 'Working out what else it needs…',
+    questionsHint: 'Leave blank anything you are unsure about.',
+    answerPlaceholder: 'Or write your own answer…',
+    answerAria: (question: string) => `Free answer to: ${question}`,
+    generate: 'Build plan',
+    regenerate: 'Build again',
+    thinking: 'Building your plan…',
+    daysCount: (n: number) => `${n} ${n === 1 ? 'session proposed' : 'sessions proposed'}`,
+    newTag: 'new',
+    newExercises: (n: number) =>
+      n === 1
+        ? '1 new exercise will be added to your catalogue.'
+        : `${n} new exercises will be added to your catalogue.`,
+    replaceLabel: 'Replace the current plan',
+    replaceOn: (n: number) =>
+      n === 1
+        ? 'The session you have now is deleted. This cannot be undone.'
+        : `The ${n} sessions you have now are deleted. This cannot be undone.`,
+    replaceOff: 'The new sessions are added to the ones you already have.',
+    save: 'Save plan',
+    confirmReplaceTitle: 'Replace the current plan?',
+    confirmReplaceMessage: (n: number) =>
+      n === 1
+        ? 'The session in your current plan is deleted and replaced by this one. Your logged session history stays. This cannot be undone.'
+        : `The ${n} sessions in your current plan are deleted and replaced by this one. Your logged session history stays. This cannot be undone.`,
+    emptyPrompt: 'Write what you want to train for first.',
+    emptyPlan: 'The AI returned no usable session. Try rewording the request.',
+    notConfigured: 'Plan generation needs an AI service connected under Shinigami › Settings.',
+    failed: 'Could not build the plan. Check your connection and settings.',
+    disclaimer:
+      'The plan is an automatically generated suggestion, not a supervised programme. Review it before saving and adjust anything that does not suit you.',
+  },
+
   nutrition: {
     title: 'Gotei Rations',
     remainingOf: (remaining: string, total: string) => `${remaining} kcal left of ${total}`,
