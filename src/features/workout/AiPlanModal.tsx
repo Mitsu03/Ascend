@@ -36,7 +36,7 @@ function QuestionCard({
   const labelId = useId()
 
   return (
-    <li className="rounded-xl border border-void-600 bg-void-800/40 p-3.5">
+    <li className="chamfer-md border border-void-600 bg-void-800/40 p-3.5">
       <p id={labelId} className="text-sm font-medium text-ink">
         {question.question}
       </p>
@@ -51,7 +51,7 @@ function QuestionCard({
                 aria-pressed={active}
                 onClick={() => onAnswer(active ? '' : option)}
                 className={cn(
-                  'rounded-full border px-3 py-1 text-xs font-medium transition-colors',
+                  'chamfer-xs border px-3 py-1 text-xs font-medium transition-colors',
                   active
                     ? 'border-ember/60 bg-ember/10 text-ember'
                     : 'border-void-600 text-ink-muted hover:text-ink',
@@ -261,7 +261,7 @@ export function AiPlanModal({ open, onClose }: AiPlanModalProps) {
     >
       <div ref={stepRef} tabIndex={-1} className="space-y-4 focus:outline-none">
         {!configured && (
-          <p className="rounded-xl border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-muted">
+          <p className="chamfer-md border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-muted">
             {t.aiPlan.notConfigured}
           </p>
         )}
@@ -270,7 +270,7 @@ export function AiPlanModal({ open, onClose }: AiPlanModalProps) {
           <div
             role="status"
             aria-live="polite"
-            className="flex items-center gap-3 rounded-xl border border-ember/35 bg-ember/5 p-4"
+            className="flex items-center gap-3 chamfer-md border border-ember/35 bg-ember/5 p-4"
           >
             <Icon name="Sparkles" size={18} className="animate-pulse-glow text-ember" />
             <p className="text-sm text-ink">
@@ -282,7 +282,7 @@ export function AiPlanModal({ open, onClose }: AiPlanModalProps) {
         {error && (
           <p
             role="alert"
-            className="flex items-start gap-2 rounded-xl border border-warn/40 bg-warn/5 p-3 text-sm text-ink"
+            className="flex items-start gap-2 chamfer-md border border-warn/40 bg-warn/5 p-3 text-sm text-ink"
           >
             <Icon name="AlertTriangle" size={16} className="mt-0.5 shrink-0 text-warn" />
             {error}
@@ -318,7 +318,7 @@ export function AiPlanModal({ open, onClose }: AiPlanModalProps) {
                       type="button"
                       disabled={busy}
                       onClick={() => setRequest(example)}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-void-600 bg-void-800/50 px-3 py-2 text-left text-xs text-ink-muted transition-colors hover:border-void-500 hover:text-ink disabled:opacity-45"
+                      className="inline-flex items-center gap-1.5 chamfer-md border border-void-600 bg-void-800/50 px-3 py-2 text-left text-xs text-ink-muted transition-colors hover:border-void-500 hover:text-ink disabled:opacity-45"
                     >
                       <Icon name="Plus" size={12} className="shrink-0" />
                       {example}
@@ -346,7 +346,7 @@ export function AiPlanModal({ open, onClose }: AiPlanModalProps) {
         {step === 'preview' && draft && (
           <div className={cn('space-y-4', busy && 'pointer-events-none opacity-50')}>
             {draft.summary && (
-              <p className="rounded-xl border border-ember/35 bg-ember/5 p-3.5 text-sm leading-relaxed text-ink">
+              <p className="chamfer-md border border-ember/35 bg-ember/5 p-3.5 text-sm leading-relaxed text-ink">
                 {draft.summary}
               </p>
             )}
@@ -357,7 +357,7 @@ export function AiPlanModal({ open, onClose }: AiPlanModalProps) {
 
             <ul className="space-y-3">
               {draft.days.map((day) => (
-                <li key={day.id} className="rounded-xl border border-void-600 bg-void-800/40 p-3.5">
+                <li key={day.id} className="chamfer-md border border-void-600 bg-void-800/40 p-3.5">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <p className="font-medium text-ink">{loc(day.name)}</p>
                     <span className="text-xs text-ink-muted">{t.weekdays.long[day.dayOfWeek]}</span>
@@ -395,7 +395,7 @@ export function AiPlanModal({ open, onClose }: AiPlanModalProps) {
               <p className="text-xs text-ink-muted">{t.aiPlan.newExercises(draft.newExercises.length)}</p>
             )}
 
-            <label className="flex cursor-pointer items-start gap-2.5 rounded-xl border border-void-600 bg-void-900/50 p-3">
+            <label className="flex cursor-pointer items-start gap-2.5 chamfer-md border border-void-600 bg-void-900/50 p-3">
               <input
                 type="checkbox"
                 checked={replace}

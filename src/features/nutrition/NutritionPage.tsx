@@ -123,7 +123,7 @@ function AddFoodModal({
         </div>
 
         {food && (
-          <div className="flex items-center justify-between gap-3 rounded-xl border border-ember/40 bg-ember/5 p-3.5">
+          <div className="flex items-center justify-between gap-3 chamfer-md border border-ember/40 bg-ember/5 p-3.5">
             <div className="min-w-0">
               <p className="truncate font-medium text-ink">{loc(food.name)}</p>
               <p className="text-xs text-ink-muted">
@@ -159,8 +159,8 @@ function AddFoodModal({
                 }}
                 className={
                   food?.id === item.id
-                    ? 'flex w-full items-center gap-3 rounded-xl border border-ember/60 bg-ember/10 p-3 text-left'
-                    : 'flex w-full items-center gap-3 rounded-xl border border-void-600 bg-void-800/50 p-3 text-left transition-colors hover:border-void-500'
+                    ? 'flex w-full items-center gap-3 chamfer-md border border-ember/60 bg-ember/10 p-3 text-left'
+                    : 'flex w-full items-center gap-3 chamfer-md border border-void-600 bg-void-800/50 p-3 text-left transition-colors hover:border-void-500'
                 }
               >
                 {/*
@@ -213,13 +213,13 @@ function CaloriesHero({
 
   return (
     <section
-      className="relative overflow-hidden border border-ember/40 px-[22px] pt-6 pb-5 shadow-[0_20px_60px_-22px_rgba(255,122,26,.45)] [clip-path:polygon(0_0,100%_0,100%_calc(100%-26px),calc(100%-26px)_100%,0_100%)]"
-      style={{ background: 'linear-gradient(165deg,#181820,#0d0d13)' }}
+      className="relative overflow-hidden border border-ember/40 px-[22px] pt-6 pb-5 shadow-[0_20px_60px_-22px_rgba(255,138,20,.45)] [clip-path:polygon(0_0,100%_0,100%_calc(100%-26px),calc(100%-26px)_100%,0_100%)]"
+      style={{ background: 'linear-gradient(165deg,#1a1d25,#0c0e13)' }}
     >
       <div
         className="pointer-events-none absolute top-0 right-0 h-[150px] w-[200px] opacity-35"
         style={{
-          backgroundImage: 'radial-gradient(rgba(255,122,26,.9) 1px, transparent 1.4px)',
+          backgroundImage: 'radial-gradient(rgba(255,138,20,.9) 1px, transparent 1.4px)',
           backgroundSize: '7px 7px',
           maskImage: 'linear-gradient(215deg, rgba(0,0,0,.95), transparent 68%)',
           WebkitMaskImage: 'linear-gradient(215deg, rgba(0,0,0,.95), transparent 68%)',
@@ -231,7 +231,7 @@ function CaloriesHero({
         {over ? t.nutrition.overHeading : t.nutrition.remainingHeading}
       </p>
       <p className="relative mt-2 flex items-baseline gap-2.5">
-        <span className="font-display text-[74px] leading-[0.86] font-bold tabular-nums text-ink [text-shadow:5px_5px_0_rgba(184,18,54,.5)]">
+        <span className="font-mono text-[74px] leading-[0.86] font-bold tabular-nums text-ink [text-shadow:5px_5px_0_rgba(200,16,46,.5)]">
           {headline}
         </span>
         <span className="text-[15px] text-ink-muted">{t.units.kcal}</span>
@@ -242,7 +242,7 @@ function CaloriesHero({
       </p>
       <div className="relative mt-4 h-1 bg-void-700">
         <div
-          className="absolute inset-y-0 left-0 bg-gradient-to-r from-crimson to-ember shadow-[0_0_14px_rgba(255,122,26,.85)]"
+          className="absolute inset-y-0 left-0 bg-ember shadow-[0_0_8px_rgba(255,138,20,.7)]"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -268,14 +268,14 @@ function MacroCard({
   const pct = target > 0 ? Math.min(100, (value / target) * 100) : 0
 
   return (
-    <div className="rounded-[14px] border border-void-600 bg-void-800 px-3 py-[13px]">
+    <div className="chamfer-md border border-void-600 bg-void-800 px-3 py-[13px]">
       <p className={cn('text-[10.5px] font-semibold', labelClass)}>{label}</p>
-      <p className="mt-[5px] font-display text-[22px] leading-none font-bold tabular-nums text-ink">
+      <p className="mt-[5px] font-mono text-[22px] leading-none font-bold tabular-nums text-ink">
         {n(value)}
         <span className="text-xs text-ink-muted">/{n(target)}</span>
       </p>
-      <div className="mt-[9px] h-[5px] rounded-full bg-void-700">
-        <div className={cn('h-full rounded-full', barClass)} style={{ width: `${pct}%` }} />
+      <div className="mt-[9px] h-[5px] bg-void-700">
+        <div className={cn('h-full', barClass)} style={{ width: `${pct}%`}} />
       </div>
     </div>
   )
@@ -290,11 +290,11 @@ function WaterCard() {
   const pct = Math.min(100, (water / WATER_GOAL_ML) * 100)
 
   return (
-    <section className="mt-3.5 rounded-2xl border border-spirit/[0.32] bg-spirit/5 p-3.5">
+    <section className="mt-3.5 chamfer-lg border border-spirit/[0.32] bg-spirit/5 p-3.5">
       <div className="flex items-end justify-between gap-2.5">
         <div>
           <p className="text-[10.5px] font-bold tracking-[0.16em] text-spirit">{t.nutrition.hydrationCaption}</p>
-          <p className="mt-[3px] font-display text-2xl leading-none font-bold tabular-nums text-spirit">
+          <p className="mt-[3px] font-mono text-2xl leading-none font-bold tabular-nums text-spirit">
             {t.nutrition.ofGoal(t.common.litres(d(water / 1000, 2)), t.common.litres(d(WATER_GOAL_ML / 1000, 1)))}
           </p>
         </div>
@@ -306,7 +306,7 @@ function WaterCard() {
               onClick={() => addWater(ml)}
               // Registar água é dos gestos mais repetidos e faz-se de pé, no
               // ginásio: 34 px passam a 44 pt cheios, sem truques.
-              className="h-11 rounded-[10px] border border-spirit/40 bg-spirit/10 px-3.5 text-[11.5px] font-semibold text-spirit transition-opacity active:opacity-90"
+              className="h-11 chamfer-sm border border-spirit/40 bg-spirit/10 px-3.5 text-[11.5px] font-semibold text-spirit transition-opacity active:opacity-90"
             >
               +{ml}
             </button>
@@ -314,14 +314,14 @@ function WaterCard() {
         </div>
       </div>
       <div
-        className="mt-[11px] h-[5px] overflow-hidden rounded-full bg-void-700"
+        className="mt-[11px] h-[5px] overflow-hidden bg-void-700"
         role="progressbar"
         aria-valuenow={water}
         aria-valuemin={0}
         aria-valuemax={WATER_GOAL_ML}
         aria-label={t.nutrition.hydration}
       >
-        <div className="h-full rounded-full bg-spirit" style={{ width: `${pct}%` }} />
+        <div className="h-full bg-spirit"style={{ width: `${pct}%`}} />
       </div>
     </section>
   )
@@ -381,7 +381,7 @@ function EntryRow({ entry, onRemove }: { entry: MealEntry; onRemove: () => void 
           {t.nutrition.entryMacros(entry.grams, macros.proteinG, macros.carbsG, macros.fatG)}
         </span>
       </span>
-      <span className="shrink-0 font-display text-[15px] font-bold tabular-nums text-ember-soft">
+      <span className="shrink-0 font-mono text-[15px] font-bold tabular-nums text-ember-soft">
         {n(macros.calories)}
       </span>
       <button
@@ -390,7 +390,7 @@ function EntryRow({ entry, onRemove }: { entry: MealEntry; onRemove: () => void 
         aria-label={t.nutrition.removeAria(foodName)}
         // Apagar um registo é a ação destrutiva mais frequente da app e tinha
         // 24 px de alvo. O desenho mantém-se; o alvo vai aos 44 pt.
-        className="tap-target flex size-6 shrink-0 items-center justify-center rounded-[7px] bg-void-700 text-ink-muted active:opacity-90"
+        className="tap-target flex size-6 shrink-0 items-center justify-center chamfer-xs bg-void-700 text-ink-muted active:opacity-90"
       >
         <Icon name="X" size={11} />
       </button>
@@ -476,7 +476,7 @@ export function NutritionPage() {
         </div>
 
         {overTarget && (
-          <div className="mt-3 flex items-center gap-[9px] rounded-[13px] border border-warn/45 bg-warn/[0.08] px-[13px] py-[11px]">
+          <div className="mt-3 flex items-center gap-[9px] chamfer-md border border-warn/45 bg-warn/[0.08] px-[13px] py-[11px]">
             <Icon name="AlertTriangle" size={13} className="shrink-0 text-warn" />
             <span className="text-[11.5px] leading-[1.45] text-warn">{t.nutrition.overTarget}</span>
           </div>
@@ -485,7 +485,7 @@ export function NutritionPage() {
         <WaterCard />
 
         {/* Sugestões */}
-        <section className="mt-3.5 rounded-2xl border border-ember/30 bg-ember/5 p-3.5">
+        <section className="mt-3.5 chamfer-lg border border-ember/30 bg-ember/5 p-3.5">
           <div className="flex items-center gap-[9px]">
             <ArtIcon name="spark-spirit" size={18} className="shrink-0 text-ember-soft" />
             <p className="text-[10.5px] font-bold tracking-[0.16em] text-ember-soft">
@@ -502,7 +502,7 @@ export function NutritionPage() {
                 {suggestions.suggestions.map((suggestion) => (
                   <div
                     key={suggestion.id}
-                    className="flex items-center justify-between gap-2.5 rounded-[11px] border border-void-600 bg-void-800 px-3 py-2.5"
+                    className="flex items-center justify-between gap-2.5 chamfer-sm border border-void-600 bg-void-800 px-3 py-2.5"
                   >
                     <span className="min-w-0">
                       <span className="block truncate text-[12.5px] text-ink">{suggestion.detail}</span>
@@ -517,10 +517,10 @@ export function NutritionPage() {
                       </span>
                     </span>
                     <span className="flex shrink-0 gap-[5px]">
-                      <span className="rounded-[5px] bg-ember/[0.14] px-[7px] py-[3px] text-[10px] font-bold text-ember-soft">
+                      <span className="chamfer-xs bg-ember/[0.14] px-[7px] py-[3px] text-[10px] font-bold text-ember-soft">
                         {n(suggestion.totals.calories)} {t.units.kcal}
                       </span>
-                      <span className="rounded-[5px] bg-void-700 px-[7px] py-[3px] text-[10px] font-bold text-ink">
+                      <span className="chamfer-xs bg-void-700 px-[7px] py-[3px] text-[10px] font-bold text-ink">
                         P {suggestion.totals.proteinG} {t.units.grams}
                       </span>
                     </span>
@@ -550,10 +550,10 @@ export function NutritionPage() {
               setLogMode('foto')
               setPhotoLogging('almoco')
             }}
-            className="mt-[11px] flex h-[60px] w-full items-center gap-[11px] rounded-2xl border border-dashed border-void-600 px-3.5 text-left active:opacity-90"
+            className="mt-[11px] flex h-[60px] w-full items-center gap-[11px] chamfer-lg border border-dashed border-void-600 px-3.5 text-left active:opacity-90"
           >
             <span
-              className="flex h-[26px] w-[34px] shrink-0 items-center justify-center rounded-md border-[1.5px] border-void-500"
+              className="flex h-[26px] w-[34px] shrink-0 items-center justify-center chamfer-xs border-[1.5px] border-void-500"
               aria-hidden="true"
             >
               <span className="size-[9px] rounded-full border-[1.5px] border-void-500" />
@@ -570,10 +570,10 @@ export function NutritionPage() {
               setLogMode('texto')
               setPhotoLogging('almoco')
             }}
-            className="mt-[9px] flex h-[60px] w-full items-center gap-[11px] rounded-2xl border border-dashed border-void-600 px-3.5 text-left active:opacity-90"
+            className="mt-[9px] flex h-[60px] w-full items-center gap-[11px] chamfer-lg border border-dashed border-void-600 px-3.5 text-left active:opacity-90"
           >
             <span
-              className="flex h-[26px] w-[34px] shrink-0 items-center justify-center rounded-md border-[1.5px] border-void-500"
+              className="flex h-[26px] w-[34px] shrink-0 items-center justify-center chamfer-xs border-[1.5px] border-void-500"
               aria-hidden="true"
             >
               <Icon name="Pencil" size={13} className="text-void-500" />
@@ -593,14 +593,14 @@ export function NutritionPage() {
                 <div className="flex items-center justify-between gap-2.5">
                   <span className="text-[12.5px] font-semibold text-ink">{t.meals[meal]}</span>
                   <span className="flex items-center gap-[9px]">
-                    <span className="font-display text-sm font-semibold tabular-nums text-ink-muted">
+                    <span className="font-mono text-sm font-semibold tabular-nums text-ink-muted">
                       {n(mealTotal)} {t.units.kcal}
                     </span>
                     <button
                       type="button"
                       onClick={() => setAdding(meal)}
                       aria-label={t.nutrition.addToMeal(t.meals[meal])}
-                      className="tap-target flex size-[26px] items-center justify-center rounded-lg border border-void-600 bg-void-800 text-ember active:opacity-90"
+                      className="tap-target flex size-[26px] items-center justify-center chamfer-sm border border-void-600 bg-void-800 text-ember active:opacity-90"
                     >
                       <Icon name="Plus" size={14} />
                     </button>
@@ -614,13 +614,13 @@ export function NutritionPage() {
                     {groupEntries(mealEntries).map((group) => (
                       <div
                         key={group.key}
-                        className="flex items-start gap-2.5 rounded-[11px] border border-void-700 bg-void-800 px-3 py-2.5"
+                        className="flex items-start gap-2.5 chamfer-sm border border-void-700 bg-void-800 px-3 py-2.5"
                       >
                         {group.photo && (
                           <img
                             src={group.photo}
                             alt={t.photoLog.photoAlt}
-                            className="size-10 shrink-0 rounded-lg border border-void-600 object-cover"
+                            className="size-10 shrink-0 chamfer-sm border border-void-600 object-cover"
                           />
                         )}
                         <div className="min-w-0 flex-1 space-y-2">
@@ -661,10 +661,10 @@ export function NutritionPage() {
                   <span className="mt-px block truncate text-[10.5px] text-ink-muted">{loc(food.portionLabel)}</span>
                 </span>
                 <span className="flex shrink-0 items-center gap-[9px]">
-                  <span className="font-display text-[15px] font-bold tabular-nums text-ember-soft">
+                  <span className="font-mono text-[15px] font-bold tabular-nums text-ember-soft">
                     {n(Math.round((food.per100g.calories * food.commonPortionG) / 100))}
                   </span>
-                  <span className="flex size-6 items-center justify-center rounded-lg bg-ember/[0.14] text-ember">
+                  <span className="flex size-6 items-center justify-center chamfer-sm bg-ember/[0.14] text-ember">
                     <Icon name="Plus" size={14} />
                   </span>
                 </span>

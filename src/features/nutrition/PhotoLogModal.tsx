@@ -383,7 +383,7 @@ export function PhotoLogModal({ open, onClose, mealType, initialMode = 'foto' }:
                 className={cn(
                   // 30 px de altura no desenho original; `tap-target` leva o
                   // alvo aos 44 pt e o `gap-2` do contentor evita sobreposição.
-                  'tap-target inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3.5 text-xs font-medium transition-colors active:opacity-90',
+                  'tap-target inline-flex min-h-9 items-center gap-1.5 chamfer-xs border px-3.5 text-xs font-medium transition-colors active:opacity-90',
                   mode === item.value
                     ? 'border-ember/60 bg-ember/10 text-ember'
                     : 'border-void-600 text-ink-muted hover:text-ink',
@@ -417,14 +417,14 @@ export function PhotoLogModal({ open, onClose, mealType, initialMode = 'foto' }:
             disto o utilizador só descobria isso ao carregar num botão inerte.
             Sem condição de `status` para continuar visível depois da foto. */}
         {mode === 'foto' && !configured && (
-          <p className="flex items-start gap-2 rounded-xl border border-warn/40 bg-warn/5 p-3 text-sm leading-relaxed text-ink">
+          <p className="flex items-start gap-2 chamfer-md border border-warn/40 bg-warn/5 p-3 text-sm leading-relaxed text-ink">
             <Icon name="AlertTriangle" size={16} className="mt-0.5 shrink-0 text-warn" />
             {t.photoLog.manualModeNote}
           </p>
         )}
 
         {mode === 'texto' && !configured && (
-          <p className="rounded-xl border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-muted">
+          <p className="chamfer-md border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-muted">
             {t.photoLog.textNotConfigured}
           </p>
         )}
@@ -456,17 +456,17 @@ export function PhotoLogModal({ open, onClose, mealType, initialMode = 'foto' }:
         )}
 
         {mode === 'codigo' && !barcodeScanningIsSupported() && (
-          <p className="rounded-xl border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-muted">
+          <p className="chamfer-md border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-muted">
             {t.photoLog.barcodeUnsupported}
           </p>
         )}
 
         {mode !== 'texto' && status === 'camera' && (
           <div className="space-y-3">
-            <div className="relative overflow-hidden rounded-2xl border border-void-600 bg-void-950">
+            <div className="relative overflow-hidden chamfer-lg border border-void-600 bg-void-950">
               <video ref={videoRef} playsInline muted className="aspect-[4/3] w-full object-cover" />
               {mode === 'codigo' && (
-                <div className="pointer-events-none absolute inset-x-8 top-1/2 h-24 -translate-y-1/2 rounded-xl border-2 border-ember/70" />
+                <div className="pointer-events-none absolute inset-x-8 top-1/2 h-24 -translate-y-1/2 chamfer-md border-2 border-ember/70" />
               )}
             </div>
             {mode === 'foto' ? (
@@ -495,7 +495,7 @@ export function PhotoLogModal({ open, onClose, mealType, initialMode = 'foto' }:
                   {t.photoLog.chooseFile}
                 </Button>
               ) : (
-                <label className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-xl border border-void-500 bg-void-700/60 px-4 text-sm text-ink transition-colors hover:bg-void-700">
+                <label className="inline-flex h-11 cursor-pointer items-center gap-2 chamfer-md border border-void-500 bg-void-700/60 px-4 text-sm text-ink transition-colors hover:bg-void-700">
                   <Icon name="Image" size={17} />
                   {t.photoLog.chooseFile}
                   {/* Sem `capture`: este botão é a galeria, não a câmara. */}
@@ -534,7 +534,7 @@ export function PhotoLogModal({ open, onClose, mealType, initialMode = 'foto' }:
           <div
             role="status"
             aria-live="polite"
-            className="flex items-center gap-3 rounded-xl border border-ember/35 bg-ember/5 p-4"
+            className="flex items-center gap-3 chamfer-md border border-ember/35 bg-ember/5 p-4"
           >
             <Icon name="Sparkles" size={18} className="animate-pulse-glow text-ember" />
             <p className="flex-1 text-sm text-ink">{t.photoLog.analysing}</p>
@@ -549,7 +549,7 @@ export function PhotoLogModal({ open, onClose, mealType, initialMode = 'foto' }:
           // existia para quem a visse.
           <p
             role="alert"
-            className="flex items-start gap-2 rounded-xl border border-warn/40 bg-warn/5 p-3 text-sm text-ink"
+            className="flex items-start gap-2 chamfer-md border border-warn/40 bg-warn/5 p-3 text-sm text-ink"
           >
             <Icon name="AlertTriangle" size={16} className="mt-0.5 shrink-0 text-warn" />
             {error}
@@ -561,7 +561,7 @@ export function PhotoLogModal({ open, onClose, mealType, initialMode = 'foto' }:
             <img
               src={thumbnail}
               alt={t.photoLog.photoAlt}
-              className="size-24 shrink-0 rounded-xl border border-void-600 object-cover"
+              className="size-24 shrink-0 chamfer-md border border-void-600 object-cover"
             />
             <div className="min-w-0 flex-1 text-xs leading-relaxed text-ink-muted">
               {selections.length > 0 ? t.photoLog.checkEstimates : t.photoLog.attachedOnly}
@@ -578,7 +578,7 @@ export function PhotoLogModal({ open, onClose, mealType, initialMode = 'foto' }:
               <li
                 key={`${item.food.id}-${index}`}
                 className={cn(
-                  'rounded-xl border p-3 transition-colors',
+                  'chamfer-md border p-3 transition-colors',
                   item.chosen ? 'border-ember/50 bg-ember/5' : 'border-void-600 bg-void-800/40',
                 )}
               >
@@ -608,7 +608,7 @@ export function PhotoLogModal({ open, onClose, mealType, initialMode = 'foto' }:
                       // Herdava os 12 px do rótulo — o `index.css` põe-no nos
                       // 16 px ao toque (senão o iOS faz zoom) e o `min-h-11`
                       // dá-lhe os 44 pt de altura.
-                      className="min-h-11 w-20 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
+                      className="min-h-11 w-20 chamfer-sm border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
                       aria-label={t.photoLog.gramsAria(loc(item.food.name))}
                     />
                     {t.units.grams}

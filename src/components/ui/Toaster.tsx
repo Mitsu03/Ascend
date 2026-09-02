@@ -45,7 +45,7 @@ export function Toaster() {
           <div
             key={toast.id}
             className={cn(
-              'pointer-events-auto flex animate-rise items-start gap-3 rounded-xl border bg-void-800/95 p-3.5 shadow-xl backdrop-blur',
+              'pointer-events-auto flex animate-rise items-start gap-3 chamfer-md border bg-void-800/95 p-3.5 shadow-xl backdrop-blur',
               style.border,
             )}
           >
@@ -60,7 +60,7 @@ export function Toaster() {
               type="button"
               onClick={() => dismiss(toast.id)}
               aria-label={t.common.dismissNotification}
-              className="tap-target -m-1 flex size-8 shrink-0 items-center justify-center rounded-md text-ink-muted transition-colors hover:text-ink"
+              className="tap-target -m-1 flex size-8 shrink-0 items-center justify-center chamfer-xs text-ink-muted transition-colors hover:text-ink"
             >
               <Icon name="X" size={14} />
             </button>

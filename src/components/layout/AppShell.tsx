@@ -47,7 +47,7 @@ function Logo() {
     <div className="flex items-center gap-2.5">
       <span className="relative flex size-9 items-center justify-center">
         <span
-          className="absolute inset-0 rounded-xl bg-gradient-to-br from-ember/25 to-crimson/25 blur-[6px]"
+          className="absolute inset-0 chamfer-md bg-ember/22 blur-[6px]"
           aria-hidden="true"
         />
         <HollowMask size={34} className="relative" />
@@ -79,7 +79,7 @@ function RankCard() {
   const title = useHeroTitle(info.level)
 
   return (
-    <div className="edge-glint rounded-xl border border-void-600/70 bg-void-800/60 p-3.5">
+    <div className="edge-glint chamfer-md border border-void-600/70 bg-void-800/60 p-3.5">
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2.5">
           <DivisionSeal divisionId={division.id} size={38} />
@@ -88,7 +88,7 @@ function RankCard() {
             <p className="truncate text-[11px] text-ink-faint">{loc(division.name)}</p>
           </div>
         </div>
-        <span className="flex items-center gap-1 text-xs font-semibold tabular-nums text-gold">
+        <span className="flex items-center gap-1 font-mono text-xs font-semibold tabular-nums text-gold">
           <Icon name="Coins" size={13} />
           {n(coins)}
         </span>
@@ -100,9 +100,10 @@ function RankCard() {
         height="sm"
         className="mt-3"
         label={t.common.levelProgress}
+        segments={10}
         showShimmer
       />
-      <p className="mt-1.5 flex items-center justify-between text-[11px] tabular-nums text-ink-faint">
+      <p className="mt-1.5 flex items-center justify-between font-mono text-[11px] tabular-nums text-ink-faint">
         <span>{t.common.levelWithNumber(info.level)}</span>
         <span>{t.common.xpProgress(n(info.currentLevelXp), n(info.nextLevelXp))}</span>
       </p>
@@ -127,9 +128,10 @@ function Sidebar() {
             end={item.end}
             className={({ isActive }) =>
               cn(
-                'flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-150',
+                'flex items-center gap-3 chamfer-sm px-3.5 py-2.5 transition-all duration-150',
+                'font-display text-[13px] font-bold tracking-[0.18em] uppercase',
                 isActive
-                  ? 'bg-gradient-to-r from-ember/18 to-transparent text-ember shadow-[inset_2px_0_0_0_var(--color-ember)]'
+                  ? 'bg-ember/[0.12] text-ember shadow-[inset_2px_0_0_0_var(--color-ember)]'
                   : 'text-ink-muted hover:bg-void-700/60 hover:text-ink',
               )
             }
@@ -161,7 +163,7 @@ function BottomNav() {
       // `index.css`. Os insets laterais só valem alguma coisa em
       // horizontal, onde o notch fica de lado; em vertical são zero e a barra
       // continua de bordo a bordo.
-      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-void-700 bg-void-850/95 pr-[env(safe-area-inset-right)] pb-[var(--tab-bar-pad)] pl-[env(safe-area-inset-left)] backdrop-blur-xl md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-ember/25 bg-void-825/95 pr-[env(safe-area-inset-right)] pb-[var(--tab-bar-pad)] pl-[env(safe-area-inset-left)] backdrop-blur-xl md:hidden"
       aria-label={t.app.mainNav}
     >
       {navItems(t).map((item) => (
@@ -171,8 +173,11 @@ function BottomNav() {
           end={item.end}
           className={({ isActive }) =>
             cn(
-              'flex flex-col items-center gap-0.5 py-1 text-[10px] font-semibold transition-colors',
-              isActive ? 'text-ember' : 'text-ink-muted',
+              'relative flex flex-col items-center gap-0.5 py-1 transition-colors',
+              'font-display text-[9.5px] font-bold tracking-[0.14em] uppercase',
+              isActive
+                ? 'text-ember shadow-[inset_0_2px_0_0_var(--color-ember)] bg-ember/[0.08]'
+                : 'text-ink-muted',
             )
           }
         >
@@ -180,7 +185,7 @@ function BottomNav() {
             <>
               <span
                 className={cn(
-                  'flex h-6 w-[34px] items-center justify-center rounded-lg transition-colors',
+                  'flex h-6 w-[34px] items-center justify-center chamfer-xs transition-colors',
                   isActive && 'bg-ember/[0.16]',
                 )}
               >
@@ -206,7 +211,7 @@ function MobileHeader() {
     // status bar / Dynamic Island na app nativa; no browser o inset é 0.
     <header className="sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-void-700/70 bg-void-900/90 px-4 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] backdrop-blur-xl md:hidden">
       <Logo />
-      <div className="flex items-center gap-2.5 text-xs font-semibold tabular-nums">
+      <div className="flex items-center gap-2.5 font-mono text-xs font-semibold tabular-nums">
         <span className="flex items-center gap-1 text-warn">
           <Icon name="Flame" size={14} />
           {streak}

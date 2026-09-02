@@ -98,7 +98,7 @@ export function HeroAvatar({
   const hairColor = `hsl(${hue} 78% 54%)`
   const hairShade = `hsl(${hue} 78% 28%)`
   const hairLight = `hsl(${hue} 92% 74%)`
-  const suit = '#12121a'
+  const suit = '#15171f'
   const suitDeep = '#06060b'
   const accent = `hsl(${hue} 82% 56%)`
   const auraColor = aura?.value ?? `hsl(${hue} 92% 58%)`
@@ -117,13 +117,13 @@ export function HeroAvatar({
     >
       {/* Aura exterior */}
       <div
-        className={cn('absolute -inset-1 rounded-full blur-xl', animated && 'animate-aura')}
+        className={cn('absolute -inset-1 hexagon blur-xl', animated && 'animate-aura')}
         style={{ background: auraColor, opacity: 0.4 }}
         aria-hidden="true"
       />
       {/* Moldura */}
-      <div className="absolute inset-0 rounded-full p-[3px]" style={frameStyle} aria-hidden="true">
-        <div className="size-full rounded-full bg-void-950" />
+      <div className="absolute inset-0 hexagon p-[3px]" style={frameStyle} aria-hidden="true">
+        <div className="size-full hexagon bg-void-950" />
       </div>
 
       {/* Retrato escolhido pelo utilizador, quando existe, no lugar da figura desenhada. */}
@@ -131,14 +131,14 @@ export function HeroAvatar({
         <img
           src={portrait}
           alt=""
-          className="absolute inset-0 size-full rounded-full object-cover"
+          className="absolute inset-0 size-full hexagon object-cover"
           style={{ padding: size * 0.035 }}
           aria-hidden="true"
         />
       ) : emblemId ? (
         /* Modo brasão: emblema centrado sobre o reiatsu da divisão. */
         <span
-          className="absolute inset-0 flex items-center justify-center rounded-full"
+          className="absolute inset-0 flex items-center justify-center hexagon"
           style={{
             padding: size * 0.035,
             color: emblemColour,
@@ -213,12 +213,12 @@ export function HeroAvatar({
             <rect x="56.6" y="50" width="6.8" height="66" rx="2.6" fill="#08080d" />
             <rect x="58" y="50" width="1.6" height="66" fill={accent} opacity="0.35" />
             {/* Sageo — o cordão que prende a saya à faixa */}
-            <path d="M63 62 C70 66 71 74 67 80 C69 73 67 68 62.6 66 Z" fill="#f2f3f7" opacity="0.7" />
+            <path d="M63 62 C70 66 71 74 67 80 C69 73 67 68 62.6 66 Z" fill="#f2efe6" opacity="0.7" />
             {/* Tsuba losangular e punho entrançado */}
             <path d="M60 42 L69 50 L60 58 L51 50 Z" fill="#4a4636" />
             <path d="M60 44.6 L66 50 L60 55.4 L54 50 Z" fill="#8a8163" />
             <rect x="57.4" y="26" width="5.2" height="18" rx="2" fill="#1a1a24" />
-            <g stroke="#f2f3f7" strokeWidth="0.7" opacity="0.5">
+            <g stroke="#f2efe6" strokeWidth="0.7" opacity="0.5">
               <path d="M57.4 30 L62.6 33" />
               <path d="M57.4 34 L62.6 37" />
               <path d="M57.4 38 L62.6 41" />
@@ -231,14 +231,14 @@ export function HeroAvatar({
 
           {/* Shihakushō: kosode preto de lapelas cruzadas sobre o branco interior */}
           <path d="M10 120 C14 95 30 84 60 84 C90 84 106 95 110 120 Z" fill={`url(#${id}-robe)`} />
-          <path d="M50 84 L60 99 L70 84 L75 87 L60 110 L45 87 Z" fill="#f2f3f7" opacity="0.94" />
+          <path d="M50 84 L60 99 L70 84 L75 87 L60 110 L45 87 Z" fill="#f2efe6" opacity="0.94" />
           <path d="M45 87 L60 110 L60 120 L26 120 C29 101 35 91 45 87 Z" fill={suit} />
           <path d="M75 87 L60 110 L60 120 L94 120 C91 101 85 91 75 87 Z" fill={suitDeep} />
           <path d="M45 87 L60 110 L58 114 L42 90 Z" fill={accent} opacity="0.85" />
           <path d="M75 87 L60 110 L62 114 L78 90 Z" fill={accent} opacity="0.55" />
 
           {/* Faixa clara em diagonal sobre o peito */}
-          <path d="M20 120 L36 88 L46 93 L31 120 Z" fill="#f2f3f7" opacity="0.88" />
+          <path d="M20 120 L36 88 L46 93 L31 120 Z" fill="#f2efe6" opacity="0.88" />
 
           {/* Ombreira à esquerda */}
           <path d="M12 118 C14 101 24 91 37 88 C33 97 31 108 32 120 L13 120 Z" fill={accent} opacity="0.9" />
