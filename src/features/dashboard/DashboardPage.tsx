@@ -34,7 +34,6 @@ function ThinBar({
   max,
   height,
   color,
-  rounded = false,
   sweep = false,
   label,
 }: {
@@ -42,7 +41,6 @@ function ThinBar({
   max: number
   height: number
   color: string
-  rounded?: boolean
   sweep?: boolean
   label: string
 }) {
@@ -50,7 +48,7 @@ function ThinBar({
 
   return (
     <div
-      className={cn('relative bg-void-700', rounded && 'overflow-hidden rounded-full')}
+      className="relative overflow-hidden bg-void-700"
       style={{ height }}
       role="progressbar"
       aria-valuenow={Math.round(value)}
@@ -59,8 +57,8 @@ function ThinBar({
       aria-label={label}
     >
       <div
-        className={cn('absolute inset-y-0 left-0 overflow-hidden', rounded && 'rounded-full')}
-        style={{ width: `${pct}%`, background: color, boxShadow: sweep ? '0 0 14px rgba(255,122,26,.9)' : undefined }}
+        className="absolute inset-y-0 left-0 overflow-hidden"
+        style={{ width: `${pct}%`, background: color, boxShadow: sweep ? '0 0 14px rgba(255,138,20,.9)' : undefined }}
       >
         {/* Brilho a atravessar: só na barra de patente, que é a que se olha. */}
         {sweep && (
@@ -71,7 +69,7 @@ function ThinBar({
   )
 }
 
-const BAR_EMBER = 'linear-gradient(90deg,#b81236,#ff7a1a)'
+const BAR_EMBER = '#ff8a14'
 
 /**
  * O cartão herói do Quartel: a ordem do dia. É o único elemento do ecrã com
@@ -112,8 +110,8 @@ function OrderOfTheDayCard() {
 
   return (
     <section
-      className="relative overflow-hidden rounded-[22px] border border-ember/40 px-[22px] pt-[22px] shadow-[0_20px_60px_-22px_rgba(255,122,26,.55)]"
-      style={{ background: 'linear-gradient(165deg,#181820,#0d0d13)' }}
+      className="relative overflow-hidden chamfer-lg border border-ember/40 px-[22px] pt-[22px]"
+      style={{ background: 'linear-gradient(165deg,#1a1d25,#0c0e13)' }}
     >
       {/* Arte do cartão: a lâmina em diagonal, o kanji da divisão a sair pelo
           fundo e uma borboleta do inferno pousada no canto. */}
@@ -138,7 +136,7 @@ function OrderOfTheDayCard() {
 
       <div className="relative">
         <p className="text-[10.5px] font-bold tracking-[0.24em] text-ember-soft">{t.dashboard.orderOfTheDay}</p>
-        <h1 className="mt-[9px] font-display text-[44px] leading-[1.02] font-bold text-ink [text-shadow:4px_4px_0_rgba(184,18,54,.55)]">
+        <h1 className="mt-[9px] font-display text-[44px] leading-[1.02] font-bold text-ink [text-shadow:4px_4px_0_rgba(200,16,46,.55)]">
           {workout ? loc(workout.name) : t.dashboard.restDay}
         </h1>
         <p className="mt-[7px] text-[13px] font-semibold text-ember-soft">
@@ -154,10 +152,10 @@ function OrderOfTheDayCard() {
 
         {workout && (
           <div className="mt-3.5 flex gap-[7px]">
-            <span className="rounded-full bg-ember/[0.13] px-[11px] py-1.5 text-[11.5px] font-bold text-ember-soft">
+            <span className="chamfer-xs bg-ember/[0.13] px-[11px] py-1.5 text-[11.5px] font-bold text-ember-soft">
               {t.dashboard.rewardXp(n(reward.xp))}
             </span>
-            <span className="rounded-full bg-gold/[0.13] px-[11px] py-1.5 text-[11.5px] font-bold text-gold-soft">
+            <span className="chamfer-xs bg-gold/[0.13] px-[11px] py-1.5 text-[11.5px] font-bold text-gold-soft">
               {t.dashboard.rewardCoins(n(reward.coins))}
             </span>
           </div>
@@ -166,9 +164,10 @@ function OrderOfTheDayCard() {
         <button
           type="button"
           onClick={openSession}
-          // Ver nota do mesmo botão na sessão de treino: `void-950` cruza os
-          // 3:1 sobre o extremo carmim do gradiente, `void-900` ficava em 2,96.
-          className="mt-[18px] h-14 w-full rounded-[15px] bg-gradient-to-br from-ember to-crimson font-display text-[19px] font-bold tracking-[0.06em] text-void-950 shadow-[0_12px_32px_-10px_rgba(255,122,26,.9)] transition-opacity active:opacity-90"
+          // O texto era `void-950` para cruzar os 3:1 sobre o extremo carmim do
+          // gradiente. Sem gradiente, o fundo é o laranja chapado e o desenho
+          // põe-lhe o Vazio por cima — 8,2:1, com folga em qualquer dos dois.
+          className="mt-[18px] h-14 w-full chamfer-lg bg-ember font-display text-[19px] font-bold tracking-[0.06em] text-void-950 transition-opacity active:opacity-90"
         >
           {workout ? ctaLabel : t.dashboard.seeWeeklyPlan}
         </button>
@@ -180,7 +179,7 @@ function OrderOfTheDayCard() {
           <span className="text-[10px] font-semibold tracking-[0.14em] whitespace-nowrap text-ink-muted">
             {t.dashboard.rankLabel(String(info.level).padStart(2, '0'))}
           </span>
-          <span className="font-display text-[13px] font-semibold tabular-nums text-ember-soft">
+          <span className="font-mono text-[13px] font-semibold tabular-nums text-ember-soft">
             {n(info.currentLevelXp)} / {n(info.nextLevelXp)}
           </span>
         </div>
@@ -212,7 +211,7 @@ function MacroLine({ label, text, value, max, color }: {
         <span className="text-[11.5px] font-semibold tabular-nums text-ink">{text}</span>
       </div>
       <div className="mt-1.5">
-        <ThinBar value={value} max={max} height={5} color={color} rounded label={label} />
+        <ThinBar value={value} max={max} height={5} color={color} label={label} />
       </div>
     </div>
   )
@@ -233,7 +232,7 @@ function RationsCard() {
   const diff = targets.calories - totals.calories
 
   return (
-    <section className="mt-[18px] rounded-[18px] border border-void-700/90 bg-void-825 px-[18px] py-4">
+    <section className="mt-[18px] chamfer-lg border border-void-700/90 bg-void-825 px-[18px] py-4">
       <div className="flex items-baseline justify-between">
         <Eyebrow>{t.dashboard.rationsToday}</Eyebrow>
         {/*
@@ -250,7 +249,7 @@ function RationsCard() {
       </div>
 
       <div className="mt-2 flex items-end gap-[9px]">
-        <span className="font-display text-[34px] leading-[0.9] font-bold tabular-nums text-ink">
+        <span className="font-mono text-[34px] leading-[0.9] font-bold tabular-nums text-ink">
           {n(totals.calories)}
         </span>
         <span className="pb-[3px] text-xs text-ink-muted">{t.dashboard.ofKcal(n(targets.calories))}</span>
@@ -269,14 +268,14 @@ function RationsCard() {
           text={t.dashboard.amountOf(n(totals.proteinG), n(targets.proteinG), t.units.grams)}
           value={totals.proteinG}
           max={targets.proteinG}
-          color="#ff7a1a"
+          color="#ff8a14"
         />
         <MacroLine
           label={t.dashboard.water}
           text={t.dashboard.amountOf(d(water / 1000, 1), d(WATER_GOAL_ML / 1000, 1), 'L')}
           value={water}
           max={WATER_GOAL_ML}
-          color="#8fd4ff"
+          color="#5cc8ff"
         />
       </div>
     </section>
@@ -322,11 +321,11 @@ function StreakCard() {
   const useRecoveryDay = useGameStore((state) => state.useRecoveryDay)
 
   return (
-    <Card className="mt-[18px] flex flex-col justify-between rounded-[18px] border-void-700/90 bg-void-825 p-[18px]">
+    <Card className="mt-[18px] flex flex-col justify-between chamfer-lg border-void-700/90 bg-void-825 p-[18px]">
       <div className="flex items-start justify-between">
         <div>
           <Eyebrow>{t.dashboard.streak}</Eyebrow>
-          <p className="mt-1.5 font-display text-[34px] leading-[0.9] font-bold text-warn">
+          <p className="mt-1.5 font-mono text-[34px] leading-[0.9] font-bold text-warn">
             {streak}
             <span className="ml-1.5 text-xs font-medium text-ink-muted">
               {streak === 1 ? t.common.day : t.common.days}
@@ -338,7 +337,7 @@ function StreakCard() {
       </div>
 
       {status === 'em_risco' && recoveryAvailable ? (
-        <div className="mt-4 rounded-xl border border-warn/40 bg-warn/5 p-3">
+        <div className="mt-4 chamfer-md border border-warn/40 bg-warn/5 p-3">
           <p className="text-[11.5px] leading-relaxed text-ink-muted">{t.narrative.streakAtRisk}</p>
           <Button size="sm" variant="gold" icon="HeartPulse" className="mt-2.5" onClick={useRecoveryDay}>
             {t.dashboard.useRecovery}
@@ -356,7 +355,7 @@ function StreakCard() {
 /** A frase do dia, sobre uma mancha de tinta. */
 function NarrativeLine({ text }: { text: string }) {
   return (
-    <Card className="mt-[18px] flex items-start gap-3.5 rounded-[18px] border-ember/25 bg-ember/5 p-4">
+    <Card className="mt-[18px] flex items-start gap-3.5 chamfer-lg border-ember/25 bg-ember/5 p-4">
       <span className="mt-0.5 shrink-0 text-ember">
         <Icon name="Sparkles" size={16} />
       </span>

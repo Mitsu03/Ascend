@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Zen+Old+Mincho:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#0a0a0e; color:#f2f3f7; }
+  a { color:#ff7a1a; text-decoration:none; }
+  a:hover { color:#ffa04d; }
+  @keyframes v5glow { 0%,100%{opacity:.35} 50%{opacity:1} }
+  @keyframes v5sweep { 0%{transform:translateX(-120%)} 100%{transform:translateX(340%)} }
+  @keyframes v5mote { 0%{opacity:0; transform:translateY(0) scale(.6)} 20%{opacity:.9} 100%{opacity:0; transform:translateY(-120px) scale(1.1)} }
+  @keyframes v5spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+  ::-webkit-scrollbar { width:0; height:0 }
+</style>
+</helmet>
+
+<section style="display:flex; flex-direction:column; gap:22px; padding:54px 58px 110px; font-family:'Inter',system-ui,sans-serif">
+
+  <div style="display:flex; align-items:baseline; gap:15px; border-bottom:1px solid #2c2c3b; padding-bottom:12px">
+    <span style="font-size:11px; font-weight:700; letter-spacing:.18em; background:#ff7a1a; color:#0a0a0e; padding:5px 9px; border-radius:4px">5A</span>
+    <h2 style="margin:0; font-family:'Rajdhani',sans-serif; font-size:32px; font-weight:700; letter-spacing:.02em">Restantes ecrãs · linguagem de manga</h2>
+    <span style="font-size:11px; letter-spacing:.1em; color:#a2a4b4; text-transform:uppercase">Estrutura da v4 · 5 ecrãs</span>
+  </div>
+  <p style="max-width:88ch; margin:-6px 0 0; font-size:13.5px; line-height:1.75; color:#a2a4b4; text-wrap:pretty">Mesma estrutura da v4 — uma ideia por ecrã, cartões, nav encostada, muito preto vazio. O que acrescento é vocabulário de banda desenhada japonesa desenhado por código: linhas de velocidade a irradiar do centro da ação, retícula de halftone atrás dos números grandes, cortes diagonais nos cartões principais, kanji em coluna como textura de fundo e sombra chapada nos títulos em vez de brilho difuso. Nenhuma imagem de terceiros.</p>
+
+  <div style="display:flex; flex-wrap:wrap; gap:44px; align-items:flex-start">
+
+    <!-- ══════ 01 ACADEMIA SHIN'Ō ══════ -->
+    <div style="display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:baseline; gap:9px"><span style="font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700; color:#ff7a1a">01</span><span style="font-size:10.5px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#a2a4b4">Academia Shin'ō · início</span></div>
+      <div style="width:402px; height:874px; display:flex; flex-shrink:0">
+        <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ ligado }}" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+          <div data-screen-label="01 Academia" style="position:absolute; inset:0; background:#0a0a0e; display:flex; flex-direction:column; overflow:hidden">
+            <!-- linhas de velocidade a irradiar da máscara -->
+            <div style="position:absolute; left:50%; top:280px; width:380px; height:380px; margin-left:-190px; margin-top:-190px; pointer-events:none; opacity:.3; background:repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,122,26,.5) 0deg 0.5deg, transparent 0.5deg 4deg); -webkit-mask-image:radial-gradient(circle at 50% 50%, transparent 88px, rgba(0,0,0,.8) 126px, transparent 178px); mask-image:radial-gradient(circle at 50% 50%, transparent 88px, rgba(0,0,0,.8) 126px, transparent 178px)"></div>
+            <div style="position:absolute; inset:0; pointer-events:none; background:radial-gradient(40rem 26rem at 50% 20%, rgba(184,18,54,.28), transparent 62%)"></div>
+            <div style="position:absolute; top:150px; right:12px; pointer-events:none; font-family:'Zen Old Mincho',serif; font-size:16px; font-weight:700; letter-spacing:.34em; color:rgba(242,243,247,.14); writing-mode:vertical-rl">死神になれ</div>
+
+            <div style="position:relative; flex:1; display:flex; flex-direction:column; align-items:center; padding:64px 24px 0; text-align:center; overflow:hidden">
+              <p style="margin:0; font-family:'Rajdhani',sans-serif; font-size:23px; font-weight:700; letter-spacing:.42em; color:#f2f3f7">ASCEND</p>
+              <p style="margin:4px 0 0; font-family:'Zen Old Mincho',serif; font-size:11px; letter-spacing:.6em; color:#ffa04d">死神</p>
+
+              <!-- máscara com halftone atrás -->
+              <div style="position:relative; margin-top:30px; width:180px; height:180px; display:flex; align-items:center; justify-content:center">
+                <div style="position:absolute; inset:-14px; border-radius:50%; pointer-events:none; opacity:.5; background-image:radial-gradient(rgba(255,122,26,.9) 1px, transparent 1.4px); background-size:6px 6px; -webkit-mask-image:radial-gradient(circle,rgba(0,0,0,.9) 40%,transparent 72%); mask-image:radial-gradient(circle,rgba(0,0,0,.9) 40%,transparent 72%)"></div>
+                <svg viewBox="-4 -4 108 108" width="170" height="170" style="position:relative; display:block; filter:drop-shadow(6px 6px 0 rgba(184,18,54,.55))">
+                  <defs><linearGradient id="x1bone" x1="0.25" y1="0" x2="0.75" y2="1"><stop offset="0%" stop-color="#fffdf7"></stop><stop offset="52%" stop-color="#ece3d2"></stop><stop offset="100%" stop-color="#b8ab92"></stop></linearGradient>
+                  <clipPath id="x1shell"><path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z"></path></clipPath></defs>
+                  <path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z" fill="url(#x1bone)"></path>
+                  <g clip-path="url(#x1shell)">
+                    <path d="M9 42 C9 66 18 84 34 96 L9 96 Z" fill="#b8ab92" opacity="0.55"></path>
+                    <path d="M27.5 6.5 L38.5 3 L35.5 57 L28 55 Z" fill="#b81236"></path>
+                    <path d="M43 2 L48 1.5 L46.5 26 L42.5 26 Z" fill="#b81236"></path>
+                    <path d="M20 30 L44 38 L45.5 50 L23 46 Z" fill="#050507"></path>
+                    <path d="M80 30 L56 38 L54.5 50 L77 46 Z" fill="#050507"></path>
+                    <circle cx="32" cy="41" r="3.4" fill="#ff7a1a" style="animation:v5glow 2.6s ease-in-out infinite"></circle>
+                    <circle cx="68" cy="41" r="3.4" fill="#ff7a1a" style="animation:v5glow 2.6s ease-in-out infinite"></circle>
+                    <path d="M17 60 L83 60 L77.5 83 L22.5 83 Z" fill="#050507"></path>
+                    <path d="M17 60 L83 60 L80 72 L74.5 61.5 L68 73 L61.5 61.5 L55 73 L48.5 61.5 L42 73 L35.5 61.5 L29 73 L23 61.5 L20 72 Z" fill="url(#x1bone)"></path>
+                    <path d="M22.5 83 L77.5 83 L74.5 72 L69 82 L63 71.5 L57 82 L51 71.5 L45 82 L39 71.5 L33 82 L27 71.5 L25 79 Z" fill="url(#x1bone)"></path>
+                  </g>
+                  <path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z" fill="none" stroke="#050507" stroke-width="2" opacity="0.7"></path>
+                </svg>
+              </div>
+
+              <h1 style="margin:30px 0 0; font-family:'Rajdhani',sans-serif; font-size:38px; font-weight:700; line-height:1.02; text-wrap:pretty; text-shadow:4px 4px 0 rgba(184,18,54,.65)">Entra no Gotei 13 e sobe de patente</h1>
+              <p style="margin:14px 0 0; max-width:33ch; font-size:13px; line-height:1.65; color:#a2a4b4; text-wrap:pretty">Treinos, refeições e hábitos transformados numa carreira de Shinigami. Tudo offline, sem contas nem subscrições.</p>
+
+              <div style="display:flex; gap:7px; margin-top:22px; flex-wrap:wrap; justify-content:center">
+                <span style="display:flex; align-items:center; gap:6px; padding:6px 11px; border-radius:999px; border:1px solid #2c2c3b; font-size:11.5px; color:#a2a4b4"><img src="art/c/katana-soft.svg" width="14" height="14" alt="">Dojo</span>
+                <span style="display:flex; align-items:center; gap:6px; padding:6px 11px; border-radius:999px; border:1px solid #2c2c3b; font-size:11.5px; color:#a2a4b4"><img src="art/c/soul-vessel-soft.svg" width="14" height="14" alt="">Rações</span>
+                <span style="display:flex; align-items:center; gap:6px; padding:6px 11px; border-radius:999px; border:1px solid #2c2c3b; font-size:11.5px; color:#a2a4b4"><img src="art/c/hell-butterfly-soft.svg" width="14" height="14" alt="">Ordens</span>
+              </div>
+            </div>
+
+            <div style="position:relative; display:flex; flex-direction:column; gap:9px; padding:18px 24px 44px">
+              <button style="height:58px; border:none; border-radius:15px; background:linear-gradient(135deg,#ff7a1a,#b81236); color:#0a0a0e; font-family:'Rajdhani',sans-serif; font-size:19px; font-weight:700; letter-spacing:.06em; cursor:pointer; box-shadow:0 12px 32px -10px rgba(255,122,26,.9)">ENTRAR NA ACADEMIA</button>
+              <button style="height:50px; border:1px solid #2c2c3b; border-radius:13px; background:transparent; color:#f2f3f7; font-size:13px; font-weight:600; cursor:pointer">Explorar com demonstração</button>
+              <p style="margin:4px 0 0; font-size:10.5px; line-height:1.55; color:#a2a4b4; text-align:center">Estimativas para gestão pessoal. Não constitui aconselhamento médico ou nutricional.</p>
+            </div>
+          </div>
+        </x-import>
+      </div>
+    </div>
+
+    <!-- ══════ 02 RAÇÕES ══════ -->
+    <div style="display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:baseline; gap:9px"><span style="font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700; color:#ff7a1a">02</span><span style="font-size:10.5px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#a2a4b4">Rações · o que falta hoje</span></div>
+      <div style="width:402px; height:874px; display:flex; flex-shrink:0">
+        <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ ligado }}" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+          <div data-screen-label="02 Rações" style="position:absolute; inset:0; background:#0a0a0e; display:flex; flex-direction:column; overflow:hidden">
+            <div style="position:absolute; inset:0; pointer-events:none; background:radial-gradient(40rem 24rem at 82% -8%, rgba(184,18,54,.2), transparent 60%)"></div>
+
+            <div style="position:relative; display:flex; align-items:center; justify-content:space-between; padding:58px 20px 0">
+              <span style="font-size:12px; font-weight:600; color:#a2a4b4">Rações · 26 de agosto</span>
+              <span style="display:flex; align-items:center; gap:5px; padding:5px 10px; border-radius:999px; background:rgba(61,220,151,.13); font-size:10.5px; font-weight:700; color:#3ddc97">Bónus de proteína +25</span>
+            </div>
+
+            <div style="position:relative; flex:1; display:flex; flex-direction:column; justify-content:center; padding:0 20px">
+              <!-- o número grande com halftone e corte -->
+              <div style="position:relative; padding:24px 22px 20px; border:1px solid rgba(255,122,26,.4); background:linear-gradient(165deg,#181820,#0d0d13); clip-path:polygon(0 0, 100% 0, 100% calc(100% - 26px), calc(100% - 26px) 100%, 0 100%); overflow:hidden; box-shadow:0 20px 60px -22px rgba(255,122,26,.45)">
+                <div style="position:absolute; top:0; right:0; width:200px; height:150px; pointer-events:none; opacity:.35; background-image:radial-gradient(rgba(255,122,26,.9) 1px, transparent 1.4px); background-size:7px 7px; -webkit-mask-image:linear-gradient(215deg, rgba(0,0,0,.95), transparent 68%); mask-image:linear-gradient(215deg, rgba(0,0,0,.95), transparent 68%)"></div>
+                <p style="position:relative; margin:0; font-size:10.5px; font-weight:700; letter-spacing:.24em; color:#ffa04d">FALTAM PARA A META</p>
+                <p style="position:relative; margin:8px 0 0; display:flex; align-items:baseline; gap:10px">
+                  <span style="font-family:'Rajdhani',sans-serif; font-size:74px; font-weight:700; line-height:.86; font-variant-numeric:tabular-nums; text-shadow:5px 5px 0 rgba(184,18,54,.5)">835</span>
+                  <span style="font-size:15px; color:#a2a4b4">kcal</span>
+                </p>
+                <p style="position:relative; margin:10px 0 0; font-size:12.5px; color:#a2a4b4">1 845 de 2 680 · faltam 34 g de proteína</p>
+                <div style="position:relative; height:4px; margin-top:16px; background:#1f1f2b">
+                  <div style="position:absolute; top:0; bottom:0; left:0; width:68.8%; background:linear-gradient(90deg,#b81236,#ff7a1a); box-shadow:0 0 14px rgba(255,122,26,.85); overflow:hidden"><div style="position:absolute; top:0; bottom:0; width:34%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent); animation:v5sweep 3.4s linear infinite"></div></div>
+                </div>
+              </div>
+
+              <!-- macros em 3 cartões -->
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px">
+                <div style="padding:13px 12px; border:1px solid #2c2c3b; border-radius:14px; background:#16161f"><p style="margin:0; font-size:10.5px; font-weight:600; color:#ffa04d">Proteína</p><p style="margin:5px 0 0; font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums">124<span style="font-size:12px; color:#a2a4b4">/158</span></p><div style="height:5px; margin-top:9px; border-radius:999px; background:#1f1f2b"><div style="width:78%; height:100%; border-radius:999px; background:#ff7a1a"></div></div></div>
+                <div style="padding:13px 12px; border:1px solid #2c2c3b; border-radius:14px; background:#16161f"><p style="margin:0; font-size:10.5px; font-weight:600; color:#ffa04d">Hidratos</p><p style="margin:5px 0 0; font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums">176<span style="font-size:12px; color:#a2a4b4">/275</span></p><div style="height:5px; margin-top:9px; border-radius:999px; background:#1f1f2b"><div style="width:64%; height:100%; border-radius:999px; background:#e8365c"></div></div></div>
+                <div style="padding:13px 12px; border:1px solid #2c2c3b; border-radius:14px; background:#16161f"><p style="margin:0; font-size:10.5px; font-weight:600; color:#ffb020">Gordura</p><p style="margin:5px 0 0; font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums">53<span style="font-size:12px; color:#a2a4b4">/74</span></p><div style="height:5px; margin-top:9px; border-radius:999px; background:#1f1f2b"><div style="width:71%; height:100%; border-radius:999px; background:#ffb020"></div></div></div>
+              </div>
+
+              <!-- sugestão -->
+              <div style="display:flex; align-items:center; gap:12px; margin-top:14px; padding:14px; border:1px solid rgba(143,212,255,.35); border-radius:16px; background:rgba(143,212,255,.06)">
+                <img src="art/c/soul-vessel-spirit.svg" width="24" height="24" alt="" style="flex-shrink:0">
+                <div style="min-width:0; flex:1"><p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:.16em; color:#8fd4ff">SUGESTÃO</p><p style="margin:3px 0 0; font-size:13px; line-height:1.45">Peito de peru fatiado, 150 g — 33 g de proteína, 165 kcal.</p></div>
+              </div>
+
+              <!-- diário -->
+              <div style="margin-top:16px">
+                <div style="display:flex; align-items:baseline; justify-content:space-between"><span style="font-size:10.5px; font-weight:600; letter-spacing:.16em; color:#a2a4b4">ALMOÇO · 682 KCAL</span><span style="font-size:11.5px; font-weight:600; color:#ff7a1a">Ver diário</span></div>
+                <div style="display:flex; flex-direction:column; margin-top:10px; border-top:1px solid #1f1f2b"><div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid #1f1f2b"><p style="margin:0; font-size:12.5px">Peito de frango grelhado <span style="color:#a2a4b4">· 170 g</span></p><span style="font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:700; color:#ffa04d; font-variant-numeric:tabular-nums">281</span></div><div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid #1f1f2b"><p style="margin:0; font-size:12.5px">Arroz cozido <span style="color:#a2a4b4">· 200 g</span></p><span style="font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:700; color:#ffa04d; font-variant-numeric:tabular-nums">260</span></div><div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid #1f1f2b"><p style="margin:0; font-size:12.5px">Brócolos cozidos <span style="color:#a2a4b4">· 150 g</span></p><span style="font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:700; color:#ffa04d; font-variant-numeric:tabular-nums">53</span></div><div style="display:flex; align-items:baseline; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid #1f1f2b"><p style="margin:0; font-size:12.5px">Azeite <span style="color:#a2a4b4">· 10 g</span></p><span style="font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:700; color:#ffa04d; font-variant-numeric:tabular-nums">88</span></div></div>
+              </div>
+
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px; padding-top:14px; border-top:1px solid #1f1f2b">
+                <span style="font-size:12px; color:#a2a4b4">Água · <strong style="color:#8fd4ff; font-weight:600">1,60 de 2,5 L</strong></span>
+                <span style="font-size:11.5px; font-weight:600; color:#ff7a1a">+250 ml</span>
+              </div>
+            </div>
+
+            <div style="position:relative; padding:0 20px 0">
+              <div style="display:flex; gap:8px; padding-bottom:12px">
+                <button style="flex:1; height:50px; border:1px solid #2c2c3b; border-radius:13px; background:#1f1f2b; color:#f2f3f7; font-size:12.5px; font-weight:600; cursor:pointer">Fotografia</button>
+                <button style="flex:1.5; height:50px; border:none; border-radius:13px; background:linear-gradient(135deg,#ff7a1a,#b81236); color:#0a0a0e; font-family:'Rajdhani',sans-serif; font-size:16px; font-weight:700; cursor:pointer">REGISTAR</button>
+              </div>
+            </div>
+
+            <div style="position:relative; display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid #1f1f2b; padding-bottom:26px; background:rgba(16,16,23,.92)">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/shinto-shrine-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Quartel</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/katana-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Dojo</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><span style="display:flex; align-items:center; justify-content:center; width:34px; height:24px; border-radius:8px; background:rgba(255,122,26,.16)"><img src="art/c/soul-vessel-ember.svg" width="19" height="19" alt=""></span><span style="font-size:10px; font-weight:600; color:#ff7a1a">Rações</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/hell-butterfly-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Ordens</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/hollow-mask-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Shinigami</span></div>
+            </div>
+          </div>
+        </x-import>
+      </div>
+    </div>
+
+    <!-- ══════ 03 ORDENS ══════ -->
+    <div style="display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:baseline; gap:9px"><span style="font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700; color:#ff7a1a">03</span><span style="font-size:10.5px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#a2a4b4">Ordens · a do Capitão primeiro</span></div>
+      <div style="width:402px; height:874px; display:flex; flex-shrink:0">
+        <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ ligado }}" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+          <div data-screen-label="03 Ordens" style="position:absolute; inset:0; background:#0a0a0e; display:flex; flex-direction:column; overflow:hidden">
+            <div style="position:absolute; inset:0; pointer-events:none; background:radial-gradient(40rem 26rem at 50% -10%, rgba(255,176,32,.18), transparent 60%)"></div>
+            <div style="position:absolute; top:190px; left:10px; pointer-events:none; font-family:'Zen Old Mincho',serif; font-size:15px; font-weight:700; letter-spacing:.34em; color:rgba(242,243,247,.1); writing-mode:vertical-rl">隊長の命</div>
+
+            <div style="position:relative; display:flex; align-items:center; justify-content:space-between; padding:58px 20px 0">
+              <span style="font-size:12px; font-weight:600; color:#a2a4b4">Ordens da Divisão</span>
+              <span style="font-size:11.5px; font-weight:600; color:#a2a4b4">1 substituição</span>
+            </div>
+
+            <div style="position:relative; flex:1; display:flex; flex-direction:column; justify-content:center; padding:0 20px">
+
+              <!-- ORDEM DO CAPITÃO -->
+              <div style="position:relative; padding:22px; border:1px solid rgba(255,176,32,.45); background:linear-gradient(160deg,#1b1710,#0d0d13); clip-path:polygon(26px 0, 100% 0, 100% 100%, 0 100%, 0 26px); overflow:hidden; box-shadow:0 20px 60px -22px rgba(255,176,32,.5)">
+                <div style="position:absolute; left:50%; top:-120px; width:520px; height:520px; margin-left:-260px; pointer-events:none; opacity:.3; background:repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,176,32,.45) 0deg 0.5deg, transparent 0.5deg 5deg); -webkit-mask-image:radial-gradient(circle at 50% 50%, rgba(0,0,0,.9) 30%, transparent 62%); mask-image:radial-gradient(circle at 50% 50%, rgba(0,0,0,.9) 30%, transparent 62%)"></div>
+                <div style="position:relative; display:flex; align-items:flex-start; justify-content:space-between; gap:12px">
+                  <div style="min-width:0">
+                    <p style="margin:0; font-size:10.5px; font-weight:700; letter-spacing:.24em; color:#ffcd5e">ORDEM DO CAPITÃO</p>
+                    <h1 style="margin:8px 0 0; font-family:'Rajdhani',sans-serif; font-size:33px; font-weight:700; line-height:1.04; text-shadow:3px 3px 0 rgba(184,18,54,.5)">Ordem: Ascensão</h1>
+                  </div>
+                  <img src="art/c/sword-hilt-gold.svg" width="34" height="34" alt="" style="flex-shrink:0">
+                </div>
+                <p style="position:relative; margin:12px 0 0; font-size:12.5px; line-height:1.6; color:#a2a4b4; text-wrap:pretty">Uma só ordem por semana, emitida pelo capitão da tua divisão.</p>
+                <div style="position:relative; display:flex; align-items:center; justify-content:space-between; margin-top:18px">
+                  <span style="font-family:'Rajdhani',sans-serif; font-size:15px; font-weight:600; color:#f2f3f7; font-variant-numeric:tabular-nums">2 de 3 treinos</span>
+                  <span style="display:flex; gap:6px"><span style="padding:4px 9px; border-radius:6px; background:rgba(255,122,26,.15); font-size:11px; font-weight:700; color:#ffa04d">+200</span><span style="padding:4px 9px; border-radius:6px; background:rgba(255,176,32,.15); font-size:11px; font-weight:700; color:#ffcd5e">+80</span></span>
+                </div>
+                <div style="position:relative; height:8px; margin-top:9px; border-radius:999px; background:#1f1f2b; overflow:hidden"><div style="width:66.6%; height:100%; border-radius:999px; background:linear-gradient(90deg,#ffb020,#ff7a1a)"></div></div>
+              </div>
+
+              <!-- DIÁRIAS -->
+              <div style="margin-top:20px">
+                <div style="display:flex; align-items:baseline; justify-content:space-between"><span style="font-size:10.5px; font-weight:600; letter-spacing:.16em; color:#a2a4b4">ORDENS DO DIA · 1 DE 3</span></div>
+                <div style="display:flex; flex-direction:column; gap:7px; margin-top:10px">
+                  <div style="display:grid; grid-template-columns:22px 1fr auto; gap:11px; align-items:center; padding:12px 13px; border:1px solid rgba(61,220,151,.4); border-radius:13px; background:rgba(61,220,151,.07)">
+                    <span style="display:flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:6px; background:#3ddc97; color:#0a0a0e; font-size:12px; font-weight:700">✓</span>
+                    <p style="margin:0; font-size:12.5px; color:#3ddc97">Hidratação do Shinigami</p>
+                    <span style="font-size:10.5px; font-weight:700; color:#3ddc97">CUMPRIDA</span>
+                  </div>
+                  <div style="display:grid; grid-template-columns:22px 1fr auto; gap:11px; align-items:center; padding:12px 13px; border:1px solid #2c2c3b; border-radius:13px; background:#16161f">
+                    <span style="width:20px; height:20px; border-radius:6px; border:1.5px solid #414155"></span>
+                    <div style="min-width:0"><p style="margin:0; font-size:12.5px">Treino do dia</p><div style="height:4px; margin-top:6px; border-radius:999px; background:#1f1f2b"><div style="width:0%; height:100%; border-radius:999px; background:#ff7a1a"></div></div></div>
+                    <span style="display:flex; gap:5px"><span style="padding:3px 7px; border-radius:5px; background:rgba(255,122,26,.14); font-size:10.5px; font-weight:700; color:#ffa04d">+40</span><span style="padding:3px 7px; border-radius:5px; background:rgba(255,176,32,.14); font-size:10.5px; font-weight:700; color:#ffcd5e">+10</span></span>
+                  </div>
+                  <div style="display:grid; grid-template-columns:22px 1fr auto; gap:11px; align-items:center; padding:12px 13px; border:1px solid #2c2c3b; border-radius:13px; background:#16161f">
+                    <span style="width:20px; height:20px; border-radius:6px; border:1.5px solid #414155"></span>
+                    <div style="min-width:0"><p style="margin:0; font-size:12.5px">Meta de proteína</p><div style="height:4px; margin-top:6px; border-radius:999px; background:#1f1f2b"><div style="width:78%; height:100%; border-radius:999px; background:#ff7a1a"></div></div></div>
+                    <span style="display:flex; gap:5px"><span style="padding:3px 7px; border-radius:5px; background:rgba(255,122,26,.14); font-size:10.5px; font-weight:700; color:#ffa04d">+35</span><span style="padding:3px 7px; border-radius:5px; background:rgba(255,176,32,.14); font-size:10.5px; font-weight:700; color:#ffcd5e">+10</span></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SEMANAIS -->
+              <div style="margin-top:18px">
+                <span style="font-size:10.5px; font-weight:600; letter-spacing:.16em; color:#a2a4b4">ORDENS DA SEMANA</span>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px">
+                  <div style="padding:13px; border:1px solid #2c2c3b; border-radius:13px; background:#16161f"><p style="margin:0; font-size:12.5px; font-weight:500">Semana de ferro</p><p style="margin:4px 0 0; font-size:10.5px; color:#a2a4b4; font-variant-numeric:tabular-nums">2 de 4 treinos</p><div style="height:4px; margin-top:8px; border-radius:999px; background:#1f1f2b"><div style="width:50%; height:100%; border-radius:999px; background:#e8365c"></div></div><span style="display:inline-block; margin-top:9px; padding:3px 7px; border-radius:5px; background:rgba(255,122,26,.14); font-size:10.5px; font-weight:700; color:#ffa04d">+140</span></div>
+                  <div style="padding:13px; border:1px solid #2c2c3b; border-radius:13px; background:#16161f"><p style="margin:0; font-size:12.5px; font-weight:500">Rio interior</p><p style="margin:4px 0 0; font-size:10.5px; color:#a2a4b4; font-variant-numeric:tabular-nums">11 000 de 15 000 ml</p><div style="height:4px; margin-top:8px; border-radius:999px; background:#1f1f2b"><div style="width:73.3%; height:100%; border-radius:999px; background:#8fd4ff"></div></div><span style="display:inline-block; margin-top:9px; padding:3px 7px; border-radius:5px; background:rgba(255,122,26,.14); font-size:10.5px; font-weight:700; color:#ffa04d">+110</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="position:relative; display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid #1f1f2b; padding-bottom:26px; background:rgba(16,16,23,.92)">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/shinto-shrine-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Quartel</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/katana-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Dojo</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/soul-vessel-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Rações</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><span style="display:flex; align-items:center; justify-content:center; width:34px; height:24px; border-radius:8px; background:rgba(255,122,26,.16)"><img src="art/c/hell-butterfly-ember.svg" width="19" height="19" alt=""></span><span style="font-size:10px; font-weight:600; color:#ff7a1a">Ordens</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/hollow-mask-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Shinigami</span></div>
+            </div>
+          </div>
+        </x-import>
+      </div>
+    </div>
+
+    <!-- ══════ 04 FICHA ══════ -->
+    <div style="display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:baseline; gap:9px"><span style="font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700; color:#ff7a1a">04</span><span style="font-size:10.5px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#a2a4b4">Ficha · quem és no Gotei</span></div>
+      <div style="width:402px; height:874px; display:flex; flex-shrink:0">
+        <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ ligado }}" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+          <div data-screen-label="04 Ficha" style="position:absolute; inset:0; background:#0a0a0e; display:flex; flex-direction:column; overflow:hidden">
+            <div style="position:absolute; left:50%; top:210px; width:330px; height:330px; margin-left:-165px; margin-top:-165px; pointer-events:none; opacity:.22; background:repeating-conic-gradient(from 0deg at 50% 50%, rgba(232,54,92,.45) 0deg 0.5deg, transparent 0.5deg 4.5deg); -webkit-mask-image:radial-gradient(circle at 50% 50%, transparent 60px, rgba(0,0,0,.8) 96px, transparent 150px); mask-image:radial-gradient(circle at 50% 50%, transparent 60px, rgba(0,0,0,.8) 96px, transparent 150px)"></div>
+            <div style="position:absolute; inset:0; pointer-events:none; background:radial-gradient(36rem 22rem at 50% -6%, rgba(232,54,92,.24), transparent 62%)"></div>
+
+            <div style="position:relative; flex:1; display:flex; flex-direction:column; overflow:hidden">
+              <!-- retrato -->
+              <div style="display:flex; flex-direction:column; align-items:center; padding:58px 20px 18px">
+                <div style="position:relative; width:112px; height:112px; display:flex; align-items:center; justify-content:center">
+                  <span style="position:absolute; inset:0; border-radius:50%; border:2px solid rgba(232,54,92,.7)"></span>
+                  <span style="position:absolute; inset:9px; border-radius:50%; border:1px solid rgba(232,54,92,.25)"></span>
+                  <span style="position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle,rgba(232,54,92,.22),transparent 72%)"></span>
+                  <img src="art/c/grim-reaper-crimson.svg" width="50" height="50" alt="" style="position:relative; filter:drop-shadow(3px 3px 0 rgba(10,10,14,.9))">
+                  <svg viewBox="-4 -4 108 108" width="46" height="46" style="position:absolute; left:50%; bottom:4px; transform:translateX(-50%); display:block; opacity:.6">
+                    <defs><linearGradient id="x4bone" x1="0.25" y1="0" x2="0.75" y2="1"><stop offset="0%" stop-color="#fffdf7"></stop><stop offset="52%" stop-color="#ece3d2"></stop><stop offset="100%" stop-color="#b8ab92"></stop></linearGradient>
+                    <clipPath id="x4shell"><path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z"></path></clipPath></defs>
+                    <path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z" fill="url(#x4bone)"></path>
+                    <g clip-path="url(#x4shell)">
+                      <path d="M27.5 6.5 L38.5 3 L35.5 57 L28 55 Z" fill="#b81236"></path>
+                      <path d="M20 30 L44 38 L45.5 50 L23 46 Z" fill="#050507"></path>
+                      <path d="M80 30 L56 38 L54.5 50 L77 46 Z" fill="#050507"></path>
+                      <circle cx="32" cy="41" r="3.2" fill="#ff7a1a"></circle>
+                      <circle cx="68" cy="41" r="3.2" fill="#ff7a1a"></circle>
+                      <path d="M17 60 L83 60 L77.5 83 L22.5 83 Z" fill="#050507"></path>
+                      <path d="M17 60 L83 60 L80 72 L74.5 61.5 L68 73 L61.5 61.5 L55 73 L48.5 61.5 L42 73 L35.5 61.5 L29 73 L23 61.5 L20 72 Z" fill="url(#x4bone)"></path>
+                    </g>
+                  </svg>
+                </div>
+                <p style="margin:14px 0 0; font-family:'Rajdhani',sans-serif; font-size:34px; font-weight:700; line-height:1; text-shadow:3px 3px 0 rgba(184,18,54,.55)">Kai</p>
+                <p style="margin:6px 0 0; font-size:13px; font-weight:600; color:#ffa04d">Oficial de Divisão · patente 07</p>
+                <p style="margin:2px 0 0; font-size:11.5px; color:#a2a4b4">Décima Primeira Divisão · Sem kidō. Sem desculpas.</p>
+              </div>
+
+              <!-- artes de combate -->
+              <div style="padding:0 20px">
+                <span style="font-size:10.5px; font-weight:600; letter-spacing:.16em; color:#a2a4b4">ARTES DE COMBATE</span>
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:11px">
+                  <div style="display:flex; flex-direction:column; align-items:center; gap:7px; padding:13px 6px; border:1px solid #2c2c3b; border-radius:13px; background:#16161f"><img src="art/c/katana-ember.svg" width="19" height="19" alt=""><span style="font-family:'Rajdhani',sans-serif; font-size:23px; font-weight:700; line-height:1">14</span><span style="font-size:9.5px; font-weight:600; color:#ff7a1a">Zanjutsu</span></div>
+                  <div style="display:flex; flex-direction:column; align-items:center; gap:7px; padding:13px 6px; border:1px solid #2c2c3b; border-radius:13px; background:#16161f"><img src="art/c/quick-slash-good.svg" width="19" height="19" alt=""><span style="font-family:'Rajdhani',sans-serif; font-size:23px; font-weight:700; line-height:1">9</span><span style="font-size:9.5px; font-weight:600; color:#3ddc97">Hohō</span></div>
+                  <div style="display:flex; flex-direction:column; align-items:center; gap:7px; padding:13px 6px; border:1px solid #2c2c3b; border-radius:13px; background:#16161f"><img src="art/c/fire-ray-crimson.svg" width="19" height="19" alt=""><span style="font-family:'Rajdhani',sans-serif; font-size:23px; font-weight:700; line-height:1">11</span><span style="font-size:9.5px; font-weight:600; color:#ffa04d">Kidō</span></div>
+                  <div style="display:flex; flex-direction:column; align-items:center; gap:7px; padding:13px 6px; border:1px solid #2c2c3b; border-radius:13px; background:#16161f"><img src="art/c/aura-gold.svg" width="19" height="19" alt=""><span style="font-family:'Rajdhani',sans-serif; font-size:23px; font-weight:700; line-height:1">8</span><span style="font-size:9.5px; font-weight:600; color:#ffb020">Reiryoku</span></div>
+                </div>
+              </div>
+
+              <!-- contadores -->
+              <div style="display:flex; margin:16px 20px 0; border-top:1px solid #1f1f2b; border-bottom:1px solid #1f1f2b">
+                <div style="flex:1; padding:13px 0; border-right:1px solid #1f1f2b"><p style="margin:0; font-size:10px; font-weight:600; letter-spacing:.14em; color:#a2a4b4">DIAS</p><p style="margin:3px 0 0; font-family:'Rajdhani',sans-serif; font-size:24px; font-weight:700; line-height:1; color:#ff9f1c">5</p></div>
+                <div style="flex:1; padding:13px 0 13px 14px; border-right:1px solid #1f1f2b"><p style="margin:0; font-size:10px; font-weight:600; letter-spacing:.14em; color:#a2a4b4">RECORDE</p><p style="margin:3px 0 0; font-family:'Rajdhani',sans-serif; font-size:24px; font-weight:700; line-height:1">12</p></div>
+                <div style="flex:1; padding:13px 0 13px 14px"><p style="margin:0; font-size:10px; font-weight:600; letter-spacing:.14em; color:#a2a4b4">KAN</p><p style="margin:3px 0 0; font-family:'Rajdhani',sans-serif; font-size:24px; font-weight:700; line-height:1; color:#ffcd5e">320</p></div>
+              </div>
+
+              <!-- conquistas -->
+              <div style="padding:16px 20px 0">
+                <div style="display:flex; align-items:baseline; justify-content:space-between"><span style="font-size:10.5px; font-weight:600; letter-spacing:.16em; color:#a2a4b4">CONQUISTAS · 4 DE 10</span><span style="font-size:11.5px; font-weight:600; color:#ff7a1a">Ver todas</span></div>
+                <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:7px; margin-top:11px">
+                  <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:13px; border:1px solid rgba(255,122,26,.45); background:rgba(255,122,26,.1)"><img src="art/c/quick-slash-soft.svg" width="22" height="22" alt=""></div>
+                  <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:13px; border:1px solid rgba(255,122,26,.45); background:rgba(255,122,26,.1)"><img src="art/c/spark-spirit-soft.svg" width="22" height="22" alt=""></div>
+                  <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:13px; border:1px solid rgba(255,176,32,.5); background:rgba(255,176,32,.12)"><img src="art/c/shinto-shrine-gold.svg" width="22" height="22" alt=""></div>
+                  <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:13px; border:1px solid rgba(232,54,92,.45); background:rgba(232,54,92,.1)"><img src="art/c/crossed-swords-crimson.svg" width="22" height="22" alt=""></div>
+                  <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:13px; border:1px dashed #414155"><img src="art/c/soul-vessel-faint.svg" width="22" height="22" alt=""></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="position:relative; display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid #1f1f2b; padding-bottom:26px; background:rgba(16,16,23,.92)">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/shinto-shrine-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Quartel</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/katana-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Dojo</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/soul-vessel-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Rações</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><img src="art/c/hell-butterfly-muted.svg" width="19" height="19" alt=""><span style="font-size:10px; color:#a2a4b4">Ordens</span></div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0"><span style="display:flex; align-items:center; justify-content:center; width:34px; height:24px; border-radius:8px; background:rgba(255,122,26,.16)"><img src="art/c/hollow-mask-ember.svg" width="19" height="19" alt=""></span><span style="font-size:10px; font-weight:600; color:#ff7a1a">Shinigami</span></div>
+            </div>
+          </div>
+        </x-import>
+      </div>
+    </div>
+
+    <!-- ══════ 05 CELEBRAÇÃO ══════ -->
+    <div style="display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:baseline; gap:9px"><span style="font-family:'Rajdhani',sans-serif; font-size:22px; font-weight:700; color:#ff7a1a">05</span><span style="font-size:10.5px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#a2a4b4">Fim de sessão · subida de patente</span></div>
+      <div style="width:402px; height:874px; display:flex; flex-shrink:0">
+        <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ ligado }}" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+          <div data-screen-label="05 Celebração" style="position:absolute; inset:0; background:#050507; display:flex; flex-direction:column; overflow:hidden">
+            <!-- explosão de linhas de velocidade -->
+            <div style="position:absolute; left:50%; top:330px; width:470px; height:470px; margin-left:-235px; margin-top:-235px; pointer-events:none; opacity:.42; background:repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,122,26,.6) 0deg 0.6deg, transparent 0.6deg 3.4deg); -webkit-mask-image:radial-gradient(circle at 50% 50%, transparent 86px, rgba(0,0,0,.85) 132px, transparent 220px); mask-image:radial-gradient(circle at 50% 50%, transparent 86px, rgba(0,0,0,.85) 132px, transparent 220px)"></div>
+            <div style="position:absolute; inset:0; pointer-events:none; background:radial-gradient(34rem 26rem at 50% 30%, rgba(184,18,54,.42), transparent 62%)"></div>
+            <div style="position:absolute; left:60px; bottom:150px; width:3px; height:3px; border-radius:50%; background:#ffa04d; animation:v5mote 8s linear infinite"></div>
+            <div style="position:absolute; left:180px; bottom:120px; width:2px; height:2px; border-radius:50%; background:#8fd4ff; animation:v5mote 10s linear infinite 2s"></div>
+            <div style="position:absolute; left:310px; bottom:170px; width:3px; height:3px; border-radius:50%; background:#ffcd5e; animation:v5mote 9s linear infinite 1s"></div>
+
+            <div style="position:relative; flex:1; display:flex; flex-direction:column; align-items:center; padding:66px 22px 0; text-align:center; overflow:hidden">
+              <p style="margin:0; font-size:11px; font-weight:700; letter-spacing:.3em; color:#ffa04d">SUBIDA DE PATENTE</p>
+
+              <div style="position:relative; margin-top:22px; width:176px; height:176px; display:flex; align-items:center; justify-content:center">
+                <div style="position:absolute; inset:-16px; border-radius:50%; pointer-events:none; opacity:.55; background-image:radial-gradient(rgba(255,122,26,.95) 1px, transparent 1.4px); background-size:6px 6px; -webkit-mask-image:radial-gradient(circle,rgba(0,0,0,.9) 42%,transparent 74%); mask-image:radial-gradient(circle,rgba(0,0,0,.9) 42%,transparent 74%)"></div>
+                <svg viewBox="-4 -4 108 108" width="168" height="168" style="position:relative; display:block; filter:drop-shadow(7px 7px 0 rgba(184,18,54,.6))">
+                  <defs><radialGradient id="x5sock" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ff7a1a" stop-opacity=".95"></stop><stop offset="55%" stop-color="#ff7a1a" stop-opacity=".35"></stop><stop offset="100%" stop-color="#ff7a1a" stop-opacity="0"></stop></radialGradient>
+                  <linearGradient id="x5bone" x1="0.25" y1="0" x2="0.75" y2="1"><stop offset="0%" stop-color="#fffdf7"></stop><stop offset="52%" stop-color="#ece3d2"></stop><stop offset="100%" stop-color="#b8ab92"></stop></linearGradient>
+                  <clipPath id="x5shell"><path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z"></path></clipPath></defs>
+                  <path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z" fill="url(#x5bone)"></path>
+                  <g clip-path="url(#x5shell)">
+                    <path d="M9 42 C9 66 18 84 34 96 L9 96 Z" fill="#b8ab92" opacity="0.5"></path>
+                    <path d="M50 1 C73 1 89 18 91 42 L91 22 C82 8 66 1 50 1 Z" fill="#ffffff" opacity="0.5"></path>
+                    <path d="M27.5 6.5 L38.5 3 L35.5 57 L28 55 Z" fill="#b81236"></path>
+                    <path d="M43 2 L48 1.5 L46.5 26 L42.5 26 Z" fill="#b81236"></path>
+                    <path d="M20 30 L44 38 L45.5 50 L23 46 Z" fill="#050507"></path>
+                    <path d="M80 30 L56 38 L54.5 50 L77 46 Z" fill="#050507"></path>
+                    <ellipse cx="32" cy="41" rx="13" ry="11" fill="url(#x5sock)" style="animation:v5glow 2.4s ease-in-out infinite"></ellipse>
+                    <ellipse cx="68" cy="41" rx="13" ry="11" fill="url(#x5sock)" style="animation:v5glow 2.4s ease-in-out infinite"></ellipse>
+                    <circle cx="32" cy="41" r="3.4" fill="#ff7a1a"></circle>
+                    <circle cx="68" cy="41" r="3.4" fill="#ff7a1a"></circle>
+                    <path d="M17 60 L83 60 L77.5 83 L22.5 83 Z" fill="#050507"></path>
+                    <path d="M17 60 L83 60 L80 72 L74.5 61.5 L68 73 L61.5 61.5 L55 73 L48.5 61.5 L42 73 L35.5 61.5 L29 73 L23 61.5 L20 72 Z" fill="url(#x5bone)"></path>
+                    <path d="M22.5 83 L77.5 83 L74.5 72 L69 82 L63 71.5 L57 82 L51 71.5 L45 82 L39 71.5 L33 82 L27 71.5 L25 79 Z" fill="url(#x5bone)"></path>
+                  </g>
+                  <path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z" fill="none" stroke="#050507" stroke-width="2" opacity="0.7"></path>
+                </svg>
+              </div>
+
+              <p style="margin:20px 0 0; font-size:11px; font-weight:600; letter-spacing:.2em; color:#a2a4b4">PATENTE 07 → 10</p>
+              <h1 style="margin:6px 0 0; font-family:'Rajdhani',sans-serif; font-size:44px; font-weight:700; line-height:1; text-shadow:5px 5px 0 rgba(184,18,54,.6)">Terceiro Oficial</h1>
+              <p style="margin:12px 0 0; max-width:30ch; font-size:13px; line-height:1.6; color:#a2a4b4; text-wrap:pretty">A máscara começa a formar-se sobre o teu rosto. A divisão já te trata pelo posto. <span style="color:#3ddc97; font-weight:600">18 de 18 séries em 48:12.</span></p>
+
+              <div style="display:flex; width:100%; margin-top:22px; border-top:1px solid #1f1f2b; border-bottom:1px solid #1f1f2b">
+                <div style="flex:1; padding:14px 0; border-right:1px solid #1f1f2b"><p style="margin:0; font-size:10px; font-weight:600; letter-spacing:.14em; color:#a2a4b4">REIATSU</p><p style="margin:4px 0 0; font-family:'Rajdhani',sans-serif; font-size:25px; font-weight:700; line-height:1; color:#ffa04d">+198</p></div>
+                <div style="flex:1; padding:14px 0; border-right:1px solid #1f1f2b"><p style="margin:0; font-size:10px; font-weight:600; letter-spacing:.14em; color:#a2a4b4">KAN</p><p style="margin:4px 0 0; font-family:'Rajdhani',sans-serif; font-size:25px; font-weight:700; line-height:1; color:#ffcd5e">+47</p></div>
+                <div style="flex:1; padding:14px 0"><p style="margin:0; font-size:10px; font-weight:600; letter-spacing:.14em; color:#a2a4b4">ARTES</p><p style="margin:4px 0 0; font-family:'Rajdhani',sans-serif; font-size:25px; font-weight:700; line-height:1; color:#8fd4ff">+3</p></div>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:13px; width:100%; margin-top:16px; padding:15px; border:1px solid rgba(232,54,92,.55); background:linear-gradient(140deg,rgba(232,54,92,.15),rgba(22,22,31,.9)); clip-path:polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px); text-align:left">
+                <span style="flex-shrink:0; width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#ff7a1a,#d1244a); box-shadow:0 0 18px rgba(255,122,26,.65)"></span>
+                <div style="min-width:0; flex:1"><p style="margin:0; font-family:'Rajdhani',sans-serif; font-size:20px; font-weight:700">Selo Shikai</p><p style="margin:1px 0 0; font-size:11px; color:#a2a4b4">Anel de retrato · desbloqueado</p></div>
+                <span style="flex-shrink:0; padding:4px 8px; background:rgba(232,54,92,.2); font-size:9.5px; font-weight:700; letter-spacing:.06em; color:#ffa04d">ADJUCHAS</span>
+              </div>
+            </div>
+
+            <div style="position:relative; display:flex; flex-direction:column; gap:8px; padding:18px 22px 44px">
+              <button style="height:56px; border:none; border-radius:15px; background:linear-gradient(135deg,#ff7a1a,#b81236); color:#0a0a0e; font-family:'Rajdhani',sans-serif; font-size:18px; font-weight:700; letter-spacing:.05em; cursor:pointer; box-shadow:0 12px 32px -10px rgba(255,122,26,.9)">EQUIPAR E VOLTAR AO QUARTEL</button>
+              <button style="height:48px; border:1px solid #2c2c3b; border-radius:13px; background:transparent; color:#a2a4b4; font-size:12.5px; font-weight:600; cursor:pointer">Ver arsenal cosmético</button>
+            </div>
+          </div>
+        </x-import>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return { devW: 402, devH: 874, ligado: true };
+  }
+}
+</script>
+</body>
+</html>

@@ -20,7 +20,7 @@ interface CelebrationScreenProps {
 function cosmeticSwatch(value: string): string {
   return value.startsWith('#') || value.startsWith('linear-gradient')
     ? value
-    : 'linear-gradient(135deg, #ff7a1a, #d1244a)'
+    : 'linear-gradient(135deg, #ff8a14, #d1244a)'
 }
 
 /**
@@ -70,7 +70,7 @@ export function CelebrationScreen({ result, onClose }: CelebrationScreenProps) {
           aria-hidden="true"
           style={{
             background:
-              'repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,122,26,.6) 0deg 0.6deg, transparent 0.6deg 3.4deg)',
+              'repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,138,20,.6) 0deg 0.6deg, transparent 0.6deg 3.4deg)',
             WebkitMaskImage:
               'radial-gradient(circle at 50% 50%, transparent 86px, rgba(0,0,0,.85) 132px, transparent 220px)',
             maskImage: 'radial-gradient(circle at 50% 50%, transparent 86px, rgba(0,0,0,.85) 132px, transparent 220px)',
@@ -79,7 +79,7 @@ export function CelebrationScreen({ result, onClose }: CelebrationScreenProps) {
         <div
           className="pointer-events-none absolute inset-0"
           aria-hidden="true"
-          style={{ background: 'radial-gradient(34rem 26rem at 50% 30%, rgba(184,18,54,.42), transparent 62%)' }}
+          style={{ background: 'radial-gradient(34rem 26rem at 50% 30%, rgba(200,16,46,.42), transparent 62%)' }}
         />
         <SpiritMotes tone="ember" count={3} />
 
@@ -99,7 +99,7 @@ export function CelebrationScreen({ result, onClose }: CelebrationScreenProps) {
               className="pointer-events-none absolute -inset-4 rounded-full opacity-[0.55]"
               aria-hidden="true"
               style={{
-                backgroundImage: 'radial-gradient(rgba(255,122,26,.95) 1px, transparent 1.4px)',
+                backgroundImage: 'radial-gradient(rgba(255,138,20,.95) 1px, transparent 1.4px)',
                 backgroundSize: '6px 6px',
                 WebkitMaskImage: 'radial-gradient(circle, rgba(0,0,0,.9) 42%, transparent 74%)',
                 maskImage: 'radial-gradient(circle, rgba(0,0,0,.9) 42%, transparent 74%)',
@@ -108,14 +108,14 @@ export function CelebrationScreen({ result, onClose }: CelebrationScreenProps) {
             <HollowMask
               size={168}
               stage={stage}
-              className="relative [filter:drop-shadow(7px_7px_0_rgba(184,18,54,0.6))]"
+              className="relative [filter:drop-shadow(7px_7px_0_rgba(200,16,46,0.6))]"
             />
           </div>
 
           <p className="mt-5 text-[11px] font-semibold tracking-[0.2em] text-ink-muted">
             {t.dashboard.rankLabel(String(level).padStart(2, '0'))}
           </p>
-          <h1 className="mt-1.5 font-display text-[44px] font-bold leading-none text-ink [text-shadow:5px_5px_0_rgba(184,18,54,0.6)]">
+          <h1 className="mt-1.5 font-display text-[44px] font-bold leading-none text-ink [text-shadow:5px_5px_0_rgba(200,16,46,0.6)]">
             {t.levelTitles[titleKeyForLevel(level)]}
           </h1>
           <p className="mt-3 max-w-[31ch] text-[13px] leading-[1.6] text-pretty text-ink-muted">
@@ -128,19 +128,19 @@ export function CelebrationScreen({ result, onClose }: CelebrationScreenProps) {
           <div className="mt-5 flex w-full border-y border-void-700">
             <div className="flex-1 border-r border-void-700 py-3.5">
               <p className="text-[10px] font-semibold tracking-[0.14em] text-ink-muted">{t.celebration.reiatsu}</p>
-              <p className="mt-1 font-display text-[25px] font-bold leading-none tabular-nums text-ember-soft">
+              <p className="mt-1 font-mono text-[25px] font-bold leading-none tabular-nums text-ember-soft">
                 +{n(log.xpEarned)}
               </p>
             </div>
             <div className="flex-1 border-r border-void-700 py-3.5">
               <p className="text-[10px] font-semibold tracking-[0.14em] text-ink-muted">{t.celebration.kanLabel}</p>
-              <p className="mt-1 font-display text-[25px] font-bold leading-none tabular-nums text-gold-soft">
+              <p className="mt-1 font-mono text-[25px] font-bold leading-none tabular-nums text-gold-soft">
                 +{n(log.coinsEarned)}
               </p>
             </div>
             <div className="flex-1 py-3.5">
               <p className="text-[10px] font-semibold tracking-[0.14em] text-ink-muted">{t.celebration.arts}</p>
-              <p className="mt-1 font-display text-[25px] font-bold leading-none tabular-nums text-spirit">+{arts}</p>
+              <p className="mt-1 font-mono text-[25px] font-bold leading-none tabular-nums text-spirit">+{arts}</p>
             </div>
           </div>
 
@@ -148,10 +148,10 @@ export function CelebrationScreen({ result, onClose }: CelebrationScreenProps) {
             // Cantos cortados a 18 px, como o cartão de recompensa do protótipo.
             <div
               className="mt-4 flex w-full items-center gap-[13px] border border-crimson-soft/55 p-[15px] text-left [clip-path:polygon(18px_0,100%_0,100%_calc(100%-18px),calc(100%-18px)_100%,0_100%,0_18px)]"
-              style={{ background: 'linear-gradient(140deg, rgba(232,54,92,.15), rgba(22,22,31,.9))' }}
+              style={{ background: 'linear-gradient(140deg, rgba(239,74,99,.15), rgba(22,22,31,.9))' }}
             >
               <span
-                className="size-8 shrink-0 rounded-full shadow-[0_0_18px_rgba(255,122,26,.65)]"
+                className="size-8 shrink-0 rounded-full shadow-[0_0_18px_rgba(255,138,20,.65)]"
                 style={{ background: cosmeticSwatch(cosmetic.value) }}
                 aria-hidden="true"
               />
@@ -173,7 +173,7 @@ export function CelebrationScreen({ result, onClose }: CelebrationScreenProps) {
             type="button"
             onClick={onClose}
             // `void-950` sobre o extremo carmim do gradiente, como no CTA do Quartel.
-            className="h-14 w-full rounded-[15px] bg-gradient-to-br from-ember to-crimson font-display text-[18px] font-bold tracking-[0.05em] text-void-950 shadow-[0_12px_32px_-10px_rgba(255,122,26,.9)] transition-opacity active:opacity-90"
+            className="h-14 w-full chamfer-lg bg-ember font-display text-[18px] font-bold tracking-[0.05em] text-void-950 transition-opacity active:opacity-90"
           >
             {t.celebration.backToBase}
           </button>

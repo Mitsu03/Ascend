@@ -86,11 +86,20 @@ function ShinigamiHeader() {
   return (
     <div className="flex flex-col items-center px-5 pt-5 pb-[18px] md:pt-0">
       <div className="relative flex size-28 items-center justify-center">
-        <span className="absolute inset-0 rounded-full border-2 border-crimson-soft/70" aria-hidden="true" />
-        <span className="absolute inset-[9px] rounded-full border border-crimson-soft/25" aria-hidden="true" />
+        {/*
+          Os anéis acompanham a forma do retrato. Um `border` não sobrevive ao
+          `clip-path` nas diagonais, por isso o de fora é um hexágono pintado
+          com 2 px de recorte por dentro — é o filete que fica à vista.
+        */}
+        <span className="absolute inset-0 hexagon bg-crimson-soft/70" aria-hidden="true">
+          <span className="absolute inset-[2px] hexagon bg-void-900" />
+        </span>
+        <span className="absolute inset-[9px] hexagon bg-crimson-soft/25" aria-hidden="true">
+          <span className="absolute inset-px hexagon bg-void-900" />
+        </span>
         <span
-          className="absolute inset-0 rounded-full"
-          style={{ background: 'radial-gradient(circle,rgba(232,54,92,.22),transparent 72%)' }}
+          className="absolute inset-0 hexagon"
+          style={{ background: 'radial-gradient(circle,rgba(239,74,99,.22),transparent 72%)' }}
           aria-hidden="true"
         />
         <HeroAvatar
@@ -105,7 +114,7 @@ function ShinigamiHeader() {
         />
       </div>
 
-      <p className="mt-3.5 font-display text-[34px] leading-none font-bold text-ink [text-shadow:3px_3px_0_rgba(184,18,54,.55)]">
+      <p className="mt-3.5 font-display text-[34px] leading-none font-bold text-ink [text-shadow:3px_3px_0_rgba(200,16,46,.55)]">
         {profile.name}
       </p>
       <p className="mt-1.5 text-[13px] font-semibold text-ember-soft">
@@ -123,7 +132,7 @@ function ShinigamiHeader() {
           </span>
         </div>
         <div
-          className="mt-1.5 h-[5px] rounded-full bg-void-700"
+          className="mt-1.5 h-[5px] bg-void-700"
           role="progressbar"
           aria-valuenow={info.currentLevelXp}
           aria-valuemin={0}
@@ -131,7 +140,7 @@ function ShinigamiHeader() {
           aria-label={t.common.levelProgress}
         >
           <div
-            className="h-full rounded-full bg-gradient-to-r from-crimson to-ember"
+            className="h-full bg-ember"
             style={{ width: `${pct}%` }}
           />
         </div>
@@ -152,11 +161,11 @@ function CombatArts() {
         {ATTRIBUTES.map((attribute) => (
           <div
             key={attribute.key}
-            className="flex flex-col items-center gap-[7px] rounded-[13px] border border-void-600 bg-void-800 px-1.5 py-[13px]"
+            className="flex flex-col items-center gap-[7px] chamfer-md border border-void-600 bg-void-800 px-1.5 py-[13px]"
             title={t.attributeHints[attribute.key]}
           >
             <ArtIcon name={attribute.emblem} size={19} className={ATTRIBUTE_COLORS[attribute.tone]} />
-            <span className="font-display text-[23px] leading-none font-bold text-ink">
+            <span className="font-mono text-[23px] leading-none font-bold text-ink">
               {attributes[attribute.key]}
             </span>
             <span className={cn('text-[9.5px] font-semibold', ATTRIBUTE_COLORS[attribute.tone])}>
@@ -190,7 +199,7 @@ function StatsStrip() {
           className={cn('flex-1 py-[13px]', index > 0 && 'pl-3.5', index < cells.length - 1 && 'border-r border-void-700')}
         >
           <p className="text-[10px] font-semibold tracking-[0.14em] text-ink-muted">{cell.caption}</p>
-          <p className={cn('mt-[3px] font-display text-2xl leading-none font-bold tabular-nums', cell.tone)}>
+          <p className={cn('mt-[3px] font-mono text-2xl leading-none font-bold tabular-nums', cell.tone)}>
             {cell.value}
           </p>
         </div>
@@ -239,7 +248,7 @@ function AvatarCard() {
 
           {/* Figura desenhada ou brasão de esquadrão */}
           <div
-            className="flex rounded-lg border border-void-600 p-0.5"
+            className="flex chamfer-sm border border-void-600 p-0.5"
             role="group"
             aria-label={t.profile.avatarModeTitle}
           >
@@ -249,7 +258,7 @@ function AvatarCard() {
               onClick={() => updateProfile({ avatarEmblem: undefined })}
               className={cn(
                 // 26 px de altura no original; 36 no desenho e 44 pt de alvo.
-                'tap-target inline-flex min-h-9 items-center rounded-md px-3.5 text-xs font-medium transition-colors active:opacity-90',
+                'tap-target inline-flex min-h-9 items-center chamfer-xs px-3.5 text-xs font-medium transition-colors active:opacity-90',
                 emblemId ? 'text-ink-muted hover:text-ink' : 'bg-ember/15 text-ember',
               )}
             >
@@ -261,7 +270,7 @@ function AvatarCard() {
               onClick={() => updateProfile({ avatarEmblem: emblemId ?? AVATAR_EMBLEMS[0].id })}
               className={cn(
                 // 26 px de altura no original; 36 no desenho e 44 pt de alvo.
-                'tap-target inline-flex min-h-9 items-center rounded-md px-3.5 text-xs font-medium transition-colors active:opacity-90',
+                'tap-target inline-flex min-h-9 items-center chamfer-xs px-3.5 text-xs font-medium transition-colors active:opacity-90',
                 emblemId ? 'bg-ember/15 text-ember' : 'text-ink-muted hover:text-ink',
               )}
             >
@@ -292,7 +301,7 @@ function AvatarCard() {
                         aria-pressed={emblemId === emblem.id}
                         onClick={() => updateProfile({ avatarEmblem: emblem.id })}
                         className={cn(
-                          'flex size-11 items-center justify-center rounded-lg border transition-colors active:opacity-90',
+                          'flex size-11 items-center justify-center chamfer-sm border transition-colors active:opacity-90',
                           emblemId === emblem.id
                             ? 'border-ember bg-ember/15 text-ember'
                             : 'border-void-600 text-ink-muted hover:border-void-500 hover:text-ink',
@@ -318,7 +327,7 @@ function AvatarCard() {
                     className={cn(
                       // 32 → 44 pt. Oito variantes em quatro colunas dão
                       // 4×44 + 3×6 = 194 px, dentro da largura do cartão.
-                      'size-11 rounded-lg border text-xs font-semibold transition-colors active:opacity-90',
+                      'size-11 chamfer-sm border text-xs font-semibold transition-colors active:opacity-90',
                       profile.avatarVariant === variant
                         ? 'border-ember bg-ember/15 text-ember'
                         : 'border-void-600 text-ink-muted hover:border-void-500 hover:text-ink',
@@ -343,13 +352,23 @@ function AvatarCard() {
                     onClick={() => setAvatar(profile.avatarVariant, hue)}
                     className="flex size-11 items-center justify-center active:opacity-90"
                   >
+                    {/*
+                      A amostra é hexagonal, como as do Arsenal. O selecionado
+                      não pode usar `border`: o recorte come-o nas diagonais.
+                      É um hexágono de tinta com a cor recortada 2 px por
+                      dentro — o filete fica a toda a volta da forma.
+                    */}
                     <span
                       className={cn(
-                        'size-8 rounded-full border-2 transition-transform',
-                        profile.avatarHue === hue ? 'scale-110 border-ink' : 'border-transparent',
+                        'relative size-8 hexagon transition-transform',
+                        profile.avatarHue === hue ? 'scale-110 bg-ink' : 'bg-transparent',
                       )}
-                      style={{ background: `hsl(${hue} 78% 54%)` }}
-                    />
+                    >
+                      <span
+                        className="absolute inset-[2px] hexagon"
+                        style={{ background: `hsl(${hue} 78% 54%)` }}
+                      />
+                    </span>
                   </button>
                 ))}
               </div>
@@ -423,7 +442,7 @@ function DivisionPanel() {
                 aria-pressed={option.id === division.id}
                 onClick={() => updateProfile({ divisionId: option.id })}
                 className={cn(
-                  'rounded-xl border p-1 transition-colors',
+                  'chamfer-md border p-1 transition-colors',
                   option.id === division.id ? 'border-ember bg-ember/10' : 'border-void-600 hover:border-void-500',
                 )}
               >
@@ -545,7 +564,7 @@ function BodyProgressCard() {
               .map((log) => (
                 <li
                   key={log.id}
-                  className="flex items-center justify-between rounded-lg border border-void-600 bg-void-800/40 px-3 py-2 text-sm"
+                  className="flex items-center justify-between chamfer-sm border border-void-600 bg-void-800/40 px-3 py-2 text-sm"
                 >
                   <span className="text-ink-muted">{formatShortDate(log.date)}</span>
                   <span className="tabular-nums text-ink">
@@ -676,7 +695,7 @@ function VisionSettingsCard({ bare = false }: { bare?: boolean }) {
           )}
         </div>
 
-        <p className="flex items-start gap-2 rounded-xl border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-faint">
+        <p className="flex items-start gap-2 chamfer-md border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-faint">
           <Icon name="Info" size={14} className="mt-0.5 shrink-0" />
           {t.photoLog.barcodeSourceNote}
         </p>
@@ -768,7 +787,7 @@ function SettingsCard() {
           {fields.map(([label, value]) => (
             <div
               key={label}
-              className="flex justify-between rounded-lg border border-void-600 bg-void-800/40 px-3 py-2"
+              className="flex justify-between chamfer-sm border border-void-600 bg-void-800/40 px-3 py-2"
             >
               <dt className="text-ink-muted">{label}</dt>
               <dd className="font-medium text-ink">{value}</dd>
@@ -777,7 +796,7 @@ function SettingsCard() {
         </dl>
 
         {targets && (
-          <div className="rounded-xl border border-void-600 bg-void-900/40 p-3.5 text-sm">
+          <div className="chamfer-md border border-void-600 bg-void-900/40 p-3.5 text-sm">
             <p className="font-medium text-ink">{t.profile.dailyTargets}</p>
             <p className="mt-1 tabular-nums text-ink-muted">
               {t.profile.targetsSummary(n(targets.calories), targets.proteinG, targets.carbsG, targets.fatG)}
@@ -900,7 +919,7 @@ function SettingsCard() {
           </Field>
         </div>
 
-        <div className="mt-4 rounded-xl border border-ember/30 bg-ember/5 p-3.5 text-sm">
+        <div className="mt-4 chamfer-md border border-ember/30 bg-ember/5 p-3.5 text-sm">
           <p className="font-medium text-ink">{t.profile.newTargets}</p>
           <p className="mt-1 tabular-nums text-ink-muted">
             {t.profile.targetsSummary(n(preview.calories), preview.proteinG, preview.carbsG, preview.fatG)}
@@ -969,9 +988,9 @@ function SettingRow({
     <button
       type="button"
       onClick={onClick}
-      className="flex min-h-14 w-full items-center gap-3 rounded-xl border border-void-600 bg-void-800/40 p-3.5 text-left transition-colors hover:border-void-500 active:opacity-90"
+      className="flex min-h-14 w-full items-center gap-3 chamfer-md border border-void-600 bg-void-800/40 p-3.5 text-left transition-colors hover:border-void-500 active:opacity-90"
     >
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-void-700 text-ember">
+      <span className="flex size-9 shrink-0 items-center justify-center chamfer-md bg-void-700 text-ember">
         <Icon name={icon} size={18} />
       </span>
       {/*

@@ -26,14 +26,14 @@ function CaptainOrder({ quest }: { quest: Quest }) {
 
   return (
     <section
-      className="relative overflow-hidden border border-gold/45 p-[22px] shadow-[0_20px_60px_-22px_rgba(255,176,32,.5)] [clip-path:polygon(26px_0,100%_0,100%_100%,0_100%,0_26px)]"
-      style={{ background: 'linear-gradient(160deg,#1b1710,#0d0d13)' }}
+      className="relative overflow-hidden border border-gold/45 p-[22px] shadow-[0_20px_60px_-22px_rgba(240,207,110,.5)] [clip-path:polygon(26px_0,100%_0,100%_100%,0_100%,0_26px)]"
+      style={{ background: 'linear-gradient(160deg,#1c1811,#0c0e13)' }}
     >
       <div
         className="pointer-events-none absolute top-[-90px] left-1/2 size-[340px] -ml-[170px] opacity-[0.28]"
         style={{
           background:
-            'repeating-conic-gradient(from 0deg at 50% 50%, rgba(255,176,32,.5) 0deg 0.6deg, transparent 0.6deg 5deg)',
+            'repeating-conic-gradient(from 0deg at 50% 50%, rgba(240,207,110,.5) 0deg 0.6deg, transparent 0.6deg 5deg)',
           maskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,.9) 24%, transparent 56%)',
           WebkitMaskImage: 'radial-gradient(circle at 50% 50%, rgba(0,0,0,.9) 24%, transparent 56%)',
         }}
@@ -43,7 +43,7 @@ function CaptainOrder({ quest }: { quest: Quest }) {
       <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-[10.5px] font-bold tracking-[0.24em] text-gold-soft">{t.quests.captainOrder}</p>
-          <h1 className="mt-2 font-display text-[33px] leading-[1.04] font-bold text-ink [text-shadow:3px_3px_0_rgba(184,18,54,.5)]">
+          <h1 className="mt-2 font-display text-[33px] leading-[1.04] font-bold text-ink [text-shadow:3px_3px_0_rgba(200,16,46,.5)]">
             {loc(quest.title)}
           </h1>
         </div>
@@ -53,28 +53,28 @@ function CaptainOrder({ quest }: { quest: Quest }) {
       <p className="relative mt-3 text-[12.5px] leading-[1.6] text-ink-muted">{t.quests.captainOrderNote}</p>
 
       <div className="relative mt-[18px] flex items-center justify-between gap-3">
-        <span className="font-display text-[15px] font-semibold tabular-nums text-ink">
+        <span className="font-mono text-[15px] font-semibold tabular-nums text-ink">
           {t.quests.ofTarget(n(quest.progress), n(quest.target), loc(quest.unit))}
         </span>
         <span className="flex shrink-0 gap-1.5">
-          <span className="rounded-md bg-ember/15 px-[9px] py-1 text-[11px] font-bold text-ember-soft">
+          <span className="chamfer-xs bg-ember/15 px-[9px] py-1 text-[11px] font-bold text-ember-soft">
             +{n(quest.rewardXp)}
           </span>
-          <span className="rounded-md bg-gold/15 px-[9px] py-1 text-[11px] font-bold text-gold-soft">
+          <span className="chamfer-xs bg-gold/15 px-[9px] py-1 text-[11px] font-bold text-gold-soft">
             +{n(quest.rewardCoins)}
           </span>
         </span>
       </div>
 
-      <div className="relative mt-[9px] h-2 overflow-hidden rounded-full bg-void-700">
-        <div className="h-full rounded-full bg-gradient-to-r from-gold to-ember" style={{ width: `${pct}%` }} />
+      <div className="relative mt-[9px] h-2 overflow-hidden bg-void-700">
+        <div className="h-full bg-gold"style={{ width: `${pct}%`}} />
       </div>
 
       {!quest.accepted && (
         <button
           type="button"
           onClick={() => acceptQuest(quest.id)}
-          className="relative mt-4 h-11 w-full rounded-xl bg-gradient-to-br from-gold to-ember font-display text-base font-bold tracking-[0.05em] text-void-900 transition-opacity active:opacity-90"
+          className="relative mt-4 h-11 w-full chamfer-md bg-gold font-display text-base font-bold tracking-[0.05em] text-void-900 transition-opacity active:opacity-90"
         >
           {t.quests.accept}
         </button>
@@ -91,15 +91,15 @@ function WeeklyOrderCard({ quest }: { quest: Quest }) {
   const bar = quest.completed ? 'bg-good' : quest.type === 'agua' ? 'bg-spirit' : 'bg-crimson-soft'
 
   return (
-    <div className="rounded-[13px] border border-void-600 bg-void-800 p-[13px]">
+    <div className="chamfer-md border border-void-600 bg-void-800 p-[13px]">
       <p className="text-[12.5px] font-medium text-ink">{loc(quest.title)}</p>
       <p className="mt-1 text-[10.5px] tabular-nums text-ink-muted">
         {t.quests.ofTarget(n(quest.progress), n(quest.target), loc(quest.unit))}
       </p>
-      <div className="mt-2 h-1 rounded-full bg-void-700">
-        <div className={`h-full rounded-full ${bar}`} style={{ width: `${pct}%` }} />
+      <div className="mt-2 h-1 bg-void-700">
+        <div className={`h-full ${bar}`} style={{ width: `${pct}%`}} />
       </div>
-      <span className="mt-[9px] inline-block rounded-[5px] bg-ember/[0.14] px-[7px] py-[3px] text-[10.5px] font-bold text-ember-soft">
+      <span className="mt-[9px] inline-block chamfer-xs bg-ember/[0.14] px-[7px] py-[3px] text-[10.5px] font-bold text-ember-soft">
         +{n(quest.rewardXp)}
       </span>
     </div>
@@ -158,7 +158,7 @@ export function QuestsPage() {
             {t.dashboard.ordersHeading(dailyDone, daily.length)}
           </span>
           {daily.length === 0 ? (
-            <Card className="mt-2.5 rounded-[18px] border-void-700/90 bg-void-825">
+            <Card className="mt-2.5 chamfer-lg border-void-700/90 bg-void-825">
               <EmptyState icon="Target" title={t.quests.empty} message={t.quests.emptyText} />
             </Card>
           ) : (
@@ -183,7 +183,7 @@ export function QuestsPage() {
 
         {/* Trocar uma ordem e ver o detalhe completo não cabem na linha
             compacta do protótipo, mas continuam a ser precisos. */}
-        <Card className="mt-5 rounded-[18px] border-void-700/90 bg-void-825">
+        <Card className="mt-5 chamfer-lg border-void-700/90 bg-void-825">
           <CardHeader title={t.quests.dailyTitle} subtitle={t.common.completedOf(dailyDone, daily.length)} icon="Target" />
           <CardBody className="pt-3">
             <ul className="space-y-3">

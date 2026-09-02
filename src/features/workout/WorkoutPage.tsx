@@ -47,7 +47,7 @@ function WeekStrip({ selectedDay, onSelect }: { selectedDay: number; onSelect: (
             aria-pressed={isSelected}
             aria-label={formatShortDate(date)}
             className={cn(
-              'flex flex-1 flex-col items-center gap-[5px] rounded-[11px] border py-2 transition-colors',
+              'flex flex-1 flex-col items-center gap-[5px] chamfer-sm border py-2 transition-colors',
               isToday || isSelected ? 'border-ember/70 bg-ember/10' : 'border-void-600',
               !isToday && !isSelected && (workout ? 'bg-void-800' : 'bg-transparent'),
             )}
@@ -94,8 +94,8 @@ function WorkoutCard({ workout }: { workout: WorkoutDay }) {
 
   return (
     <section
-      className="edge-glint relative overflow-hidden rounded-[20px] border border-ember/40 p-[18px]"
-      style={{ background: 'linear-gradient(165deg,#181820,#0d0d13)' }}
+      className="edge-glint relative overflow-hidden chamfer-lg border border-ember/40 p-[18px]"
+      style={{ background: 'linear-gradient(165deg,#1a1d25,#0c0e13)' }}
     >
       <div className="flex items-start justify-between gap-3">
         <p className="text-[10.5px] font-bold tracking-[0.22em] text-ember-soft">{t.workout.todaysWorkout}</p>
@@ -111,26 +111,26 @@ function WorkoutCard({ workout }: { workout: WorkoutDay }) {
         </div>
       </div>
 
-      <h1 className="mt-[7px] font-display text-[32px] leading-[1.05] font-bold text-ink [text-shadow:3px_3px_0_rgba(184,18,54,.5)]">
+      <h1 className="mt-[7px] font-display text-[32px] leading-[1.05] font-bold text-ink [text-shadow:3px_3px_0_rgba(200,16,46,.5)]">
         {loc(workout.name)}
       </h1>
       <p className="mt-1 text-[12.5px] font-semibold text-ember-soft">{loc(workout.focus)}</p>
 
       <div className="mt-3.5 flex flex-wrap gap-1.5">
-        <span className="rounded-full bg-void-700 px-[9px] py-1 text-[10.5px] font-semibold text-ink">
+        <span className="chamfer-xs bg-void-700 px-[9px] py-1 text-[10.5px] font-semibold text-ink">
           {t.workout.exercises(workout.exercises.length)}
         </span>
-        <span className="rounded-full bg-void-700 px-[9px] py-1 text-[10.5px] font-semibold text-ink">
+        <span className="chamfer-xs bg-void-700 px-[9px] py-1 text-[10.5px] font-semibold text-ink">
           {t.workout.sets(totalSets(workout.exercises))}
         </span>
-        <span className="rounded-full bg-void-700 px-[9px] py-1 text-[10.5px] font-semibold text-ink">
+        <span className="chamfer-xs bg-void-700 px-[9px] py-1 text-[10.5px] font-semibold text-ink">
           {t.workout.approxMinutes(estimateDuration(workout.exercises))}
         </span>
-        <span className="rounded-full bg-crimson-soft/[0.16] px-[9px] py-1 text-[10.5px] font-semibold text-ember-soft">
+        <span className="chamfer-xs bg-crimson-soft/[0.16] px-[9px] py-1 text-[10.5px] font-semibold text-ember-soft">
           {t.levels[workout.difficulty]}
         </span>
         {workout.isCustom && (
-          <span className="rounded-full bg-gold/[0.16] px-[9px] py-1 text-[10.5px] font-semibold text-gold-soft">
+          <span className="chamfer-xs bg-gold/[0.16] px-[9px] py-1 text-[10.5px] font-semibold text-gold-soft">
             {t.workout.custom}
           </span>
         )}
@@ -144,7 +144,7 @@ function WorkoutCard({ workout }: { workout: WorkoutDay }) {
         }}
         // `void-950` pelos 3:1 sobre o extremo carmim do gradiente — ver a nota
         // do botão gémeo em `WorkoutSessionPage`.
-        className="mt-4 h-[54px] w-full rounded-[14px] bg-gradient-to-br from-ember to-crimson font-display text-[18px] font-bold tracking-[0.05em] text-void-950 shadow-[0_12px_30px_-10px_rgba(255,122,26,.85)] transition-opacity active:opacity-90"
+        className="mt-4 h-[54px] w-full chamfer-md bg-ember font-display text-[18px] font-bold tracking-[0.05em] text-void-950 transition-opacity active:opacity-90"
       >
         {label}
       </button>
@@ -180,7 +180,7 @@ function ExerciseList({ workout }: { workout: WorkoutDay }) {
           const open = expanded === item.exerciseId
 
           return (
-            <li key={item.exerciseId} className="overflow-hidden rounded-[13px] border border-void-600 bg-void-800">
+            <li key={item.exerciseId} className="overflow-hidden chamfer-md border border-void-600 bg-void-800">
               <button
                 type="button"
                 onClick={() => setExpanded(open ? null : item.exerciseId)}
@@ -208,7 +208,7 @@ function ExerciseList({ workout }: { workout: WorkoutDay }) {
                       : ''}
                   </span>
                 </span>
-                <span className="shrink-0 font-display text-[16px] font-bold tabular-nums text-ember-soft">
+                <span className="shrink-0 font-mono text-[16px] font-bold tabular-nums text-ember-soft">
                   {item.sets} × {item.reps}
                 </span>
                 <Icon
@@ -239,7 +239,7 @@ function HistoryCard() {
   const recent = history.slice(0, 6)
 
   return (
-    <Card className="mt-5 rounded-[18px] border-void-700/90 bg-void-825">
+    <Card className="mt-5 chamfer-lg border-void-700/90 bg-void-825">
       <CardHeader title={t.workout.recentSessions} subtitle={t.workout.sessionsLogged(history.length)} icon="Clock" />
       <CardBody className="pt-3">
         {recent.length === 0 ? (
@@ -249,7 +249,7 @@ function HistoryCard() {
             {recent.map((log) => (
               <li
                 key={log.id}
-                className="flex items-center justify-between gap-3 rounded-xl border border-void-600 bg-void-800/40 p-3"
+                className="flex items-center justify-between gap-3 chamfer-md border border-void-600 bg-void-800/40 p-3"
               >
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-ink">{loc(log.workoutName)}</p>
@@ -321,7 +321,7 @@ export function WorkoutPage() {
             </div>
           ))
         ) : (
-          <Card className="rounded-[18px] border-void-700/90 bg-void-825">
+          <Card className="chamfer-lg border-void-700/90 bg-void-825">
             <EmptyState
               icon="Moon"
               title={t.workout.restDayTitle}

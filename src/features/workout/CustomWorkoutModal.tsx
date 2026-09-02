@@ -153,7 +153,7 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
               {selected.map((item, index) => (
                 <li
                   key={item.exerciseId}
-                  className="flex flex-wrap items-center gap-2 rounded-xl border border-void-600 bg-void-800/60 p-3"
+                  className="flex flex-wrap items-center gap-2 chamfer-md border border-void-600 bg-void-800/60 p-3"
                 >
                   <span className="min-w-0 flex-1 truncate text-sm font-medium text-ink">
                     {exerciseName(item.exerciseId)}
@@ -166,7 +166,7 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
                       max={8}
                       value={item.sets}
                       onChange={(event) => update(index, { sets: Math.max(1, Number(event.target.value)) })}
-                      className="min-h-11 w-14 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
+                      className="min-h-11 w-14 chamfer-sm border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
                       aria-label={t.builder.setsAria(exerciseName(item.exerciseId))}
                     />
                   </label>
@@ -176,7 +176,7 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
                       type="text"
                       value={item.reps}
                       onChange={(event) => update(index, { reps: event.target.value })}
-                      className="min-h-11 w-20 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
+                      className="min-h-11 w-20 chamfer-sm border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
                       aria-label={t.builder.repsAria(exerciseName(item.exerciseId))}
                     />
                   </label>
@@ -189,7 +189,7 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
                       step={15}
                       value={item.restSeconds}
                       onChange={(event) => update(index, { restSeconds: Math.max(0, Number(event.target.value)) })}
-                      className="min-h-11 w-16 rounded-lg border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
+                      className="min-h-11 w-16 chamfer-sm border border-void-600 bg-void-900 px-2 py-1 text-center text-ink"
                       aria-label={t.builder.restAria(exerciseName(item.exerciseId))}
                     />
                     {t.units.seconds}
@@ -222,8 +222,8 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
                 aria-pressed={group === item}
                 className={
                   group === item
-                    ? 'tap-target inline-flex min-h-9 items-center rounded-full border border-ember/60 bg-ember/10 px-3.5 text-xs font-medium text-ember'
-                    : 'tap-target inline-flex min-h-9 items-center rounded-full border border-void-600 px-3.5 text-xs font-medium text-ink-muted transition-colors hover:text-ink active:opacity-90'
+                    ? 'tap-target inline-flex min-h-9 items-center chamfer-xs border border-ember/60 bg-ember/10 px-3.5 text-xs font-medium text-ember'
+                    : 'tap-target inline-flex min-h-9 items-center chamfer-xs border border-void-600 px-3.5 text-xs font-medium text-ink-muted transition-colors hover:text-ink active:opacity-90'
                 }
               >
                 {item === 'todos' ? t.common.all : t.muscles[item]}
@@ -240,7 +240,7 @@ export function CustomWorkoutModal({ open, onClose }: CustomWorkoutModalProps) {
                     type="button"
                     onClick={() => add(exercise.id)}
                     disabled={already}
-                    className="flex w-full items-center gap-3 rounded-xl border border-void-600 bg-void-800/50 p-3 text-left transition-colors hover:border-void-500 disabled:opacity-45"
+                    className="flex w-full items-center gap-3 chamfer-md border border-void-600 bg-void-800/50 p-3 text-left transition-colors hover:border-void-500 disabled:opacity-45"
                   >
                     {/*
                       As duas pastilhas ficavam na linha do nome e comiam-na:

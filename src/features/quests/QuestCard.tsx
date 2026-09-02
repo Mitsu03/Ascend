@@ -39,7 +39,7 @@ export function QuestCard({ quest, compact = false, onProgress, onReplace, onAcc
   return (
     <li
       className={cn(
-        'rounded-xl border p-4 transition-colors',
+        'chamfer-md border p-4 transition-colors',
         quest.completed
           ? 'border-good/40 bg-good/5'
           : quest.period === 'especial'
@@ -50,7 +50,7 @@ export function QuestCard({ quest, compact = false, onProgress, onReplace, onAcc
       <div className="flex items-start gap-3">
         <span
           className={cn(
-            'flex size-10 shrink-0 items-center justify-center rounded-xl',
+            'flex size-10 shrink-0 items-center justify-center chamfer-md',
             quest.completed
               ? 'bg-good/15 text-good'
               : quest.period === 'especial'

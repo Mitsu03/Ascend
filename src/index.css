@@ -1,76 +1,125 @@
 @import 'tailwindcss';
 
 /*
- * Tema visual: o preto do shihakushō cortado pelo laranja de um Getsuga e pelo
- * carmesim das marcas de máscara, com o osso das máscaras de Hollow a fazer de
- * branco e um azul-espectral para o reiatsu.
+ * Tema visual «Bleach» — o preto do shihakushō e o carmim profundo por baixo,
+ * o branco de osso das máscaras a fazer de tinta, o laranja de reiatsu como cor
+ * do Sistema (e só dele), o carmim reservado a HP e ao destrutivo, o ouro do
+ * Gotei na moeda e o azul de kidō na confirmação.
  *
+ * A forma é chanfro, não raio: `clip-path` corta o canto superior esquerdo e o
+ * inferior direito. Não há um único `border-radius` no desenho — ver
+ * `.chamfer-*` nas utilidades.
+ *
+ * Fonte: `design_handoff_ascend/tokens.css` e `Ascend Bleach - Prototipo.dc.html`.
  * A aplicação usa o vocabulário do universo do Bleach; a arte é toda original
  * ou de terceiros sob licença livre (ver public/art/LICENSE.md).
  */
 @theme {
-  /* Fundos — preto-tinta */
-  --color-void-950: #050507;
-  --color-void-900: #0a0a0e;
-  --color-void-850: #101017;
-  --color-void-825: #12121a;
-  --color-void-800: #16161f;
-  --color-void-700: #1f1f2b;
-  --color-void-600: #2c2c3b;
-  --color-void-500: #414155;
+  /*
+   * Fundos — preto de shihakushō.
+   *
+   * A escala mantém os nomes da geração anterior (o número continua a ser a
+   * escuridão) para que os ~280 usos de `void-*` não precisem de tocar em nada;
+   * o que muda é o tom, que passa de neutro-azulado para o preto-tinta do
+   * desenho. Os quatro degraus canónicos do sistema caem nos seus lugares:
+   * `void-900` é o Vazio, `void-825` o Painel, `void-700` o Trilho e `void-600`
+   * a Linha.
+   */
+  --color-void-950: #08090d;
+  --color-void-900: #0c0e13;
+  --color-void-850: #11131a;
+  --color-void-825: #15171f;
+  --color-void-800: #1a1d25;
+  --color-void-700: #1e212b;
+  --color-void-600: #2b2f3b;
+  --color-void-500: #3a3f4d;
 
-  /* Acentos */
-  --color-ember: #ff7a1a;
-  --color-ember-soft: #ffa04d;
-  --color-crimson: #b81236;
-  --color-crimson-soft: #e8365c;
-  --color-spirit: #8fd4ff;
-  --color-gold: #ffb020;
-  --color-gold-soft: #ffcd5e;
+  /*
+   * Acentos.
+   *
+   * `ember` é o reiatsu, e no desenho é a cor do Sistema — molduras, códigos,
+   * estados ativos, CTA. Nunca é gradiente: o laranja é sempre chapado.
+   * `crimson` é HP e destrutivo; `crimson-soft` é a variante que se lê como
+   * texto (o `crimson` chapado dá 3,3:1 sobre o fundo e só serve para preencher).
+   */
+  --color-ember: #ff8a14;
+  --color-ember-soft: #ffcb95;
+  --color-crimson: #c8102e;
+  --color-crimson-soft: #ef4a63;
+  /* Carmim profundo: só vive nos gradientes de ambiente, sempre em rgba. */
+  --color-crimson-deep: #7a1024;
+  /* Kidō — hidratação e reiatsu espectral. */
+  --color-spirit: #5cc8ff;
+  --color-kido: #4fa3c7;
+  /* Ouro do Gotei: `gold` é a moeda (kan), `alert` é o aviso e o descanso. */
+  --color-gold: #f0cf6e;
+  --color-gold-soft: #f7e2a8;
+  --color-alert: #d9a635;
 
   /* Osso — as máscaras de Hollow e o branco do shihakushō */
-  --color-bone: #ece3d2;
-  --color-bone-deep: #b8ab92;
+  --color-bone: #f2efe6;
+  --color-bone-deep: #b8ac97;
 
   /* Texto e estado */
-  --color-ink: #f2f3f7;
-  --color-ink-soft: #c9cbd8;
-  --color-ink-muted: #a2a4b4;
+  --color-ink: #f2efe6;
+  --color-ink-soft: #cdc8bf;
+  --color-ink-muted: #a9a49a;
   /*
-   * O tom `faint` era #6f7183: 4,4:1 sobre o preto do fundo e 4,0:1 sobre o
-   * cinzento dos cartões — abaixo dos 4,5:1 que a WCAG AA pede para corpo de
-   * texto, e é justamente em corpo de texto pequeno (notas, dicas, legendas)
-   * que ele se usa. Este está em 5,1:1 sobre o fundo e 4,6:1 sobre os cartões.
+   * O tom `faint` usa-se em corpo de texto pequeno (notas, dicas, legendas),
+   * por isso tem de cumprir os 4,5:1 da WCAG AA sobre os três fundos onde
+   * assenta, e não só sobre o mais escuro.
+   *
+   * O `--color-ink-dim` do sistema de design (#6e6a62) dá 3,6:1 sobre o Vazio —
+   * reprova. Este está em 5,7:1 sobre o Vazio, 5,3:1 sobre o Painel e 4,7:1
+   * sobre o Trilho, mantendo o mesmo tom quente do osso.
    */
-  --color-ink-faint: #7e8093;
-  --color-good: #3ddc97;
-  --color-warn: #ff9f1c;
-  --color-bad: #ff5468;
+  --color-ink-faint: #918b7d;
+  /*
+   * Não há verde na paleta: o sistema de design usa o azul de kidō para a
+   * confirmação. `good` acompanha, para que o positivo não seja a única cor
+   * fora do tema.
+   */
+  --color-good: #4fa3c7;
+  --color-warn: #d9a635;
+  --color-bad: #ef4a63;
 
   /* Tipografia */
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Rajdhani', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Saira Condensed', 'Barlow', system-ui, sans-serif;
+  /*
+   * Mono é estrutural, não decorativo: no desenho, *todos* os números, códigos,
+   * progressos e caminhos são IBM Plex Mono. Ver `.tnum` nas utilidades.
+   */
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
   /* Kanji decorativo de fundo — nunca usado para texto que se leia. */
-  --font-kanji: 'Zen Old Mincho', 'Hiragino Mincho ProN', serif;
+  --font-kanji: 'Noto Sans JP', 'Hiragino Sans', sans-serif;
 
-  /* Animações */
-  --animate-float: float 6s ease-in-out infinite;
+  /*
+   * Animações. O sistema pede tudo ≤ 340 ms exceto as de respiração, e a
+   * curva é sempre a mesma — `cubic-bezier(.2,.9,.3,1)`, que arranca depressa
+   * e assenta devagar.
+   */
+  --animate-rise: rise 0.22s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  --animate-pop: pop 0.3s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  --animate-boot: boot-scan 0.34s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  --animate-wipe: wipe-diagonal 0.26s linear both;
+  --animate-glitch: glitch-fix 0.14s steps(2) both;
   --animate-pulse-glow: pulse-glow 2.4s ease-in-out infinite;
-  --animate-rise: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  --animate-pop: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-blink: blink-dot 1.6s ease-in-out infinite;
+  --animate-breath: breathe 2s ease-in-out infinite;
   --animate-shimmer: shimmer 2.6s linear infinite;
   --animate-sweep: sweep 3.4s linear infinite;
-  --animate-mote: mote-rise 9s linear infinite;
-  --animate-aura: aura-breathe 5.5s ease-in-out infinite;
+  --animate-mote: mote-rise 7s linear infinite;
+  --animate-aura: aura-breathe 5s ease-in-out infinite;
   --animate-rays: ray-spin 48s linear infinite;
-  --animate-slash: slash-sweep 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slash: slash-sweep 0.26s linear both;
   --animate-drift: ink-drift 30s ease-in-out infinite alternate;
-  --animate-demo-flip: demo-flip 2s ease-in-out infinite;
+  --animate-demo-flip: demo-flip 2.4s ease-in-out infinite;
 }
 
 /*
  * As duas posições de um exercício, alternadas. A troca é quase instantânea
- * (0,2 s dos 2 s do ciclo) porque o que interessa é ver as duas posições, não
+ * (0,2 s dos 2,4 s do ciclo) porque o que interessa é ver as duas posições, não
  * a passagem entre elas — uma transição lenta faz o movimento parecer outro.
  */
 @keyframes demo-flip {
@@ -87,20 +136,32 @@
   }
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
 @keyframes pulse-glow {
   0%,
   100% {
     opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Ponto de estado do HUD: pisca sem nunca desaparecer de todo. */
+@keyframes blink-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Respiração curta — molduras e selos «vivos» sem chamar a atenção. */
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.72;
   }
   50% {
     opacity: 1;
@@ -115,7 +176,7 @@
 @keyframes rise {
   from {
     opacity: 0.35;
-    transform: translateY(14px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -126,14 +187,54 @@
 @keyframes pop {
   0% {
     opacity: 0.4;
-    transform: scale(0.88);
+    transform: scale(0.94);
   }
   60% {
-    transform: scale(1.03);
+    transform: scale(1.02);
   }
   100% {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+/*
+ * Boot de scanline: a janela materializa-se de cima para baixo, como um écran
+ * que acaba de ligar. É o gesto de abertura de todos os módulos.
+ */
+@keyframes boot-scan {
+  from {
+    opacity: 0.2;
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Wipe diagonal — a transição entre módulos, no sentido da lâmina. */
+@keyframes wipe-diagonal {
+  from {
+    clip-path: polygon(0 0, 0 0, -30% 100%, -30% 100%);
+  }
+  to {
+    clip-path: polygon(0 0, 130% 0, 100% 100%, 0 100%);
+  }
+}
+
+/*
+ * Glitch de título: dois passos, sem meio-termo. O `steps(2)` é o que o faz
+ * ler como avaria de sinal em vez de movimento.
+ */
+@keyframes glitch-fix {
+  0% {
+    transform: translateX(-2px);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 
@@ -256,6 +357,15 @@
   :root {
     --tab-bar-pad: env(safe-area-inset-bottom);
     --tab-bar: calc(3.125rem + env(safe-area-inset-bottom));
+
+    /*
+     * Chanfros do sistema — os valores do desenho. As utilidades `.chamfer-*`
+     * abaixo cobrem os que aparecem em componentes.
+     */
+    --chamfer-xs: 5px;
+    --chamfer-sm: 8px;
+    --chamfer-md: 10px;
+    --chamfer-lg: 14px;
   }
 
   html {
@@ -286,32 +396,54 @@
     user-select: text;
   }
 
+  /*
+   * Ambiente: as camadas que ficam por baixo de tudo, como no protótipo. Duas
+   * auras de carmim (uma em cima à direita, outra em baixo à esquerda), um halo
+   * de reiatsu no topo e uma grelha técnica de 44 px. As scanlines finas e o
+   * halftone ficam para `.asc-weave`, que se aplica por ecrã.
+   */
   body {
     margin: 0;
     min-height: 100dvh;
     background-color: var(--color-void-900);
-    /* Duas auras de energia e um corte diagonal ténue sobre o preto. */
     background-image:
-      radial-gradient(60rem 34rem at 8% -12%, color-mix(in oklab, var(--color-ember) 16%, transparent), transparent 62%),
-      radial-gradient(52rem 30rem at 102% 4%, color-mix(in oklab, var(--color-crimson) 24%, transparent), transparent 60%),
-      linear-gradient(115deg, transparent 46%, color-mix(in oklab, var(--color-ember) 5%, transparent) 48%, transparent 50%);
+      radial-gradient(42rem 26rem at 88% -4%, rgb(200 16 46 / 0.2), transparent 62%),
+      radial-gradient(34rem 32rem at -4% 104%, rgb(122 16 36 / 0.28), transparent 62%),
+      radial-gradient(60rem 30rem at 50% -10%, rgb(255 138 20 / 0.09), transparent 60%),
+      repeating-linear-gradient(0deg, rgb(255 138 20 / 0.03) 0 1px, transparent 1px 44px),
+      repeating-linear-gradient(90deg, rgb(255 138 20 / 0.03) 0 1px, transparent 1px 44px);
     background-attachment: fixed;
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    /*
+     * Os números do desenho são todos de largura fixa. Pô-lo aqui evita ter de
+     * repetir `tabular-nums` em cada contador, progresso e cronómetro.
+     */
+    font-variant-numeric: tabular-nums;
   }
 
+  /*
+   * Os títulos são condensados, em maiúsculas e espaçados — no desenho não há
+   * um título em caixa baixa. O `letter-spacing` é o que os faz ler como
+   * rótulos de sistema em vez de prosa.
+   */
   h1,
   h2,
   h3 {
     font-family: var(--font-display);
-    letter-spacing: 0.01em;
+    font-weight: 700;
+    letter-spacing: 0.06em;
   }
 
+  /*
+   * O contorno de foco não pode ser redondo num sistema sem raios. Fica a
+   * direito e colado ao controlo, que é como o desenho o mostra.
+   */
   :focus-visible {
     outline: 2px solid var(--color-ember);
     outline-offset: 2px;
-    border-radius: 6px;
+    border-radius: 0;
   }
 
   /*
@@ -330,7 +462,6 @@
     }
     ::-webkit-scrollbar-thumb {
       background: var(--color-void-600);
-      border-radius: 999px;
       border: 2px solid var(--color-void-900);
     }
     ::-webkit-scrollbar-thumb:hover {
@@ -361,22 +492,177 @@
     text-wrap: balance;
   }
 
+  /*
+   * Chanfro — a forma do sistema, no lugar do raio.
+   *
+   * Corta o canto superior esquerdo e o inferior direito. Duas consequências a
+   * conhecer antes de usar:
+   *
+   * 1. `clip-path` recorta tudo o que está dentro, incluindo sombras e o
+   *    contorno de foco. Num controlo focável, põe o chanfro no elemento de
+   *    dentro e deixa o `:focus-visible` no de fora.
+   * 2. Um `border` normal desaparece na diagonal — o corte leva-o com ele.
+   *    Onde a moldura tem de acompanhar o chanfro (janelas, modais), usa-se
+   *    `.chamfer-frame`: um invólucro de 1 px pintado com a cor da moldura,
+   *    com o conteúdo chanfrado por cima.
+   */
+  .chamfer-xs {
+    clip-path: polygon(
+      var(--chamfer-xs) 0,
+      100% 0,
+      100% calc(100% - var(--chamfer-xs)),
+      calc(100% - var(--chamfer-xs)) 100%,
+      0 100%,
+      0 var(--chamfer-xs)
+    );
+  }
+
+  .chamfer-sm {
+    clip-path: polygon(
+      var(--chamfer-sm) 0,
+      100% 0,
+      100% calc(100% - var(--chamfer-sm)),
+      calc(100% - var(--chamfer-sm)) 100%,
+      0 100%,
+      0 var(--chamfer-sm)
+    );
+  }
+
+  .chamfer-md {
+    clip-path: polygon(
+      var(--chamfer-md) 0,
+      100% 0,
+      100% calc(100% - var(--chamfer-md)),
+      calc(100% - var(--chamfer-md)) 100%,
+      0 100%,
+      0 var(--chamfer-md)
+    );
+  }
+
+  .chamfer-lg {
+    clip-path: polygon(
+      var(--chamfer-lg) 0,
+      100% 0,
+      100% calc(100% - var(--chamfer-lg)),
+      calc(100% - var(--chamfer-lg)) 100%,
+      0 100%,
+      0 var(--chamfer-lg)
+    );
+  }
+
+  /*
+   * Moldura que acompanha o chanfro. O elemento é o filete: 1 px de padding
+   * pintado com a cor da moldura (`--frame`, por defeito o laranja de sistema),
+   * e o filho leva o mesmo chanfro com o preenchimento. Ver a nota acima.
+   */
+  .chamfer-frame {
+    padding: 1px;
+    background: var(--frame, color-mix(in oklab, var(--color-ember) 50%, transparent));
+    clip-path: polygon(
+      var(--chamfer-lg) 0,
+      100% 0,
+      100% calc(100% - var(--chamfer-lg)),
+      calc(100% - var(--chamfer-lg)) 100%,
+      0 100%,
+      0 var(--chamfer-lg)
+    );
+  }
+
+  /* Hexágono — selos, patente e amostras de cor. */
+  .hexagon {
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  }
+
+  /*
+   * Brackets nos cantos: dois traços de 2 px em cantos opostos de uma janela, o
+   * detalhe que a faz ler como visor e não como cartão. Vivem nos
+   * pseudo-elementos para não gastar nós; quem usa isto precisa de `relative`
+   * (a classe já o põe) e de não ter `overflow-hidden` a cortá-los.
+   */
+  .brackets {
+    position: relative;
+  }
+  .brackets::before,
+  .brackets::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+    border-color: color-mix(in oklab, var(--color-ember) 70%, transparent);
+  }
+  .brackets::before {
+    top: 0;
+    right: 0;
+    border-top: 2px solid;
+    border-right: 2px solid;
+  }
+  .brackets::after {
+    bottom: 0;
+    left: 0;
+    border-bottom: 2px solid;
+    border-left: 2px solid;
+  }
+
+  /*
+   * Trama do ambiente: scanline de 3 px e halftone de 7 px, por baixo do
+   * conteúdo. O elemento onde se aplica tem de estar posicionado.
+   */
+  .asc-weave::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      repeating-linear-gradient(0deg, rgb(255 138 20 / 0.05) 0 1px, transparent 1px 3px),
+      radial-gradient(circle at center, rgb(200 16 46 / 0.07) 1px, transparent 1.3px);
+    background-size:
+      auto,
+      7px 7px;
+  }
+
+  /*
+   * O glow do sistema é sempre curto — 14 px e nunca difuso. Um halo largo
+   * lê-se como néon, e o desenho não é néon: é sinal elétrico.
+   *
+   * É `inset` de propósito. Quase tudo o que brilha nesta interface também é
+   * chanfrado, e `clip-path` corta o que sai da forma: uma sombra exterior
+   * desaparecia por inteiro no mesmo elemento. A inset é pintada dentro da
+   * caixa, portanto acompanha o chanfro em vez de ser comida por ele. Para um
+   * halo que tenha mesmo de sair para fora — hexágonos, ícones — usa-se
+   * `.halo-*`, que é `drop-shadow` e segue a silhueta recortada.
+   */
   .glow-ember {
     box-shadow:
-      0 0 0 1px color-mix(in oklab, var(--color-ember) 30%, transparent),
-      0 8px 40px -12px color-mix(in oklab, var(--color-ember) 50%, transparent);
+      inset 0 0 0 1px color-mix(in oklab, var(--color-ember) 45%, transparent),
+      inset 0 0 14px color-mix(in oklab, var(--color-ember) 22%, transparent);
   }
 
   .glow-gold {
     box-shadow:
-      0 0 0 1px color-mix(in oklab, var(--color-gold) 34%, transparent),
-      0 8px 40px -12px color-mix(in oklab, var(--color-gold) 52%, transparent);
+      inset 0 0 0 1px color-mix(in oklab, var(--color-gold) 48%, transparent),
+      inset 0 0 14px color-mix(in oklab, var(--color-gold) 20%, transparent);
   }
 
   .glow-crimson {
     box-shadow:
-      0 0 0 1px color-mix(in oklab, var(--color-crimson-soft) 28%, transparent),
-      0 8px 40px -12px color-mix(in oklab, var(--color-crimson) 60%, transparent);
+      inset 0 0 0 1px color-mix(in oklab, var(--color-crimson-soft) 42%, transparent),
+      inset 0 0 14px color-mix(in oklab, var(--color-crimson) 22%, transparent);
+  }
+
+  /*
+   * Halo exterior para formas recortadas. `drop-shadow` traça a silhueta real
+   * (hexágono, chanfro, o traço de um SVG) em vez da caixa, que é o que o
+   * `box-shadow` faria.
+   */
+  .halo-ember {
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-ember) 50%, transparent));
+  }
+  .halo-gold {
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-gold) 50%, transparent));
+  }
+  .halo-crimson {
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-crimson) 60%, transparent));
   }
 
   /* Corte diagonal usado nos cabeçalhos, como um golpe de lâmina. */
@@ -388,11 +674,11 @@
     position: absolute;
     inset-inline: 0;
     bottom: -0.5rem;
-    height: 2px;
+    height: 1px;
     background: linear-gradient(
       90deg,
       color-mix(in oklab, var(--color-ember) 75%, transparent),
-      color-mix(in oklab, var(--color-crimson-soft) 45%, transparent) 35%,
+      color-mix(in oklab, var(--color-crimson) 45%, transparent) 35%,
       transparent 70%
     );
   }
@@ -409,15 +695,10 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.18;
+    opacity: 0.14;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 160px 160px;
-  }
-
-  /* Cantos cortados a direito, como se a lâmina tivesse passado pela caixa. */
-  .blade-corner {
-    clip-path: polygon(1.15rem 0, 100% 0, 100% calc(100% - 1.15rem), calc(100% - 1.15rem) 100%, 0 100%, 0 1.15rem);
   }
 
   /* Fio de luz no topo de um cartão — o brilho da aresta da lâmina. */
@@ -446,6 +727,23 @@
   }
   .text-glow-gold {
     text-shadow: 0 0 20px color-mix(in oklab, var(--color-gold) 55%, transparent);
+  }
+
+  /*
+   * Rótulo de sistema: condensado, maiúsculas, muito espaçado. É a forma de
+   * todos os eyebrows e códigos do desenho (`SYS//`, `ASC//03`, `LOG//`).
+   */
+  .sys-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+  }
+
+  /* Números, códigos e progressos — mono, sempre. */
+  .tnum {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
   }
 
   /* Caixa de arte: recorta o SVG de fundo e nunca intercepta o rato. */

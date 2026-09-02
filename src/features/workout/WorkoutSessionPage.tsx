@@ -36,24 +36,24 @@ function RestCard({ seconds, onDismiss }: { seconds: number; onDismiss: () => vo
   const pct = seconds > 0 ? ((seconds - remaining) / seconds) * 100 : 0
 
   return (
-    <div className="animate-pop relative mx-5 mb-3 rounded-2xl border border-crimson-soft/50 bg-void-800/95 p-3.5">
+    <div className="animate-pop relative mx-5 mb-3 chamfer-lg border border-crimson-soft/50 bg-void-800/95 p-3.5">
       <div className="flex items-center gap-3">
         <div className="min-w-0 flex-1">
           <p className="text-[10px] font-semibold tracking-[0.16em] text-ink-muted">{t.session.restCaption}</p>
-          <p className="mt-0.5 font-display text-[30px] leading-none font-bold tabular-nums text-crimson-soft">
+          <p className="mt-0.5 font-mono text-[30px] leading-none font-bold tabular-nums text-crimson-soft">
             {formatDuration(remaining)}
           </p>
         </div>
         <button
           type="button"
           onClick={onDismiss}
-          className="h-11 shrink-0 rounded-[10px] border border-void-600 bg-void-700 px-4 text-xs font-semibold text-ink transition-opacity active:opacity-90"
+          className="h-11 shrink-0 chamfer-sm border border-void-600 bg-void-700 px-4 text-xs font-semibold text-ink transition-opacity active:opacity-90"
         >
           {remaining > 0 ? t.session.skip : t.session.continue}
         </button>
       </div>
-      <div className="mt-[11px] h-[5px] overflow-hidden rounded-full bg-void-700">
-        <div className="h-full rounded-full bg-crimson-soft transition-[width]" style={{ width: `${pct}%` }} />
+      <div className="mt-[11px] h-[5px] overflow-hidden bg-void-700">
+        <div className="h-full bg-crimson-soft transition-[width]"style={{ width: `${pct}%`}} />
       </div>
     </div>
   )
@@ -192,7 +192,7 @@ export function WorkoutSessionPage() {
           aria-label={t.session.exitAria}
           // 34 px de desenho, 44 pt de toque: treina-se com as mãos suadas e
           // estes dois botões de canto eram os mais pequenos da app.
-          className="tap-target flex size-[34px] shrink-0 items-center justify-center rounded-[11px] border border-void-600 text-ink-muted active:opacity-90"
+          className="tap-target flex size-[34px] shrink-0 items-center justify-center chamfer-sm border border-void-600 text-ink-muted active:opacity-90"
         >
           <Icon name="X" size={15} />
         </button>
@@ -205,7 +205,7 @@ export function WorkoutSessionPage() {
               <span
                 key={i}
                 className={cn(
-                  'h-[7px] rounded-full transition-all',
+                  'h-[7px] transition-all',
                   i === index ? 'w-[22px]' : 'w-[7px]',
                   rowDone ? 'bg-good' : i === index ? 'bg-ember' : 'bg-void-600',
                 )}
@@ -217,7 +217,7 @@ export function WorkoutSessionPage() {
         <div className="flex shrink-0 items-center gap-1.5">
           <span
             className={cn(
-              'font-display text-[16px] font-semibold tabular-nums',
+              'font-mono text-[16px] font-semibold tabular-nums',
               activeSession.paused ? 'text-ink-faint' : 'text-ink-muted',
             )}
           >
@@ -227,7 +227,7 @@ export function WorkoutSessionPage() {
             type="button"
             onClick={togglePause}
             aria-label={activeSession.paused ? t.session.resume : t.session.pause}
-            className="tap-target flex size-[34px] items-center justify-center rounded-[11px] border border-void-600 text-ink-muted active:opacity-90"
+            className="tap-target flex size-[34px] items-center justify-center chamfer-sm border border-void-600 text-ink-muted active:opacity-90"
           >
             <Icon name={activeSession.paused ? 'Play' : 'Pause'} size={13} />
           </button>
@@ -242,7 +242,7 @@ export function WorkoutSessionPage() {
           </span>
         </div>
         <div
-          className="mt-1.5 h-[5px] overflow-hidden rounded-full bg-void-700"
+          className="mt-1.5 h-[5px] overflow-hidden bg-void-700"
           role="progressbar"
           aria-valuenow={completedSets}
           aria-valuemin={0}
@@ -250,7 +250,7 @@ export function WorkoutSessionPage() {
           aria-label={t.session.progress}
         >
           <div
-            className="h-full rounded-full bg-gradient-to-r from-crimson to-ember transition-[width]"
+            className="h-full bg-ember transition-[width]"
             style={{ width: `${total > 0 ? (completedSets / total) * 100 : 0}%` }}
           />
         </div>
@@ -279,7 +279,7 @@ export function WorkoutSessionPage() {
 
         <h1
           className={cn(
-            'mt-2.5 font-display leading-[0.98] font-bold text-ink [text-shadow:4px_4px_0_rgba(184,18,54,.4)]',
+            'mt-2.5 font-display leading-[0.98] font-bold text-ink [text-shadow:4px_4px_0_rgba(200,16,46,.4)]',
             name.length > 17 ? 'text-[42px]' : 'text-[50px]',
           )}
         >
@@ -287,7 +287,7 @@ export function WorkoutSessionPage() {
         </h1>
 
         <p className="mt-4 flex items-baseline gap-2.5">
-          <span className="font-display text-[34px] leading-none font-bold text-ember-soft">{item.reps}</span>
+          <span className="font-mono text-[34px] leading-none font-bold text-ember-soft">{item.reps}</span>
           <span className="text-sm text-ink-muted">
             {t.session.setOfTotal(Math.min(doneHere + 1, checks.length), checks.length)}
           </span>
@@ -332,13 +332,13 @@ export function WorkoutSessionPage() {
               aria-label={t.session.setAria(setIndex + 1, name)}
               onClick={() => markSet(setIndex)}
               className={cn(
-                'flex h-[66px] flex-1 flex-col items-center justify-center gap-[3px] rounded-2xl border transition-colors',
+                'flex h-[66px] flex-1 flex-col items-center justify-center gap-[3px] chamfer-lg border transition-colors',
                 checked ? 'border-good/50 bg-good/[0.14]' : 'border-void-600 bg-void-800',
               )}
             >
               <span
                 className={cn(
-                  'font-display text-[22px] leading-none font-bold',
+                  'font-mono text-[22px] leading-none font-bold',
                   checked ? 'text-good' : 'text-ink-faint',
                 )}
               >
@@ -358,7 +358,7 @@ export function WorkoutSessionPage() {
           // gradiente o preto mais claro dava 2,96:1, um fio abaixo dos 3:1 que
           // a WCAG pede a texto grande. Com este fica em 3,03:1 e a diferença
           // de cor não se vê.
-          className="mt-2 h-16 w-full rounded-[18px] bg-gradient-to-br from-ember to-crimson font-display text-xl font-bold tracking-[0.05em] text-void-950 shadow-[0_14px_36px_-10px_rgba(255,122,26,.9)] transition-opacity active:opacity-90"
+          className="mt-2 h-16 w-full chamfer-lg bg-ember font-display text-xl font-bold tracking-[0.05em] text-void-950 transition-opacity active:opacity-90"
         >
           {mainLabel}
         </button>

@@ -31,7 +31,7 @@ export function ScreenHeader({ children, className }: { children: ReactNode; cla
 
 /** Título simples à esquerda, como «Rações · hoje». */
 export function ScreenTitle({ children }: { children: ReactNode }) {
-  return <span className="text-xs font-semibold text-ink-muted">{children}</span>
+  return <span className="sys-label text-[10.5px] text-ink-muted">{children}</span>
 }
 
 /**
@@ -49,7 +49,7 @@ export function HeaderIdentity() {
         <span className="absolute inset-0 rounded-full border border-crimson-soft/50" aria-hidden="true" />
         <span
           className="absolute inset-0 rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(232,54,92,.14), transparent 72%)' }}
+          style={{ background: 'radial-gradient(circle, rgba(239,74,99,.14), transparent 72%)' }}
           aria-hidden="true"
         />
         <ArtIcon name="crossed-swords" size={17} className="relative text-crimson-soft" />
@@ -83,12 +83,12 @@ export function HeaderTally() {
     <div className="flex shrink-0 items-center gap-3">
       <span className="flex items-center gap-1" title={t.dashboard.streak}>
         <ArtIcon name="fire-ray" size={13} className="text-warn" />
-        <span className="font-display text-[15px] font-bold text-warn">{streak}</span>
+        <span className="font-mono text-[15px] font-bold text-alert">{streak}</span>
         <span className="sr-only">{t.dashboard.streak}</span>
       </span>
       <span className="flex items-center gap-1" title={t.common.coins}>
         <span className="size-2 rounded-full bg-gold" aria-hidden="true" />
-        <span className="font-display text-[15px] font-bold tabular-nums text-gold">{n(coins)}</span>
+        <span className="font-mono text-[15px] font-bold tabular-nums text-gold">{n(coins)}</span>
         <span className="sr-only">{t.common.coins}</span>
       </span>
     </div>
@@ -111,7 +111,7 @@ export function HeaderAction({
       onClick={onClick}
       // A pílula tinha 28 px de altura. Passa a 36 no desenho e a 44 pt de área
       // de toque — é o único botão deste cabeçalho e não tem vizinhos perto.
-      className="tap-target flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border border-void-600 bg-void-800/70 px-3.5 text-[11.5px] font-semibold text-ink-muted transition-colors active:opacity-90"
+      className="tap-target flex min-h-9 shrink-0 items-center gap-1.5 chamfer-xs border border-void-600 bg-void-800/70 px-3.5 text-[11.5px] font-semibold text-ink-muted transition-colors active:opacity-90"
     >
       {icon && <Icon name={icon} size={13} />}
       {children}
