@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Noto+Sans+JP:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#0c0e13; color:#f2efe6; }
+  a { color:#ff8a14; text-decoration:none; }
+  a:hover { color:#ffcb95; }
+  button { font-family:inherit; -webkit-tap-highlight-color:transparent; }
+  button:focus-visible { outline:2px solid #ff8a14; outline-offset:2px }
+  ::-webkit-scrollbar { width:5px; height:5px }
+  ::-webkit-scrollbar-track { background:rgba(255,138,20,.07) }
+  ::-webkit-scrollbar-thumb { background:#ff8a14 }
+  ::-webkit-scrollbar-thumb:hover { background:#c8102e }
+  body { font-variant-numeric:tabular-nums }
+  @keyframes smat { 0%{opacity:0; transform:scale(.96,.04)} 45%{opacity:1; transform:scale(1.01,1.01)} 100%{transform:scale(1,1)} }
+  @keyframes swipe { 0%{opacity:1; transform:translateX(-130%)} 100%{opacity:0; transform:translateX(130%)} }
+  @keyframes sfix { 0%{clip-path:inset(0 0 62% 0); transform:translateX(-3px); opacity:.6} 50%{clip-path:inset(46% 0 0 0); transform:translateX(3px); opacity:.85} 100%{clip-path:inset(0); transform:none; opacity:1} }
+  @keyframes shover { 0%{background-position:0 -100%} 100%{background-position:0 200%} }
+  @keyframes sboot { 0%{transform:scaleX(0)} 100%{transform:scaleX(1)} }
+  @keyframes sload { 0%{width:6%} 55%{width:64%} 100%{width:100%} }
+  @keyframes sbreath { 0%,100%{opacity:.3} 50%{opacity:1} }
+  @keyframes sdrain { 0%{width:100%} 100%{width:0} }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important } }
+  @keyframes sscan { 0%{top:-4px; opacity:.9} 100%{top:100%; opacity:0} }
+  @keyframes spulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,138,20,0), 0 0 14px rgba(255,138,20,.35)} 50%{box-shadow:0 0 0 3px rgba(255,138,20,.14), 0 0 22px rgba(255,138,20,.7)} }
+  @keyframes sblink { 0%,100%{opacity:1} 50%{opacity:.25} }
+  @keyframes sfade { 0%{opacity:0} 100%{opacity:1} }
+  @keyframes sdemo { 0%,40%{opacity:0} 50%,90%{opacity:1} 100%{opacity:0} }
+  @keyframes srain { 0%{-webkit-mask-position:0 -320px; mask-position:0 -320px} 100%{-webkit-mask-position:0 1000px; mask-position:0 1000px} }
+  @keyframes sneon { 0%,100%{opacity:1} 92%{opacity:1} 94%{opacity:.4} 96%{opacity:1} 98%{opacity:.6} }
+</style>
+</helmet>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="ic-quest" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="2"></circle><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line></symbol>
+  <symbol id="ic-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="4" y="4" width="7" height="7"></rect><rect x="13" y="4" width="7" height="7"></rect><rect x="4" y="13" width="7" height="7"></rect><rect x="13" y="13" width="7" height="7"></rect></symbol>
+  <symbol id="ic-dojo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 3 21 12 12 21 3 12"></polygon><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></symbol>
+  <symbol id="ic-sessao" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="5" width="18" height="14"></rect><polygon points="10 9 15 12 10 15"></polygon></symbol>
+  <symbol id="ic-racoes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 2 21 7 21 17 12 22 3 17 3 7"></polygon><circle cx="12" cy="12" r="3.5"></circle></symbol>
+  <symbol id="ic-ordens" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="4" y="4" width="16" height="16"></rect><polyline points="8 12 11 15 16 9"></polyline></symbol>
+  <symbol id="ic-status" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 2 21 7 21 17 12 22 3 17 3 7"></polygon><circle cx="12" cy="10" r="2.5"></circle><path d="M7.5 17.5a4.5 4.5 0 0 1 9 0"></path></symbol>
+  <symbol id="ic-config" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 2 19 5 22 12 19 19 12 22 5 19 2 12 5 5"></polygon><circle cx="12" cy="12" r="3"></circle></symbol>
+  <symbol id="ic-timer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="13" r="8"></circle><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="13" x2="15" y2="15"></line><line x1="9" y1="2" x2="15" y2="2"></line></symbol>
+  <symbol id="ic-water" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 3 18 13 12 21 6 13"></polygon><line x1="12" y1="12" x2="12" y2="17"></line></symbol>
+  <symbol id="ic-fire" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 3 20 19 4 19"></polygon><polygon points="12 10 15.5 17 8.5 17"></polygon></symbol>
+  <symbol id="ic-kan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5"></polygon><polygon points="12 8 15.5 10 15.5 14 12 16 8.5 14 8.5 10" fill="currentColor" stroke="none"></polygon></symbol>
+  <symbol id="ic-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polyline points="13 2 6 13 12 13 11 22 18 11 12 11 13 2"></polyline></symbol>
+  <symbol id="ic-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="6" width="18" height="14"></rect><circle cx="12" cy="13" r="3"></circle><line x1="12" y1="10" x2="12" y2="13"></line></symbol>
+  <symbol id="ic-prot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5"></polygon><line x1="12" y1="3" x2="12" y2="21"></line></symbol>
+  <symbol id="ic-hid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 3 21 12 12 21 3 12"></polygon><polygon points="12 8 16 12 12 16 8 12"></polygon></symbol>
+  <symbol id="ic-gord" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle></symbol>
+  <symbol id="ic-lista" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="5" width="4" height="4"></rect><rect x="3" y="15" width="4" height="4"></rect><line x1="10" y1="7" x2="21" y2="7"></line><line x1="10" y1="17" x2="21" y2="17"></line></symbol>
+  <symbol id="ic-lang" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><line x1="3" y1="12" x2="21" y2="12"></line><path d="M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></symbol>
+  <symbol id="ic-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></symbol>
+  <symbol id="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></symbol>
+  <symbol id="ic-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="4" width="18" height="16"></rect><circle cx="9" cy="9" r="2"></circle><polyline points="3 17 9 12 13 15 17 11 21 15"></polyline></symbol>
+  <symbol id="ic-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="6" y="7" width="12" height="14"></rect><line x1="4" y1="7" x2="20" y2="7"></line><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line><line x1="9" y1="4" x2="15" y2="4"></line></symbol>
+  <symbol id="ic-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="6" width="18" height="14"></rect><circle cx="12" cy="13" r="4"></circle><line x1="8" y1="3" x2="12" y2="6"></line></symbol>
+  <symbol id="ic-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="16" y2="12"></line><line x1="4" y1="17" x2="12" y2="17"></line></symbol>
+  <symbol id="ic-arsenal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5"></polygon><polyline points="4 7.5 12 12 20 7.5"></polyline><line x1="12" y1="12" x2="12" y2="21"></line></symbol>
+  <symbol id="ic-manha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="14" r="4"></circle><line x1="3" y1="20" x2="21" y2="20"></line><line x1="12" y1="4" x2="12" y2="7"></line><line x1="5" y1="8" x2="7" y2="10"></line><line x1="19" y1="8" x2="17" y2="10"></line></symbol>
+  <symbol id="ic-meio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="3" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="21"></line><line x1="3" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="21" y2="12"></line></symbol>
+  <symbol id="ic-tarde" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><polygon points="12 4 20 20 4 20"></polygon><line x1="8" y1="16" x2="16" y2="16"></line></symbol>
+  <symbol id="ic-noite" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><path d="M15 3a9 9 0 1 0 6 15 7 7 0 0 1-6-15z"></path></symbol>
+</svg>
+
+<div style="display:flex; align-items:flex-start; gap:48px; padding:52px 56px 90px; font-family:'Barlow',system-ui,sans-serif; position:relative; min-height:100vh">
+  <div style="position:fixed; inset:0; pointer-events:none; opacity:.25; mix-blend-mode:overlay; background-image:url(data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27180%27%20height%3D%27180%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%27.85%27%20numOctaves%3D%272%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20values%3D%270%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20.6%200%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url(%23n)%27%2F%3E%3C%2Fsvg%3E)"></div>
+  <div style="position:fixed; inset:0; pointer-events:none; background:radial-gradient(42rem 26rem at 88% -4%, rgba(200,16,46,.2), transparent 62%), radial-gradient(34rem 32rem at -4% 104%, rgba(122,16,36,.28), transparent 62%), radial-gradient(60rem 30rem at 50% -10%, rgba(255,138,20,.09), transparent 60%), repeating-linear-gradient(0deg, rgba(255,138,20,.03) 0 1px, transparent 1px 44px), repeating-linear-gradient(90deg, rgba(255,138,20,.03) 0 1px, transparent 1px 44px)"></div>
+  <div style="position:fixed; inset:0; pointer-events:none; opacity:.5; background-image:radial-gradient(circle at center, rgba(255,138,20,.09) 1px, transparent 1.4px); background-size:8px 8px"></div>
+
+  <div style="width:402px; height:874px; display:flex; flex-shrink:0; position:relative">
+    <x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ ligado }}" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+      <div style="position:absolute; inset:0; background:#0c0e13; overflow:hidden; font-family:'Barlow',system-ui,sans-serif; color:#f2efe6">
+        <div style="position:absolute; inset:0; pointer-events:none; background:radial-gradient(26rem 20rem at 88% -8%, rgba(200,16,46,.3), transparent 60%), radial-gradient(20rem 20rem at 4% 100%, rgba(122,16,36,.35), transparent 62%), radial-gradient(16rem 14rem at 96% 82%, rgba(79,163,199,.1), transparent 62%), radial-gradient(30rem 22rem at 50% 28%, rgba(255,138,20,.1), transparent 62%), repeating-linear-gradient(90deg, rgba(79,163,199,.05) 0 1px, transparent 1px 9px, rgba(200,16,46,.04) 9px 10px, transparent 10px 23px), repeating-linear-gradient(0deg, rgba(255,138,20,.03) 0 1px, transparent 1px 44px)"></div>
+        <div style="position:absolute; inset:0; pointer-events:none; opacity:.55; background-image:radial-gradient(circle at center, rgba(200,16,46,.1) 1px, transparent 1.3px); background-size:7px 7px"></div>
+        <div style="position:absolute; inset:0; pointer-events:none; opacity:.35; mix-blend-mode:overlay; background-image:url(data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27180%27%20height%3D%27180%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%27.85%27%20numOctaves%3D%272%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20values%3D%270%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20.6%200%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url(%23n)%27%2F%3E%3C%2Fsvg%3E)"></div>
+        <div style="position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(90deg, transparent 0 41px, rgba(79,163,199,.35) 41px 42px, transparent 42px 97px, rgba(200,16,46,.28) 97px 98px, transparent 98px 151px, rgba(255,138,20,.3) 151px 152px); -webkit-mask-image:linear-gradient(180deg, transparent, #000 40%, #000 60%, transparent); -webkit-mask-size:100% 320px; -webkit-mask-repeat:no-repeat; mask-image:linear-gradient(180deg, transparent, #000 40%, #000 60%, transparent); mask-size:100% 320px; mask-repeat:no-repeat; animation:srain 7s linear infinite"></div>
+        <div style="position:absolute; left:0; right:0; bottom:0; height:6px; pointer-events:none; background:repeating-linear-gradient(-45deg, #f0cf6e 0 10px, #0c0e13 10px 20px); opacity:.55"></div>
+        <div style="position:absolute; left:50%; top:52%; width:520px; height:520px; margin:-260px 0 0 -260px; pointer-events:none; border:1px solid rgba(255,138,20,.07); clip-path:polygon(40px 0,100% 0,100% calc(100% - 40px),calc(100% - 40px) 100%,0 100%,0 40px)"></div>
+        <div style="position:absolute; left:50%; top:52%; width:380px; height:380px; margin:-190px 0 0 -190px; pointer-events:none; border:1px dashed rgba(255,138,20,.1); clip-path:polygon(28px 0,100% 0,100% calc(100% - 28px),calc(100% - 28px) 100%,0 100%,0 28px)"></div>
+        <div style="position:absolute; left:14px; right:14px; bottom:11px; display:flex; align-items:center; justify-content:space-between; gap:10px; pointer-events:none; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:8px; letter-spacing:.1em; color:rgba(255,138,20,.4)"><span>ASC // 昇天 // 0x1F</span><span style="flex:1; height:1px; background:repeating-linear-gradient(90deg, rgba(255,138,20,.3) 0 2px, transparent 2px 5px)"></span><span>PT-PT · 60Hz</span><span style="color:rgba(240,207,110,.6)">■</span></div>
+        <div style="position:absolute; right:8px; bottom:12px; pointer-events:none; width:18px; height:18px"><span style="position:absolute; left:8px; top:0; width:2px; height:18px; background:rgba(240,207,110,.5)"></span><span style="position:absolute; left:0; top:8px; width:18px; height:2px; background:rgba(240,207,110,.5)"></span></div>
+
+        <!-- ══════════ HUD ══════════ -->
+        <div style="position:absolute; top:58px; left:12px; right:12px; z-index:30">
+          <button onClick="{{ abrirMenu }}" aria-label="Abrir menu do sistema" style="position:relative; display:flex; align-items:center; gap:12px; width:100%; height:56px; padding:0 14px; border:1px solid rgba(255,138,20,.35); background:rgba(21,23,31,.82); backdrop-filter:blur(12px); color:#f2efe6; text-align:left; cursor:pointer; clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)" style-hover="border-color:#ff8a14; background-image:linear-gradient(180deg, transparent 44%, rgba(79,163,199,.28) 50%, transparent 56%); background-size:100% 200%; box-shadow:0 0 0 1px rgba(255,138,20,.3), inset 0 0 24px rgba(255,138,20,.12); animation:shover .3s linear" style-active="transform:translateY(1px); border-color:#4fa3c7">
+            <span style="position:relative; width:36px; height:36px; flex-shrink:0; display:flex; align-items:center; justify-content:center; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); background:#ff8a14"><span style="position:absolute; inset:1px; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); background:#15171f"></span><span style="position:relative; font-family:'Saira Condensed',sans-serif; font-size:13px; font-weight:700; color:#ff8a14">K</span></span>
+            <span style="min-width:0; flex:1">
+              <span style="display:flex; align-items:baseline; gap:6px"><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9px; letter-spacing:.06em; color:#6e6a62">ID_</span><span style="font-family:'Saira Condensed',sans-serif; font-size:15px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; margin-right:2px">Kai</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; color:#ffcb95">LV {{ patenteTxt }}</span><span style="display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); background:#ff8a14; color:#0c0e13; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700">{{ rank }}</span></span>
+              <span style="display:block; position:relative; height:6px; margin-top:6px; background:#1e212b"><span style="position:absolute; inset:0 auto 0 0; width:{{ reiatsuPct }}; background:#ff8a14; box-shadow:0 0 10px rgba(255,138,20,.7); transition:width .6s ease"></span><span style="position:absolute; inset:0; background:repeating-linear-gradient(90deg, transparent 0 calc(10% - 2px), #0c0e13 calc(10% - 2px) 10%)"></span></span>
+            </span>
+            <span style="display:flex; align-items:center; gap:12px; flex-shrink:0; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:12px; font-weight:700"><span style="display:inline-flex; align-items:center; gap:4px; color:#d9a635" aria-label="dias de serviço"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-fire"></use></svg>{{ dias }}<span style="font-size:9px; color:#a9a49a">d</span></span><span style="display:inline-flex; align-items:center; gap:4px; color:#f0cf6e" aria-label="kan"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-kan"></use></svg>{{ kan }}<span style="font-size:9px; color:#a9a49a">k</span></span></span>
+          </button>
+          <div style="height:2px; margin:4px 10px 0; background:repeating-linear-gradient(-45deg, rgba(240,207,110,.75) 0 6px, transparent 6px 12px)"></div>
+          <div style="display:flex; align-items:center; gap:7px; margin:8px 10px 0; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9px; letter-spacing:.02em; color:#6e6a62; white-space:nowrap; overflow:hidden">
+            <span style="color:#ff8a14">&gt;</span><span style="color:#ffcb95">{{ caminho }}</span>
+            <span style="flex:1; height:1px; background:repeating-linear-gradient(90deg, rgba(255,138,20,.35) 0 3px, transparent 3px 6px)"></span>
+            <span style="letter-spacing:.14em">LINK:</span>
+            <span style="display:inline-flex; align-items:flex-end; gap:2px; height:10px"><span style="width:3px; height:4px; background:#4fa3c7"></span><span style="width:3px; height:6px; background:#4fa3c7"></span><span style="width:3px; height:8px; background:#4fa3c7"></span><span style="width:3px; height:10px; background:rgba(79,163,199,.25); animation:sbreath 2s ease-in-out infinite"></span></span>
+            <span style="color:#a9a49a">{{ relogio }}</span>
+          </div>
+        </div>
+
+        <!-- ══════════ QUEST (base) ══════════ -->
+        <div data-screen-label="Quartel" style="position:absolute; top:156px; left:12px; right:12px; bottom:30px; padding:1px; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(255,138,20,.5); animation:smat .22s cubic-bezier(.2,.9,.3,1) both; transition:opacity .2s ease, transform .2s ease; opacity:{{ baseOpacidade }}; transform:{{ baseTransform }}; pointer-events:{{ baseEventos }}">
+          <div style="position:relative; height:100%; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(21,23,31,.86); backdrop-filter:blur(14px); overflow:hidden; display:flex; flex-direction:column; box-sizing:border-box">
+            <div style="position:absolute; inset:0; pointer-events:none; background-image:repeating-linear-gradient(0deg, rgba(255,138,20,.05) 0 1px, transparent 1px 3px), radial-gradient(circle at center, rgba(200,16,46,.07) 1px, transparent 1.3px); background-size:auto, 7px 7px"></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px 12px; border-bottom:1px solid rgba(255,138,20,.18)">
+              <span style="font-family:'Saira Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; color:#ff8a14; display:inline-flex; align-items:center; gap:8px; animation:sfix .14s steps(2) both"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-quest"></use></svg>[ QUEST ]</span>
+              <span style="display:flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62"><span style="font-family:'Noto Sans JP',sans-serif; font-size:10px; color:#6e6a62; margin-right:6px">クエスト</span>ASC//01 <span style="width:6px; height:6px; background:#ff8a14; box-shadow:0 0 8px #ff8a14; animation:sblink 1.6s ease-in-out infinite"></span></span>
+            </div>
+            <div style="position:absolute; right:6px; bottom:40px; pointer-events:none; writing-mode:vertical-rl; font-family:'Noto Sans JP',sans-serif; font-size:56px; font-weight:900; line-height:1; letter-spacing:.08em; color:rgba(242,239,230,.05)">肉体強化</div>
+            <div style="position:relative; flex:1; overflow-y:auto; overflow-x:hidden; padding:0 18px 22px">
+              <div style="position:relative; height:132px; margin:0 -18px 14px; overflow:hidden; border-bottom:1px solid rgba(255,138,20,.25)">
+                <x-import component-from-global-scope="image-slot" from="./image-slot.js" id="quest-hero" placeholder="ARTE // fundo da QUEST" style="position:absolute; inset:0; width:100%; height:100%" hint-size="100%,132px"></x-import>
+                <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg, rgba(21,23,31,.1), rgba(21,23,31,.92)), repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px)"></div>
+                <div style="position:absolute; right:14px; top:12px; padding:4px 8px; border:1px solid rgba(200,16,46,.8); background:rgba(200,16,46,.18); color:#ef4a63; font-family:'Noto Sans JP',sans-serif; font-size:11px; font-weight:900; letter-spacing:.2em; text-shadow:0 0 8px rgba(255,80,80,.9), 0 0 18px rgba(255,60,60,.6); box-shadow:0 0 14px rgba(200,16,46,.45), inset 0 0 10px rgba(200,16,46,.25); animation:sneon 5s steps(1) infinite">昇天強化</div>
+                <div style="position:absolute; left:18px; bottom:10px; font-family:'Noto Sans JP',sans-serif; font-size:30px; font-weight:900; line-height:1; color:#f2efe6; letter-spacing:.06em; text-shadow:2px 2px 0 rgba(200,16,46,.5), -2px -1px 0 rgba(255,138,20,.5)">昇天<span style="display:block; margin-top:4px; font-family:'Saira Condensed',sans-serif; font-size:8.5px; font-weight:700; letter-spacing:.6em; color:#a9a49a; text-shadow:none; white-space:nowrap">A S C E N D</span></div>
+              </div>
+              <p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-dojo"></use></svg>SYS// ORDEM DO DIA · TER</p>
+              <h1 style="margin:8px 0 0; font-family:'Saira Condensed',sans-serif; font-size:36px; font-weight:700; line-height:1; letter-spacing:.03em; text-transform:uppercase; text-shadow:2px 2px 0 rgba(200,16,46,.45), -2px -1px 0 rgba(255,138,20,.45)">Inferior A</h1>
+              <p style="margin:6px 0 0; display:flex; align-items:center; gap:7px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; letter-spacing:.1em; color:#a9a49a"><span style="width:14px; height:1px; background:#ff8a14"></span>QUADRÍCEPS · GLÚTEOS<span style="flex:1; height:1px; background:repeating-linear-gradient(90deg, rgba(255,138,20,.3) 0 2px, transparent 2px 5px)"></span><span style="color:#6e6a62">TER 19:30</span></p>
+              <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:3px; margin-top:10px">
+                <div style="padding:7px 8px 6px; border:1px solid #2b2f3b; background:rgba(21,23,31,.55); clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)"><span style="display:block; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:15px; font-weight:700; line-height:1; color:#f2efe6">06</span><span style="display:block; margin-top:5px; font-family:'Saira Condensed',sans-serif; font-size:8.5px; font-weight:700; letter-spacing:.14em; color:#6e6a62">EXERC</span></div>
+                <div style="padding:7px 8px 6px; border:1px solid #2b2f3b; background:rgba(21,23,31,.55); clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)"><span style="display:block; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:15px; font-weight:700; line-height:1; color:#f2efe6">18</span><span style="display:block; margin-top:5px; font-family:'Saira Condensed',sans-serif; font-size:8.5px; font-weight:700; letter-spacing:.14em; color:#6e6a62">SÉRIES</span></div>
+                <div style="padding:7px 8px 6px; border:1px solid #2b2f3b; background:rgba(21,23,31,.55); clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)"><span style="display:block; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:15px; font-weight:700; line-height:1; color:#ffcb95">48′</span><span style="display:block; margin-top:5px; font-family:'Saira Condensed',sans-serif; font-size:8.5px; font-weight:700; letter-spacing:.14em; color:#6e6a62">TEMPO</span></div>
+                <div style="padding:7px 8px 6px; border:1px solid #2b2f3b; background:rgba(21,23,31,.55); clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)"><span style="display:block; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:15px; font-weight:700; line-height:1; color:#ffcb95">90″</span><span style="display:block; margin-top:5px; font-family:'Saira Condensed',sans-serif; font-size:8.5px; font-weight:700; letter-spacing:.14em; color:#6e6a62">DESC</span></div>
+              </div>
+              <div style="display:flex; gap:8px; margin-top:12px">
+                <span style="display:inline-flex; align-items:center; height:24px; padding:0 9px; background:rgba(255,138,20,.12); color:#ffcb95; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; font-weight:700; border-left:2px solid #ff8a14; clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px); gap:5px; white-space:nowrap; flex-shrink:0"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-bolt"></use></svg>RTS<span style="color:#6e6a62">_</span>+198</span>
+                <span style="display:inline-flex; align-items:center; height:24px; padding:0 9px; background:rgba(240,207,110,.12); color:#f0cf6e; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; font-weight:700; border-left:2px solid #f0cf6e; clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px); gap:5px; white-space:nowrap; flex-shrink:0"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-kan"></use></svg>KAN<span style="color:rgba(240,207,110,.5)">_</span>+47</span><span style="display:inline-flex; align-items:center; height:24px; padding:0 9px; border-left:2px solid #4fa3c7; background:rgba(79,163,199,.1); color:#8fd0e8; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; font-weight:700; clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px); gap:5px; white-space:nowrap; flex-shrink:0; margin-left:auto">ASC//02</span>
+              </div>
+              <button onClick="{{ abrirDojo }}" style="width:100%; height:52px; margin-top:16px; border:none; background:#ff8a14; color:#0c0e13; font-family:'Saira Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:.14em; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px); animation:spulse 2.4s ease-in-out infinite" style-hover="transform:translate(-1px,-1px); box-shadow:0 0 0 1px #f2efe6, 5px 5px 0 rgba(200,16,46,.35)" style-active="transform:translate(1px,1px); background:#4fa3c7">{{ rotuloComecar }}</button>
+
+              <button onClick="{{ irRacoes }}" style="display:block; width:100%; margin-top:18px; padding:14px 0 0; border:none; border-top:1px solid #2b2f3b; background:none; color:#f2efe6; text-align:left; cursor:pointer">
+                <span style="display:flex; justify-content:space-between; align-items:baseline"><span style="font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:inline-flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-racoes"></use></svg>[ RATIONS ]<span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9px; font-weight:400; letter-spacing:0; color:#6e6a62">ASC//03</span></span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#ffcb95; white-space:nowrap">{{ faltamResumo }} ▸</span></span>
+                <span style="display:flex; align-items:baseline; gap:8px; margin-top:8px"><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:28px; font-weight:700; line-height:1">{{ qKcal }}</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; color:#6e6a62">/ {{ qMetaKcal }} kcal</span></span>
+                <span style="display:block; position:relative; height:6px; margin-top:8px; background:#1e212b"><span style="position:absolute; inset:0 auto 0 0; width:{{ kcalPct }}; background:#c8102e; box-shadow:0 0 8px rgba(200,16,46,.5); transition:width .6s ease"></span><span style="position:absolute; inset:0; background:repeating-linear-gradient(90deg, transparent 0 calc(10% - 2px), #0c0e13 calc(10% - 2px) 10%)"></span></span>
+                <span style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px">
+                  <span><span style="display:flex; justify-content:space-between; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#a9a49a"><span style="display:inline-flex; align-items:center; gap:4px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-prot"></use></svg>PROT</span><span style="color:#f2efe6">{{ qProtTxt }}</span></span><span style="display:block; position:relative; height:4px; margin-top:5px; background:#1e212b"><span style="position:absolute; inset:0 auto 0 0; width:{{ qProtPct }}; background:#ff8a14; transition:width .6s ease"></span></span></span>
+                  <span><span style="display:flex; justify-content:space-between; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#a9a49a"><span style="display:inline-flex; align-items:center; gap:4px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-water"></use></svg>H2O</span><span style="color:#f2efe6">{{ qAguaTxt }}</span></span><span style="display:block; position:relative; height:4px; margin-top:5px; background:#1e212b"><span style="position:absolute; inset:0 auto 0 0; width:{{ qAguaPct }}; background:#ffcb95; transition:width .6s ease"></span></span></span>
+                </span>
+              </button>
+
+              <button onClick="{{ irOrdens }}" style="display:block; width:100%; margin-top:16px; padding:14px 0 0; border:none; border-top:1px solid #2b2f3b; background:none; color:#f2efe6; text-align:left; cursor:pointer">
+                <span style="display:flex; justify-content:space-between; align-items:baseline"><span style="font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:inline-flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-ordens"></use></svg>[ ORDERS ]<span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9px; font-weight:400; letter-spacing:0; color:#6e6a62">ASC//04</span></span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#ffcb95; white-space:nowrap">{{ ordensTxt }} ▸</span></span>
+                <span style="display:flex; flex-direction:column; gap:4px; margin-top:10px">
+                  <sc-for list="{{ ordens }}" as="o" hint-placeholder-count="3">
+                    <span style="display:grid; grid-template-columns:24px 14px minmax(0,1fr) 34px auto; gap:7px; align-items:center; min-height:30px; overflow:hidden; border-bottom:1px solid rgba(43,47,59,.7)"><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9.5px; color:#6e6a62">ORD{{ o.indice }}</span><span style="display:inline-flex; align-items:center; justify-content:center; width:14px; height:14px; border:1px solid {{ o.caixaBorda }}; background:{{ o.caixaFundo }}; color:#0c0e13; font-size:9px; font-weight:700">{{ o.marca }}</span><span style="min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-family:'Saira Condensed',sans-serif; font-size:12.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:{{ o.cor }}">{{ o.curto }}</span><span style="position:relative; height:4px; background:#1e212b"><span style="position:absolute; inset:0 auto 0 0; width:{{ o.pct }}; background:{{ o.barra }}"></span></span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:{{ o.corPremio }}">{{ o.premio }}</span></span>
+                  </sc-for>
+                </span>
+              </button>
+
+              <div style="margin-top:16px; padding-top:14px; border-top:1px solid #2b2f3b; display:flex; justify-content:space-between; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62"><span>{{ nomePatente }} · SECÇÃO 9</span><span>LINK: estável</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════ MENU ══════════ -->
+        <sc-if value="{{ eMenu }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; inset:0; z-index:40">
+            <button onClick="{{ fecharMenu }}" aria-label="Fechar menu" style="position:absolute; inset:0; border:none; background:rgba(12,14,19,.55); cursor:pointer; animation:sfade .2s ease both"></button>
+            <div data-screen-label="Menu" style="position:absolute; top:156px; left:12px; right:12px; padding:1px; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(255,138,20,.6); animation:smat .22s cubic-bezier(.2,.9,.3,1) both">
+              <div style="position:relative; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(21,23,31,.94); backdrop-filter:blur(14px); overflow:hidden">
+                <div style="position:absolute; left:0; right:0; height:2px; background:#ff8a14; box-shadow:0 0 12px rgba(255,138,20,.9); animation:sscan .34s cubic-bezier(.2,.9,.3,1) both; pointer-events:none"></div><div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(112deg, transparent 40%, rgba(255,138,20,.18) 47%, rgba(200,16,46,.22) 52%, transparent 59%); animation:swipe .26s linear both"></div><div style="position:absolute; right:0; top:0; width:16px; height:16px; border-right:2px solid #ff8a14; border-top:2px solid #ff8a14; pointer-events:none"></div><div style="position:absolute; left:0; bottom:0; width:16px; height:16px; border-left:2px solid rgba(255,138,20,.45); border-bottom:2px solid rgba(255,138,20,.45); pointer-events:none"></div>
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 8px 12px 18px; border-bottom:1px solid rgba(255,138,20,.18); background:linear-gradient(180deg, rgba(255,138,20,.08), transparent)">
+                  <span style="font-family:'Saira Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; color:#ff8a14; display:inline-flex; align-items:center; gap:8px; animation:sfix .14s steps(2) both"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-menu"></use></svg>[ MENU ]<span style="font-family:'Noto Sans JP',sans-serif; font-size:10px; font-weight:700; color:#6e6a62; letter-spacing:.1em">メニュー</span></span>
+                  <button onClick="{{ fecharMenu }}" aria-label="Fechar" style="width:44px; height:44px; border:none; background:none; color:#ffcb95; font-size:18px; cursor:pointer">×</button>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:14px 18px 18px">
+                  <sc-for list="{{ menu }}" as="m" hint-placeholder-count="6">
+                    <button onClick="{{ m.ir }}" style="display:flex; flex-direction:column; align-items:flex-start; gap:4px; min-height:76px; padding:12px 12px; border:1px solid {{ m.borda }}; background:{{ m.fundo }}; box-shadow:{{ m.sombra }}; color:#f2efe6; text-align:left; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)" style-hover="border-color:#ff8a14; background-image:linear-gradient(180deg, transparent 44%, rgba(79,163,199,.32) 50%, transparent 56%); background-size:100% 200%; transform:translate(-1px,-1px); box-shadow:0 0 0 1px rgba(255,138,20,.35), 4px 4px 0 rgba(200,16,46,.25); animation:shover .3s linear" style-active="transform:translate(1px,1px); border-color:#4fa3c7">
+                      <span style="display:flex; justify-content:space-between; width:100%; font-family:'Saira Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.18em; color:{{ m.cor }}"><span style="display:inline-flex; align-items:center; gap:7px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0; filter:drop-shadow(0 0 6px rgba(255,138,20,.5))"><use href="#ic-{{ m.id }}"></use></svg>{{ m.codigo }}</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9.5px; font-weight:400; color:#6e6a62; letter-spacing:0">{{ m.sys }}</span></span>
+                      <span style="display:flex; justify-content:space-between; align-items:baseline; width:100%; font-size:12px; color:#a9a49a">{{ m.nome }}<span style="font-family:'Noto Sans JP',sans-serif; font-size:11px; font-weight:700; color:#6e6a62">{{ m.kana }}</span></span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ══════════ DOJO · plano ══════════ -->
+        <sc-if value="{{ eDojo }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Dojo" style="position:absolute; top:156px; left:12px; right:12px; bottom:30px; z-index:20; padding:1px; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(255,138,20,.5); animation:smat .22s cubic-bezier(.2,.9,.3,1) both">
+            <div style="position:relative; height:100%; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(21,23,31,.9); backdrop-filter:blur(14px); overflow:hidden; display:flex; flex-direction:column; box-sizing:border-box">
+              <div style="position:absolute; inset:0; pointer-events:none; background-image:repeating-linear-gradient(0deg, rgba(255,138,20,.05) 0 1px, transparent 1px 3px), radial-gradient(circle at center, rgba(200,16,46,.07) 1px, transparent 1.3px); background-size:auto, 7px 7px"></div>
+              <div style="position:absolute; left:0; right:0; height:2px; background:#ff8a14; box-shadow:0 0 12px rgba(255,138,20,.9); animation:sscan .34s cubic-bezier(.2,.9,.3,1) both; pointer-events:none"></div><div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(112deg, transparent 40%, rgba(255,138,20,.18) 47%, rgba(200,16,46,.22) 52%, transparent 59%); animation:swipe .26s linear both"></div><div style="position:absolute; right:0; top:0; width:16px; height:16px; border-right:2px solid #ff8a14; border-top:2px solid #ff8a14; pointer-events:none"></div><div style="position:absolute; left:0; bottom:0; width:16px; height:16px; border-left:2px solid rgba(255,138,20,.45); border-bottom:2px solid rgba(255,138,20,.45); pointer-events:none"></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 8px 12px 18px; border-bottom:1px solid rgba(255,138,20,.18); background:linear-gradient(180deg, rgba(255,138,20,.08), transparent)">
+                <span style="font-family:'Saira Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; color:#ff8a14; display:inline-flex; align-items:center; gap:8px; animation:sfix .14s steps(2) both"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-dojo"></use></svg>[ DOJO ]</span>
+                <span style="display:flex; align-items:center; gap:6px"><span style="font-family:'Noto Sans JP',sans-serif; font-size:10px; color:#6e6a62">道場</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">ASC//02</span><button onClick="{{ fecharJanela }}" aria-label="Fechar" style="width:44px; height:44px; border:none; background:none; color:#ffcb95; font-size:18px; cursor:pointer">×</button></span>
+              </div>
+              <div style="position:relative; flex:1; overflow-y:auto; overflow-x:hidden; padding:16px 18px 22px">
+                <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px">
+                  <sc-for list="{{ semana }}" as="d" hint-placeholder-count="7">
+                    <span style="display:flex; flex-direction:column; align-items:center; gap:5px; height:52px; padding-top:7px; border:1px solid {{ d.borda }}; background:{{ d.fundo }}; box-sizing:border-box"><span style="font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; color:{{ d.cor }}">{{ d.dia }}</span><span style="display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; background:{{ d.pontoFundo }}; color:{{ d.pontoCor }}; font-size:10px; font-weight:700">{{ d.marca }}</span></span>
+                  </sc-for>
+                </div>
+                <p style="margin:16px 0 0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95">PLANO// HOJE · INFERIOR A</p>
+                <h2 style="margin:6px 0 0; font-family:'Saira Condensed',sans-serif; font-size:24px; font-weight:700; line-height:1.2; letter-spacing:.03em; text-transform:uppercase">Quadríceps e glúteos</h2>
+                <p style="margin:6px 0 0; display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; color:#a9a49a"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-timer"></use></svg>{{ seriesTxt }} séries · {{ cronometro }}</p>
+                <button onClick="{{ abrirSessao }}" style="width:100%; height:52px; margin-top:14px; border:none; background:#ff8a14; color:#0c0e13; font-family:'Saira Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:.14em; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px); animation:spulse 2.4s ease-in-out infinite" style-hover="transform:translate(-1px,-1px); box-shadow:0 0 0 1px #f2efe6, 5px 5px 0 rgba(200,16,46,.35)" style-active="transform:translate(1px,1px); background:#4fa3c7">{{ rotuloSessao }}</button>
+
+                <div style="display:flex; flex-direction:column; gap:6px; margin-top:18px">
+                  <sc-for list="{{ exerciciosPlano }}" as="e" hint-placeholder-count="6">
+                    <div style="border:1px solid #2b2f3b; background:rgba(21,23,31,.6)">
+                      <button onClick="{{ e.alternar }}" style="display:grid; grid-template-columns:24px 1fr auto auto; gap:10px; align-items:center; width:100%; min-height:56px; padding:0 12px 0 14px; border:none; background:none; color:#f2efe6; text-align:left; cursor:pointer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffcb95" stroke-width="1.5" stroke-linejoin="round"><use href="#ic-{{ e.icone }}"></use></svg>
+                        <span style="min-width:0"><span style="display:block; font-size:13px; font-weight:600">{{ e.nome }}</span><span style="display:block; margin-top:2px; font-size:10.5px; color:#a9a49a">{{ e.meta }}</span></span>
+                        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:13px; font-weight:700; color:#ffcb95">{{ e.series }}</span>
+                        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; font-weight:700; color:{{ e.corEstado }}; min-width:26px; text-align:right">{{ e.estado }}{{ e.seta }}</span>
+                      </button>
+                      <sc-if value="{{ e.aberto }}" hint-placeholder-val="{{ false }}">
+                        <p style="margin:0; padding:10px 14px 12px; border-top:1px solid #2b2f3b; font-size:12px; line-height:1.6; color:#a9a49a">{{ e.desc }}</p>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:16px">
+                  <button onClick="{{ planoIA }}" style="height:44px; border:1px solid rgba(255,138,20,.45); background:rgba(255,138,20,.08); color:#ffcb95; font-family:'Saira Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.14em; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)">PLANO COM IA</button>
+                  <button onClick="{{ criarTreino }}" style="height:44px; border:1px solid #2b2f3b; background:transparent; color:#a9a49a; font-family:'Saira Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.14em; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)">CRIAR TREINO</button>
+                </div>
+
+                <p style="margin:18px 0 0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95">LOG// {{ historicoTxt }}</p>
+                <div style="display:flex; flex-direction:column; margin-top:6px">
+                  <sc-for list="{{ historico }}" as="h" hint-placeholder-count="4">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; min-height:44px; border-bottom:1px solid #2b2f3b"><span style="min-width:0"><span style="display:block; font-size:12.5px; font-weight:600">{{ h.nome }}</span><span style="display:block; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#a9a49a">{{ h.detalhe }}</span></span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; font-weight:700; color:#ffcb95">{{ h.xp }} RTS</span></div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ══════════ SESSION · treino ══════════ -->
+        <sc-if value="{{ eSessao }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Treino" style="position:absolute; top:156px; left:12px; right:12px; bottom:30px; z-index:20; padding:1px; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:{{ bordaSessao }}; animation:smat .22s cubic-bezier(.2,.9,.3,1) both">
+            <div style="position:relative; height:100%; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(21,23,31,.92); backdrop-filter:blur(14px); overflow:hidden; display:flex; flex-direction:column; box-sizing:border-box">
+              <div style="position:absolute; inset:0; pointer-events:none; background-image:repeating-linear-gradient(0deg, rgba(255,138,20,.05) 0 1px, transparent 1px 3px), radial-gradient(circle at center, rgba(200,16,46,.07) 1px, transparent 1.3px); background-size:auto, 7px 7px"></div>
+              <div style="position:absolute; left:0; right:0; height:2px; background:#ff8a14; box-shadow:0 0 12px rgba(255,138,20,.9); animation:sscan .34s cubic-bezier(.2,.9,.3,1) both; pointer-events:none"></div><div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(112deg, transparent 40%, rgba(255,138,20,.18) 47%, rgba(200,16,46,.22) 52%, transparent 59%); animation:swipe .26s linear both"></div><div style="position:absolute; right:0; top:0; width:16px; height:16px; border-right:2px solid #ff8a14; border-top:2px solid #ff8a14; pointer-events:none"></div><div style="position:absolute; left:0; bottom:0; width:16px; height:16px; border-left:2px solid rgba(255,138,20,.45); border-bottom:2px solid rgba(255,138,20,.45); pointer-events:none"></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 8px 12px 18px; border-bottom:1px solid rgba(255,138,20,.18); background:linear-gradient(180deg, rgba(255,138,20,.08), transparent)">
+                <span style="font-family:'Saira Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; color:#ff8a14; display:inline-flex; align-items:center; gap:8px; animation:sfix .14s steps(2) both"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-sessao"></use></svg>[ SESSION ]<span style="font-family:'Noto Sans JP',sans-serif; font-size:10px; font-weight:700; color:#6e6a62; letter-spacing:.1em">セッション</span></span>
+                <span style="display:flex; align-items:center; gap:2px">
+                  <span style="display:inline-flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:13px; font-weight:700; color:{{ corCronometro }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-timer"></use></svg>{{ cronometro }}</span>
+                  <button onClick="{{ alternarPausa }}" aria-label="Pausar" style="width:44px; height:44px; border:none; background:none; color:{{ corPausa }}; font-size:11px; cursor:pointer">{{ rotuloPausa }}</button>
+                  <button onClick="{{ sairDojo }}" aria-label="Fechar" style="width:44px; height:44px; border:none; background:none; color:#ffcb95; font-size:18px; cursor:pointer">×</button>
+                </span>
+              </div>
+              <div style="position:relative; height:3px; background:#1e212b"><div style="position:absolute; inset:0 auto 0 0; width:{{ progressoPct }}; background:#ff8a14; box-shadow:0 0 8px rgba(255,138,20,.8); transition:width .3s ease"></div></div>
+
+              <div style="position:relative; flex:1; overflow-y:auto; overflow-x:hidden; padding:16px 18px 0">
+                <div style="display:flex; justify-content:space-between; gap:10px; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; line-height:1.6; color:#ffcb95"><span style="white-space:nowrap">{{ exercicioTxt }}</span><span style="text-align:right; color:#a9a49a">{{ metaExercicio }}</span></div>
+                <div style="position:relative"><span style="position:absolute; right:-6px; top:-22px; pointer-events:none; font-family:'Noto Sans JP',sans-serif; font-size:72px; font-weight:900; line-height:1; color:rgba(242,239,230,.05)">{{ kanjiGrupo }}</span><h2 style="position:relative; margin:10px 0 0; font-family:'Saira Condensed',sans-serif; font-size:32px; font-weight:700; line-height:1.15; letter-spacing:.02em; text-transform:uppercase; text-shadow:2px 2px 0 rgba(200,16,46,.35), -2px -1px 0 rgba(255,138,20,.35)">{{ nomeExercicio }}</h2></div>
+                <div style="display:flex; align-items:baseline; gap:10px; margin-top:10px"><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:40px; font-weight:700; line-height:1; color:#ffcb95">{{ repsAtual }}</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; color:#a9a49a">{{ serieTxt }}</span><button onClick="{{ alternarDemo }}" style="margin-left:auto; height:32px; padding:0 10px; border:1px solid #2b2f3b; background:none; color:#a9a49a; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.14em; cursor:pointer; display:inline-flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-sessao"></use></svg>{{ rotuloDemo }}</button></div>
+                <p style="margin:10px 0 0; font-size:12.5px; line-height:1.6; color:#a9a49a; text-wrap:pretty">{{ descricaoExercicio }}</p>
+
+                <sc-if value="{{ verDemo }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:relative; width:100%; margin-top:12px; aspect-ratio:16/9; border:1px solid rgba(255,138,20,.35); background:#15171f; overflow:hidden">
+                    <sc-if value="{{ demoEx0 }}" hint-placeholder-val="{{ false }}"><span><img src="exercises/agachamento-bulgaro-0.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1)"><img src="exercises/agachamento-bulgaro-1.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1); animation:sdemo 2.4s ease-in-out infinite"></span></sc-if>
+                    <sc-if value="{{ demoEx1 }}" hint-placeholder-val="{{ false }}"><span><img src="exercises/agachamento-goblet-0.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1)"><img src="exercises/agachamento-goblet-1.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1); animation:sdemo 2.4s ease-in-out infinite"></span></sc-if>
+                    <sc-if value="{{ demoEx2 }}" hint-placeholder-val="{{ false }}"><span><img src="exercises/peso-morto-romeno-halteres-0.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1)"><img src="exercises/peso-morto-romeno-halteres-1.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1); animation:sdemo 2.4s ease-in-out infinite"></span></sc-if>
+                    <sc-if value="{{ demoEx3 }}" hint-placeholder-val="{{ false }}"><span><img src="exercises/ponte-gluteos-0.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1)"><img src="exercises/ponte-gluteos-1.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1); animation:sdemo 2.4s ease-in-out infinite"></span></sc-if>
+                    <sc-if value="{{ demoEx4 }}" hint-placeholder-val="{{ false }}"><span><img src="exercises/prancha-0.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1)"><img src="exercises/prancha-1.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1); animation:sdemo 2.4s ease-in-out infinite"></span></sc-if>
+                    <sc-if value="{{ demoEx5 }}" hint-placeholder-val="{{ false }}"><span><img src="exercises/prancha-lateral-0.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1)"><img src="exercises/prancha-lateral-1.jpg" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(.3) contrast(1.1); animation:sdemo 2.4s ease-in-out infinite"></span></sc-if>
+                    <span style="position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg, rgba(255,138,20,.08) 0 1px, transparent 1px 3px)"></span>
+                    <span style="position:absolute; left:8px; top:6px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9px; color:#ff8a14">REC · DEMO</span>
+                  </div>
+                </sc-if>
+
+                <div style="display:grid; grid-template-columns:repeat({{ nSeries }},1fr); gap:4px; margin-top:16px">
+                  <sc-for list="{{ series }}" as="q" hint-placeholder-count="4">
+                    <button onClick="{{ q.alternar }}" style-hover="border-color:#ff8a14; box-shadow:inset 0 0 16px rgba(255,138,20,.18)" style-active="background:#4fa3c7; color:#0c0e13" style="height:52px; border:1px solid {{ q.borda }}; background:{{ q.fundo }}; color:{{ q.cor }}; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px"><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:15px; font-weight:700">{{ q.numero }}</span><span style="font-family:'Saira Condensed',sans-serif; font-size:8.5px; font-weight:700; letter-spacing:.14em">{{ q.estado }}</span></button>
+                  </sc-for>
+                </div>
+
+                <sc-if value="{{ descansoAtivo }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:12px; padding:12px 14px; border:1px solid rgba(217,166,53,.55); background:rgba(217,166,53,.07); animation:smat .22s ease both">
+                    <div style="display:flex; justify-content:space-between; align-items:baseline"><span style="font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; color:#d9a635; display:inline-flex; align-items:center; gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-timer"></use></svg>DESCANSO</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:22px; font-weight:700; color:#d9a635">{{ descansoTxt }}</span></div>
+                    <div style="position:relative; height:6px; margin-top:8px; background:#1e212b"><div style="position:absolute; inset:0 auto 0 0; width:{{ descansoPct }}; background:#d9a635; transition:width 1s linear"></div><div style="position:absolute; inset:0; background:repeating-linear-gradient(90deg, transparent 0 calc(10% - 2px), #0c0e13 calc(10% - 2px) 10%)"></div></div>
+                    <button onClick="{{ saltarDescanso }}" style="margin-top:8px; height:36px; padding:0 10px; border:none; background:none; color:#a9a49a; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.14em; cursor:pointer">SALTAR ▸</button>
+                  </div>
+                </sc-if>
+              </div>
+
+              <div style="position:relative; padding:10px 18px 16px; border-top:1px solid rgba(255,138,20,.18); background:rgba(12,14,19,.5)"><div style="position:absolute; left:0; right:0; top:-1px; height:3px; background:repeating-linear-gradient(-45deg, #f0cf6e 0 8px, transparent 8px 16px); opacity:.5"></div>
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px">
+                  <span style="display:flex; gap:4px"><sc-for list="{{ pontos }}" as="p" hint-placeholder-count="6"><button onClick="{{ p.ir }}" aria-label="Ir para exercício" style="width:{{ p.largura }}; height:5px; padding:0; border:none; background:{{ p.cor }}; cursor:pointer; transition:width .2s ease"></button></sc-for></span>
+                  <span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#a9a49a">▸ {{ proximoTxt }}</span>
+                </div>
+                <button onClick="{{ acaoPrincipal }}" style="width:100%; height:52px; border:none; background:#ff8a14; color:#0c0e13; font-family:'Saira Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:.14em; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px); animation:spulse 2.4s ease-in-out infinite" style-hover="transform:translate(-1px,-1px); box-shadow:0 0 0 1px #f2efe6, 5px 5px 0 rgba(200,16,46,.35)" style-active="transform:translate(1px,1px); background:#4fa3c7">{{ rotuloPrincipal }}</button>
+                <sc-if value="{{ podeTerminar }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ terminarParcial }}" style="width:100%; height:40px; margin-top:2px; border:none; background:none; color:#a9a49a; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.14em; cursor:pointer">TERMINAR AQUI · {{ seriesTxt }} SÉRIES</button>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ══════════ RATIONS · rações ══════════ -->
+        <sc-if value="{{ eRacoes }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Rações" style="position:absolute; top:156px; left:12px; right:12px; bottom:30px; z-index:20; padding:1px; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(255,138,20,.5); animation:smat .22s cubic-bezier(.2,.9,.3,1) both">
+            <div style="position:relative; height:100%; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(21,23,31,.9); backdrop-filter:blur(14px); overflow:hidden; display:flex; flex-direction:column; box-sizing:border-box">
+              <div style="position:absolute; inset:0; pointer-events:none; background-image:repeating-linear-gradient(0deg, rgba(255,138,20,.05) 0 1px, transparent 1px 3px), radial-gradient(circle at center, rgba(200,16,46,.07) 1px, transparent 1.3px); background-size:auto, 7px 7px"></div>
+              <div style="position:absolute; left:0; right:0; height:2px; background:#ff8a14; box-shadow:0 0 12px rgba(255,138,20,.9); animation:sscan .34s cubic-bezier(.2,.9,.3,1) both; pointer-events:none"></div><div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(112deg, transparent 40%, rgba(255,138,20,.18) 47%, rgba(200,16,46,.22) 52%, transparent 59%); animation:swipe .26s linear both"></div><div style="position:absolute; right:0; top:0; width:16px; height:16px; border-right:2px solid #ff8a14; border-top:2px solid #ff8a14; pointer-events:none"></div><div style="position:absolute; left:0; bottom:0; width:16px; height:16px; border-left:2px solid rgba(255,138,20,.45); border-bottom:2px solid rgba(255,138,20,.45); pointer-events:none"></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 8px 12px 18px; border-bottom:1px solid rgba(255,138,20,.18); background:linear-gradient(180deg, rgba(255,138,20,.08), transparent)">
+                <span style="font-family:'Saira Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; color:#ff8a14; display:inline-flex; align-items:center; gap:8px; animation:sfix .14s steps(2) both"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-racoes"></use></svg>[ RATIONS ]</span>
+                <span style="display:flex; align-items:center; gap:6px"><span style="font-family:'Noto Sans JP',sans-serif; font-size:10px; color:#6e6a62">配給</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">ASC//03</span><button onClick="{{ fecharJanela }}" aria-label="Fechar" style="width:44px; height:44px; border:none; background:none; color:#ffcb95; font-size:18px; cursor:pointer">×</button></span>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:3px; padding:10px 18px 0">
+                <sc-for list="{{ abasRacoes }}" as="ab" hint-placeholder-count="3">
+                  <button onClick="{{ ab.ir }}" aria-label="{{ ab.nome }}" style="display:flex; align-items:center; justify-content:center; gap:6px; height:44px; border:1px solid {{ ab.borda }}; background:{{ ab.fundo }}; color:{{ ab.cor }}; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.14em; cursor:pointer; clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-{{ ab.icone }}"></use></svg>{{ ab.nome }}</button>
+                </sc-for>
+              </div>
+              <div style="position:relative; flex:1; overflow-y:auto; overflow-x:hidden; padding:16px 18px 22px">
+                <span style="position:absolute; right:8px; top:4px; pointer-events:none; font-family:'Noto Sans JP',sans-serif; font-size:88px; font-weight:900; line-height:1; color:rgba(242,239,230,.045)">糧</span>
+                <sc-if value="{{ abaEstado }}" hint-placeholder-val="{{ true }}"><div>
+                <div style="position:relative; display:grid; grid-template-columns:150px 1fr; gap:14px; align-items:stretch">
+                  <div style="position:relative; width:150px; height:150px">
+                    <svg width="150" height="150" viewBox="0 0 150 150" style="position:absolute; inset:0; transform:rotate(-90deg)">
+                      <circle cx="75" cy="75" r="64" fill="none" stroke="#1e212b" stroke-width="10"></circle>
+                      <circle cx="75" cy="75" r="64" fill="none" stroke="#0c0e13" stroke-width="12" stroke-dasharray="2 38.2" stroke-dashoffset="1"></circle>
+                      <circle cx="75" cy="75" r="64" fill="none" stroke="#c8102e" stroke-width="10" stroke-linecap="butt" stroke-dasharray="{{ kcalDash }}" style="filter:drop-shadow(0 0 6px rgba(200,16,46,.8)); transition:stroke-dasharray .6s ease"></circle>
+                      <circle cx="75" cy="75" r="64" fill="none" stroke="#0c0e13" stroke-width="12" stroke-dasharray="2 38.2" stroke-dashoffset="1"></circle>
+                      <circle cx="75" cy="75" r="54" fill="none" stroke="rgba(255,138,20,.25)" stroke-width="1" stroke-dasharray="3 5"></circle>
+                    </svg>
+                    <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center">
+                      <span style="font-family:'Saira Condensed',sans-serif; font-size:9.5px; font-weight:700; letter-spacing:.2em; color:#ffcb95; display:inline-flex; align-items:center; gap:4px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><use href="#ic-fire"></use></svg>{{ rotuloFaltam }}</span>
+                      <span style="margin-top:2px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:30px; font-weight:700; line-height:1; color:#f2efe6; text-shadow:0 0 14px rgba(200,16,46,.5)">{{ faltamNum }}</span>
+                      <span style="margin-top:4px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9.5px; color:#6e6a62">{{ kcalTxt }}</span>
+                    </div>
+                    <sc-if value="{{ bonusProteina }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; left:50%; bottom:-4px; transform:translateX(-50%); display:inline-flex; align-items:center; gap:4px; height:20px; padding:0 8px; background:#ff8a14; color:#0c0e13; font-family:'Saira Condensed',sans-serif; font-size:9px; font-weight:700; letter-spacing:.14em; clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px)"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><use href="#ic-prot"></use></svg>OK</span></sc-if>
+                  </div>
+                  <div style="display:flex; flex-direction:column; justify-content:center; gap:10px; min-width:0">
+                    <sc-for list="{{ macros }}" as="m" hint-placeholder-count="3">
+                      <div><div style="display:flex; justify-content:space-between; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.16em; line-height:1.5; color:#ffcb95"><span style="display:inline-flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0"><use href="#ic-{{ m.icone }}"></use></svg>{{ m.nome }}</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; color:#f2efe6; white-space:nowrap">{{ m.valor }}<span style="color:#6e6a62">/{{ m.meta }} g</span></span></div><div style="position:relative; height:6px; margin-top:5px; background:#1e212b"><div style="position:absolute; inset:0 auto 0 0; width:{{ m.pct }}; background:{{ m.barra }}; transition:width .6s ease"></div><div style="position:absolute; inset:0; background:repeating-linear-gradient(90deg, transparent 0 calc(10% - 2px), #0c0e13 calc(10% - 2px) 10%)"></div></div></div>
+                    </sc-for>
+                  </div>
+                </div>
+                <sc-if value="{{ acimaDaMeta }}" hint-placeholder-val="{{ false }}">
+                  <p style="margin:12px 0 0; padding:9px 12px; border:1px solid rgba(217,166,53,.5); background:rgba(217,166,53,.07); font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#d9a635">▲ META ULTRAPASSADA</p>
+                </sc-if>
+
+                <div style="display:grid; grid-template-columns:auto 1fr 44px 44px; gap:8px; align-items:center; margin-top:16px; padding-top:14px; border-top:1px solid #2b2f3b">
+                  <div style="position:relative; width:40px; height:40px">
+                    <div style="position:absolute; inset:6px; background:#1e212b; border:1px solid rgba(92,200,255,.4); transform:rotate(45deg); overflow:hidden"><div style="position:absolute; left:-10px; right:-10px; bottom:-10px; height:calc({{ aguaPct }} + 10px); background:#5cc8ff; transform:rotate(-45deg); transform-origin:center bottom; transition:height .6s ease"></div></div>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0c0e13" stroke-width="1.5" stroke-linejoin="round" style="position:absolute; inset:0"><use href="#ic-water"></use></svg>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:2px; min-width:0"><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:12px; font-weight:700; color:#5cc8ff">{{ aguaTxt }}</span><div style="display:flex; gap:2px">
+                    <sc-for list="{{ aguaCelulas }}" as="c" hint-placeholder-count="10"><span style="flex:1; height:6px; background:{{ c.cor }}; clip-path:polygon(2px 0,100% 0,calc(100% - 2px) 100%,0 100%)"></span></sc-for>
+                  </div></div>
+                  <button onClick="{{ addAgua250 }}" style="height:44px; border:1px solid rgba(92,200,255,.45); background:rgba(92,200,255,.08); color:#5cc8ff; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; font-weight:700; cursor:pointer">+250</button>
+                  <button onClick="{{ addAgua500 }}" style="height:44px; border:1px solid rgba(92,200,255,.45); background:rgba(92,200,255,.08); color:#5cc8ff; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; font-weight:700; cursor:pointer">+500</button>
+                </div>
+
+                <p style="margin:16px 0 0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-quest"></use></svg>SUGESTÃO</p>
+                <sc-if value="{{ semSugestao }}" hint-placeholder-val="{{ false }}"><p style="margin:8px 0 0; display:flex; align-items:center; gap:8px; font-size:12.5px; color:#a9a49a"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-water"></use></svg>{{ mensagemSugestao }}</p></sc-if>
+                <sc-if value="{{ temSugestoes }}" hint-placeholder-val="{{ true }}">
+                  <div>
+                    <p style="margin:8px 0 0; display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:#ffcb95"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-prot"></use></svg>{{ sugestaoTitulo }}</p>
+                    <div style="display:flex; flex-direction:column; margin-top:4px">
+                      <sc-for list="{{ sugestoes }}" as="sg" hint-placeholder-count="2">
+                        <div style="display:grid; grid-template-columns:1fr auto auto; gap:12px; align-items:center; min-height:40px; border-bottom:1px solid #2b2f3b; font-size:12px"><span>{{ sg.nome }}</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#a9a49a; white-space:nowrap">{{ sg.kcal }}</span><span style="display:inline-flex; align-items:center; gap:4px; white-space:nowrap; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#ffcb95"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-prot"></use></svg>{{ sg.prot }}</span></div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+
+                </div></sc-if>
+
+                <sc-if value="{{ abaRegistar }}" hint-placeholder-val="{{ false }}"><div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:0">
+                  <button onClick="{{ registarFoto }}" style="display:flex; align-items:center; justify-content:center; gap:8px; height:64px; flex-direction:column; gap:6px; border:1px dashed rgba(255,138,20,.5); background:rgba(255,138,20,.04); color:#ffcb95; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.14em; cursor:pointer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-camera"></use></svg>FOTO</button>
+                  <button onClick="{{ registarTexto }}" style="display:flex; align-items:center; justify-content:center; gap:8px; height:64px; flex-direction:column; gap:6px; border:1px dashed rgba(255,138,20,.5); background:rgba(255,138,20,.04); color:#ffcb95; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.14em; cursor:pointer"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-text"></use></svg>TEXTO</button>
+                </div>
+
+                <p style="margin:18px 0 0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-bolt"></use></svg>RÁPIDO</p>
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:3px; margin-top:8px">
+                  <sc-for list="{{ destinos }}" as="dst" hint-placeholder-count="4">
+                    <button onClick="{{ dst.escolher }}" style="height:44px; border:1px solid {{ dst.borda }}; background:{{ dst.fundo }}; color:{{ dst.cor }}; font-family:'Saira Condensed',sans-serif; font-size:9.5px; font-weight:700; letter-spacing:.06em; cursor:pointer; padding:0 2px">{{ dst.curto }}</button>
+                  </sc-for>
+                </div>
+                <div style="display:flex; flex-direction:column; margin-top:6px">
+                  <sc-for list="{{ rapidos }}" as="rp" hint-placeholder-count="4">
+                    <button onClick="{{ rp.adicionar }}" style="display:grid; grid-template-columns:1fr auto 24px; gap:10px; align-items:center; min-height:48px; padding:0 0 0 2px; border:none; border-bottom:1px solid #2b2f3b; background:none; color:#f2efe6; text-align:left; cursor:pointer"><span style="min-width:0; font-size:12.5px">{{ rp.nome }}</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; color:#a9a49a">{{ rp.kcal }}</span><span style="color:#ff8a14; font-size:16px; text-align:center">+</span></button>
+                  </sc-for>
+                </div></div></sc-if>
+
+                <sc-if value="{{ abaDiario }}" hint-placeholder-val="{{ false }}"><div>
+                <p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-lista"></use></svg>{{ diarioTxt }}</p>
+                <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px">
+                  <sc-for list="{{ refeicoes }}" as="r" hint-placeholder-count="4">
+                    <div style="border:1px solid #2b2f3b; background:rgba(21,23,31,.6)">
+                      <div style="display:grid; grid-template-columns:1fr auto 44px; align-items:center; gap:8px; min-height:44px; padding-left:14px"><span style="display:inline-flex; align-items:center; gap:7px; font-family:'Saira Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.12em; line-height:1.5; text-transform:uppercase"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0; color:#ff8a14"><use href="#ic-{{ r.icone }}"></use></svg>{{ r.nome }}</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#a9a49a">{{ r.total }}</span><button onClick="{{ r.adicionar }}" aria-label="Adicionar" style="width:44px; height:44px; border:none; background:none; color:#ff8a14; font-size:18px; cursor:pointer">+</button></div>
+                      <sc-if value="{{ r.vazia }}" hint-placeholder-val="{{ false }}"><p style="margin:0; padding:0 14px 10px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">—</p></sc-if>
+                      <sc-for list="{{ r.itens }}" as="it" hint-placeholder-count="2">
+                        <div style="display:grid; grid-template-columns:1fr auto 44px; gap:8px; align-items:center; min-height:44px; padding-left:14px; border-top:1px solid #2b2f3b"><span style="min-width:0"><span style="display:block; font-size:12.5px">{{ it.nome }}</span><span style="display:block; margin-top:1px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#a9a49a">{{ it.gramas }}</span></span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:13px; font-weight:700; color:#ffcb95">{{ it.kcal }}</span><button onClick="{{ it.remover }}" aria-label="Remover" style="width:44px; height:44px; border:none; background:none; color:#a9a49a; font-size:16px; cursor:pointer">×</button></div>
+                      </sc-for>
+                    </div>
+                  </sc-for>
+                </div>
+                </div></sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-if><!-- ══════════ ORDERS · ordens ══════════ -->
+        <sc-if value="{{ eOrdens }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Ordens" style="position:absolute; top:156px; left:12px; right:12px; bottom:30px; z-index:20; padding:1px; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(255,138,20,.5); animation:smat .22s cubic-bezier(.2,.9,.3,1) both">
+            <div style="position:relative; height:100%; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(21,23,31,.9); backdrop-filter:blur(14px); overflow:hidden; display:flex; flex-direction:column; box-sizing:border-box">
+              <div style="position:absolute; inset:0; pointer-events:none; background-image:repeating-linear-gradient(0deg, rgba(255,138,20,.05) 0 1px, transparent 1px 3px), radial-gradient(circle at center, rgba(200,16,46,.07) 1px, transparent 1.3px); background-size:auto, 7px 7px"></div>
+              <div style="position:absolute; left:0; right:0; height:2px; background:#ff8a14; box-shadow:0 0 12px rgba(255,138,20,.9); animation:sscan .34s cubic-bezier(.2,.9,.3,1) both; pointer-events:none"></div><div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(112deg, transparent 40%, rgba(255,138,20,.18) 47%, rgba(200,16,46,.22) 52%, transparent 59%); animation:swipe .26s linear both"></div><div style="position:absolute; right:0; top:0; width:16px; height:16px; border-right:2px solid #ff8a14; border-top:2px solid #ff8a14; pointer-events:none"></div><div style="position:absolute; left:0; bottom:0; width:16px; height:16px; border-left:2px solid rgba(255,138,20,.45); border-bottom:2px solid rgba(255,138,20,.45); pointer-events:none"></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 8px 12px 18px; border-bottom:1px solid rgba(255,138,20,.18); background:linear-gradient(180deg, rgba(255,138,20,.08), transparent)">
+                <span style="font-family:'Saira Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; color:#ff8a14; display:inline-flex; align-items:center; gap:8px; animation:sfix .14s steps(2) both"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-ordens"></use></svg>[ ORDERS ]</span>
+                <span style="display:flex; align-items:center; gap:6px"><span style="font-family:'Noto Sans JP',sans-serif; font-size:10px; color:#6e6a62">命令</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">ASC//04</span><button onClick="{{ fecharJanela }}" aria-label="Fechar" style="width:44px; height:44px; border:none; background:none; color:#ffcb95; font-size:18px; cursor:pointer">×</button></span>
+              </div>
+              <div style="position:relative; flex:1; overflow-y:auto; overflow-x:hidden; padding:16px 18px 22px">
+                <span style="position:absolute; right:8px; top:0; pointer-events:none; font-family:'Noto Sans JP',sans-serif; font-size:88px; font-weight:900; line-height:1; color:rgba(242,239,230,.045)">令</span>
+                <div style="position:relative; display:flex; justify-content:space-between; align-items:baseline"><p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-ordens"></use></svg>ORD// DIÁRIAS · {{ ordensTxt }}</p><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">reset 00:00</span></div>
+                <p style="margin:8px 0 0; font-size:12.5px; line-height:1.55; color:#a9a49a; text-wrap:pretty">Uma ordem cumpre-se ao fazer a coisa. Tocar leva ao sítio onde se cumpre; o prémio entra sozinho.</p>
+                <div style="display:flex; flex-direction:column; gap:6px; margin-top:14px">
+                  <sc-for list="{{ ordens }}" as="o" hint-placeholder-count="3">
+                    <button onClick="{{ o.abrir }}" style="display:block; width:100%; padding:12px 14px; border:1px solid {{ o.borda }}; background:{{ o.fundo }}; box-shadow:{{ o.sombra }}; color:{{ o.cor }}; text-align:left; cursor:pointer">
+                      <span style="display:grid; grid-template-columns:28px 1fr auto; gap:12px; align-items:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" style="opacity:.9"><use href="#ic-{{ o.icone }}"></use></svg><span style="min-width:0"><span style="display:block; font-size:13px; font-weight:600">{{ o.titulo }}</span><span style="display:block; margin-top:2px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; opacity:.75">{{ o.progressoTxt }}</span></span><span style="display:flex; flex-direction:column; align-items:flex-end; gap:2px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; font-weight:700"><span style="color:{{ o.corPremio }}">{{ o.premio }}</span><span style="color:{{ o.corPremioKan }}; font-size:9.5px">{{ o.premioKan }}</span></span></span>
+                      <span style="display:block; position:relative; height:4px; margin-top:10px; background:{{ o.trilho }}"><span style="position:absolute; inset:0 auto 0 0; width:{{ o.pct }}; background:{{ o.barra }}; transition:width .6s ease"></span></span>
+                    </button>
+                  </sc-for>
+                </div>
+
+                <p style="margin:22px 0 0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-status"></use></svg>ORD// SEMANAIS · ORDEM DO CAPITÃO</p>
+                <div style="display:flex; flex-direction:column; gap:6px; margin-top:10px">
+                  <div style="padding:12px 14px; border:1px solid #2b2f3b; background:rgba(21,23,31,.6)"><div style="display:flex; justify-content:space-between; align-items:baseline"><span style="display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0; color:#ffcb95"><use href="#ic-dojo"></use></svg>Três treinos esta semana</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#ffcb95">+150 · +40k</span></div><div style="position:relative; height:6px; margin-top:8px; background:#1e212b"><div style="position:absolute; inset:0 auto 0 0; width:{{ capitaoPct }}; background:#ff8a14; box-shadow:0 0 8px rgba(255,138,20,.6)"></div><div style="position:absolute; inset:0; background:repeating-linear-gradient(90deg, transparent 0 calc(33.33% - 2px), #0c0e13 calc(33.33% - 2px) 33.33%)"></div></div><p style="margin:6px 0 0; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#a9a49a">{{ capitaoTxt }}</p></div>
+                  <div style="padding:12px 14px; border:1px solid #2b2f3b; background:rgba(21,23,31,.6)"><div style="display:flex; justify-content:space-between; align-items:baseline"><span style="display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0; color:#ffcb95"><use href="#ic-fire"></use></svg>Semana de ferro</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#ffcb95">+220 · +60k</span></div><div style="position:relative; height:6px; margin-top:8px; background:#1e212b"><div style="position:absolute; inset:0 auto 0 0; width:{{ semanaFerroPct }}; background:#ff8a14; box-shadow:0 0 8px rgba(255,138,20,.6)"></div><div style="position:absolute; inset:0; background:repeating-linear-gradient(90deg, transparent 0 calc(25% - 2px), #0c0e13 calc(25% - 2px) 25%)"></div></div><p style="margin:6px 0 0; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#a9a49a">{{ semanaFerroTxt }}</p></div>
+                  <div style="padding:12px 14px; border:1px solid #2b2f3b; background:rgba(21,23,31,.6)"><div style="display:flex; justify-content:space-between; align-items:baseline"><span style="display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0; color:#ffcb95"><use href="#ic-water"></use></svg>Rio de reiatsu · 15 L de água</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#ffcb95">+120 · +30k</span></div><div style="position:relative; height:6px; margin-top:8px; background:#1e212b"><div style="position:absolute; inset:0 auto 0 0; width:{{ rioPct }}; background:#ffcb95"></div><div style="position:absolute; inset:0; background:repeating-linear-gradient(90deg, transparent 0 calc(10% - 2px), #0c0e13 calc(10% - 2px) 10%)"></div></div><p style="margin:6px 0 0; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#a9a49a">{{ rioTxt }}</p></div>
+                </div>
+                <p style="margin:16px 0 0; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">{{ dias }} dias de serviço · melhor marca {{ melhor }} d · {{ licencaTxt }}</p>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ══════════ STATUS · ficha ══════════ -->
+        <sc-if value="{{ eFicha }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Ficha" style="position:absolute; top:156px; left:12px; right:12px; bottom:30px; z-index:20; padding:1px; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(255,138,20,.5); animation:smat .22s cubic-bezier(.2,.9,.3,1) both">
+            <div style="position:relative; height:100%; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(21,23,31,.9); backdrop-filter:blur(14px); overflow:hidden; display:flex; flex-direction:column; box-sizing:border-box">
+              <div style="position:absolute; inset:0; pointer-events:none; background-image:repeating-linear-gradient(0deg, rgba(255,138,20,.05) 0 1px, transparent 1px 3px), radial-gradient(circle at center, rgba(200,16,46,.07) 1px, transparent 1.3px); background-size:auto, 7px 7px"></div>
+              <div style="position:absolute; left:0; right:0; height:2px; background:#ff8a14; box-shadow:0 0 12px rgba(255,138,20,.9); animation:sscan .34s cubic-bezier(.2,.9,.3,1) both; pointer-events:none"></div><div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(112deg, transparent 40%, rgba(255,138,20,.18) 47%, rgba(200,16,46,.22) 52%, transparent 59%); animation:swipe .26s linear both"></div><div style="position:absolute; right:0; top:0; width:16px; height:16px; border-right:2px solid #ff8a14; border-top:2px solid #ff8a14; pointer-events:none"></div><div style="position:absolute; left:0; bottom:0; width:16px; height:16px; border-left:2px solid rgba(255,138,20,.45); border-bottom:2px solid rgba(255,138,20,.45); pointer-events:none"></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 8px 12px 18px; border-bottom:1px solid rgba(255,138,20,.18); background:linear-gradient(180deg, rgba(255,138,20,.08), transparent)">
+                <span style="font-family:'Saira Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; color:#ff8a14; display:inline-flex; align-items:center; gap:8px; animation:sfix .14s steps(2) both"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-status"></use></svg>[ STATUS ]</span>
+                <span style="display:flex; align-items:center; gap:6px"><span style="font-family:'Noto Sans JP',sans-serif; font-size:10px; color:#6e6a62">状態</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">ASC//05</span><button onClick="{{ fecharJanela }}" aria-label="Fechar" style="width:44px; height:44px; border:none; background:none; color:#ffcb95; font-size:18px; cursor:pointer">×</button></span>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:3px; padding:12px 18px 0">
+                <button onClick="{{ abaProgresso.ir }}" style="height:40px; border:1px solid {{ abaProgresso.borda }}; background:{{ abaProgresso.fundo }}; color:{{ abaProgresso.cor }}; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.12em; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-bolt"></use></svg>PROGRESSO</button>
+                <button onClick="{{ abaConquistas.ir }}" style="height:40px; border:1px solid {{ abaConquistas.borda }}; background:{{ abaConquistas.fundo }}; color:{{ abaConquistas.cor }}; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.12em; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-status"></use></svg>CONQUISTAS</button>
+                <button onClick="{{ abaArsenal.ir }}" style="height:40px; border:1px solid {{ abaArsenal.borda }}; background:{{ abaArsenal.fundo }}; color:{{ abaArsenal.cor }}; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.12em; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-arsenal"></use></svg>ARSENAL</button>
+              </div>
+              <div style="position:relative; flex:1; overflow-y:auto; overflow-x:hidden; padding:16px 18px 22px">
+
+                <sc-if value="{{ faceProgresso }}" hint-placeholder-val="{{ true }}">
+                  <div>
+                    <div style="display:flex; align-items:center; gap:14px">
+                      <span style="position:relative; display:flex; align-items:center; justify-content:center; width:96px; height:108px; flex-shrink:0; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); background:#ff8a14; box-shadow:0 0 14px rgba(255,138,20,.5)"><span style="position:absolute; inset:1px; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); background:#15171f; overflow:hidden; font-size:8px"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="status-retrato" placeholder="◈" style="position:absolute; inset:0; width:100%; height:100%" hint-size="100%,100%"></x-import></span><span style="position:absolute; right:-2px; bottom:-2px; display:flex; align-items:center; justify-content:center; width:28px; height:31px; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); background:#ff8a14; color:#0c0e13; font-family:'Saira Condensed',sans-serif; font-size:14px; font-weight:700">{{ rank }}</span></span>
+                      <span style="min-width:0"><span style="display:block; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.06em; line-height:1.7; color:#ffcb95">PATENTE {{ patenteTxt }} · {{ divisaoTxt }} DIVISÃO</span><span style="display:block; margin-top:8px; font-family:'Saira Condensed',sans-serif; font-size:17px; font-weight:700; line-height:1.3; text-transform:uppercase; letter-spacing:.02em">{{ nomePatente }}</span><span style="display:block; margin-top:4px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#ffcb95">{{ reiatsuTxt }} RTS</span></span>
+                    </div>
+                    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:3px; margin-top:16px">
+                      <sc-for list="{{ numeros }}" as="n" hint-placeholder-count="6">
+                        <div style="padding:10px 10px 9px; border:1px solid #2b2f3b; background:rgba(21,23,31,.6)"><span style="display:flex; align-items:center; justify-content:space-between; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:18px; font-weight:700; color:{{ n.cor }}">{{ n.valor }}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6e6a62" stroke-width="1.5" stroke-linejoin="round"><use href="#ic-{{ n.icone }}"></use></svg></span><span style="display:block; margin-top:3px; font-family:'Saira Condensed',sans-serif; font-size:8.5px; font-weight:700; letter-spacing:.12em; color:#a9a49a; text-transform:uppercase">{{ n.rotulo }}</span></div>
+                      </sc-for>
+                    </div>
+                    <p style="margin:18px 0 0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-dojo"></use></svg>ART// ARTES</p>
+                    <div style="display:flex; flex-direction:column; gap:10px; margin-top:8px">
+                      <sc-for list="{{ artes }}" as="a" hint-placeholder-count="4">
+                        <div><div style="display:flex; justify-content:space-between; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.16em; line-height:1.5; color:#ffcb95"><span style="display:inline-flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" style="flex-shrink:0"><use href="#ic-{{ a.icone }}"></use></svg>{{ a.nome }}</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; color:#f2efe6">{{ a.valor }}<span style="color:#6e6a62">/20</span></span></div><div style="position:relative; height:6px; margin-top:5px; background:#1e212b"><div style="position:absolute; inset:0 auto 0 0; width:{{ a.pct }}; background:#ff8a14; box-shadow:0 0 8px rgba(255,138,20,.5); transition:width .6s ease"></div><div style="position:absolute; inset:0; background:repeating-linear-gradient(90deg, transparent 0 calc(5% - 1px), #0c0e13 calc(5% - 1px) 5%)"></div></div></div>
+                      </sc-for>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:18px"><p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-bolt"></use></svg>RTS// 7 DIAS</p><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">{{ reiatsuSemanaTxt }}</span></div>
+                    <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:4px; align-items:end; height:60px; margin-top:8px">
+                      <sc-for list="{{ reiatsuSemana }}" as="rs" hint-placeholder-count="7">
+                        <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:4px; height:100%"><span style="width:100%; height:{{ rs.altura }}; background:{{ rs.cor }}; box-shadow:{{ rs.sombra }}"></span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9px; color:#6e6a62">{{ rs.dia }}</span></div>
+                      </sc-for>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:18px"><p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-scale"></use></svg>BIO// CORPO</p><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">{{ ultimaPesagem }}</span></div>
+                    <div style="display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:end; margin-top:8px">
+                      <span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:30px; font-weight:700; line-height:1">{{ pesoAtual }}<span style="font-size:11px; color:#6e6a62"> kg</span></span><span style="display:block; margin-top:2px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#ffcb95">{{ deltaPeso }} em 5 semanas</span></span>
+                      <span style="display:grid; grid-template-columns:repeat(6,1fr); gap:3px; align-items:end; height:40px"><sc-for list="{{ pesagens }}" as="pz" hint-placeholder-count="6"><span style="height:{{ pz.altura }}; min-height:3px; background:rgba(255,138,20,.35); border-top:1px solid #ff8a14"></span></sc-for></span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; margin-top:8px">
+                      <sc-for list="{{ historicoPeso }}" as="hp" hint-placeholder-count="3">
+                        <div style="display:flex; justify-content:space-between; min-height:32px; align-items:center; border-bottom:1px solid #2b2f3b; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px"><span style="color:#a9a49a">{{ hp.data }}</span><span>{{ hp.valor }}</span></div>
+                      </sc-for>
+                    </div>
+                    <button onClick="{{ registarPeso }}" style="width:100%; height:44px; margin-top:10px; border:1px solid rgba(255,138,20,.45); background:rgba(255,138,20,.08); color:#ffcb95; font-family:'Saira Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.14em; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px); display:inline-flex; align-items:center; justify-content:center; gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-scale"></use></svg>REGISTAR PESAGEM</button>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ faceConquistas }}" hint-placeholder-val="{{ false }}">
+                  <div>
+                    <div style="display:flex; justify-content:space-between; align-items:baseline"><p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-status"></use></svg>ARQ// {{ conquistasTxt }}</p><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">selos do Gotei</span></div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:12px">
+                      <sc-for list="{{ conquistas }}" as="c" hint-placeholder-count="10">
+                        <div style="display:flex; align-items:center; gap:12px; min-height:76px; padding:12px 12px; border:1px solid {{ c.borda }}; background:{{ c.fundo }}; opacity:{{ c.opacidade }}"><img src="art/c/{{ c.icone }}.svg" width="26" height="26" alt="" style="flex-shrink:0"><span style="min-width:0"><span style="display:block; font-size:12px; font-weight:600; line-height:1.25; color:{{ c.cor }}">{{ c.nome }}</span><span style="display:block; margin-top:3px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9.5px; color:#a9a49a">{{ c.progresso }}</span></span></div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ faceArsenal }}" hint-placeholder-val="{{ false }}">
+                  <div>
+                    <div style="display:flex; justify-content:space-between; align-items:baseline"><p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-arsenal"></use></svg>INV// ARSENAL</p><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#f0cf6e">{{ kan }} kan</span></div>
+                    <p style="margin:8px 0 0; font-size:12px; line-height:1.55; color:#a9a49a">Kan só compra estética, nunca vantagem.</p>
+                    <sc-for list="{{ arsenal }}" as="g" hint-placeholder-count="3">
+                      <div style="margin-top:16px">
+                        <p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95">{{ g.nome }}</p>
+                        <div style="display:flex; flex-direction:column; gap:4px; margin-top:8px">
+                          <sc-for list="{{ g.itens }}" as="i" hint-placeholder-count="3">
+                            <div style="display:grid; grid-template-columns:28px 1fr auto; gap:12px; align-items:center; min-height:56px; padding:8px 12px; border:1px solid {{ i.borda }}; background:{{ i.fundo }}"><span style="width:28px; height:28px; background:{{ i.amostra }}; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)"></span><span style="min-width:0"><span style="display:flex; align-items:center; gap:8px"><span style="font-size:12.5px; font-weight:600">{{ i.nome }}</span><span style="font-family:'Saira Condensed',sans-serif; font-size:8.5px; font-weight:700; letter-spacing:.12em; color:{{ i.escalaoCor }}; border:1px solid {{ i.escalaoBorda }}; padding:2px 5px">{{ i.escalao }}</span></span><span style="display:block; margin-top:2px; font-size:10.5px; line-height:1.4; color:#a9a49a">{{ i.descricao }}</span></span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; font-weight:700; color:{{ i.acaoCor }}; white-space:nowrap">{{ i.acao }}</span></div>
+                          </sc-for>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ══════════ CONFIG · definições ══════════ -->
+        <sc-if value="{{ eConfig }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Definições" style="position:absolute; top:156px; left:12px; right:12px; bottom:30px; z-index:20; padding:1px; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(255,138,20,.5); animation:smat .22s cubic-bezier(.2,.9,.3,1) both">
+            <div style="position:relative; height:100%; clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px); background:rgba(21,23,31,.9); backdrop-filter:blur(14px); overflow:hidden; display:flex; flex-direction:column; box-sizing:border-box">
+              <div style="position:absolute; inset:0; pointer-events:none; background-image:repeating-linear-gradient(0deg, rgba(255,138,20,.05) 0 1px, transparent 1px 3px), radial-gradient(circle at center, rgba(200,16,46,.07) 1px, transparent 1.3px); background-size:auto, 7px 7px"></div>
+              <div style="position:absolute; left:0; right:0; height:2px; background:#ff8a14; box-shadow:0 0 12px rgba(255,138,20,.9); animation:sscan .34s cubic-bezier(.2,.9,.3,1) both; pointer-events:none"></div><div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(112deg, transparent 40%, rgba(255,138,20,.18) 47%, rgba(200,16,46,.22) 52%, transparent 59%); animation:swipe .26s linear both"></div><div style="position:absolute; right:0; top:0; width:16px; height:16px; border-right:2px solid #ff8a14; border-top:2px solid #ff8a14; pointer-events:none"></div><div style="position:absolute; left:0; bottom:0; width:16px; height:16px; border-left:2px solid rgba(255,138,20,.45); border-bottom:2px solid rgba(255,138,20,.45); pointer-events:none"></div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 8px 12px 18px; border-bottom:1px solid rgba(255,138,20,.18); background:linear-gradient(180deg, rgba(255,138,20,.08), transparent)">
+                <span style="font-family:'Saira Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.22em; color:#ff8a14; display:inline-flex; align-items:center; gap:8px; animation:sfix .14s steps(2) both"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-config"></use></svg>[ CONFIG ]</span>
+                <span style="display:flex; align-items:center; gap:6px"><span style="font-family:'Noto Sans JP',sans-serif; font-size:10px; color:#6e6a62">設定</span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">ASC//06</span><button onClick="{{ fecharJanela }}" aria-label="Fechar" style="width:44px; height:44px; border:none; background:none; color:#ffcb95; font-size:18px; cursor:pointer">×</button></span>
+              </div>
+              <div style="position:relative; flex:1; overflow-y:auto; overflow-x:hidden; padding:16px 18px 22px">
+                <p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-config"></use></svg>SYS// PARÂMETROS</p>
+                <div style="display:flex; flex-direction:column; gap:4px; margin-top:8px">
+                  <sc-for list="{{ ajustes }}" as="aj" hint-placeholder-count="4">
+                    <button onClick="{{ aj.abrir }}" style="display:grid; grid-template-columns:20px 1fr auto; gap:12px; align-items:center; width:100%; min-height:56px; padding:10px 14px; border:1px solid {{ aj.borda }}; background:{{ aj.fundo }}; color:#f2efe6; text-align:left; cursor:pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffcb95" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><use href="#ic-{{ aj.icone }}"></use></svg><span style="min-width:0"><span style="display:block; font-size:12.5px; font-weight:600">{{ aj.titulo }}</span><span style="display:block; margin-top:2px; font-size:10.5px; line-height:1.4; color:#a9a49a">{{ aj.nota }}</span></span><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#ffcb95; white-space:nowrap">{{ aj.valor }} ▸</span></button>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ temPainelAjuste }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:8px; padding:12px 14px; border:1px solid rgba(255,138,20,.45); background:rgba(255,138,20,.05); animation:smat .22s ease both">
+                    <p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; color:#ff8a14">{{ painelTitulo }}</p>
+                    <p style="margin:6px 0 0; font-size:11.5px; line-height:1.5; color:#a9a49a; text-wrap:pretty">{{ painelNota }}</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:10px">
+                      <sc-for list="{{ painelOpcoes }}" as="op" hint-placeholder-count="3">
+                        <button onClick="{{ op.escolher }}" style="height:40px; padding:0 12px; border:1px solid {{ op.borda }}; background:{{ op.fundo }}; color:{{ op.cor }}; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.08em; cursor:pointer">{{ op.nome }}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+                <p style="margin:10px 0 0; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9.5px; line-height:1.5; color:#6e6a62">METAS · {{ metasTxt }}</p>
+
+                <p style="margin:20px 0 0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-user"></use></svg>ID_ AVATAR</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-top:8px">
+                  <button onClick="{{ modoDesenhada }}" style="height:40px; border:1px solid {{ bordaDesenhada }}; background:{{ fundoDesenhada }}; color:{{ corDesenhada }}; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.12em; cursor:pointer">FIGURA</button>
+                  <button onClick="{{ modoBrasao }}" style="height:40px; border:1px solid {{ bordaBrasao }}; background:{{ fundoBrasao }}; color:{{ corBrasao }}; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.12em; cursor:pointer">BRASÃO</button>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(8,1fr); gap:3px; margin-top:6px">
+                  <sc-for list="{{ penteados }}" as="pt" hint-placeholder-count="8">
+                    <button onClick="{{ pt.escolher }}" style="height:44px; border:1px solid {{ pt.borda }}; background:{{ pt.fundo }}; color:{{ pt.cor }}; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; font-weight:700; cursor:pointer">{{ pt.numero }}</button>
+                  </sc-for>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(8,1fr); gap:3px; margin-top:6px">
+                  <sc-for list="{{ cores }}" as="cr" hint-placeholder-count="8">
+                    <button onClick="{{ cr.escolher }}" aria-label="Cor do reiatsu" style="height:44px; padding:0; border:1px solid {{ cr.anel }}; background:none; cursor:pointer; display:flex; align-items:center; justify-content:center"><span style="width:20px; height:22px; background:{{ cr.valor }}; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)"></span></button>
+                  </sc-for>
+                </div>
+
+                <p style="margin:20px 0 0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-image"></use></svg>IMG// FUNDO</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:3px; margin-top:8px">
+                  <sc-for list="{{ fundos }}" as="f" hint-placeholder-count="2">
+                    <button onClick="{{ f.escolher }}" style="height:40px; border:1px solid {{ f.borda }}; background:{{ f.fundo }}; color:{{ f.cor }}; font-family:'Saira Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:.1em; cursor:pointer; text-transform:uppercase">{{ f.nome }}</button>
+                  </sc-for>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px">
+                  <div style="position:relative; height:84px; border:1px dashed rgba(255,138,20,.45); overflow:hidden"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="quest-hero" placeholder="Fundo · 5 ecrãs" style="position:absolute; inset:0; width:100%; height:100%" hint-size="100%,84px"></x-import></div>
+                  <div style="position:relative; height:84px; border:1px dashed rgba(255,138,20,.45); overflow:hidden"><x-import component-from-global-scope="image-slot" from="./image-slot.js" id="status-retrato" placeholder="Retrato" style="position:absolute; inset:0; width:100%; height:100%" hint-size="100%,84px"></x-import></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#a9a49a"><span>VÉU DE CONTRASTE</span><span style="color:#f2efe6">0,78</span></div>
+                <div style="position:relative; height:6px; margin-top:6px; background:#1e212b"><div style="position:absolute; inset:0 auto 0 0; width:78%; background:#ff8a14"></div><div style="position:absolute; inset:0; background:repeating-linear-gradient(90deg, transparent 0 calc(10% - 2px), #0c0e13 calc(10% - 2px) 10%)"></div></div>
+
+                <button onClick="{{ reporDados }}" style="width:100%; height:44px; margin-top:24px; border:1px solid rgba(200,16,46,.55); background:rgba(200,16,46,.08); color:#e8697d; font-family:'Saira Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.14em; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px); display:inline-flex; align-items:center; justify-content:center; gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-trash"></use></svg>REPOR DADOS DO DISPOSITIVO</button>
+                <p style="margin:12px 0 0; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9.5px; color:#6e6a62; text-align:center">ASCEND · build 1.0 (2) · PROJETO ASC-01 · TestFlight</p>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ══════════ TOAST · aviso de sistema ══════════ -->
+        <sc-if value="{{ temToast }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; left:12px; right:12px; bottom:44px; z-index:55; padding:1px; clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px); background:{{ toastCor }}; animation:smat .2s cubic-bezier(.2,.9,.3,1) both">
+            <div style="position:relative; display:grid; grid-template-columns:20px 1fr 32px; gap:10px; align-items:center; padding:10px 10px 12px 12px; clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px); background:rgba(21,23,31,.97); backdrop-filter:blur(10px)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{ toastCor }}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="animation:sbreath 2s ease-in-out infinite"><use href="#ic-quest"></use></svg>
+              <span style="min-width:0"><span style="display:block; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.18em; color:{{ toastCor }}">{{ toastCodigo }}</span><span style="display:block; margin-top:2px; font-size:11.5px; color:#f2efe6">{{ toastTexto }}</span></span>
+              <button onClick="{{ fecharToast }}" aria-label="Fechar aviso" style="width:32px; height:32px; border:none; background:none; color:#a9a49a; font-size:14px; cursor:pointer">×</button>
+              <span style="position:absolute; left:0; bottom:0; height:2px; background:{{ toastCor }}; animation:sdrain 3.4s linear both"></span>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ══════════ MODAL · confirmação do sistema ══════════ -->
+        <sc-if value="{{ temModal }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:24px; background:rgba(12,14,19,.6); animation:sfade .2s ease both">
+            <div style="width:100%; padding:1px; clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px); background:{{ modalBorda }}; animation:smat .22s cubic-bezier(.2,.9,.3,1) both">
+              <div style="clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px); background:rgba(21,23,31,.97); padding:22px 20px 18px; text-align:center">
+                <p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.24em; color:{{ modalCor }}">{{ modalTitulo }}</p>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="{{ modalCor }}" stroke-width="1.5" style="margin:16px auto 0; display:block; filter:drop-shadow(0 0 8px {{ modalCor }})"><polygon points="12 2 21 7 21 17 12 22 3 17 3 7"></polygon><line x1="12" y1="8" x2="12" y2="13"></line><circle cx="12" cy="16.5" r=".6"></circle></svg>
+                <p style="margin:14px 0 0; font-size:13px; line-height:1.6; color:#f2efe6; text-wrap:pretty">{{ modalTexto }}</p>
+                <sc-if value="{{ modalSimples }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ fecharModal }}" style="margin-top:18px; width:100%; height:48px; border:none; background:#ff8a14; color:#0c0e13; font-family:'Saira Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.16em; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)">CONFIRMAR</button>
+                </sc-if>
+                <sc-if value="{{ modalDestrutivo }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:18px"><button onClick="{{ fecharModal }}" style="height:48px; border:1px solid #2b2f3b; background:transparent; color:#a9a49a; font-family:'Saira Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:.16em; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)">CANCELAR</button><button onClick="{{ reiniciar }}" style="height:48px; border:none; background:#c8102e; color:#0c0e13; font-family:'Saira Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:.16em; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)">APAGAR</button></div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ══════════ CELEBRAÇÃO ══════════ -->
+        <sc-if value="{{ eCeleb }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="Celebração" style="position:absolute; inset:0; z-index:60; background:#0c0e13; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 28px; overflow:hidden; animation:sfade .3s ease both">
+            <div style="position:absolute; inset:0; pointer-events:none; background:radial-gradient(28rem 28rem at 50% 42%, rgba(255,138,20,.22), transparent 62%), repeating-linear-gradient(0deg, rgba(255,138,20,.04) 0 1px, transparent 1px 3px)"></div>
+            <div style="position:absolute; left:50%; top:42%; width:300px; height:300px; margin:-150px 0 0 -150px; pointer-events:none; border:1px solid rgba(255,138,20,.25); clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); animation:spulse 2.4s ease-in-out infinite" style-hover="transform:translate(-1px,-1px); box-shadow:0 0 0 1px #f2efe6, 5px 5px 0 rgba(200,16,46,.35)" style-active="transform:translate(1px,1px); background:#4fa3c7"></div>
+            <div style="position:absolute; left:50%; top:42%; width:420px; height:420px; margin:-210px 0 0 -210px; pointer-events:none; border:1px dashed rgba(255,138,20,.15); clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)"></div>
+            <div style="position:relative; text-align:center; animation:smat .3s cubic-bezier(.2,.9,.3,1) both">
+              <span style="position:absolute; left:50%; top:-40px; transform:translateX(-50%); pointer-events:none; font-family:'Noto Sans JP',sans-serif; font-size:120px; font-weight:900; line-height:1; white-space:nowrap; color:rgba(242,239,230,.045)">昇天</span>
+              <p style="position:relative; margin:0; font-family:'Saira Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.28em; color:#ff8a14">[ SYS // SINCRONIA ]</p>
+              <p style="margin:26px 0 0; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.2em; color:#a9a49a">{{ celebEtiqueta }}</p>
+              <span style="display:flex; align-items:center; justify-content:center; width:96px; height:108px; margin:18px auto 0; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); background:#ff8a14; filter:drop-shadow(0 0 22px rgba(255,138,20,.7))"><span style="display:flex; align-items:center; justify-content:center; width:92px; height:104px; clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); background:#15171f; font-family:'Saira Condensed',sans-serif; font-size:44px; font-weight:700; color:#ff8a14">{{ celebRank }}</span></span>
+              <p style="margin:18px 0 0; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; color:#ffcb95">{{ celebSub }}</p>
+              <h2 style="margin:6px 0 0; font-family:'Saira Condensed',sans-serif; font-size:26px; font-weight:700; line-height:1.2; letter-spacing:.03em; text-transform:uppercase; text-shadow:2px 2px 0 rgba(200,16,46,.45), -2px -1px 0 rgba(255,138,20,.45)">{{ celebTitulo }}</h2>
+              <p style="margin:12px auto 0; max-width:30ch; font-size:12.5px; line-height:1.6; color:#a9a49a; text-wrap:pretty">{{ celebFrase }}</p>
+              <p style="margin:12px 0 0; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#6e6a62">{{ celebSessao }}</p>
+              <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:3px; margin-top:22px">
+                <div style="padding:12px 8px; border:1px solid rgba(255,138,20,.35); background:rgba(255,138,20,.06)"><span style="display:block; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:22px; font-weight:700; color:#ffcb95">{{ celebXp }}</span><span style="display:block; margin-top:3px; font-family:'Saira Condensed',sans-serif; font-size:9px; font-weight:700; letter-spacing:.16em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; justify-content:center; gap:5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-bolt"></use></svg>REIATSU</span></div>
+                <div style="padding:12px 8px; border:1px solid rgba(240,207,110,.35); background:rgba(240,207,110,.06)"><span style="display:block; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:22px; font-weight:700; color:#f0cf6e">{{ celebKan }}</span><span style="display:block; margin-top:3px; font-family:'Saira Condensed',sans-serif; font-size:9px; font-weight:700; letter-spacing:.16em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; justify-content:center; gap:5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-kan"></use></svg>KAN</span></div>
+                <div style="padding:12px 8px; border:1px solid #2b2f3b; background:rgba(21,23,31,.6)"><span style="display:block; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:22px; font-weight:700">{{ celebArtes }}</span><span style="display:block; margin-top:3px; font-family:'Saira Condensed',sans-serif; font-size:9px; font-weight:700; letter-spacing:.16em; line-height:1.5; color:#ffcb95; display:flex; align-items:center; justify-content:center; gap:5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-dojo"></use></svg>ARTES</span></div>
+              </div>
+              <sc-if value="{{ temCosmetico }}" hint-placeholder-val="{{ false }}"><p style="margin:12px 0 0; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10.5px; color:#f0cf6e">sessão completa · +1 kidō</p></sc-if>
+              <button onClick="{{ fecharCeleb }}" style="width:100%; height:52px; margin-top:26px; border:none; background:#ff8a14; color:#0c0e13; font-family:'Saira Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:.16em; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px); animation:spulse 2.4s ease-in-out infinite" style-hover="transform:translate(-1px,-1px); box-shadow:0 0 0 1px #f2efe6, 5px 5px 0 rgba(200,16,46,.35)" style-active="transform:translate(1px,1px); background:#4fa3c7">CONFIRMAR</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </x-import>
+  </div>
+
+  <!-- ══════════ NOTAS ══════════ -->
+  <div style="position:relative; flex:1; max-width:520px; padding:22px 26px 26px; border:1px solid #2b2f3b; background:rgba(21,23,31,.6); clip-path:polygon(16px 0,100% 0,100% calc(100% - 16px),calc(100% - 16px) 100%,0 100%,0 16px)">
+    <div style="position:absolute; inset:0; pointer-events:none; opacity:.3; mix-blend-mode:overlay; background-image:url(data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27180%27%20height%3D%27180%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%27.85%27%20numOctaves%3D%272%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20values%3D%270%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20.6%200%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url(%23n)%27%2F%3E%3C%2Fsvg%3E)"></div>
+    <div style="position:absolute; left:0; right:0; top:0; height:4px; background:repeating-linear-gradient(-45deg, #f0cf6e 0 10px, #0c0e13 10px 20px); opacity:.6"></div>
+    <p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:.28em; color:#ff8a14">[ SYSTEM UI · GOTEI · ASC//00 ]</p>
+    <h1 style="margin:14px 0 0; font-family:'Noto Sans JP',sans-serif; font-size:64px; font-weight:900; letter-spacing:.04em; line-height:1; color:#f2efe6; text-shadow:3px 3px 0 rgba(200,16,46,.5), -3px -2px 0 rgba(255,138,20,.5)">昇天<span style="display:block; margin-top:8px; font-family:'Saira Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:.7em; color:#a9a49a; text-shadow:none">A S C E N D</span></h1>
+    <p style="margin:12px 0 0; font-size:13.5px; line-height:1.65; color:#a9a49a; text-wrap:pretty">Paleta de Bleach: preto de shihakushō e carmim profundo, branco de osso na tinta, laranja de reiatsu no Sistema, carmim em HP e no destrutivo, ouro do Gotei na moeda e azul de kidō na confirmação — com grão, halftone e scanlines por baixo de tudo. Painéis com cantos cortados, molduras com brackets, marcas de registo nos cantos e labels técnicos densos (SYS//, ID_, LINK:). Sem barra de separadores: o HUD é a única peça fixa, tocar nele abre o [MENU] e cada módulo materializa-se como janela sobre a [QUEST], com boot de scanline e wipe diagonal de 260 ms. Toda a lógica do protótipo — sessão, rações, ordens, celebração — foi mantida.</p>
+    <a href="Ascend%20Bleach%20-%20Design%20System.dc.html" style="display:inline-flex; align-items:center; height:40px; margin-top:16px; padding:0 16px; border:1px solid rgba(255,138,20,.45); background:rgba(255,138,20,.08); color:#ffcb95; font-family:'Saira Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.18em; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)">DESIGN SYSTEM →</a>
+
+    <div style="position:relative; margin-top:26px; padding:16px 18px 18px; border:1px solid #2b2f3b; background:rgba(21,23,31,.55); clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)">
+      <div style="display:flex; align-items:baseline; justify-content:space-between"><p style="margin:0; font-family:'Saira Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.22em; color:#ff8a14">SYS// TOKENS</p><span style="font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:9.5px; color:#6e6a62">asc.tokens · v3</span></div>
+      <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin-top:12px">
+        <span style="height:34px; background:#0c0e13; border:1px solid #2b2f3b"></span>
+        <span style="height:34px; background:#15171f; border:1px solid #2b2f3b"></span>
+        <span style="height:34px; background:#1e212b; border:1px solid #2b2f3b"></span>
+        <span style="height:34px; background:#2b2f3b"></span>
+        <span style="height:34px; background:#f2efe6"></span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin-top:4px">
+        <span style="height:34px; background:#ff8a14"></span>
+        <span style="height:34px; background:#c8102e"></span>
+        <span style="height:34px; background:#d9a635"></span>
+        <span style="height:34px; background:#4fa3c7"></span>
+        <span style="height:34px; background:#f0cf6e"></span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:4px; margin-top:5px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:8.5px; color:#6e6a62">
+        <span>link<br>ff8a14</span><span>sinal<br>c8102e</span><span>alerta<br>d9a635</span><span>kidō<br>4fa3c7</span><span>kan<br>f0cf6e</span>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px 16px; margin-top:16px; padding-top:14px; border-top:1px solid #2b2f3b; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; line-height:1.6; color:#a9a49a">
+        <span><span style="display:block; color:#ffcb95; letter-spacing:.14em">TIPO</span>Saira Condensed 700 · títulos<br>IBM Plex Mono · dados, códigos<br>Barlow · corpo<br>Noto Sans JP 900 · decoração</span>
+        <span><span style="display:block; color:#ffcb95; letter-spacing:.14em">FORMA</span>chanfro 6 / 10 / 16 px<br>traço 1 px · brackets 2 px<br>espaço 2·4·6·10·14·18·24<br>grão .35 · halftone 7 px</span>
+        <span><span style="display:block; color:#ffcb95; letter-spacing:.14em">MOVIMENTO</span>flicker 90 ms · glitch 140 ms<br>boot 220 ms · wipe 260 ms<br>respiração 2 s<br>cubic-bezier(.2,.9,.3,1)</span>
+        <span><span style="display:block; color:#ffcb95; letter-spacing:.14em">REGRAS</span>contraste AA mínimo<br>foco visível a laranja<br>reduced-motion respeitado<br>alvos ≥ 44 px</span>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:6px; margin-top:32px">
+      <sc-for list="{{ notas }}" as="nt" hint-placeholder-count="7">
+        <button onClick="{{ nt.ir }}" style="display:grid; grid-template-columns:110px 1fr; gap:16px; width:100%; padding:14px 16px; border:1px solid {{ nt.borda }}; background:{{ nt.fundo }}; box-shadow:{{ nt.sombra }}; color:#f2efe6; text-align:left; cursor:pointer; clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)">
+          <span><span style="display:flex; align-items:center; gap:7px; font-family:'Saira Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:.18em; color:{{ nt.cor }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" style="flex-shrink:0"><use href="#ic-{{ nt.icone }}"></use></svg>{{ nt.codigo }}</span><span style="display:block; margin-top:4px; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:10px; color:#6e6a62">{{ nt.ecra }}</span></span>
+          <span style="font-size:12.5px; line-height:1.6; color:#a9a49a; text-wrap:pretty">{{ nt.texto }}</span>
+        </button>
+      </sc-for>
+    </div>
+
+    <div style="display:flex; gap:8px; margin-top:24px; padding-top:16px; border-top:1px solid #2b2f3b">
+      <button onClick="{{ atalhoSubir }}" style="height:40px; padding:0 14px; border:1px solid #2b2f3b; background:transparent; color:#a9a49a; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.14em; cursor:pointer">ATALHO · REIATSU → LV 10</button>
+      <button onClick="{{ reiniciar }}" style="height:40px; padding:0 14px; border:1px solid #2b2f3b; background:transparent; color:#6e6a62; font-family:'Saira Condensed',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.14em; cursor:pointer">REINICIAR ESTADO</button>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+const PLANO = [
+  { id: 'agachamento-bulgaro', nome: 'Agachamento búlgaro', grupo: 'Pernas', equip: 'Sem equipamento', series: 4, reps: '10', desc: 'Pé de trás apoiado num banco. Desce controlado, o peso fica na perna da frente.', descanso: 90 },
+  { id: 'agachamento-goblet', nome: 'Agachamento goblet', grupo: 'Pernas', equip: 'Halteres', series: 3, reps: '12', desc: 'Halter junto ao peito, desce mantendo o tronco erguido.', descanso: 75 },
+  { id: 'peso-morto-romeno', nome: 'Peso morto romeno', grupo: 'Pernas', equip: 'Halteres', series: 3, reps: '10', desc: 'Joelhos ligeiramente fletidos, empurra a anca para trás e sente o alongamento posterior.', descanso: 90 },
+  { id: 'ponte-gluteos', nome: 'Ponte de glúteos', grupo: 'Pernas', equip: 'Sem equipamento', series: 3, reps: '15', desc: 'Deitado de costas, eleva a anca contraindo os glúteos no topo durante 1 segundo.', descanso: 60 },
+  { id: 'prancha', nome: 'Prancha', grupo: 'Core', equip: 'Sem equipamento', series: 3, reps: '45 s', desc: 'Antebraços no chão, corpo em linha reta, abdominal e glúteos contraídos.', descanso: 45 },
+  { id: 'prancha-lateral', nome: 'Prancha lateral', grupo: 'Core', equip: 'Sem equipamento', series: 2, reps: '30 s', desc: 'Apoio num antebraço, anca elevada e alinhada. Alterna os lados.', descanso: 45 },
+];
+const SEMANA = [
+  { dia: 'SEG', treino: 'Superior A', feito: true }, { dia: 'TER', treino: 'Inferior A', hoje: true }, { dia: 'QUA', treino: null },
+  { dia: 'QUI', treino: 'Superior B' }, { dia: 'SEX', treino: null }, { dia: 'SÁB', treino: 'Inferior B' }, { dia: 'DOM', treino: null },
+];
+const REFEICOES = ['Pequeno-almoço', 'Almoço', 'Lanche', 'Jantar'];
+const REF_CURTO = ['P.ALMOÇO', 'ALMOÇO', 'LANCHE', 'JANTAR'];
+const REF_ICONE = ['manha', 'meio', 'tarde', 'noite'];
+const ORDENS_BASE = [
+  { id: 'hidratacao', titulo: 'Hidratação do Shinigami', curto: 'Hidratação', xp: 25, kan: 6, alvo: 2500 },
+  { id: 'treino', titulo: 'Treino do dia', curto: 'Treino do dia', xp: 40, kan: 10, alvo: 1 },
+  { id: 'proteina', titulo: 'Meta de proteína', curto: 'Meta de proteína', xp: 35, kan: 10, alvo: 120 },
+];
+const ALIMENTOS = {
+  peru: { nome: 'Peito de peru fatiado', porcao: '3 fatias (60 g)', g: 60, kcal: 110, p: 22, c: 1.5, f: 1.8 },
+  frango: { nome: 'Peito de frango grelhado', porcao: '1 peito médio (150 g)', g: 150, kcal: 165, p: 31, c: 0, f: 3.6 },
+  salmao: { nome: 'Salmão grelhado', porcao: '1 lombo (130 g)', g: 130, kcal: 208, p: 20, c: 0, f: 13 },
+  whey: { nome: 'Proteína whey (pó)', porcao: '1 colher (30 g)', g: 30, kcal: 380, p: 78, c: 8, f: 4 },
+  skyr: { nome: 'Iogurte skyr natural', porcao: '1 embalagem (150 g)', g: 150, kcal: 63, p: 11, c: 4, f: 0.2 },
+  arroz: { nome: 'Arroz cozido', porcao: '1 concha (180 g)', g: 180, kcal: 130, p: 2.7, c: 28, f: 0.3 },
+  aveia: { nome: 'Flocos de aveia', porcao: '5 colheres (50 g)', g: 50, kcal: 379, p: 13, c: 62, f: 7 },
+  'batata-doce': { nome: 'Batata-doce assada', porcao: '1 batata-doce (180 g)', g: 180, kcal: 90, p: 2, c: 21, f: 0.1 },
+  banana: { nome: 'Banana', porcao: '1 banana (120 g)', g: 120, kcal: 89, p: 1.1, c: 23, f: 0.3 },
+  brocolos: { nome: 'Brócolos cozidos', porcao: '1 taça (150 g)', g: 150, kcal: 35, p: 2.4, c: 7, f: 0.4 },
+  'salada-mista': { nome: 'Salada mista', porcao: '1 taça (150 g)', g: 150, kcal: 28, p: 1.2, c: 4.2, f: 0.6 },
+  amendoas: { nome: 'Amêndoas', porcao: '1 mão-cheia (25 g)', g: 25, kcal: 579, p: 21, c: 22, f: 50 },
+  azeite: { nome: 'Azeite', porcao: '1 colher de sopa (10 g)', g: 10, kcal: 884, p: 0, c: 0, f: 100 },
+};
+const RAPIDOS = ['peru', 'frango', 'skyr', 'whey', 'aveia', 'banana', 'amendoas', 'salada-mista'];
+const METAS = { kcal: 2680, prot: 158, hid: 275, gord: 74 };
+const AGUA_META = 2500;
+const PATENTES = [[1, 'Alma de Rukongai'], [3, 'Aluno da Academia Shin\u02bcō'], [5, 'Shinigami sem Patente'], [7, 'Oficial de Divisão'], [10, 'Terceiro Oficial'], [14, 'Tenente'], [18, 'Capitão'], [25, 'Capitão-Comandante']];
+const CONQUISTAS = [
+  { nome: 'Primeiro Corte', icone: 'quick-slash', metrica: 'treinos', alvo: 1 },
+  { nome: 'Reiatsu Desperto', icone: 'spark-spirit', metrica: 'serie', alvo: 3 },
+  { nome: 'Semana no Seireitei', icone: 'shinto-shrine', metrica: 'serie', alvo: 7 },
+  { nome: 'Décima Primeira Divisão', icone: 'crossed-swords', metrica: 'treinos', alvo: 10 },
+  { nome: 'Rações do Gotei', icone: 'soul-vessel', metrica: 'diasProteina', alvo: 5 },
+  { nome: 'Máscara de Hollow', icone: 'hollow-mask', metrica: 'patente', alvo: 10 },
+  { nome: 'Borboleta do Inferno', icone: 'hell-butterfly', metrica: 'ordens', alvo: 20 },
+  { nome: 'Cozinha da Quarta', icone: 'kimono', metrica: 'refeicoes', alvo: 50 },
+  { nome: 'Forja da Asauchi', icone: 'sword-hilt', metrica: 'treinosCustom', alvo: 1 },
+  { nome: 'Instituto de Investigação', icone: 'third-eye', metrica: 'pesagens', alvo: 5 },
+];
+const COSMETICOS = [
+  { grupo: 'SELOS', itens: [
+    { nome: 'Selo Asauchi', escalao: 'Hollow', preco: 120, amostra: '#6e6a62', desc: 'Aço por nomear, igual para todos os recrutas.' },
+    { nome: 'Selo Shikai', escalao: 'Adjuchas', preco: 260, amostra: 'linear-gradient(135deg,#ff8a14,#c8102e)', desc: 'A lâmina respondeu quando lhe chamaste pelo nome.' },
+    { nome: 'Selo Bankai', escalao: 'Vasto Lorde', preco: 480, amostra: 'linear-gradient(135deg,#f0cf6e,#d9a635)', desc: 'Dez mil vezes o poder — e dez anos a merecê-lo.' },
+  ] },
+  { grupo: 'TÍTULOS', itens: [
+    { nome: 'Alma Determinada', escalao: 'Hollow', preco: 80, amostra: '#2b2f3b', desc: 'Todo o Shinigami saiu do Rukongai.' },
+    { nome: 'Lua Cortante', escalao: 'Adjuchas', preco: 240, amostra: '#2b2f3b', desc: 'Para quem treina antes de o sol nascer.' },
+    { nome: 'Guardião da Quarta', escalao: 'Adjuchas', preco: 240, amostra: '#2b2f3b', desc: 'A Quarta ganha as batalhas que ninguém vê.' },
+    { nome: 'Visored', escalao: 'Vasto Lorde', preco: 520, amostra: '#2b2f3b', desc: 'Pôs a máscara e não deixou o Hollow decidir.' },
+  ] },
+  { grupo: 'REIATSU', itens: [
+    { nome: 'Reiatsu Espectral', escalao: 'Hollow', preco: 140, amostra: '#ffcb95', desc: 'Azul-branco sereno, de quem procura o limite.' },
+    { nome: 'Reiatsu Carmesim', escalao: 'Adjuchas', preco: 280, amostra: '#c8102e', desc: 'Denso ao ponto de se sentir na sala ao lado.' },
+    { nome: 'Reiatsu Incandescente', escalao: 'Vasto Lorde', preco: 500, amostra: '#d9a635', desc: 'O laranja que fica no ar depois do corte.' },
+  ] },
+];
+const EQUIPADOS = ['Selo Asauchi', 'Alma Determinada', 'Reiatsu Espectral'];
+const ESCALOES = { 'Hollow': ['#a9a49a', '#2b2f3b'], 'Adjuchas': ['#ffcb95', 'rgba(255,138,20,.45)'], 'Vasto Lorde': ['#f0cf6e', 'rgba(240,207,110,.5)'] };
+const DIVISOES = [[1, 'Primeira'], [2, 'Segunda'], [3, 'Terceira'], [4, 'Quarta'], [5, 'Quinta'], [6, 'Sexta'], [7, 'Sétima'], [8, 'Oitava'], [9, 'Nona'], [10, 'Décima'], [11, 'Décima Primeira'], [12, 'Décima Segunda'], [13, 'Décima Terceira']];
+const PESAGENS = [['5 jul', 74.8, 82], ['12 jul', 74.6, 81.8], ['19 jul', 74.9, 82], ['26 jul', 74.4, 81.5], ['2 ago', 74.2, 81.4], ['9 ago', 74.0, 81.2]];
+const REIATSU_SEMANA = [['SEG', 178], ['TER', 0], ['QUA', 0], ['QUI', 166], ['SEX', 0], ['SÁB', 160], ['DOM', 0]];
+const HISTORICO = [
+  { nome: 'Superior A', data: '25 ago', feitas: 16, total: 16, minutos: 44, xp: 166 },
+  { nome: 'Inferior B', data: '23 ago', feitas: 15, total: 15, minutos: 41, xp: 160 },
+  { nome: 'Superior B', data: '21 ago', feitas: 13, total: 16, minutos: 38, xp: 118 },
+  { nome: 'Inferior A', data: '19 ago', feitas: 18, total: 18, minutos: 47, xp: 178 },
+];
+const NOTAS = [
+  ['quest', '[ QUEST ]', 'Quartel', 'A base do operativo, como um terminal de campo. Não é um ecrã inicial: é a janela que fica sempre aberta por baixo das outras, com a ordem do dia e os dois sinais vitais — HP (calorias) e ordens. Quando outra janela abre, a QUEST recua e escurece: o Sistema mostra que continua lá.'],
+  ['menu', '[ MENU ]', 'HUD', 'Substitui a barra de separadores. O HUD é o corpo cibernético do operativo — nível, patente, reiatsu, dias e kan — e tocar nele abre a grelha de subsistemas. Seis módulos, cada um com o seu código ASC — a unidade é o sistema; o operativo é a consciência dentro do corpo.'],
+  ['dojo', '[ DOJO ]', 'Dojo · plano', 'Briefing de missão. A semana é uma fila de sensores; a lista de exercícios lê-se como manifesto de carga, com índice em mono. Um só botão sólido: iniciar. IA e treino manual ficam em secundário.'],
+  ['sessao', '[ SESSION ]', 'Treino', 'Modo tático — o mergulho no corpo. A janela ganha borda de ouro em descanso — o laranja é o Sistema, o ouro é a espera e o cronómetro vive no cabeçalho, como telemetria. As séries são interruptores; a barra de 3 px no topo é a única leitura de progresso. Demonstração em feed REC dessaturado.'],
+  ['racoes', '[ RATIONS ]', 'Rações', 'Diagnóstico de sistemas. HP a vermelho é a única barra quente do módulo; proteína, hidratos e gordura são subsistemas em laranja e ouro. Scan por foto e por texto são duas portas de entrada tracejadas — ainda não são dados, são captação.'],
+  ['ordens', '[ ORDERS ]', 'Ordens', 'Fila de missões atribuídas. Cada ordem é um alvo com progresso; cumprida, a linha inverte para laranja sólido. Tocar não marca a caixa: abre o módulo onde a ordem se executa.'],
+  ['status', '[ STATUS ]', 'Ficha', 'Ficha do operativo — o dossier do operativo. Patente em hexágono, artes como barras de 20 segmentos, corpo como telemetria semanal. Conquistas são selos do arquivo; o Arsenal é inventário — kan compra estética, nunca poder.'],
+  ['config', '[ CONFIG ]', 'Definições', 'Parâmetros do cyberbrain. Cada ajuste expande um painel de opções em linha, sem sair da janela. A única ação vermelha da app — repor dados — pede confirmação num modal de dois botões.'],
+];
+
+const xpDoNivel = (n) => Math.round(100 * Math.pow(n, 1.5));
+function xpTotalAte(n) { let t = 0; for (let i = 1; i < n; i += 1) t += xpDoNivel(i); return t; }
+function nivelDeXp(xp) { let nivel = 1; while (xp >= xpTotalAte(nivel + 1)) nivel += 1; const base = xpTotalAte(nivel); return { nivel, atual: xp - base, proximo: xpDoNivel(nivel) }; }
+function nomeDaPatente(nivel) { let nome = PATENTES[0][1]; for (const p of PATENTES) if (nivel >= p[0]) nome = p[1]; return nome; }
+const rankDe = (n) => (n >= 14 ? 'S' : n >= 10 ? 'A' : n >= 7 ? 'B' : n >= 5 ? 'C' : n >= 3 ? 'D' : 'E');
+function recompensaSessao(feitas, total, segundos) {
+  const taxa = total > 0 ? feitas / total : 0;
+  return { xp: Math.round(40 + feitas * 6 + (taxa >= 1 ? 30 : 0) + Math.min(20, Math.floor(segundos / 60))), kan: Math.round(10 + feitas * 1.5 + (taxa >= 1 ? 10 : 0)), taxa };
+}
+const nomeDivisao = (id) => { const d = DIVISOES.filter((x) => x[0] === id)[0]; return d ? d[1] : ''; };
+const mmss = (s) => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+const nf = (v) => new Intl.NumberFormat('pt-PT').format(Math.round(v));
+const totaisDe = (diario) => diario.reduce((acc, it) => { const f = ALIMENTOS[it.id]; const k = it.g / 100; return { kcal: acc.kcal + f.kcal * k, prot: acc.prot + f.p * k, hid: acc.hid + f.c * k, gord: acc.gord + f.f * k }; }, { kcal: 0, prot: 0, hid: 0, gord: 0 });
+const ordemBase = (id) => ORDENS_BASE.find((o) => o.id === id);
+const CY = '#ff8a14', CYS = '#ffcb95', INK = '#f2efe6', MUT = '#a9a49a', LINE = '#2b2f3b';
+
+const ESTADO_INICIAL = () => ({
+  tela: 'quartel', menu: false, modal: null,
+  xp: xpTotalAte(7) + Math.round(xpDoNivel(7) * 0.42), kan: 320, dias: 5, melhor: 12, licenca: true, treinos: 12, ordensCumpridas: 34,
+  artes: { zanjutsu: 14, hoho: 9, kido: 11, reiryoku: 8 },
+  ordens: { hidratacao: false, treino: false, proteina: false },
+  diario: [
+    { k: 'd1', ref: 0, id: 'aveia', g: 60 }, { k: 'd2', ref: 0, id: 'skyr', g: 150 }, { k: 'd3', ref: 0, id: 'banana', g: 120 },
+    { k: 'd4', ref: 1, id: 'frango', g: 170 }, { k: 'd5', ref: 1, id: 'arroz', g: 200 }, { k: 'd6', ref: 1, id: 'brocolos', g: 150 }, { k: 'd7', ref: 1, id: 'azeite', g: 10 },
+  ],
+  seq: 7, agua: 1250, refRapida: 1, toast: null, dojoVista: 'plano', verDemo: false, face: 'progresso', abaRacoes: 'estado', painel: null,
+  idioma: 'pt', divisao: 11, fundo: 'Predefinido', penteado: 1, matiz: 200, brasao: false, expandido: null, pausado: false, treinosSemana: 2,
+  marcadas: PLANO.map((e) => new Array(e.series).fill(false)), exercicio: 0, decorrido: 1458, emSessao: false, descanso: null, descansoTotal: 90, celeb: null,
+});
+
+class Component extends DCLogic {
+  state = ESTADO_INICIAL();
+
+  componentDidMount() {
+    this.timer = window.setInterval(() => {
+      this.setState((s) => {
+        const next = {};
+        if (s.emSessao && !s.pausado && s.tela === 'dojo' && s.dojoVista === 'sessao') next.decorrido = s.decorrido + 1;
+        if (s.descanso !== null && !s.pausado) next.descanso = s.descanso > 1 ? s.descanso - 1 : null;
+        return Object.keys(next).length ? next : null;
+      });
+    }, 1000);
+  }
+  componentWillUnmount() { window.clearInterval(this.timer); window.clearTimeout(this.toastTimer); }
+
+  avisar = (codigo, texto, cor) => {
+    window.clearTimeout(this.toastTimer);
+    this.setState({ toast: { codigo, texto, cor } });
+    this.toastTimer = window.setTimeout(() => this.setState({ toast: null }), 3400);
+  };
+
+  ir = (tela) => this.setState({ tela, menu: false, painel: null });
+
+  alternarSerie = (ei, si) => {
+    this.setState((s) => {
+      const marcadas = s.marcadas.map((linha, i) => (i === ei ? linha.slice() : linha));
+      const estavaFeita = marcadas[ei][si];
+      marcadas[ei][si] = !estavaFeita;
+      const patch = { marcadas };
+      if (!estavaFeita) {
+        patch.descanso = PLANO[ei].descanso; patch.descansoTotal = PLANO[ei].descanso;
+        if (marcadas[ei].every(Boolean) && ei < PLANO.length - 1) patch.exercicio = ei + 1;
+      }
+      return patch;
+    });
+  };
+  abrirOrdem = (id) => this.setState({ tela: id === 'treino' ? 'dojo' : 'racoes', dojoVista: 'plano' });
+  premiarSe = (s, patch, id, atingido) => {
+    if (!atingido || s.ordens[id]) return patch;
+    const o = ordemBase(id);
+    patch.ordens = Object.assign({}, s.ordens, patch.ordens || {}, { [id]: true });
+    patch.xp = (patch.xp === undefined ? s.xp : patch.xp) + o.xp;
+    patch.kan = (patch.kan === undefined ? s.kan : patch.kan) + o.kan;
+    return patch;
+  };
+  adicionarAlimento = (id, ref) => this.setState((s) => {
+    const diario = s.diario.concat([{ k: 'd' + (s.seq + 1), ref, id, g: ALIMENTOS[id].g }]);
+    return this.premiarSe(s, { seq: s.seq + 1, diario }, 'proteina', totaisDe(diario).prot >= ordemBase('proteina').alvo);
+  });
+  removerEntrada = (k) => { this.avisar('SYS//ERR 0x11', 'registo removido do diário', '#c8102e'); this.setState((s) => ({ diario: s.diario.filter((e) => e.k !== k) })); };
+  addAgua = (ml) => { this.avisar('SYS//LOG 0x2A', '+' + ml + ' ml em hidratação', '#4fa3c7'); this.setState((s) => { const agua = s.agua + ml; return this.premiarSe(s, { agua }, 'hidratacao', agua >= ordemBase('hidratacao').alvo); }); };
+  concluir = () => this.setState((s) => {
+    const feitas = s.marcadas.flat().filter(Boolean).length;
+    const total = s.marcadas.flat().length;
+    if (feitas === 0) return null;
+    const r = recompensaSessao(feitas, total, s.decorrido);
+    const bonus = s.ordens.treino ? { xp: 0, kan: 0 } : ordemBase('treino');
+    const antes = nivelDeXp(s.xp).nivel;
+    const xp = s.xp + r.xp + bonus.xp;
+    const depois = nivelDeXp(xp).nivel;
+    return {
+      xp, kan: s.kan + r.kan + bonus.kan, treinos: s.treinos + 1, treinosSemana: s.treinosSemana + 1,
+      ordens: Object.assign({}, s.ordens, { treino: true }),
+      artes: Object.assign({}, s.artes, { zanjutsu: s.artes.zanjutsu + 1, hoho: s.artes.hoho + 1, kido: r.taxa >= 1 ? s.artes.kido + 1 : s.artes.kido }),
+      emSessao: false, descanso: null,
+      celeb: { xp: r.xp, kan: r.kan, feitas, total, segundos: s.decorrido, subiu: depois > antes, nivel: depois, cosmetico: r.taxa >= 1 },
+      tela: 'celeb',
+    };
+  });
+  modal = (titulo, texto, destrutivo) => this.setState({ modal: { titulo, texto, destrutivo: Boolean(destrutivo) } });
+
+  renderVals() {
+    const s = this.state;
+    const info = nivelDeXp(s.xp);
+    const ex = PLANO[s.exercicio];
+    const marcadasEx = s.marcadas[s.exercicio];
+    const feitasEx = marcadasEx.filter(Boolean).length;
+    const feitasTotal = s.marcadas.flat().filter(Boolean).length;
+    const totalSeries = s.marcadas.flat().length;
+    const tot = totaisDe(s.diario);
+    const metricas = { treinos: s.treinos, serie: Math.max(s.dias, s.melhor), patente: info.nivel, diasProteina: 6, ordens: s.ordensCumpridas, refeicoes: 80, treinosCustom: 0, pesagens: 6 };
+    const pct = (v, m) => Math.min(100, (v / m) * 100).toFixed(1) + '%';
+    const faltam = Math.max(0, METAS.kcal - tot.kcal);
+    const protFalta = Math.max(0, METAS.prot - tot.prot);
+    const seg = (ativo) => ({ borda: ativo ? CY : LINE, fundo: ativo ? 'rgba(255,138,20,.14)' : 'transparent', cor: ativo ? CY : MUT });
+    const face = (id) => Object.assign({ ir: () => this.setState({ face: id }) }, seg(s.face === id));
+    const abaR = (id, nome, icone) => Object.assign({ nome, icone, ir: () => this.setState({ abaRacoes: id }) }, seg(s.abaRacoes === id));
+    const opcao = (nome, ativo, escolher) => Object.assign({ nome, escolher: escolher || (() => {}) }, seg(ativo));
+    const PAINEIS = {
+      idioma: { titulo: 'IDIOMA', nota: 'Português de Portugal por omissão; o inglês aplica-se de imediato e fica guardado no dispositivo.', opcoes: ['pt', 'en'].map((c) => opcao(c === 'pt' ? 'PORTUGUÊS' : 'ENGLISH (UK)', s.idioma === c, () => this.setState({ idioma: c }))) },
+      perfil: { titulo: 'OBJETIVO', nota: 'Mudar o objetivo recalcula calorias e macros: −15% para perder gordura, +10% para ganhar massa.', opcoes: ['PERDER GORDURA', 'GANHAR MASSA', 'MANTER', 'CONDIÇÃO FÍSICA'].map((g) => opcao(g, g === 'GANHAR MASSA')) },
+      divisao: { titulo: 'DIVISÃO', nota: 'Apenas estético: altera o emblema, a cor do reiatsu e o lema.', opcoes: DIVISOES.map(([id, nome]) => opcao(nome.toUpperCase(), s.divisao === id, () => this.setState({ divisao: id }))) },
+      visao: { titulo: 'RECONHECIMENTO POR FOTOGRAFIA', nota: 'A chave fica neste dispositivo e é legível por quem lhe tenha acesso — usa um serviço de nível gratuito, sem cartão associado.', opcoes: ['GOOGLE GEMINI', 'OPENROUTER', 'GROQ', 'OPENAI'].map((p) => opcao(p, false)) },
+    };
+    const painel = PAINEIS[s.painel] || { titulo: '', nota: '', opcoes: [] };
+    const celeb = s.celeb || {};
+    const c = celeb.subiu
+      ? { etiqueta: 'SUBIDA DE PATENTE', sub: 'PATENTE ' + String(celeb.nivel).padStart(2, '0'), titulo: nomeDaPatente(celeb.nivel), frase: 'A máscara começa a formar-se sobre o teu rosto. A divisão já te trata pelo posto.' }
+      : { etiqueta: 'SESSÃO CONCLUÍDA', sub: 'PATENTE ' + String(info.nivel).padStart(2, '0'), titulo: nomeDaPatente(info.nivel), frase: 'O reiatsu consolida-se no descanso. Volta amanhã e a divisão nota.' };
+    const coberta = s.tela !== 'quartel' || s.menu;
+    const janelaAtiva = s.tela === 'quartel' ? (s.menu ? 'menu' : 'quest') : s.tela === 'dojo' ? (s.dojoVista === 'sessao' ? 'sessao' : 'dojo') : s.tela === 'ficha' ? 'status' : s.tela;
+    const irJanela = (id) => {
+      if (id === 'menu') return this.setState({ tela: 'quartel', menu: true });
+      if (id === 'quest') return this.ir('quartel');
+      if (id === 'sessao') return this.setState({ tela: 'dojo', dojoVista: 'sessao', emSessao: true, pausado: false, menu: false });
+      if (id === 'dojo') return this.setState({ tela: 'dojo', dojoVista: 'plano', menu: false });
+      if (id === 'status') return this.ir('ficha');
+      return this.ir(id);
+    };
+    const MENU = [['QUEST', 'Quartel', 'quest', 'ASC//01', 'クエスト'], ['DOJO', 'Dojo', 'dojo', 'ASC//02', '道場'], ['RATIONS', 'Rações', 'racoes', 'ASC//03', '配給'], ['ORDERS', 'Ordens', 'ordens', 'ASC//04', '命令'], ['STATUS', 'Ficha', 'status', 'ASC//05', '状態'], ['CONFIG', 'Definições', 'config', 'ASC//06', '設定']];
+    const ativoPara = (id) => (janelaAtiva === id || (id === 'dojo' && janelaAtiva === 'sessao') || (id === 'quest' && janelaAtiva === 'menu'));
+
+    return {
+      devW: 402, devH: 874, ligado: true,
+      eMenu: s.menu, eDojo: s.tela === 'dojo' && s.dojoVista === 'plano', eSessao: s.tela === 'dojo' && s.dojoVista === 'sessao',
+      eRacoes: s.tela === 'racoes', eOrdens: s.tela === 'ordens', eFicha: s.tela === 'ficha', eConfig: s.tela === 'config', eCeleb: s.tela === 'celeb',
+      baseOpacidade: coberta ? '.45' : '1', baseTransform: coberta ? 'scale(.96) translateY(-10px)' : 'none', baseEventos: coberta ? 'none' : 'auto',
+      abrirMenu: () => this.setState((st) => ({ menu: !st.menu })), fecharMenu: () => this.setState({ menu: false }),
+      fecharJanela: () => this.ir('quartel'),
+      menu: MENU.map(([codigo, nome, id, sys, kana]) => { const a = ativoPara(id); return { codigo, nome, sys, id, kana, ir: () => irJanela(id), borda: a ? CY : LINE, fundo: a ? 'rgba(255,138,20,.12)' : 'rgba(21,23,31,.6)', cor: a ? CY : CYS, sombra: a ? 'inset 4px 0 0 #ff8a14, 0 0 18px rgba(255,138,20,.28)' : 'none' }; }),
+      notas: NOTAS.map(([id, codigo, ecra, texto]) => { const a = janelaAtiva === id; return { codigo, ecra, texto, icone: id, ir: () => irJanela(id), borda: a ? 'rgba(255,138,20,.55)' : LINE, fundo: a ? 'rgba(255,138,20,.06)' : 'transparent', cor: a ? CY : MUT, sombra: a ? 'inset 3px 0 0 #ff8a14' : 'none' }; }),
+
+      nomePatente: nomeDaPatente(info.nivel), patenteTxt: String(info.nivel).padStart(2, '0'), rank: rankDe(info.nivel),
+      reiatsuTxt: nf(info.atual) + ' / ' + nf(info.proximo), reiatsuPct: pct(info.atual, info.proximo),
+      kan: nf(s.kan), dias: s.dias, melhor: s.melhor, divisaoTxt: nomeDivisao(s.divisao).toUpperCase(),
+      licencaTxt: s.licenca ? 'licença guardada' : 'licença usada',
+
+      rotuloComecar: s.emSessao ? 'CONTINUAR SESSÃO' : (s.ordens.treino ? 'TREINAR OUTRA VEZ' : 'INICIAR SESSÃO'),
+      abrirDojo: () => this.setState((st) => ({ tela: 'dojo', dojoVista: 'sessao', emSessao: true, pausado: false, decorrido: st.emSessao ? st.decorrido : 0 })),
+      irOrdens: () => this.ir('ordens'), irRacoes: () => this.ir('racoes'),
+      faltamResumo: faltam > 0 ? 'faltam ' + nf(faltam) : nf(tot.kcal - METAS.kcal) + ' acima',
+      qKcal: nf(tot.kcal), qMetaKcal: nf(METAS.kcal), qProtTxt: Math.round(tot.prot) + '/' + METAS.prot + ' g', qProtPct: pct(tot.prot, METAS.prot),
+      qAguaTxt: (s.agua / 1000).toFixed(1).replace('.', ',') + '/2,5 L', qAguaPct: pct(s.agua, AGUA_META),
+      ordensTxt: Object.values(s.ordens).filter(Boolean).length + ' / 3',
+
+      ordens: ORDENS_BASE.map((o, i) => {
+        const feito = s.ordens[o.id];
+        const prog = o.id === 'hidratacao' ? Math.min(100, (s.agua / o.alvo) * 100) : o.id === 'proteina' ? Math.min(100, (tot.prot / o.alvo) * 100) : feito ? 100 : 0;
+        return {
+          id: o.id, icone: o.id === 'hidratacao' ? 'water' : o.id === 'treino' ? 'dojo' : 'prot', titulo: o.titulo, curto: o.curto, indice: String(i + 1).padStart(2, '0'), marca: feito ? '✓' : '', abrir: () => this.abrirOrdem(o.id),
+          progressoTxt: o.id === 'hidratacao' ? (feito ? 'alvo de ' + nf(o.alvo) + ' ml cumprido' : nf(s.agua) + ' / ' + nf(o.alvo) + ' ml')
+            : o.id === 'proteina' ? (feito ? 'alvo de ' + o.alvo + ' g cumprido' : Math.round(tot.prot) + ' / ' + o.alvo + ' g proteína')
+            : feito ? 'sessão concluída' : 'ainda sem sessão hoje',
+          borda: feito ? CY : (prog > 0 ? 'rgba(255,138,20,.45)' : LINE), fundo: feito ? CY : (prog > 0 ? 'rgba(255,138,20,.06)' : 'rgba(21,23,31,.6)'),
+          sombra: feito ? '0 0 16px rgba(255,138,20,.35)' : (prog > 0 ? 'inset 3px 0 0 #ff8a14' : 'none'),
+          caixaBorda: feito ? CY : '#6e6a62', caixaFundo: feito ? CY : 'transparent',
+          cor: feito ? '#0c0e13' : INK, corPremio: feito ? '#0c0e13' : CYS, corPremioKan: feito ? 'rgba(12,14,19,.7)' : '#f0cf6e',
+          premio: feito ? 'CUMPRIDA' : '+' + o.xp, premioKan: feito ? '' : '+' + o.kan + 'k',
+          trilho: feito ? 'rgba(12,14,19,.25)' : '#1e212b', barra: feito ? '#0c0e13' : CY, pct: prog.toFixed(1) + '%',
+        };
+      }),
+
+      cronometro: mmss(s.decorrido), kanjiGrupo: ex.grupo === 'Core' ? '芯' : '脚', metaExercicio: ex.grupo.toUpperCase() + ' · ' + ex.equip.toUpperCase(), nomeExercicio: ex.nome, descricaoExercicio: ex.desc,
+      repsAtual: ex.reps, serieTxt: 'série ' + Math.min(feitasEx + 1, ex.series) + ' / ' + ex.series, seriesTxt: feitasTotal + ' / ' + totalSeries,
+      exercicioTxt: 'EX ' + String(s.exercicio + 1).padStart(2, '0') + ' / ' + String(PLANO.length).padStart(2, '0'), nSeries: ex.series,
+      series: marcadasEx.map((feita, i) => ({ numero: String(i + 1).padStart(2, '0'), estado: feita ? 'FEITA' : 'SÉRIE', alternar: () => this.alternarSerie(s.exercicio, i), borda: feita ? CY : LINE, fundo: feita ? CY : 'rgba(21,23,31,.6)', cor: feita ? '#0c0e13' : MUT })),
+      pontos: PLANO.map((_, i) => ({ largura: i === s.exercicio ? '22px' : '7px', cor: s.marcadas[i].every(Boolean) ? CY : i === s.exercicio ? CYS : '#2b2f3b', ir: () => this.setState({ exercicio: i }) })),
+      descansoAtivo: s.descanso !== null, descansoTxt: mmss(s.descanso || 0),
+      descansoPct: (((s.descansoTotal - (s.descanso || 0)) / s.descansoTotal) * 100).toFixed(1) + '%',
+      bordaSessao: s.descanso !== null ? 'rgba(217,166,53,.6)' : 'rgba(255,138,20,.5)',
+      saltarDescanso: () => this.setState({ descanso: null }),
+      proximoTxt: s.exercicio < PLANO.length - 1 ? PLANO[s.exercicio + 1].nome : 'Fim da sessão',
+      rotuloPrincipal: feitasTotal === totalSeries ? 'CONCLUIR SESSÃO' : (feitasEx < ex.series ? 'SÉRIE ' + (feitasEx + 1) + ' FEITA' : 'PRÓXIMO EXERCÍCIO'),
+      acaoPrincipal: () => {
+        const st = this.state; const e = PLANO[st.exercicio]; const feitas = st.marcadas[st.exercicio].filter(Boolean).length;
+        if (st.marcadas.flat().filter(Boolean).length === st.marcadas.flat().length) { this.concluir(); return; }
+        if (feitas < e.series) { this.alternarSerie(st.exercicio, feitas); return; }
+        if (st.exercicio < PLANO.length - 1) this.setState({ exercicio: st.exercicio + 1 });
+      },
+      sairDojo: () => this.setState({ dojoVista: 'plano', descanso: null }),
+      rotuloPausa: s.pausado ? '▶' : '❚❚', corCronometro: s.pausado ? '#d9a635' : CYS, corPausa: s.pausado ? '#d9a635' : MUT,
+      alternarPausa: () => this.setState((st) => ({ pausado: !st.pausado })),
+      progressoPct: ((feitasTotal / totalSeries) * 100).toFixed(1) + '%',
+      verDemo: s.verDemo, rotuloDemo: s.verDemo ? 'FECHAR DEMO' : 'VER DEMO', alternarDemo: () => this.setState((st) => ({ verDemo: !st.verDemo })),
+      demoEx0: s.exercicio === 0, demoEx1: s.exercicio === 1, demoEx2: s.exercicio === 2, demoEx3: s.exercicio === 3, demoEx4: s.exercicio === 4, demoEx5: s.exercicio === 5,
+      podeTerminar: feitasTotal > 0 && feitasTotal < totalSeries, terminarParcial: () => this.concluir(),
+      criarTreino: () => this.modal('[ SYS // AVISO ]', 'No produto abre o criador de treinos: escolhes exercícios do catálogo, séries, repetições e descanso, e o treino passa a fazer parte do plano.'),
+      planoIA: () => this.modal('[ SYS // AVISO ]', 'No produto o Sistema gera um plano a partir do teu objetivo, dias por semana e equipamento, e pede-te para o aceitares antes de substituir o atual.'),
+      historicoTxt: HISTORICO.length + ' de ' + s.treinos + ' sessões',
+      historico: HISTORICO.map((h) => ({ nome: h.nome, detalhe: h.data + ' · ' + h.feitas + '/' + h.total + ' séries · ' + h.minutos + ' min', xp: '+' + h.xp })),
+      abrirSessao: () => this.setState((st) => ({ dojoVista: 'sessao', emSessao: true, pausado: false, decorrido: st.marcadas.flat().some(Boolean) ? st.decorrido : 0 })),
+      rotuloSessao: s.emSessao && feitasTotal > 0 ? 'CONTINUAR SESSÃO' : 'INICIAR SESSÃO',
+      semana: SEMANA.map((d) => ({ dia: d.dia, marca: d.treino ? (d.feito ? '✓' : '') : '·', borda: d.hoje ? CY : LINE, fundo: d.hoje ? 'rgba(255,138,20,.12)' : d.treino ? 'rgba(21,23,31,.6)' : 'transparent', cor: d.hoje ? CY : d.treino ? INK : '#6e6a62', pontoFundo: d.treino ? (d.feito ? CY : 'rgba(255,138,20,.15)') : 'transparent', pontoCor: d.feito ? '#0c0e13' : d.treino ? CYS : '#6e6a62' })),
+      exerciciosPlano: PLANO.map((e, i) => {
+        const aberto = s.expandido === e.id; const feitasAqui = s.marcadas[i].filter(Boolean).length;
+        return { indice: String(i + 1).padStart(2, '0'), icone: e.grupo === 'Core' ? 'gord' : 'hid', nome: e.nome, meta: e.grupo + ' · ' + e.equip + ' · ' + e.descanso + ' s', series: e.series + '×' + e.reps, desc: e.desc, aberto, seta: aberto ? '▾' : '▸', estado: feitasAqui === e.series ? '✓ ' : (feitasAqui > 0 ? feitasAqui + '/' + e.series + ' ' : ''), corEstado: feitasAqui === e.series ? CY : (feitasAqui > 0 ? CYS : '#6e6a62'), alternar: () => this.setState((st) => ({ expandido: st.expandido === e.id ? null : e.id })) };
+      }),
+
+      rotuloFaltam: faltam > 0 ? 'FALTAM' : 'A MAIS',
+      kcalDash: (Math.min(1, tot.kcal / METAS.kcal) * 2 * Math.PI * 64).toFixed(1) + ' 999',
+      aguaCelulas: Array.from({ length: 10 }, (_, i) => ({ cor: s.agua / AGUA_META > i / 10 ? '#5cc8ff' : '#1e212b' })), faltamNum: nf(faltam > 0 ? faltam : tot.kcal - METAS.kcal),
+      kcalTxt: nf(tot.kcal) + ' / ' + nf(METAS.kcal), protFaltaTxt: protFalta > 0 ? '−' + Math.round(protFalta) + ' g' : '✓',
+      kcalPct: pct(tot.kcal, METAS.kcal), bonusProteina: tot.prot >= METAS.prot,
+      macros: [
+        { nome: 'PROTEÍNA', sigla: 'P', icone: 'prot', barra: CY, valor: Math.round(tot.prot), meta: METAS.prot, pct: pct(tot.prot, METAS.prot) },
+        { nome: 'HIDRATOS', sigla: 'C', icone: 'hid', barra: 'rgba(255,138,20,.55)', valor: Math.round(tot.hid), meta: METAS.hid, pct: pct(tot.hid, METAS.hid) },
+        { nome: 'GORDURA', sigla: 'G', icone: 'gord', barra: '#d9a635', valor: Math.round(tot.gord), meta: METAS.gord, pct: pct(tot.gord, METAS.gord) },
+      ],
+      acimaDaMeta: tot.kcal > METAS.kcal * 1.05, semSugestao: protFalta <= 20, temSugestoes: protFalta > 20,
+      sugestaoTitulo: '−' + Math.round(protFalta) + ' g',
+      sugestoes: (protFalta > 20 ? (protFalta > 60 ? [['frango', 150], ['whey', 30]] : [['peru', 150], ['skyr', 150]]) : []).map(([id, g]) => { const f = ALIMENTOS[id]; return { nome: f.nome, detalhe: g + ' g', kcal: Math.round((f.kcal * g) / 100) + ' kcal', prot: 'P ' + Math.round((f.p * g) / 100) + ' g' }; }),
+      mensagemSugestao: 'Metas quase fechadas',
+      diarioTxt: '×' + s.diario.length,
+      abasRacoes: [abaR('estado', 'ESTADO', 'status'), abaR('diario', 'DIÁRIO', 'lista'), abaR('registar', 'REGISTAR', 'bolt')],
+      abaEstado: s.abaRacoes === 'estado', abaDiario: s.abaRacoes === 'diario', abaRegistar: s.abaRacoes === 'registar',
+      refeicoes: REFEICOES.map((nome, idx) => {
+        const itens = s.diario.filter((e) => e.ref === idx);
+        const total = itens.reduce((sum, e) => sum + (ALIMENTOS[e.id].kcal * e.g) / 100, 0);
+        return { nome: REF_CURTO[idx], icone: REF_ICONE[idx], vazia: itens.length === 0, total: nf(total) + ' kcal', adicionar: () => this.setState({ refRapida: idx, abaRacoes: 'registar' }),
+          itens: itens.map((e) => { const f = ALIMENTOS[e.id]; const k = e.g / 100; return { nome: f.nome, gramas: e.g + ' g', detalhe: e.g + ' g · P ' + Math.round(f.p * k) + ' H ' + Math.round(f.c * k) + ' G ' + Math.round(f.f * k), kcal: nf(f.kcal * k), remover: () => this.removerEntrada(e.k) }; }) };
+      }),
+      rapidos: RAPIDOS.map((id) => { const f = ALIMENTOS[id]; return { nome: f.nome, porcao: f.porcao, kcal: Math.round((f.kcal * f.g) / 100), adicionar: () => this.adicionarAlimento(id, s.refRapida) }; }),
+      destinos: REFEICOES.map((nome, idx) => Object.assign({ nome, curto: REF_CURTO[idx], escolher: () => this.setState({ refRapida: idx }) }, seg(s.refRapida === idx))),
+      registarFoto: () => this.modal('[ SYS // AVISO ]', 'A câmara não corre no protótipo. No produto: fotografas o prato, a estimativa de calorias e macros aparece para confirmares, e a miniatura fica anexada à refeição.'),
+      registarTexto: () => this.modal('[ SYS // AVISO ]', 'No produto descreves a refeição por palavras — «arroz, frango e salada» — e o Sistema devolve a estimativa para confirmares antes de entrar no diário.'),
+      aguaTxt: (s.agua / 1000).toFixed(1).replace('.', ',') + ' / 2,5 L', aguaPct: pct(s.agua, AGUA_META),
+      addAgua250: () => this.addAgua(250), addAgua500: () => this.addAgua(500),
+
+      capitaoTxt: Math.min(3, s.treinosSemana) + ' / 3 treinos', capitaoPct: (Math.min(1, s.treinosSemana / 3) * 100).toFixed(1) + '%',
+      semanaFerroTxt: Math.min(4, s.treinosSemana) + ' / 4 treinos', semanaFerroPct: (Math.min(1, s.treinosSemana / 4) * 100).toFixed(1) + '%',
+      rioTxt: nf(s.agua * 7) + ' / 15 000 ml', rioPct: (Math.min(1, (s.agua * 7) / 15000) * 100).toFixed(1) + '%',
+
+      abaProgresso: face('progresso'), abaConquistas: face('conquistas'), abaArsenal: face('arsenal'),
+      faceProgresso: s.face === 'progresso', faceConquistas: s.face === 'conquistas', faceArsenal: s.face === 'arsenal',
+      numeros: [
+        { rotulo: 'Treinos', icone: 'dojo', valor: s.treinos, cor: INK }, { rotulo: 'Ordens', icone: 'ordens', valor: s.ordensCumpridas, cor: CYS }, { rotulo: 'Refeições', icone: 'racoes', valor: 80, cor: INK },
+        { rotulo: 'Dias de serviço', icone: 'fire', valor: s.dias + 'd', cor: '#d9a635' }, { rotulo: 'Melhor marca', icone: 'bolt', valor: s.melhor + 'd', cor: '#f0cf6e' }, { rotulo: 'Tempo total', icone: 'timer', valor: '516m', cor: INK },
+      ],
+      artes: [['ZANJUTSU', s.artes.zanjutsu, 'dojo'], ['HOHŌ', s.artes.hoho, 'bolt'], ['KIDŌ', s.artes.kido, 'quest'], ['REIRYOKU', s.artes.reiryoku, 'status']].map(([nome, v, icone]) => ({ nome, valor: v, icone, pct: pct(v, 20) })),
+      pesoAtual: '74,0', ultimaPesagem: 'última a 9 ago', deltaPeso: '−0,8 kg',
+      pesagens: PESAGENS.map(([, kg]) => ({ altura: (((kg - 73.6) / 1.6) * 100).toFixed(0) + '%' })),
+      historicoPeso: PESAGENS.slice().reverse().slice(0, 4).map(([data, kg, cm]) => ({ data, valor: kg.toFixed(1).replace('.', ',') + ' kg · ' + cm.toFixed(1).replace('.', ',') + ' cm' })),
+      registarPeso: () => this.modal('[ SYS // AVISO ]', 'No produto abre o registo de pesagem: peso e cintura com passos de ±0,1, e a nova leitura entra no gráfico e no histórico.'),
+      reiatsuSemana: REIATSU_SEMANA.map(([dia, xp]) => ({ dia, altura: xp > 0 ? Math.round((xp / 178) * 44) + 'px' : '3px', cor: xp > 0 ? CY : LINE, sombra: xp > 0 ? '0 0 8px rgba(255,138,20,.5)' : 'none' })),
+      reiatsuSemanaTxt: '504 RTS · 3 sessões',
+      conquistas: CONQUISTAS.map((cq) => { const valor = Math.min(metricas[cq.metrica], cq.alvo); const ganha = valor >= cq.alvo; return { nome: cq.nome, icone: cq.icone + (ganha ? '-spirit' : '-faint'), borda: ganha ? 'rgba(255,138,20,.45)' : LINE, fundo: ganha ? 'rgba(255,138,20,.06)' : 'transparent', cor: ganha ? INK : MUT, opacidade: ganha ? '1' : '.5', progresso: ganha ? 'DESBLOQUEADA' : valor + ' / ' + cq.alvo }; }),
+      conquistasTxt: CONQUISTAS.filter((cq) => metricas[cq.metrica] >= cq.alvo).length + ' / ' + CONQUISTAS.length,
+      arsenal: COSMETICOS.map((g) => ({ nome: g.grupo, itens: g.itens.map((i) => { const equipado = EQUIPADOS.indexOf(i.nome) >= 0; const e = ESCALOES[i.escalao]; return { nome: i.nome, descricao: i.desc, escalao: i.escalao.toUpperCase(), escalaoCor: e[0], escalaoBorda: e[1], amostra: i.amostra, borda: equipado ? 'rgba(255,138,20,.55)' : LINE, fundo: equipado ? 'rgba(255,138,20,.06)' : 'rgba(21,23,31,.6)', acao: equipado ? 'EQUIPADO' : i.preco + ' kan', acaoCor: equipado ? CY : '#f0cf6e' }; }) })),
+
+      ajustes: [
+        { id: 'idioma', icone: 'lang', titulo: 'Idioma da aplicação', nota: 'Aplica-se de imediato, incluindo catálogos e datas.', valor: s.idioma === 'pt' ? 'PT' : 'EN' },
+        { id: 'perfil', icone: 'user', titulo: 'Dados do perfil', nota: 'Objetivo, dias por semana, peso, altura, idade e dieta.', valor: 'GANHAR MASSA' },
+        { id: 'divisao', icone: 'status', titulo: 'Divisão', nota: 'Muda o emblema, a cor do reiatsu e o lema. Não mexe nos cálculos.', valor: nomeDivisao(s.divisao).toUpperCase() },
+        { id: 'visao', icone: 'eye', titulo: 'Reconhecimento por fotografia', nota: 'Liga o teu serviço de visão. Gemini, OpenRouter e Groq têm nível gratuito.', valor: 'OFF' },
+      ].map((a) => Object.assign({}, a, { borda: s.painel === a.id ? 'rgba(255,138,20,.45)' : LINE, fundo: s.painel === a.id ? 'rgba(255,138,20,.06)' : 'rgba(21,23,31,.6)', abrir: () => this.setState((st) => ({ painel: st.painel === a.id ? null : a.id })) })),
+      temPainelAjuste: Boolean(PAINEIS[s.painel]), painelTitulo: painel.titulo, painelNota: painel.nota, painelOpcoes: painel.opcoes,
+      metasTxt: '2 680 kcal · 158 g prot · 275 g hid · 74 g gord · 2 500 ml',
+      modoDesenhada: () => this.setState({ brasao: false }), modoBrasao: () => this.setState({ brasao: true }),
+      bordaDesenhada: seg(!s.brasao).borda, fundoDesenhada: seg(!s.brasao).fundo, corDesenhada: seg(!s.brasao).cor,
+      bordaBrasao: seg(s.brasao).borda, fundoBrasao: seg(s.brasao).fundo, corBrasao: seg(s.brasao).cor,
+      penteados: [1, 2, 3, 4, 5, 6, 7, 8].map((num) => Object.assign({ numero: String(num).padStart(2, '0'), escolher: () => this.setState({ penteado: num }) }, seg(s.penteado === num))),
+      cores: [200, 180, 220, 268, 320, 0, 24, 48].map((h) => ({ valor: 'hsl(' + h + ' 90% 60%)', anel: s.matiz === h ? CY : LINE, escolher: () => this.setState({ matiz: h }) })),
+      fundos: ['Predefinido', 'A minha imagem'].map((f) => opcao(f, s.fundo === f, () => this.setState({ fundo: f }))),
+      reporDados: () => this.modal('[ WARNING ]', 'Apaga perfil, plano, diário e progresso deste dispositivo. Não há como desfazer.', true),
+
+      temModal: Boolean(s.modal), modalTitulo: (s.modal || {}).titulo, modalTexto: (s.modal || {}).texto,
+      modalDestrutivo: Boolean(s.modal && s.modal.destrutivo), modalSimples: Boolean(s.modal && !s.modal.destrutivo),
+      modalCor: s.modal && s.modal.destrutivo ? '#c8102e' : '#d9a635', modalBorda: s.modal && s.modal.destrutivo ? 'rgba(200,16,46,.6)' : 'rgba(255,138,20,.55)',
+      fecharModal: () => this.setState({ modal: null }),
+
+      celebEtiqueta: c.etiqueta, celebSub: c.sub, celebTitulo: c.titulo, celebFrase: c.frase, celebRank: rankDe(celeb.nivel || info.nivel),
+      celebSessao: celeb.feitas ? celeb.feitas + ' / ' + celeb.total + ' séries · ' + mmss(celeb.segundos || 0) : '',
+      celebXp: '+' + (celeb.xp || 0), celebKan: '+' + (celeb.kan || 0), celebArtes: celeb.cosmetico ? '+3' : '+2', temCosmetico: Boolean(celeb.cosmetico),
+      fecharCeleb: () => this.setState({ tela: 'quartel', dojoVista: 'plano', celeb: null, marcadas: PLANO.map((e) => new Array(e.series).fill(false)), exercicio: 0, decorrido: 0, pausado: false }),
+
+      temToast: Boolean(s.toast), toastCodigo: (s.toast || {}).codigo, toastTexto: (s.toast || {}).texto,
+      toastCor: (s.toast || {}).cor || '#ff8a14', fecharToast: () => this.setState({ toast: null }),
+      caminho: 'asc / ' + ({ quest: 'quartel', menu: 'quartel / menu', dojo: 'dojo / plano', sessao: 'dojo / sessão', racoes: 'rações', ordens: 'ordens', status: 'ficha', config: 'definições', celeb: 'sincronia' }[janelaAtiva] || janelaAtiva),
+      relogio: s.emSessao ? mmss(s.decorrido) : '--:--',
+      atalhoSubir: () => this.setState({ xp: xpTotalAte(10) - 40 }),
+      reiniciar: () => this.setState(ESTADO_INICIAL()),
+    };
+  }
+}
+</script>
+</body>
+</html>
