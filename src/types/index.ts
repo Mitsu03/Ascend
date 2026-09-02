@@ -90,6 +90,8 @@ export type MuscleGroup =
   | 'pernas'
   | 'ombros'
   | 'bracos'
+  | 'antebracos'
+  | 'pescoco'
   | 'core'
   | 'cardio'
   | 'corpo_inteiro'

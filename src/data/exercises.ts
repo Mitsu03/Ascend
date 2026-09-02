@@ -236,6 +236,61 @@ export const EXERCISES: Exercise[] = [
     ),
   },
 
+  {
+    id: 'flexoes-declinadas',
+    name: l('Flexões declinadas', 'Decline push-ups'),
+    muscleGroup: 'peito',
+    equipment: 'nenhum',
+    difficulty: 'intermedio',
+    description: l(
+      'Pés apoiados num banco, mais altos do que as mãos. Carrega a parte alta do peito.',
+      'Feet raised on a bench, higher than your hands. Loads the upper chest.',
+    ),
+  },
+  {
+    id: 'nordic-curl',
+    name: l('Curl nórdico', 'Nordic hamstring curl'),
+    muscleGroup: 'pernas',
+    equipment: 'nenhum',
+    difficulty: 'avancado',
+    description: l(
+      'De joelhos com os tornozelos presos, desce o tronco à frente o mais devagar que aguentares.',
+      'Kneel with your ankles anchored and lower your torso forward as slowly as you can hold it.',
+    ),
+  },
+  {
+    id: 'coice-gluteo',
+    name: l('Coice de glúteo', 'Glute kickback'),
+    muscleGroup: 'pernas',
+    equipment: 'nenhum',
+    difficulty: 'iniciante',
+    description: l(
+      'De gatas, estende uma perna para trás e para cima sem arquear a lombar.',
+      'On all fours, extend one leg back and up without arching your lower back.',
+    ),
+  },
+  {
+    id: 'pescoco-isometrico',
+    name: l('Isometria de pescoço', 'Isometric neck hold'),
+    muscleGroup: 'pescoco',
+    equipment: 'nenhum',
+    difficulty: 'iniciante',
+    description: l(
+      'Mão na testa e depois na nuca: faz força contra a mão sem deixar a cabeça mexer-se.',
+      'Hand on your forehead, then behind your head: press into it without letting the head move.',
+    ),
+  },
+  {
+    id: 'pescoco-lateral',
+    name: l('Flexão lateral do pescoço', 'Lateral neck flexion'),
+    muscleGroup: 'pescoco',
+    equipment: 'nenhum',
+    difficulty: 'iniciante',
+    description: l(
+      'Mão sobre a orelha, empurra a cabeça para o lado contra a resistência da própria mão.',
+      'Hand against the side of your head, press sideways into your own resistance.',
+    ),
+  },
   // ---------------------------------------------------------- Halteres
   {
     id: 'press-ombros-halteres',
@@ -381,6 +436,116 @@ export const EXERCISES: Exercise[] = [
     ),
   },
 
+  {
+    id: 'crucifixo-inverso',
+    name: l('Crucifixo inverso', 'Reverse flyes'),
+    muscleGroup: 'ombros',
+    equipment: 'halteres',
+    difficulty: 'iniciante',
+    description: l(
+      'Tronco à frente, abre os braços em arco. O trabalho é da parte de trás do ombro, não do trapézio.',
+      'Torso hinged forward, open your arms in an arc. The rear delt does the work, not the traps.',
+    ),
+  },
+  {
+    id: 'curl-martelo',
+    name: l('Curl martelo', 'Hammer curls'),
+    muscleGroup: 'bracos',
+    equipment: 'halteres',
+    difficulty: 'iniciante',
+    description: l(
+      'Punhos neutros, como a agarrar um martelo. Apanha o braquial e o braquiorradial.',
+      'Neutral wrists, as if holding a hammer. Hits the brachialis and brachioradialis.',
+    ),
+  },
+  {
+    id: 'curl-concentrado',
+    name: l('Curl concentrado', 'Concentration curls'),
+    muscleGroup: 'bracos',
+    equipment: 'halteres',
+    difficulty: 'iniciante',
+    description: l(
+      'Sentado, cotovelo apoiado na coxa. Sobe até ao pico da contração e desce devagar.',
+      'Seated, elbow braced on your thigh. Curl to the peak and lower slowly.',
+    ),
+  },
+  {
+    id: 'crunch-com-peso',
+    name: l('Abdominais com peso', 'Weighted crunches'),
+    muscleGroup: 'core',
+    equipment: 'halteres',
+    difficulty: 'iniciante',
+    description: l(
+      'Peso ao peito, enrola a coluna sem puxar o pescoço. É o abdominal que faz o trabalho.',
+      'Weight on your chest, curl the spine without pulling on your neck. The abs do the work.',
+    ),
+  },
+  {
+    id: 'curl-punho',
+    name: l('Curl de punho', 'Wrist curl'),
+    muscleGroup: 'antebracos',
+    equipment: 'halteres',
+    difficulty: 'iniciante',
+    description: l(
+      'Antebraços apoiados, palmas para cima. Só o punho se mexe, em amplitude completa.',
+      'Forearms braced, palms up. Only the wrist moves, through a full range.',
+    ),
+  },
+  {
+    id: 'curl-punho-inverso',
+    name: l('Curl de punho inverso', 'Reverse wrist curl'),
+    muscleGroup: 'antebracos',
+    equipment: 'halteres',
+    difficulty: 'iniciante',
+    description: l(
+      'O mesmo com as palmas para baixo, para o lado de cima do antebraço.',
+      'The same with palms down, for the top of the forearm.',
+    ),
+  },
+  {
+    id: 'flexao-pescoco',
+    name: l('Flexão do pescoço', 'Neck curl'),
+    muscleGroup: 'pescoco',
+    equipment: 'halteres',
+    difficulty: 'intermedio',
+    description: l(
+      'Deitado de costas num banco, disco leve na testa sobre uma toalha. Leva o queixo ao peito.',
+      'Lying face up on a bench, a light plate on your forehead over a towel. Bring your chin to your chest.',
+    ),
+  },
+  {
+    id: 'extensao-pescoco',
+    name: l('Extensão do pescoço', 'Neck extension'),
+    muscleGroup: 'pescoco',
+    equipment: 'halteres',
+    difficulty: 'intermedio',
+    description: l(
+      'Deitado de barriga para baixo, disco leve na nuca sobre uma toalha. Levanta a cabeça devagar.',
+      'Lying face down, a light plate on the back of your head over a towel. Raise your head slowly.',
+    ),
+  },
+  {
+    id: 'pinca-manual',
+    name: l('Pinça de mão', 'Hand gripper'),
+    muscleGroup: 'antebracos',
+    equipment: 'halteres',
+    difficulty: 'iniciante',
+    description: l(
+      'Fecha a pinça até tocar e segura um segundo. Acessório opcional, como na folha.',
+      'Close the gripper until it touches and hold for a second. Optional accessory work, as on the sheet.',
+    ),
+  },
+  {
+    id: 'balde-arroz',
+    name: l('Balde de arroz', 'Rice bucket training'),
+    muscleGroup: 'antebracos',
+    equipment: 'nenhum',
+    difficulty: 'iniciante',
+    description: l(
+      'Mãos dentro do arroz a abrir, fechar e rodar até queimar. Acessório opcional, como na folha.',
+      'Hands in the rice, opening, closing and rotating until it burns. Optional accessory work, as on the sheet.',
+    ),
+  },
   // ---------------------------------------------------------- Ginásio
   {
     id: 'supino',
@@ -567,6 +732,182 @@ export const EXERCISES: Exercise[] = [
     description: l(
       'Ritmo constante e confortável. Sela à altura da anca.',
       'Steady, comfortable pace. Saddle at hip height.',
+    ),
+  },
+  {
+    id: 'peck-deck',
+    name: l('Peck deck', 'Pec deck'),
+    muscleGroup: 'peito',
+    equipment: 'ginasio',
+    difficulty: 'iniciante',
+    description: l(
+      'Cotovelos à altura do peito, junta os braços à frente e segura um instante no fim.',
+      'Elbows at chest height, bring the arms together in front and hold briefly at the end.',
+    ),
+  },
+  {
+    id: 'cruzamento-polia',
+    name: l('Cruzamento na polia', 'Cable crossover'),
+    muscleGroup: 'peito',
+    equipment: 'ginasio',
+    difficulty: 'intermedio',
+    description: l(
+      'Um passo à frente das polias, cruza as mãos abaixo do peito. Tensão constante do início ao fim.',
+      'A step in front of the pulleys, cross your hands below chest height. Constant tension throughout.',
+    ),
+  },
+  {
+    id: 'elevacoes',
+    name: l('Elevações', 'Pull-ups'),
+    muscleGroup: 'costas',
+    equipment: 'ginasio',
+    difficulty: 'intermedio',
+    description: l(
+      'Pega pronada, um pouco mais larga que os ombros. Puxa até o queixo passar a barra.',
+      'Overhand grip, slightly wider than your shoulders. Pull until your chin clears the bar.',
+    ),
+  },
+  {
+    id: 'elevacoes-supinadas',
+    name: l('Elevações supinadas', 'Chin-ups'),
+    muscleGroup: 'costas',
+    equipment: 'ginasio',
+    difficulty: 'intermedio',
+    description: l(
+      'Pega supinada à largura dos ombros. A mesma puxada, com muito mais bíceps.',
+      'Underhand grip at shoulder width. The same pull, with far more biceps.',
+    ),
+  },
+  {
+    id: 'remada-curvada',
+    name: l('Remada curvada', 'Bent-over barbell row'),
+    muscleGroup: 'costas',
+    equipment: 'ginasio',
+    difficulty: 'intermedio',
+    description: l(
+      'Tronco a 45°, costas direitas. Puxa a barra ao umbigo e controla a descida.',
+      'Torso at 45°, back flat. Pull the bar to your navel and control the way down.',
+    ),
+  },
+  {
+    id: 'elevacoes-laterais-polia',
+    name: l('Elevações laterais na polia', 'Cable lateral raise'),
+    muscleGroup: 'ombros',
+    equipment: 'ginasio',
+    difficulty: 'iniciante',
+    description: l(
+      'Polia baixa por trás do corpo. Sobe até à linha do ombro, sem encolher.',
+      'Low pulley behind you. Raise to shoulder level without shrugging.',
+    ),
+  },
+  {
+    id: 'curl-scott',
+    name: l('Curl Scott', 'Preacher curl'),
+    muscleGroup: 'bracos',
+    equipment: 'ginasio',
+    difficulty: 'iniciante',
+    description: l(
+      'Braços apoiados no banco inclinado. Sem balanço nenhum: só o cotovelo dobra.',
+      'Arms braced on the preacher bench. No swing at all: only the elbow bends.',
+    ),
+  },
+  {
+    id: 'curl-inverso',
+    name: l('Curl inverso', 'Reverse curl'),
+    muscleGroup: 'bracos',
+    equipment: 'ginasio',
+    difficulty: 'iniciante',
+    description: l(
+      'Pega pronada na barra. Trabalha o braquiorradial e o lado de cima do antebraço.',
+      'Overhand grip on the bar. Works the brachioradialis and the top of the forearm.',
+    ),
+  },
+  {
+    id: 'rolo-punho',
+    name: l('Rolo de punho', 'Wrist roller'),
+    muscleGroup: 'antebracos',
+    equipment: 'ginasio',
+    difficulty: 'intermedio',
+    description: l(
+      'Braços à frente, enrola a corda até acima e desenrola devagar. Queima como poucas coisas.',
+      'Arms out in front, roll the cord all the way up and unroll it slowly. Few things burn like it.',
+    ),
+  },
+  {
+    id: 'crunch-polia',
+    name: l('Crunch na polia', 'Cable crunch'),
+    muscleGroup: 'core',
+    equipment: 'ginasio',
+    difficulty: 'iniciante',
+    description: l(
+      'De joelhos, corda atrás da cabeça. Enrola a coluna com a anca parada.',
+      'Kneeling, rope behind your head. Curl the spine with your hips fixed.',
+    ),
+  },
+  {
+    id: 'hack-squat',
+    name: l('Agachamento hack', 'Hack squat'),
+    muscleGroup: 'pernas',
+    equipment: 'ginasio',
+    difficulty: 'intermedio',
+    description: l(
+      'Costas apoiadas na máquina, pés a meio da plataforma. Desce até à paralela.',
+      'Back against the machine, feet mid-platform. Descend to parallel.',
+    ),
+  },
+  {
+    id: 'peso-morto-pernas-esticadas',
+    name: l('Peso morto de pernas esticadas', 'Stiff-legged deadlift'),
+    muscleGroup: 'pernas',
+    equipment: 'ginasio',
+    difficulty: 'avancado',
+    description: l(
+      'Joelhos quase direitos, anca para trás. Desce até sentires o isquiotibial, não mais.',
+      'Knees nearly straight, hips back. Lower until the hamstrings stretch, no further.',
+    ),
+  },
+  {
+    id: 'bom-dia',
+    name: l('Bom-dia', 'Good morning'),
+    muscleGroup: 'pernas',
+    equipment: 'ginasio',
+    difficulty: 'avancado',
+    description: l(
+      'Barra nas costas, dobra pela anca com a lombar firme. Carga leve e técnica primeiro.',
+      'Bar on your back, hinge at the hips with a solid lower back. Light load and technique first.',
+    ),
+  },
+  {
+    id: 'hip-thrust',
+    name: l('Elevação de anca com barra', 'Barbell hip thrust'),
+    muscleGroup: 'pernas',
+    equipment: 'ginasio',
+    difficulty: 'intermedio',
+    description: l(
+      'Costas no banco, barra sobre a anca. Sobe até ao alinhamento e aperta os glúteos no topo.',
+      'Upper back on the bench, bar over your hips. Drive up to a straight line and squeeze at the top.',
+    ),
+  },
+  {
+    id: 'coice-gluteo-polia',
+    name: l('Coice de glúteo na polia', 'Cable glute kickback'),
+    muscleGroup: 'pernas',
+    equipment: 'ginasio',
+    difficulty: 'intermedio',
+    description: l(
+      'Tornozeleira na polia baixa. Leva a perna atrás sem rodar a anca.',
+      'Ankle strap on the low pulley. Drive the leg back without rotating the hip.',
+    ),
+  },
+  {
+    id: 'gemeos-sentado',
+    name: l('Elevação de gémeos sentado', 'Seated calf raise'),
+    muscleGroup: 'pernas',
+    equipment: 'ginasio',
+    difficulty: 'iniciante',
+    description: l(
+      'Joelhos dobrados a 90°, o que põe o sóleo a trabalhar. Amplitude completa e pausa em baixo.',
+      'Knees bent to 90°, which puts the soleus to work. Full range with a pause at the bottom.',
     ),
   },
 ]

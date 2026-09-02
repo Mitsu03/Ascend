@@ -124,6 +124,8 @@ export const pt = {
     pernas: 'Pernas',
     ombros: 'Ombros',
     bracos: 'Braços',
+    antebracos: 'Antebraços',
+    pescoco: 'Pescoço',
     core: 'Core',
     cardio: 'Cardio',
     corpo_inteiro: 'Corpo inteiro',

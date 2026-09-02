@@ -121,6 +121,8 @@ export const en: Dictionary = {
     pernas: 'Legs',
     ombros: 'Shoulders',
     bracos: 'Arms',
+    antebracos: 'Forearms',
+    pescoco: 'Neck',
     core: 'Core',
     cardio: 'Cardio',
     corpo_inteiro: 'Full body',

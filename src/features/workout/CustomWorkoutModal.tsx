@@ -24,6 +24,8 @@ const GROUPS: (MuscleGroup | 'todos')[] = [
   'pernas',
   'ombros',
   'bracos',
+  'antebracos',
+  'pescoco',
   'core',
   'cardio',
   'corpo_inteiro',
