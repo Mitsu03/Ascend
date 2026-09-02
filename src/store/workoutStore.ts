@@ -9,7 +9,13 @@ import { createPersistStorage } from '@/services/storage'
 import { useGameStore } from '@/store/gameStore'
 import { useQuestStore } from '@/store/questStore'
 import { toast } from '@/store/toastStore'
-import type { ActiveSession, WorkoutDay, WorkoutSessionLog } from '@/types'
+import type {
+  ActiveSession,
+  CollectionDay,
+  WorkoutCollection,
+  WorkoutDay,
+  WorkoutSessionLog,
+} from '@/types'
 
 export interface SessionResult {
   log: WorkoutSessionLog
@@ -28,6 +34,10 @@ interface WorkoutStore {
   addCustomWorkout: (workout: WorkoutDay) => void
   /** Aplica um plano gerado por IA, substituindo o atual ou juntando-se a ele. */
   applyGeneratedPlan: (days: WorkoutDay[], options?: { replace?: boolean }) => void
+  /** Troca a semana inteira pelos dias de uma coleção. */
+  applyCollection: (collection: WorkoutCollection) => void
+  /** Põe um único dia de uma coleção no dia da semana escolhido. */
+  applyCollectionDay: (collection: WorkoutCollection, day: CollectionDay, dayOfWeek: number) => void
   updateWorkout: (workout: WorkoutDay) => void
   removeWorkout: (id: string) => void
   startSession: (workoutDayId: string) => void
@@ -41,6 +51,27 @@ interface WorkoutStore {
   isCompletedOn: (workoutDayId: string, date: string) => boolean
   hydrate: (plan: WorkoutDay[], history: WorkoutSessionLog[]) => void
   reset: () => void
+}
+
+/**
+ * Cópia de um dia de coleção para o plano. O identificador leva o dia da
+ * semana porque o mesmo dia pode ser aplicado a dois dias diferentes, e dois
+ * treinos com o mesmo id partilhariam o histórico um do outro.
+ */
+function collectionDayToWorkout(
+  collection: WorkoutCollection,
+  day: CollectionDay,
+  dayOfWeek: number,
+): WorkoutDay {
+  return {
+    id: `col-${collection.id}-${day.id}-${dayOfWeek}`,
+    name: day.name,
+    focus: day.focus,
+    dayOfWeek,
+    exercises: day.exercises.map((item) => ({ ...item })),
+    isCustom: false,
+    difficulty: collection.difficulty,
+  }
 }
 
 function elapsedFrom(session: ActiveSession): number {
@@ -72,6 +103,23 @@ export const useWorkoutStore = create<WorkoutStore>()(
         game.incrementCounter('customWorkouts', days.length)
         game.checkAchievements()
       },
+
+      applyCollection: (collection) =>
+        set({
+          plan: collection.days.map((day) =>
+            collectionDayToWorkout(collection, day, day.suggestedDayOfWeek),
+          ),
+        }),
+
+      applyCollectionDay: (collection, day, dayOfWeek) =>
+        set((state) => ({
+          // O dia escolhido fica com este treino e mais nenhum: aplicar um dia é
+          // substituir o que lá estava, não empilhar outro treino por baixo.
+          plan: [
+            ...state.plan.filter((existing) => existing.dayOfWeek !== dayOfWeek),
+            collectionDayToWorkout(collection, day, dayOfWeek),
+          ],
+        })),
 
       updateWorkout: (workout) =>
         set((state) => ({ plan: state.plan.map((day) => (day.id === workout.id ? workout : day)) })),

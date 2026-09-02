@@ -8,6 +8,7 @@ import { Icon } from '@/components/ui/Icon'
 import { Badge, EmptyState } from '@/components/ui/Misc'
 import { ConfirmDialog } from '@/components/ui/Modal'
 import { AiPlanModal } from '@/features/workout/AiPlanModal'
+import { CollectionsModal } from '@/features/workout/CollectionsModal'
 import { CustomWorkoutModal } from '@/features/workout/CustomWorkoutModal'
 import { ExerciseDemo } from '@/features/workout/ExerciseDemo'
 import { useI18n } from '@/i18n'
@@ -280,6 +281,7 @@ export function WorkoutPage() {
   const [selectedDay, setSelectedDay] = useState(dayOfWeek(today()))
   const [creating, setCreating] = useState(false)
   const [generating, setGenerating] = useState(false)
+  const [browsing, setBrowsing] = useState(false)
 
   const workouts = useMemo(() => plan.filter((day) => day.dayOfWeek === selectedDay), [plan, selectedDay])
 
@@ -298,6 +300,9 @@ export function WorkoutPage() {
           <p className="mt-3.5 text-sm text-ink-muted">{t.workout.planCount(plan.length)}</p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <Button variant="secondary" icon="ListChecks" onClick={() => setBrowsing(true)}>
+            {t.collections.open}
+          </Button>
           <Button variant="secondary" icon="Hammer" onClick={() => setCreating(true)}>
             {t.workout.createWorkout}
           </Button>
@@ -328,6 +333,9 @@ export function WorkoutPage() {
               message={t.workout.restDayText}
               action={
                 <div className="flex flex-wrap justify-center gap-2">
+                  <Button variant="secondary" icon="ListChecks" onClick={() => setBrowsing(true)}>
+                    {t.collections.open}
+                  </Button>
                   <Button variant="secondary" icon="Hammer" onClick={() => setCreating(true)}>
                     {t.workout.createForDay}
                   </Button>
@@ -345,6 +353,9 @@ export function WorkoutPage() {
           <Button variant="primary" icon="Sparkles" fullWidth onClick={() => setGenerating(true)}>
             {t.aiPlan.title}
           </Button>
+          <Button variant="secondary" icon="ListChecks" fullWidth onClick={() => setBrowsing(true)}>
+            {t.collections.open}
+          </Button>
           <Button variant="secondary" icon="Hammer" fullWidth onClick={() => setCreating(true)}>
             {t.workout.createWorkout}
           </Button>
@@ -355,6 +366,7 @@ export function WorkoutPage() {
 
       <CustomWorkoutModal open={creating} onClose={() => setCreating(false)} />
       <AiPlanModal open={generating} onClose={() => setGenerating(false)} />
+      <CollectionsModal open={browsing} onClose={() => setBrowsing(false)} />
     </>
   )
 }

@@ -470,6 +470,34 @@ export const pt = {
     noResults: 'Nenhum exercício encontrado.',
   },
 
+  collections: {
+    title: 'Coleções de treinos',
+    open: 'Coleções',
+    description:
+      'Planos semanais prontos a usar. Aplica a semana inteira ou leva só o dia que te interessa.',
+    daysCount: (n: number) => `${n} ${n === 1 ? 'dia' : 'dias'}`,
+    weeklySets: (n: number) => `${n} séries por semana`,
+    sourceLabel: (source: string) => `Fonte: ${source}`,
+    notesHeading: 'NOTAS',
+    daysHeading: 'DIAS DA COLEÇÃO',
+    back: 'Voltar às coleções',
+    applyWeek: 'Aplicar a semana inteira',
+    applyDay: 'Aplicar este dia',
+    dayLabel: 'Dia da semana',
+    suggestedDay: (weekday: string) => `Sugerido para ${weekday}`,
+    replacesDay: (weekday: string) => `Substitui o treino de ${weekday}.`,
+    freeDay: (weekday: string) => `${weekday} está livre.`,
+    confirmWeekTitle: 'Aplicar a coleção à semana?',
+    confirmWeekMessage: (name: string, days: number) =>
+      `O teu plano atual é apagado e substituído pelos ${days} dias de “${name}”. O histórico de sessões já feitas mantém-se. Não dá para desfazer.`,
+    confirmWeekConfirm: 'Substituir o plano',
+    appliedWeek: 'Coleção aplicada',
+    appliedWeekDetail: (name: string, days: number) => `“${name}” — ${days} dias no teu plano semanal.`,
+    appliedDay: 'Dia aplicado',
+    appliedDayDetail: (day: string, weekday: string) => `“${day}” passou a ser o treino de ${weekday}.`,
+    empty: 'Ainda não há coleções disponíveis.',
+  },
+
   aiPlan: {
     title: 'Plano por IA',
     description: 'Descreve o treino que queres e a IA monta o plano semanal.',
