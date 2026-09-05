@@ -9,15 +9,28 @@ interface ProgressBarProps {
   height?: 'sm' | 'md' | 'lg'
   label?: string
   showShimmer?: boolean
+  /**
+   * Corta a barra em N células com 2 px de vazio entre elas, como as barras
+   * segmentadas do protótipo. O corte é pintado por cima do preenchimento, e
+   * não desenhado nele, para as células ficarem alinhadas seja qual for a
+   * percentagem.
+   */
+  segments?: number
 }
 
+/*
+ * As barras do desenho são chapadas: no protótipo o preenchimento é sempre uma
+ * cor só (`#ff8a14`, `#4fa3c7`) sobre um trilho `#1e212b`. Os gradientes de
+ * três paragens que aqui estavam vinham da geração anterior e são precisamente
+ * o que o sistema Bleach proíbe — gradiente só no ambiente e nas amostras.
+ */
 const TONES: Record<NonNullable<ProgressBarProps['tone']>, string> = {
-  xp: 'from-ember via-crimson-soft to-gold',
-  ember: 'from-ember to-spirit',
-  gold: 'from-gold to-gold-soft',
-  crimson: 'from-crimson to-crimson-soft',
-  good: 'from-good to-spirit',
-  warn: 'from-warn to-gold',
+  xp: 'bg-ember',
+  ember: 'bg-ember',
+  gold: 'bg-gold',
+  crimson: 'bg-crimson',
+  good: 'bg-kido',
+  warn: 'bg-alert',
 }
 
 const HEIGHTS = { sm: 'h-1.5', md: 'h-2.5', lg: 'h-4' } as const
@@ -30,11 +43,12 @@ export function ProgressBar({
   height = 'md',
   label,
   showShimmer = false,
+  segments,
 }: ProgressBarProps) {
   const pct = percent(value, max)
   return (
     <div
-      className={cn('relative w-full overflow-hidden rounded-full bg-void-700', HEIGHTS[height], className)}
+      className={cn('relative w-full overflow-hidden bg-void-700', HEIGHTS[height], className)}
       role="progressbar"
       aria-valuenow={Math.round(pct)}
       aria-valuemin={0}
@@ -42,12 +56,18 @@ export function ProgressBar({
       aria-label={label}
     >
       <div
-        className={cn(
-          'h-full rounded-full bg-gradient-to-r transition-[width] duration-700 ease-out',
-          TONES[tone],
-        )}
+        className={cn('h-full transition-[width] duration-700 ease-out', TONES[tone])}
         style={{ width: `${pct}%` }}
       />
+      {segments && segments > 1 && (
+        <span
+          className="pointer-events-none absolute inset-0"
+          aria-hidden="true"
+          style={{
+            backgroundImage: `repeating-linear-gradient(90deg, transparent 0 calc(${100 / segments}% - 2px), var(--color-void-900) calc(${100 / segments}% - 2px) ${100 / segments}%)`,
+          }}
+        />
+      )}
       {showShimmer && pct > 0 && pct < 100 && (
         <span
           className="pointer-events-none absolute inset-y-0 left-0 w-1/3 animate-shimmer bg-gradient-to-r from-transparent via-white/25 to-transparent"

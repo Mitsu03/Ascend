@@ -41,12 +41,12 @@ function SlotRow({ slot }: { slot: ArtSlot }) {
   }
 
   return (
-    <li className="rounded-xl border border-void-600 bg-void-800/40 p-3.5">
+    <li className="chamfer-md border border-void-600 bg-void-800/40 p-3.5">
       <div className="flex items-center gap-3">
         <span
           className={cn(
-            'flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-void-600 bg-void-900',
-            slot === 'avatar' && 'rounded-full',
+            'flex size-16 shrink-0 items-center justify-center overflow-hidden chamfer-sm border border-void-600 bg-void-900',
+            slot === 'avatar' && 'hexagon',
           )}
         >
           {active ? (
@@ -65,7 +65,7 @@ function SlotRow({ slot }: { slot: ArtSlot }) {
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <label className="tap-target inline-flex h-9 cursor-pointer items-center gap-1.5 rounded-lg border border-void-500 bg-void-700/60 px-3 text-sm text-ink transition-colors hover:bg-void-700 active:opacity-90">
+          <label className="tap-target inline-flex h-9 cursor-pointer items-center gap-1.5 chamfer-sm border border-void-500 bg-void-700/60 px-3 text-sm text-ink transition-colors hover:bg-void-700 active:opacity-90">
             <Icon name="Image" size={15} />
             {uploaded ? t.artwork.replace : t.artwork.choose}
             <input
@@ -128,7 +128,7 @@ export function ArtworkPanel({ bare = false }: { bare?: boolean }) {
           <p className="text-xs text-ink-faint">{t.artwork.scrimHint}</p>
         </div>
 
-        <p className="flex items-start gap-2 rounded-xl border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-faint">
+        <p className="flex items-start gap-2 chamfer-md border border-void-600 bg-void-900/50 p-3 text-xs leading-relaxed text-ink-faint">
           <Icon name="Info" size={14} className="mt-0.5 shrink-0" />
           {t.artwork.note}
         </p>

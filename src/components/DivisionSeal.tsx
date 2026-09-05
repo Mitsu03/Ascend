@@ -87,7 +87,7 @@ export function DivisionSeal({ divisionId, size = 44, compact, className, title 
 
       {showNumeral && (
         <span
-          className="absolute left-1/2 -translate-x-1/2 rounded px-1 font-display font-bold leading-none"
+          className="absolute left-1/2 -translate-x-1/2 chamfer-xs px-1 font-display font-bold leading-none"
           style={{
             bottom: size * 0.06,
             fontSize: Math.max(9, size * 0.26),

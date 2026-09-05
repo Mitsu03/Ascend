@@ -71,7 +71,7 @@ export function StartPage() {
           <div className="flex items-center gap-3">
             <span className="relative flex size-11 items-center justify-center">
               <span
-                className="absolute inset-0 rounded-2xl bg-gradient-to-br from-ember/30 to-crimson/30 blur-[8px]"
+                className="absolute inset-0 chamfer-lg bg-ember/26 blur-[8px]"
                 aria-hidden="true"
               />
               <HollowMask size={44} className="relative" />
@@ -119,7 +119,7 @@ export function StartPage() {
               edge
               className="group flex items-start gap-3.5 p-4 transition-colors duration-200 hover:border-ember/45"
             >
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-void-700 to-void-800 text-ember ring-1 ring-ember/25 transition-colors duration-200 group-hover:ring-ember/60">
+              <span className="flex size-10 shrink-0 items-center justify-center chamfer-md bg-void-700 text-ember ring-1 ring-ember/25 transition-colors duration-200 group-hover:ring-ember/60">
                 <ArtIcon name={item.emblem} size={21} />
               </span>
               <div>

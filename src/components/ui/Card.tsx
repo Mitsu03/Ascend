@@ -24,7 +24,7 @@ export function Card({ children, className, glow = 'none', edge = false, as: Tag
   return (
     <Tag
       className={cn(
-        'rounded-2xl border border-void-600/70 bg-void-800/70 backdrop-blur-sm',
+        'chamfer-lg border border-void-600/70 bg-void-800/70 backdrop-blur-sm',
         GLOW_CLASS[glow],
         edge && 'edge-glint',
         className,
@@ -64,7 +64,7 @@ export function CardHeader({ title, subtitle, icon, action, className }: CardHea
     <div className={cn('flex flex-wrap items-start justify-between gap-3 px-5 pt-5', className)}>
       <div className="flex min-w-0 flex-1 basis-48 items-center gap-3">
         {icon && (
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-void-700 text-ember">
+          <span className="flex size-9 shrink-0 items-center justify-center chamfer-md bg-void-700 text-ember">
             <Icon name={icon} size={18} />
           </span>
         )}

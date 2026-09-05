@@ -5,15 +5,19 @@ import { Icon } from '@/components/ui/Icon'
 type Variant = 'primary' | 'secondary' | 'ghost' | 'gold' | 'danger'
 type Size = 'sm' | 'md' | 'lg'
 
+/*
+ * No sistema Bleach o laranja é chapado: não há um único gradiente de marca —
+ * os gradientes ficam reservados ao ambiente e às amostras do Arsenal. As duas
+ * variantes preenchidas perderam por isso o `bg-gradient-to-r` que tinham, e
+ * com ele a sombra projetada: o glow do sistema é curto e vive dentro da caixa
+ * (ver `.glow-*` em `index.css`), porque o chanfro corta o que sai dela.
+ */
 const VARIANTS: Record<Variant, string> = {
-  // A sombra era ciano (rgba(34,211,238)) — sobra de uma paleta anterior, e
-  // acendia um halo azul por baixo de um botão laranja. Agora é a cor do botão.
-  primary:
-    'bg-gradient-to-r from-ember to-crimson-soft text-void-950 font-semibold hover:brightness-110 active:brightness-95 shadow-[0_6px_24px_-10px_rgba(255,122,26,0.8)]',
+  primary: 'bg-ember text-void-900 hover:brightness-110 active:brightness-95',
   secondary: 'border border-void-500 bg-void-700/60 text-ink hover:bg-void-700 hover:border-void-500',
   ghost: 'text-ink-muted hover:text-ink hover:bg-void-700/60',
-  gold: 'bg-gradient-to-r from-gold to-gold-soft text-void-950 font-semibold hover:brightness-110',
-  danger: 'border border-bad/50 text-bad hover:bg-bad/10',
+  gold: 'bg-gold text-void-900 hover:brightness-110',
+  danger: 'border border-crimson/60 text-crimson-soft hover:bg-crimson/12',
 }
 
 // `sm` tem 36 px de altura, abaixo dos 44 pt das HIG; `tap-target` estende-lhe
@@ -21,9 +25,9 @@ const VARIANTS: Record<Variant, string> = {
 // de intervalo até ao controlo seguinte (`gap-2`), que é o que impede as duas
 // áreas de se sobreporem.
 const SIZES: Record<Size, string> = {
-  sm: 'h-9 px-3 text-sm gap-1.5 rounded-lg tap-target',
-  md: 'h-11 px-4 text-sm gap-2 rounded-xl',
-  lg: 'h-13 px-6 text-base gap-2.5 rounded-xl',
+  sm: 'h-9 px-3 text-xs gap-1.5 chamfer-xs tap-target',
+  md: 'h-11 px-4 text-[13px] gap-2 chamfer-sm',
+  lg: 'h-13 px-6 text-sm gap-2.5 chamfer-sm',
 }
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -52,7 +56,10 @@ export function Button({
       className={cn(
         // `active:` é o que dá resposta ao toque: no telefone não há `hover`, e
         // sem estado premido o botão parecia inerte até a ação acontecer.
+        // Os rótulos do desenho são todos Saira condensada, maiúsculas e
+        // espaçadas — é o que os faz ler como comandos de sistema.
         'inline-flex items-center justify-center whitespace-nowrap transition-all duration-150 active:opacity-90',
+        'font-display font-bold tracking-[0.14em] uppercase',
         'disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:brightness-100 disabled:active:opacity-45',
         VARIANTS[variant],
         SIZES[size],
@@ -84,7 +91,7 @@ export function IconButton({ icon, label, variant = 'ghost', size = 'md', classN
       aria-label={label}
       title={label}
       className={cn(
-        'inline-flex items-center justify-center rounded-xl transition-all duration-150 active:opacity-90 disabled:opacity-45',
+        'inline-flex items-center justify-center chamfer-sm transition-all duration-150 active:opacity-90 disabled:opacity-45',
         VARIANTS[variant],
         dimension,
         className,

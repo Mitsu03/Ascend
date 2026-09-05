@@ -90,6 +90,8 @@ export type MuscleGroup =
   | 'pernas'
   | 'ombros'
   | 'bracos'
+  | 'antebracos'
+  | 'pescoco'
   | 'core'
   | 'cardio'
   | 'corpo_inteiro'
@@ -144,6 +146,37 @@ export interface ActiveSession {
   paused: boolean
   /** checked[indiceExercicio][indiceSerie] */
   checked: boolean[][]
+}
+
+/**
+ * Um dia de uma coleção. É um treino ainda sem lugar na semana: o dia só é
+ * decidido no momento em que a coleção — ou este dia sozinho — é aplicada,
+ * que é o que permite ir buscar um único dia sem levar a coleção inteira.
+ */
+export interface CollectionDay {
+  id: string
+  name: Localized
+  focus: Localized
+  exercises: WorkoutExercise[]
+  /** Dia sugerido (0 = Domingo) quando a coleção inteira é aplicada de uma vez. */
+  suggestedDayOfWeek: number
+}
+
+/** Um plano semanal pronto a usar, guardado no catálogo e nunca alterado. */
+export interface WorkoutCollection {
+  id: string
+  name: Localized
+  /** Uma linha só, para o cartão da lista. */
+  tagline: Localized
+  description: Localized
+  /** Autor ou publicação de onde o plano vem. */
+  source?: Localized
+  difficulty: ExperienceLevel
+  /** Equipamento mínimo para a coleção fazer sentido por inteiro. */
+  equipment: Equipment
+  days: CollectionDay[]
+  /** Notas do autor: no caso das folhas de referência, o volume semanal. */
+  notes: Localized[]
 }
 
 // ---------------------------------------------------------------- Nutrição

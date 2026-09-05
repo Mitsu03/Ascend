@@ -244,8 +244,8 @@ export function OnboardingPage() {
                       onClick={() => patch({ daysPerWeek: days })}
                       className={
                         draft.daysPerWeek === days
-                          ? 'size-12 rounded-xl border border-ember/70 bg-ember/10 font-display text-lg font-bold text-ember'
-                          : 'size-12 rounded-xl border border-void-600 bg-void-800/60 font-display text-lg font-bold text-ink-muted transition-colors hover:border-void-500 hover:text-ink'
+                          ? 'size-12 chamfer-md border border-ember/70 bg-ember/10 font-mono text-lg font-bold text-ember'
+                          : 'size-12 chamfer-md border border-void-600 bg-void-800/60 font-mono text-lg font-bold text-ink-muted transition-colors hover:border-void-500 hover:text-ink'
                       }
                     >
                       {days}
@@ -289,7 +289,7 @@ export function OnboardingPage() {
                       aria-pressed={selected}
                       onClick={() => patch({ divisionId: division.id })}
                       className={cn(
-                        'flex items-center gap-3 rounded-xl border p-3 text-left transition-colors',
+                        'flex items-center gap-3 chamfer-md border p-3 text-left transition-colors',
                         selected
                           ? 'border-ember bg-ember/10'
                           : 'border-void-600 hover:border-void-500 hover:bg-void-700/40',
@@ -390,9 +390,9 @@ export function OnboardingPage() {
                 <p className="mt-1.5 leading-relaxed text-ink-muted">{t.onboarding.summaryText}</p>
               </div>
 
-              <div className="rounded-2xl border border-ember/30 bg-ember/5 p-5 text-center">
+              <div className="chamfer-lg border border-ember/30 bg-ember/5 p-5 text-center">
                 <p className="text-sm font-medium text-ink-muted">{t.onboarding.calorieGoal}</p>
-                <p className="font-display text-5xl font-bold text-ember">
+                <p className="font-mono text-5xl font-bold text-ember">
                   {n(targets.calories)}
                   <span className="ml-1 text-xl text-ink-muted">{t.units.kcal}</span>
                 </p>
@@ -404,16 +404,16 @@ export function OnboardingPage() {
                   { label: t.macros.carbs, value: targets.carbsG, color: 'text-crimson-soft' },
                   { label: t.macros.fat, value: targets.fatG, color: 'text-gold' },
                 ].map((macro) => (
-                  <div key={macro.label} className="rounded-xl border border-void-600 bg-void-900/40 p-4 text-center">
+                  <div key={macro.label} className="chamfer-md border border-void-600 bg-void-900/40 p-4 text-center">
                     <p className="text-xs font-medium text-ink-muted">{macro.label}</p>
-                    <p className={`font-display text-2xl font-bold ${macro.color}`}>
+                    <p className={`font-mono text-2xl font-bold ${macro.color}`}>
                       {macro.value} {t.units.grams}
                     </p>
                   </div>
                 ))}
               </div>
 
-              <div className="rounded-xl border border-void-600 bg-void-900/40 p-4">
+              <div className="chamfer-md border border-void-600 bg-void-900/40 p-4">
                 <p className="flex items-center gap-2 text-sm font-semibold text-ink">
                   <Icon name="Sparkles" size={16} className="text-gold" />
                   {t.onboarding.whatsNext}

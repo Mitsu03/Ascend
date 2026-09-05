@@ -1,0 +1,85 @@
+/* Ascend · tokens Bleach — fonte central para src/index.css (@theme, Tailwind v4)
+   Espelha os literais usados em «Ascend Bleach - Prototipo.dc.html».
+   Exceção: --color-crimson-deep (#7a1024) não aparece no protótipo como hex —
+   só como rgba(122,16,36,.28) e rgba(122,16,36,.35) nos gradientes de ambiente. */
+
+@theme {
+  /* ── fundos: shihakushō e carmim profundo */
+  --color-void: #0c0e13;
+  --color-panel: #15171f;
+  --color-rail: #1e212b;
+  --color-line: #2b2f3b;
+  --color-crimson-deep: #7a1024;
+
+  /* ── tinta */
+  --color-ink: #f2efe6;
+  --color-ink-muted: #a9a49a;
+  --color-ink-dim: #6e6a62;
+
+  /* ── acentos: alta saturação, pouco brilho */
+  --color-link: #ff8a14;   /* reiatsu · Sistema */
+  --color-link-soft: #ffcb95;
+  --color-signal: #c8102e;  /* HP · destrutivo */
+  --color-alert: #d9a635;   /* aviso · descanso */
+  --color-kido: #4fa3c7;    /* confirmação */
+  --color-kido-bright: #5cc8ff; /* hidratação */
+  --color-kan: #f0cf6e;     /* moeda · faixas */
+
+  /* ── tipografia */
+  --font-display: 'Saira Condensed', system-ui, sans-serif;
+  --font-body: 'Barlow', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-deco: 'Noto Sans JP', sans-serif;
+  --tracking-display: .06em;
+  --tracking-micro: .18em;
+  --tracking-module: .22em;
+  --text-micro: 10.5px;
+
+  /* ── espaço */
+  --spacing-1: 2px;  --spacing-2: 4px;  --spacing-3: 6px;
+  --spacing-4: 10px; --spacing-5: 14px; --spacing-6: 18px;
+  --spacing-7: 24px; --spacing-8: 32px;
+
+  /* ── forma: chanfro em vez de raio */
+  --chamfer-sm: 6px;
+  --chamfer-md: 10px;
+  --chamfer-lg: 16px;
+  --radius-none: 0;
+  --border-hair: 1px;
+  --border-bracket: 2px;
+
+  /* ── movimento (≤300 ms, desligado em prefers-reduced-motion) */
+  --dur-flicker: 90ms;
+  --dur-glitch: 140ms;
+  --dur-boot: 220ms;
+  --dur-wipe: 260ms;
+  --dur-breath: 2s;
+  --dur-toast: 3400ms;
+  --ease-sys: cubic-bezier(.2, .9, .3, 1);
+  --ease-step: steps(2, end);
+
+  /* ── glow (sempre curto, nunca difuso) */
+  --glow-link: 0 0 14px rgb(255 138 20 / .55);
+  --glow-signal: 0 0 14px rgb(200 16 46 / .5);
+}
+
+/* chanfro reutilizável */
+.asc-chamfer-md {
+  clip-path: polygon(var(--chamfer-md) 0, 100% 0, 100% calc(100% - var(--chamfer-md)), calc(100% - var(--chamfer-md)) 100%, 0 100%, 0 var(--chamfer-md));
+}
+
+/* trama de fundo: scanline + halftone + grão por cima */
+.asc-weave {
+  background-image:
+    repeating-linear-gradient(0deg, rgb(255 138 20 / .05) 0 1px, transparent 1px 3px),
+    radial-gradient(circle at center, rgb(200 16 46 / .08) 1px, transparent 1.3px);
+  background-size: auto, 7px 7px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

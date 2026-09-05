@@ -38,25 +38,25 @@ const BACKDROPS: Record<ScreenName, Backdrop> = {
   quartel: {
     // O Quartel não leva kanji de ecrã: o 隊 vive dentro do cartão da ordem
     // do dia, para o herói ficar com o peso todo.
-    aura: 'radial-gradient(44rem 30rem at 50% -12%, rgba(255,122,26,.14), transparent 60%)',
+    aura: 'radial-gradient(44rem 30rem at 50% -12%, rgba(255,138,20,.14), transparent 60%)',
   },
   dojo: {
-    aura: 'radial-gradient(40rem 28rem at 50% 108%, rgba(255,122,26,.16), transparent 62%)',
+    aura: 'radial-gradient(40rem 28rem at 50% 108%, rgba(255,138,20,.16), transparent 62%)',
     kanji: { glyph: '刃', size: 200, className: 'top-[150px] -left-[34px]' },
     mark: { name: 'katana', size: 150, className: 'bottom-[120px] -right-[38px]', opacity: 55, rotate: -22 },
   },
   racoes: {
-    aura: 'radial-gradient(40rem 24rem at 82% -8%, rgba(184,18,54,.2), transparent 60%)',
+    aura: 'radial-gradient(40rem 24rem at 82% -8%, rgba(200,16,46,.2), transparent 60%)',
     kanji: { glyph: '糧', size: 196, className: 'top-[118px] -right-[40px]' },
     mark: { name: 'soul-vessel', size: 140, className: 'bottom-[130px] -left-[30px]', opacity: 50 },
   },
   ordens: {
-    aura: 'radial-gradient(40rem 26rem at 50% -10%, rgba(255,176,32,.18), transparent 60%)',
+    aura: 'radial-gradient(40rem 26rem at 50% -10%, rgba(240,207,110,.18), transparent 60%)',
     kanji: { glyph: '令', size: 200, className: 'top-[126px] -right-[42px]' },
     mark: { name: 'hell-butterfly', size: 120, className: 'bottom-[140px] -left-[26px]', opacity: 60, rotate: 12 },
   },
   ficha: {
-    aura: 'radial-gradient(42rem 28rem at 50% -10%, rgba(232,54,92,.16), transparent 60%)',
+    aura: 'radial-gradient(42rem 28rem at 50% -10%, rgba(239,74,99,.16), transparent 60%)',
   },
 }
 

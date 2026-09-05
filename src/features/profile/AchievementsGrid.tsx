@@ -53,7 +53,7 @@ export function AchievementsGrid() {
               <li
                 key={achievement.id}
                 className={cn(
-                  'relative overflow-hidden rounded-xl border p-4 transition-colors',
+                  'relative overflow-hidden chamfer-md border p-4 transition-colors',
                   unlockedAt ? 'border-gold/45 bg-gold/5' : 'border-void-600 bg-void-800/40',
                 )}
               >
@@ -71,7 +71,7 @@ export function AchievementsGrid() {
                 <div className="relative flex items-start gap-3">
                   <span
                     className={cn(
-                      'flex size-11 shrink-0 items-center justify-center rounded-xl',
+                      'flex size-11 shrink-0 items-center justify-center chamfer-md',
                       unlockedAt ? 'bg-gold/15 text-gold' : 'bg-void-700 text-ink-faint',
                     )}
                   >

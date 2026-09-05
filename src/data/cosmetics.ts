@@ -32,7 +32,7 @@ export const COSMETICS: CosmeticItem[] = [
       'Amber and crimson: the blade answered when you called its name.',
     ),
     price: 260,
-    value: 'linear-gradient(135deg, #ff7a1a, #d1244a)',
+    value: 'linear-gradient(135deg, #ff8a14, #d1244a)',
   },
   {
     id: 'selo-bankai',
@@ -44,7 +44,7 @@ export const COSMETICS: CosmeticItem[] = [
       'Molten gold. Ten thousand times the power — and ten years earning it.',
     ),
     price: 480,
-    value: 'linear-gradient(135deg, #ffb020, #ff5a1f)',
+    value: 'linear-gradient(135deg, #f0cf6e, #ff5a1f)',
   },
 
   // Títulos
@@ -105,7 +105,7 @@ export const COSMETICS: CosmeticItem[] = [
       'A calm blue-white, still looking for its own limit.',
     ),
     price: 140,
-    value: '#8fd4ff',
+    value: '#5cc8ff',
   },
   {
     id: 'reiatsu-carmesim',
@@ -126,7 +126,7 @@ export const COSMETICS: CosmeticItem[] = [
       'The orange that hangs in the air after the cut.',
     ),
     price: 500,
-    value: '#ff7a1a',
+    value: '#ff8a14',
   },
 ]
 

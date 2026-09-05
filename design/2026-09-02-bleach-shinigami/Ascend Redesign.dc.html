@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  body { margin:0; background:#c9c1b2; color:#16120d; }
+  a { color:#b3231a; text-decoration:none; }
+  a:hover { color:#16120d; }
+  @keyframes asc-pulse { 0%,100%{opacity:.35} 50%{opacity:1} }
+  @keyframes asc-sweep { 0%{transform:translateX(-110%)} 100%{transform:translateX(360%)} }
+  ::-webkit-scrollbar { width:0; height:0 }
+</style>
+</helmet>
+
+<section style="display:flex; flex-direction:column; gap:22px; padding:54px 58px 110px; font-family:'IBM Plex Sans',system-ui,sans-serif">
+
+  <div style="display:flex; align-items:baseline; gap:15px; border-bottom:2px solid #16120d; padding-bottom:11px">
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.22em; background:#b3231a; color:#f4efe2; padding:5px 9px">1A</span>
+    <h2 style="margin:0; font-family:'Zen Old Mincho',serif; font-size:31px; font-weight:700; letter-spacing:.03em">Ficha Técnica do Gotei 13</h2>
+    <span style="font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.14em; color:#6b6357; text-transform:uppercase">Redesenho iOS · 6 ecrãs</span>
+  </div>
+  <p style="max-width:84ch; margin:-6px 0 0; font-size:13.5px; line-height:1.75; color:#4a4438; text-wrap:pretty">Papel envelhecido, tinta preta chapada, um único vermelho, kanji em coluna, numeração de anotação técnica. As barras de reiatsu passam a réguas graduadas, os cartões arredondados passam a fios de 1px e a máscara de Hollow deixa de ser ícone para ser desenho anotado. Os ecrãs 02 e 03 são o mesmo Quartel em duas densidades. Os dois slots tracejados são para arrastares a tua arte.</p>
+
+  <div style="display:flex; flex-wrap:wrap; gap:44px; align-items:flex-start">
+
+    <!-- ══════ 01 ACADEMIA ══════ -->
+    <div style="display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:baseline; gap:9px"><span style="font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:#b3231a">01</span><span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase">Academia Shin'ō</span></div>
+      <div style="width:402px; height:874px; display:flex; flex-shrink:0"><x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+        <div data-screen-label="01 Academia" style="position:absolute; inset:0; background:#eae2d2; display:flex; flex-direction:column; overflow:hidden">
+          <div style="position:absolute; inset:0; pointer-events:none; z-index:4; opacity:.5; mix-blend-mode:multiply; background-image:radial-gradient(rgba(22,18,13,.5) .5px,transparent .6px),radial-gradient(rgba(22,18,13,.38) .5px,transparent .6px); background-size:3px 3px,5px 5px; background-position:0 0,1px 2px"></div>
+
+          <div style="position:relative; flex:1; display:flex; flex-direction:column; overflow:hidden">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; padding:62px 28px 8px; border-bottom:1.5px solid #16120d">
+              <span style="font-family:'Zen Old Mincho',serif; font-size:20px; font-weight:700; letter-spacing:.36em">ASCEND</span>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.2em; color:#8c8474">FL.001 / GOTEI 13</span>
+            </div>
+
+            <!-- herói: slot de arte com máscara sobreposta -->
+            <div style="position:relative; height:290px; border-bottom:2px solid #16120d; overflow:hidden">
+              <image-slot id="asc-heroi" shape="rect" fit="cover" placeholder="Arrasta a tua arte aqui"></image-slot>
+              <div style="position:absolute; inset:0; pointer-events:none; background:linear-gradient(to bottom,rgba(234,226,210,.15) 0%,rgba(234,226,210,0) 40%,rgba(234,226,210,.9) 100%)"></div>
+              <div style="position:absolute; top:16px; right:14px; pointer-events:none; font-family:'Zen Old Mincho',serif; font-size:15px; letter-spacing:.34em; color:#16120d; writing-mode:vertical-rl; text-shadow:0 0 8px rgba(234,226,210,.9)">魂は鍛えられる</div>
+              <div style="position:absolute; bottom:-2px; left:22px; pointer-events:none">
+                <svg viewBox="-6 -6 112 112" width="124" height="124" style="display:block">
+                  <defs>
+                    <pattern id="ascH1" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(38)"><line x1="0" y1="0" x2="0" y2="4" stroke="#16120d" stroke-width="0.6" opacity="0.45"></line></pattern>
+                    <clipPath id="ascS1"><path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z"></path></clipPath>
+                  </defs>
+                  <path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z" fill="#f7f2e6"></path>
+                  <g clip-path="url(#ascS1)">
+                    <path d="M9 42 C9 66 18 84 34 96 L9 96 Z" fill="url(#ascH1)" opacity="0.75"></path>
+                    <path d="M64 3 L91 30 L91 96 L62 96 Z" fill="url(#ascH1)" opacity="0.4"></path>
+                    <path d="M27.5 6.5 L38.5 3 L35.5 57 L28 55 Z" fill="#b3231a"></path>
+                    <path d="M43 2 L48 1.5 L46.5 26 L42.5 26 Z" fill="#b3231a"></path>
+                    <path d="M20 30 L44 38 L45.5 50 L23 46 Z" fill="#16120d"></path>
+                    <path d="M80 30 L56 38 L54.5 50 L77 46 Z" fill="#16120d"></path>
+                    <circle cx="32" cy="41" r="2.5" fill="#b3231a" style="animation:asc-pulse 2.8s ease-in-out infinite"></circle>
+                    <circle cx="68" cy="41" r="2.5" fill="#b3231a" style="animation:asc-pulse 2.8s ease-in-out infinite"></circle>
+                    <path d="M17 60 L83 60 L77.5 83 L22.5 83 Z" fill="#16120d"></path>
+                    <path d="M17 60 L83 60 L80 72 L74.5 61.5 L68 73 L61.5 61.5 L55 73 L48.5 61.5 L42 73 L35.5 61.5 L29 73 L23 61.5 L20 72 Z" fill="#f7f2e6"></path>
+                    <path d="M22.5 83 L77.5 83 L74.5 72 L69 82 L63 71.5 L57 82 L51 71.5 L45 82 L39 71.5 L33 82 L27 71.5 L25 79 Z" fill="#f7f2e6"></path>
+                  </g>
+                  <path d="M50 1 C73 1 89 18 91 42 C92.5 60 85 78 72 90 C65 96.5 58 100 50 100 C42 100 35 96.5 28 90 C15 78 7.5 60 9 42 C11 18 27 1 50 1 Z" fill="none" stroke="#16120d" stroke-width="1.7"></path>
+                </svg>
+              </div>
+              <div style="position:absolute; bottom:26px; right:20px; display:flex; align-items:center; gap:6px; pointer-events:none"><span style="width:30px; height:1px; background:#b3231a"></span><span style="font-family:'IBM Plex Mono',monospace; font-size:8px; color:#b3231a">MÁSCARA 03</span></div>
+            </div>
+
+            <div style="padding:16px 28px 0">
+              <h1 style="margin:0; font-family:'Zen Old Mincho',serif; font-size:30px; font-weight:700; line-height:1.16; text-wrap:pretty">Entra no Gotei 13 e sobe de patente</h1>
+              <p style="margin:9px 0 0; font-size:12.5px; line-height:1.62; color:#4a4438; text-wrap:pretty">Treinos, refeições e hábitos transformados numa carreira de Shinigami: reiatsu, patentes, ordens da divisão e máscaras de Hollow. Tudo offline, sem contas.</p>
+              <div style="display:flex; flex-direction:column; margin-top:14px; border-top:1.5px solid #16120d">
+                <div style="display:grid; grid-template-columns:26px 1fr; gap:10px; align-items:baseline; padding:7px 0; border-bottom:1px solid rgba(22,18,13,.16)"><span style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:#b3231a">I.</span><div><p style="margin:0; font-family:'Zen Old Mincho',serif; font-size:13.5px; font-weight:700">Treino no Dojo</p><p style="margin:1px 0 0; font-size:11px; line-height:1.45; color:#6b6357">Plano semanal, sessão guiada, descanso cronometrado.</p></div></div>
+                <div style="display:grid; grid-template-columns:26px 1fr; gap:10px; align-items:baseline; padding:7px 0; border-bottom:1px solid rgba(22,18,13,.16)"><span style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:#b3231a">II.</span><div><p style="margin:0; font-family:'Zen Old Mincho',serif; font-size:13.5px; font-weight:700">Rações do Gotei</p><p style="margin:1px 0 0; font-size:11px; line-height:1.45; color:#6b6357">Calorias e macros de ~60 alimentos comuns em Portugal.</p></div></div>
+                <div style="display:grid; grid-template-columns:26px 1fr; gap:10px; align-items:baseline; padding:7px 0; border-bottom:1px solid rgba(22,18,13,.16)"><span style="font-family:'IBM Plex Mono',monospace; font-size:10px; color:#b3231a">III.</span><div><p style="margin:0; font-family:'Zen Old Mincho',serif; font-size:13.5px; font-weight:700">Ordens da divisão</p><p style="margin:1px 0 0; font-size:11px; line-height:1.45; color:#6b6357">Três diárias, duas semanais e a Ordem do Capitão.</p></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:relative; z-index:5; display:flex; flex-direction:column; gap:8px; padding:14px 28px 44px; border-top:2px solid #16120d; background:#eae2d2">
+            <button style="height:50px; border:none; background:#16120d; color:#f4efe2; font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; cursor:pointer">Entrar na Academia</button>
+            <button style="height:50px; border:1.5px solid #16120d; background:transparent; color:#16120d; font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.2em; text-transform:uppercase; cursor:pointer">Explorar demonstração</button>
+            <p style="margin:2px 0 0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; line-height:1.55; color:#8c8474">Estimativas para gestão pessoal. Não constitui aconselhamento médico ou nutricional.</p>
+          </div>
+        </div>
+      </x-import></div>
+    </div>
+
+    <!-- ══════ 02 QUARTEL COMPACTA ══════ -->
+    <div style="display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:baseline; gap:9px"><span style="font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:#b3231a">02</span><span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase">Quartel · compacta</span></div>
+      <div style="width:402px; height:874px; display:flex; flex-shrink:0"><x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+        <div data-screen-label="02 Quartel compacta" style="position:absolute; inset:0; background:#eae2d2; display:flex; flex-direction:column; overflow:hidden">
+          <div style="position:absolute; inset:0; pointer-events:none; opacity:.45; mix-blend-mode:multiply; background-image:radial-gradient(rgba(22,18,13,.5) .5px,transparent .6px),radial-gradient(rgba(22,18,13,.38) .5px,transparent .6px); background-size:3px 3px,5px 5px; background-position:0 0,1px 2px"></div>
+
+          <div style="position:relative; display:flex; align-items:flex-end; justify-content:space-between; padding:58px 22px 8px; border-bottom:2px solid #16120d">
+            <div><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.26em; color:#8c8474">QUARTEL DA DIVISÃO</p><p style="margin:2px 0 0; font-family:'Zen Old Mincho',serif; font-size:19px; font-weight:700">Décima Primeira</p></div>
+            <div style="display:flex; align-items:center; gap:11px">
+              <div style="text-align:right"><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:7.5px; letter-spacing:.18em; color:#8c8474">KAN</p><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; font-variant-numeric:tabular-nums">1 240</p></div>
+              <div style="display:flex; align-items:center; justify-content:center; width:38px; height:38px; border:1.5px solid #16120d; border-radius:50%"><span style="font-family:'Zen Old Mincho',serif; font-size:16px; font-weight:700; line-height:1">十一</span></div>
+            </div>
+          </div>
+
+          <div style="position:relative; flex:1; overflow:hidden; padding:0 22px">
+            <div style="padding:14px 0 12px; border-bottom:1.5px solid #16120d">
+              <div style="display:flex; align-items:flex-start; justify-content:space-between">
+                <div><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.24em; color:#8c8474">PATENTE 07</p><h1 style="margin:2px 0 0; font-family:'Zen Old Mincho',serif; font-size:26px; font-weight:700; line-height:1.1">Oficial de Divisão</h1><p style="margin:3px 0 0; font-size:11.5px; color:#4a4438">Kai · 21 dias de serviço</p></div>
+                <span style="font-family:'Zen Old Mincho',serif; font-size:40px; line-height:.85; color:#b3231a">霊</span>
+              </div>
+              <div style="display:flex; align-items:baseline; justify-content:space-between; margin-top:13px; font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.16em; color:#6b6357"><span>REIATSU</span><span style="font-variant-numeric:tabular-nums">1 340 / 1 852</span></div>
+              <div style="position:relative; height:20px; margin-top:5px; border-left:1.5px solid #16120d; border-right:1.5px solid #16120d">
+                <div style="position:absolute; inset:0; background-image:repeating-linear-gradient(90deg,rgba(22,18,13,.28) 0 1px,transparent 1px 10px)"></div>
+                <div style="position:absolute; top:0; bottom:0; left:0; width:72.3%; background:#16120d; overflow:hidden"><div style="position:absolute; top:0; bottom:0; width:30%; background:linear-gradient(90deg,transparent,rgba(244,239,226,.5),transparent); animation:asc-sweep 3.6s linear infinite"></div></div>
+                <div style="position:absolute; top:-4px; bottom:-4px; left:72.3%; width:2px; background:#b3231a"></div>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:auto 1fr; gap:9px; padding:10px 0; border-bottom:1px solid rgba(22,18,13,.2)"><span style="font-family:'Zen Old Mincho',serif; font-size:14px; color:#b3231a; line-height:1.25">「</span><p style="margin:0; font-family:'Zen Old Mincho',serif; font-size:12.5px; line-height:1.55; text-wrap:pretty">Vinte e um dias sem falhar. A divisão já não pergunta se apareces.</p></div>
+
+            <div style="padding:11px 0; border-bottom:1px solid rgba(22,18,13,.2)">
+              <div style="display:flex; align-items:baseline; justify-content:space-between"><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.24em; color:#8c8474">RAÇÕES DE HOJE</p><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; color:#b3231a">FALTAM 835</p></div>
+              <div style="display:flex; align-items:flex-end; gap:11px; margin-top:5px"><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:32px; font-weight:600; line-height:.9; font-variant-numeric:tabular-nums">1 845</p><p style="margin:0 0 3px; font-family:'IBM Plex Mono',monospace; font-size:10px; color:#6b6357">/ 2 680 kcal</p></div>
+              <div style="display:flex; flex-direction:column; gap:5px; margin-top:9px">
+                <div style="display:grid; grid-template-columns:44px 1fr auto; gap:8px; align-items:center"><span style="font-family:'IBM Plex Mono',monospace; font-size:8.5px; color:#4a4438">PROT</span><div style="position:relative; height:7px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:78%; background:#b3231a"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:8.5px; font-variant-numeric:tabular-nums; color:#4a4438">124/158</span></div>
+                <div style="display:grid; grid-template-columns:44px 1fr auto; gap:8px; align-items:center"><span style="font-family:'IBM Plex Mono',monospace; font-size:8.5px; color:#4a4438">HIDR</span><div style="position:relative; height:7px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:64%; background:#16120d"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:8.5px; font-variant-numeric:tabular-nums; color:#4a4438">176/275</span></div>
+                <div style="display:grid; grid-template-columns:44px 1fr auto; gap:8px; align-items:center"><span style="font-family:'IBM Plex Mono',monospace; font-size:8.5px; color:#4a4438">GORD</span><div style="position:relative; height:7px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:71%; background:#6b6357"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:8.5px; font-variant-numeric:tabular-nums; color:#4a4438">53/74</span></div>
+              </div>
+            </div>
+
+            <div style="padding:11px 0 0">
+              <div style="display:flex; align-items:baseline; justify-content:space-between"><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.24em; color:#8c8474">ORDENS DO DIA</p><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; color:#6b6357">1/3</p></div>
+              <div style="display:flex; flex-direction:column; margin-top:7px">
+                <div style="display:grid; grid-template-columns:16px 1fr auto; gap:9px; align-items:center; padding:7px 0; border-bottom:1px solid rgba(22,18,13,.14)"><span style="width:12px; height:12px; background:#16120d"></span><p style="margin:0; font-size:11.5px; color:#8c8474; text-decoration:line-through">Beber 2,5 L de água</p><span style="font-family:'IBM Plex Mono',monospace; font-size:8.5px; color:#8c8474">+40</span></div>
+                <div style="display:grid; grid-template-columns:16px 1fr auto; gap:9px; align-items:center; padding:7px 0; border-bottom:1px solid rgba(22,18,13,.14)"><span style="width:12px; height:12px; border:1.5px solid #16120d"></span><p style="margin:0; font-size:11.5px">Completar o treino de hoje</p><span style="font-family:'IBM Plex Mono',monospace; font-size:8.5px; color:#b3231a">+120</span></div>
+                <div style="display:grid; grid-template-columns:16px 1fr auto; gap:9px; align-items:center; padding:7px 0; border-bottom:1px solid rgba(22,18,13,.14)"><span style="width:12px; height:12px; border:1.5px solid #16120d"></span><p style="margin:0; font-size:11.5px">Atingir a meta de proteína</p><span style="font-family:'IBM Plex Mono',monospace; font-size:8.5px; color:#b3231a">+80</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:relative; padding:12px 22px 0; border-top:2px solid #16120d">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+              <div style="min-width:0"><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.22em; color:#8c8474">PRÓXIMO TREINO</p><p style="margin:1px 0 0; font-family:'Zen Old Mincho',serif; font-size:16px; font-weight:700">Corpo Inteiro · A</p><p style="margin:1px 0 0; font-family:'IBM Plex Mono',monospace; font-size:9px; color:#6b6357">6 exercícios · 18 séries · ~48 min</p></div>
+              <button style="flex-shrink:0; height:46px; padding:0 18px; border:none; background:#b3231a; color:#f4efe2; font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; cursor:pointer">Iniciar</button>
+            </div>
+          </div>
+
+          <div style="position:relative; display:grid; grid-template-columns:repeat(5,1fr); border-top:1.5px solid #16120d; margin-top:12px; padding-bottom:26px; background:#eae2d2">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0 5px; background:#16120d"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; color:#f4efe2; line-height:1">隊</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; letter-spacing:.1em; color:#f4efe2">QUARTEL</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0 5px"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; line-height:1">刀</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; letter-spacing:.1em; color:#6b6357">DOJO</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0 5px"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; line-height:1">糧</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; letter-spacing:.1em; color:#6b6357">RAÇÕES</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0 5px"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; line-height:1">令</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; letter-spacing:.1em; color:#6b6357">ORDENS</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0 5px"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; line-height:1">神</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; letter-spacing:.1em; color:#6b6357">FICHA</span></div>
+          </div>
+        </div>
+      </x-import></div>
+    </div>
+
+    <!-- ══════ 03 QUARTEL AMPLA ══════ -->
+    <div style="display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:baseline; gap:9px"><span style="font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:#b3231a">03</span><span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase">Quartel · ampla</span></div>
+      <div style="width:402px; height:874px; display:flex; flex-shrink:0"><x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+        <div data-screen-label="03 Quartel ampla" style="position:absolute; inset:0; background:#eae2d2; display:flex; flex-direction:column; overflow:hidden">
+          <div style="position:absolute; inset:0; pointer-events:none; opacity:.45; mix-blend-mode:multiply; background-image:radial-gradient(rgba(22,18,13,.5) .5px,transparent .6px),radial-gradient(rgba(22,18,13,.38) .5px,transparent .6px); background-size:3px 3px,5px 5px; background-position:0 0,1px 2px"></div>
+          <div style="position:absolute; top:230px; right:-40px; font-family:'Zen Old Mincho',serif; font-size:200px; line-height:.8; color:rgba(22,18,13,.05); pointer-events:none">霊</div>
+
+          <div style="position:relative; padding:58px 26px 14px; border-bottom:2px solid #16120d">
+            <p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.26em; color:#8c8474">QUARTEL DA DIVISÃO · 十一</p>
+            <p style="margin:3px 0 0; font-family:'Zen Old Mincho',serif; font-size:22px; font-weight:700">Décima Primeira</p>
+          </div>
+
+          <div style="position:relative; flex:1; overflow:hidden; padding:0 26px">
+            <div style="padding:24px 0 20px; border-bottom:1.5px solid #16120d">
+              <p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.26em; color:#8c8474">PATENTE 07</p>
+              <h1 style="margin:5px 0 0; font-family:'Zen Old Mincho',serif; font-size:36px; font-weight:700; line-height:1.08; text-wrap:pretty">Oficial de Divisão</h1>
+              <p style="margin:8px 0 0; font-size:13px; color:#4a4438">Kai · 21 dias de serviço · 1 240 kan</p>
+              <div style="display:flex; align-items:baseline; justify-content:space-between; margin-top:24px; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:.18em; color:#6b6357"><span>REIATSU</span><span style="font-variant-numeric:tabular-nums">1 340 / 1 852</span></div>
+              <div style="position:relative; height:30px; margin-top:7px; border-left:1.5px solid #16120d; border-right:1.5px solid #16120d">
+                <div style="position:absolute; inset:0; background-image:repeating-linear-gradient(90deg,rgba(22,18,13,.28) 0 1px,transparent 1px 12px)"></div>
+                <div style="position:absolute; top:0; bottom:0; left:0; width:72.3%; background:#16120d; overflow:hidden"><div style="position:absolute; top:0; bottom:0; width:28%; background:linear-gradient(90deg,transparent,rgba(244,239,226,.5),transparent); animation:asc-sweep 3.6s linear infinite"></div></div>
+                <div style="position:absolute; top:-5px; bottom:-5px; left:72.3%; width:2px; background:#b3231a"></div>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:auto 1fr; gap:12px; padding:22px 0; border-bottom:1.5px solid #16120d"><span style="font-family:'Zen Old Mincho',serif; font-size:20px; color:#b3231a; line-height:1.1">「</span><p style="margin:0; font-family:'Zen Old Mincho',serif; font-size:16px; line-height:1.6; text-wrap:pretty">Vinte e um dias sem falhar. A divisão já não pergunta se apareces.</p></div>
+
+            <div style="padding:22px 0">
+              <p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.26em; color:#8c8474">RAÇÕES DE HOJE</p>
+              <div style="display:flex; align-items:flex-end; gap:14px; margin-top:9px"><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:46px; font-weight:600; line-height:.88; font-variant-numeric:tabular-nums">1 845</p><p style="margin:0 0 5px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#6b6357">/ 2 680 kcal</p></div>
+              <p style="margin:8px 0 0; font-family:'IBM Plex Mono',monospace; font-size:10px; color:#b3231a; letter-spacing:.1em">FALTAM 835 KCAL</p>
+              <div style="display:flex; flex-direction:column; gap:11px; margin-top:20px">
+                <div style="display:grid; grid-template-columns:56px 1fr auto; gap:11px; align-items:center"><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.1em; color:#4a4438">PROT</span><div style="position:relative; height:11px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:78%; background:#b3231a"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-variant-numeric:tabular-nums; color:#4a4438">124/158</span></div>
+                <div style="display:grid; grid-template-columns:56px 1fr auto; gap:11px; align-items:center"><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.1em; color:#4a4438">HIDR</span><div style="position:relative; height:11px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:64%; background:#16120d"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-variant-numeric:tabular-nums; color:#4a4438">176/275</span></div>
+                <div style="display:grid; grid-template-columns:56px 1fr auto; gap:11px; align-items:center"><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.1em; color:#4a4438">GORD</span><div style="position:relative; height:11px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:71%; background:#6b6357"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-variant-numeric:tabular-nums; color:#4a4438">53/74</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:relative; padding:16px 26px 0; border-top:2px solid #16120d">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+              <div><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.22em; color:#8c8474">PRÓXIMO TREINO</p><p style="margin:2px 0 0; font-family:'Zen Old Mincho',serif; font-size:19px; font-weight:700">Corpo Inteiro · A</p></div>
+              <button style="flex-shrink:0; height:50px; padding:0 22px; border:none; background:#b3231a; color:#f4efe2; font-family:'IBM Plex Mono',monospace; font-size:11.5px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; cursor:pointer">Iniciar</button>
+            </div>
+          </div>
+
+          <div style="position:relative; display:grid; grid-template-columns:repeat(5,1fr); border-top:1.5px solid #16120d; margin-top:16px; padding-bottom:26px; background:#eae2d2">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:11px 0 6px; background:#16120d"><span style="font-family:'Zen Old Mincho',serif; font-size:17px; color:#f4efe2; line-height:1">隊</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; color:#f4efe2">QUARTEL</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:11px 0 6px"><span style="font-family:'Zen Old Mincho',serif; font-size:17px; line-height:1">刀</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; color:#6b6357">DOJO</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:11px 0 6px"><span style="font-family:'Zen Old Mincho',serif; font-size:17px; line-height:1">糧</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; color:#6b6357">RAÇÕES</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:11px 0 6px"><span style="font-family:'Zen Old Mincho',serif; font-size:17px; line-height:1">令</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; color:#6b6357">ORDENS</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:11px 0 6px"><span style="font-family:'Zen Old Mincho',serif; font-size:17px; line-height:1">神</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; color:#6b6357">FICHA</span></div>
+          </div>
+        </div>
+      </x-import></div>
+    </div>
+
+    <!-- ══════ 04 DOJO ══════ -->
+    <div style="display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:baseline; gap:9px"><span style="font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:#b3231a">04</span><span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase">Dojo · sessão guiada</span></div>
+      <div style="width:402px; height:874px; display:flex; flex-shrink:0"><x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+        <div data-screen-label="04 Dojo" style="position:absolute; inset:0; background:#eae2d2; display:flex; flex-direction:column; overflow:hidden">
+          <div style="position:absolute; inset:0; pointer-events:none; opacity:.45; mix-blend-mode:multiply; background-image:radial-gradient(rgba(22,18,13,.5) .5px,transparent .6px),radial-gradient(rgba(22,18,13,.38) .5px,transparent .6px); background-size:3px 3px,5px 5px; background-position:0 0,1px 2px"></div>
+
+          <div style="position:relative; background:#16120d; color:#f4efe2; padding:56px 22px 14px">
+            <div style="display:flex; align-items:center; justify-content:space-between">
+              <div><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.24em; color:rgba(244,239,226,.55)">DOJO · SESSÃO</p><p style="margin:2px 0 0; font-family:'Zen Old Mincho',serif; font-size:20px; font-weight:700">Corpo Inteiro · A</p></div>
+              <p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:30px; font-weight:600; font-variant-numeric:tabular-nums; color:#f4efe2">24:18</p>
+            </div>
+            <div style="display:flex; align-items:baseline; justify-content:space-between; margin-top:16px; font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.16em; color:rgba(244,239,226,.55)"><span>PROGRESSO</span><span>11 / 18 SÉRIES</span></div>
+            <div style="position:relative; height:14px; margin-top:5px; border:1px solid rgba(244,239,226,.4)">
+              <div style="position:absolute; inset:0; background-image:repeating-linear-gradient(90deg,rgba(244,239,226,.22) 0 1px,transparent 1px 10px)"></div>
+              <div style="position:absolute; top:0; bottom:0; left:0; width:61%; background:#b3231a"></div>
+            </div>
+          </div>
+
+          <div style="position:relative; flex:1; overflow:hidden; padding:0 22px">
+            <div style="padding:16px 0 14px; border-bottom:1.5px solid #16120d">
+              <div style="display:flex; align-items:baseline; justify-content:space-between"><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.22em; color:#8c8474">EXERCÍCIO 03 / 06</p><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8px; color:#b3231a">EM CURSO</p></div>
+              <h1 style="margin:4px 0 0; font-family:'Zen Old Mincho',serif; font-size:27px; font-weight:700; line-height:1.12">Agachamento búlgaro</h1>
+              <p style="margin:4px 0 0; font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#6b6357">PERNAS · 4 × 10 · DESCANSO 90 S</p>
+              <div style="display:flex; gap:7px; margin-top:14px">
+                <div style="flex:1; height:50px; display:flex; align-items:center; justify-content:center; gap:6px; background:#16120d; color:#f4efe2"><span style="font-family:'IBM Plex Mono',monospace; font-size:15px; font-weight:600">1</span></div>
+                <div style="flex:1; height:50px; display:flex; align-items:center; justify-content:center; gap:6px; background:#16120d; color:#f4efe2"><span style="font-family:'IBM Plex Mono',monospace; font-size:15px; font-weight:600">2</span></div>
+                <div style="flex:1; height:50px; display:flex; align-items:center; justify-content:center; border:1.5px solid #b3231a; color:#b3231a"><span style="font-family:'IBM Plex Mono',monospace; font-size:15px; font-weight:600">3</span></div>
+                <div style="flex:1; height:50px; display:flex; align-items:center; justify-content:center; border:1.5px solid rgba(22,18,13,.4); color:#8c8474"><span style="font-family:'IBM Plex Mono',monospace; font-size:15px; font-weight:600">4</span></div>
+              </div>
+            </div>
+
+            <div style="padding:12px 0; border-bottom:1px solid rgba(22,18,13,.2); opacity:.55">
+              <div style="display:flex; align-items:baseline; justify-content:space-between"><p style="margin:0; font-family:'Zen Old Mincho',serif; font-size:15px; font-weight:700">Remada com halteres</p><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#4a4438">3 × 12</span></div>
+              <p style="margin:2px 0 0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; color:#8c8474">COSTAS · POR FAZER</p>
+            </div>
+            <div style="padding:12px 0; border-bottom:1px solid rgba(22,18,13,.2); opacity:.55">
+              <div style="display:flex; align-items:baseline; justify-content:space-between"><p style="margin:0; font-family:'Zen Old Mincho',serif; font-size:15px; font-weight:700">Prancha frontal</p><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#4a4438">3 × 45 s</span></div>
+              <p style="margin:2px 0 0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; color:#8c8474">CORE · POR FAZER</p>
+            </div>
+
+            <div style="margin-top:16px; border:1.5px solid #b3231a; padding:13px 14px; background:rgba(179,35,26,.05)">
+              <div style="display:flex; align-items:center; justify-content:space-between">
+                <div><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.22em; color:#b3231a">DESCANSO</p><p style="margin:2px 0 0; font-family:'IBM Plex Mono',monospace; font-size:30px; font-weight:600; line-height:1; font-variant-numeric:tabular-nums">01:12</p></div>
+                <button style="height:42px; padding:0 16px; border:1.5px solid #16120d; background:transparent; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; cursor:pointer">Saltar</button>
+              </div>
+              <div style="position:relative; height:6px; margin-top:11px; background:rgba(22,18,13,.18)"><div style="position:absolute; top:0; bottom:0; left:0; width:25%; background:#b3231a"></div></div>
+            </div>
+          </div>
+
+          <div style="position:relative; display:flex; gap:8px; padding:14px 22px 44px; border-top:2px solid #16120d; background:#eae2d2">
+            <button style="flex:1; height:50px; border:1.5px solid #16120d; background:transparent; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; cursor:pointer">Sair</button>
+            <button style="flex:1.6; height:50px; border:none; background:#16120d; color:#f4efe2; font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; cursor:pointer">Concluir sessão</button>
+          </div>
+        </div>
+      </x-import></div>
+    </div>
+
+    <!-- ══════ 05 RAÇÕES ══════ -->
+    <div style="display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:baseline; gap:9px"><span style="font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:#b3231a">05</span><span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase">Rações do Gotei</span></div>
+      <div style="width:402px; height:874px; display:flex; flex-shrink:0"><x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+        <div data-screen-label="05 Rações" style="position:absolute; inset:0; background:#eae2d2; display:flex; flex-direction:column; overflow:hidden">
+          <div style="position:absolute; inset:0; pointer-events:none; opacity:.45; mix-blend-mode:multiply; background-image:radial-gradient(rgba(22,18,13,.5) .5px,transparent .6px),radial-gradient(rgba(22,18,13,.38) .5px,transparent .6px); background-size:3px 3px,5px 5px; background-position:0 0,1px 2px"></div>
+
+          <div style="position:relative; padding:58px 22px 12px; border-bottom:2px solid #16120d">
+            <p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.26em; color:#8c8474">RAÇÕES DO GOTEI · 26 AGO</p>
+            <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-top:4px">
+              <p style="margin:0; font-family:'Zen Old Mincho',serif; font-size:22px; font-weight:700">Diário do dia</p>
+              <span style="font-family:'Zen Old Mincho',serif; font-size:26px; color:#b3231a; line-height:1">糧</span>
+            </div>
+          </div>
+
+          <div style="position:relative; flex:1; overflow:hidden; padding:0 22px">
+            <div style="padding:16px 0 14px; border-bottom:1.5px solid #16120d">
+              <div style="display:flex; align-items:flex-end; gap:12px"><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:40px; font-weight:600; line-height:.9; font-variant-numeric:tabular-nums">1 845</p><p style="margin:0 0 4px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#6b6357">/ 2 680 kcal</p></div>
+              <div style="position:relative; height:22px; margin-top:12px; border-left:1.5px solid #16120d; border-right:1.5px solid #16120d">
+                <div style="position:absolute; inset:0; background-image:repeating-linear-gradient(90deg,rgba(22,18,13,.28) 0 1px,transparent 1px 11px)"></div>
+                <div style="position:absolute; top:0; bottom:0; left:0; width:68.8%; background:#16120d"></div>
+                <div style="position:absolute; top:-4px; bottom:-4px; left:68.8%; width:2px; background:#b3231a"></div>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:6px; margin-top:14px">
+                <div style="display:grid; grid-template-columns:46px 1fr auto; gap:9px; align-items:center"><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#4a4438">PROT</span><div style="position:relative; height:8px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:78%; background:#b3231a"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; font-variant-numeric:tabular-nums; color:#4a4438">124/158</span></div>
+                <div style="display:grid; grid-template-columns:46px 1fr auto; gap:9px; align-items:center"><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#4a4438">HIDR</span><div style="position:relative; height:8px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:64%; background:#16120d"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; font-variant-numeric:tabular-nums; color:#4a4438">176/275</span></div>
+                <div style="display:grid; grid-template-columns:46px 1fr auto; gap:9px; align-items:center"><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#4a4438">GORD</span><div style="position:relative; height:8px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:71%; background:#6b6357"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; font-variant-numeric:tabular-nums; color:#4a4438">53/74</span></div>
+              </div>
+            </div>
+
+            <div style="padding:12px 0 0">
+              <p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.24em; color:#8c8474">ALMOÇO · 720 KCAL</p>
+              <div style="display:flex; flex-direction:column; margin-top:6px">
+                <div style="display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:baseline; padding:8px 0; border-bottom:1px solid rgba(22,18,13,.14)"><p style="margin:0; font-size:12.5px">Arroz carolino cozido</p><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#8c8474">180 g</span><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-variant-numeric:tabular-nums">234</span></div>
+                <div style="display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:baseline; padding:8px 0; border-bottom:1px solid rgba(22,18,13,.14)"><p style="margin:0; font-size:12.5px">Peito de frango grelhado</p><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#8c8474">200 g</span><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-variant-numeric:tabular-nums">330</span></div>
+                <div style="display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:baseline; padding:8px 0; border-bottom:1px solid rgba(22,18,13,.14)"><p style="margin:0; font-size:12.5px">Brócolos cozidos</p><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#8c8474">150 g</span><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-variant-numeric:tabular-nums">52</span></div>
+                <div style="display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:baseline; padding:8px 0; border-bottom:1px solid rgba(22,18,13,.14)"><p style="margin:0; font-size:12.5px">Azeite virgem extra</p><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#8c8474">12 g</span><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-variant-numeric:tabular-nums">104</span></div>
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px; padding:12px 14px; border:1.5px solid #16120d">
+              <div><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.2em; color:#8c8474">ÁGUA</p><p style="margin:1px 0 0; font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; line-height:1; font-variant-numeric:tabular-nums">1,60 <span style="font-size:11px; color:#6b6357">/ 2,5 L</span></p></div>
+              <div style="display:flex; gap:5px">
+                <span style="width:12px; height:26px; background:#16120d"></span><span style="width:12px; height:26px; background:#16120d"></span><span style="width:12px; height:26px; background:#16120d"></span><span style="width:12px; height:26px; border:1.5px solid rgba(22,18,13,.4)"></span><span style="width:12px; height:26px; border:1.5px solid rgba(22,18,13,.4)"></span>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:relative; display:flex; gap:8px; padding:14px 22px 44px; border-top:2px solid #16120d; background:#eae2d2">
+            <button style="flex:1; height:50px; border:1.5px solid #16120d; background:transparent; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; cursor:pointer">Fotografia</button>
+            <button style="flex:1.4; height:50px; border:none; background:#16120d; color:#f4efe2; font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; cursor:pointer">Registar alimento</button>
+          </div>
+        </div>
+      </x-import></div>
+    </div>
+
+    <!-- ══════ 06 FICHA ══════ -->
+    <div style="display:flex; flex-direction:column; gap:11px">
+      <div style="display:flex; align-items:baseline; gap:9px"><span style="font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:#b3231a">06</span><span style="font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase">Ficha de Shinigami</span></div>
+      <div style="width:402px; height:874px; display:flex; flex-shrink:0"><x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" width="{{ devW }}" height="{{ devH }}" hint-size="402px,874px">
+        <div data-screen-label="06 Ficha" style="position:absolute; inset:0; background:#eae2d2; display:flex; flex-direction:column; overflow:hidden">
+          <div style="position:absolute; inset:0; pointer-events:none; z-index:4; opacity:.45; mix-blend-mode:multiply; background-image:radial-gradient(rgba(22,18,13,.5) .5px,transparent .6px),radial-gradient(rgba(22,18,13,.38) .5px,transparent .6px); background-size:3px 3px,5px 5px; background-position:0 0,1px 2px"></div>
+
+          <div style="position:relative; flex:1; display:flex; flex-direction:column; overflow:hidden">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; padding:58px 22px 10px; border-bottom:2px solid #16120d">
+              <p style="margin:0; font-family:'Zen Old Mincho',serif; font-size:21px; font-weight:700">Ficha de Shinigami</p>
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.18em; color:#8c8474">FL.007</span>
+            </div>
+
+            <div style="position:relative; display:grid; grid-template-columns:150px 1fr; gap:0; border-bottom:2px solid #16120d">
+              <div style="position:relative; height:190px; border-right:1.5px solid #16120d">
+                <image-slot id="asc-retrato" shape="rect" fit="cover" placeholder="Retrato"></image-slot>
+              </div>
+              <div style="padding:14px 18px; display:flex; flex-direction:column; justify-content:center">
+                <p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.22em; color:#8c8474">NOME</p>
+                <p style="margin:2px 0 0; font-family:'Zen Old Mincho',serif; font-size:24px; font-weight:700; line-height:1.05">Kai</p>
+                <p style="margin:12px 0 0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.22em; color:#8c8474">PATENTE</p>
+                <p style="margin:2px 0 0; font-family:'Zen Old Mincho',serif; font-size:15px; font-weight:700; line-height:1.2">Oficial de Divisão</p>
+                <p style="margin:12px 0 0; font-family:'IBM Plex Mono',monospace; font-size:8px; letter-spacing:.22em; color:#8c8474">DIVISÃO</p>
+                <p style="margin:2px 0 0; font-family:'Zen Old Mincho',serif; font-size:15px; font-weight:700">十一 · Décima Primeira</p>
+              </div>
+            </div>
+
+            <div style="padding:14px 22px 0">
+              <p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.24em; color:#8c8474">ARTES DE COMBATE</p>
+              <div style="display:flex; flex-direction:column; gap:9px; margin-top:9px">
+                <div style="display:grid; grid-template-columns:20px 68px 1fr auto; gap:9px; align-items:center"><span style="font-family:'Zen Old Mincho',serif; font-size:14px; color:#b3231a">刀</span><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#4a4438">ZANJUTSU</span><div style="position:relative; height:9px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:74%; background:#16120d"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-weight:600; font-variant-numeric:tabular-nums">37</span></div>
+                <div style="display:grid; grid-template-columns:20px 68px 1fr auto; gap:9px; align-items:center"><span style="font-family:'Zen Old Mincho',serif; font-size:14px; color:#b3231a">歩</span><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#4a4438">HOHŌ</span><div style="position:relative; height:9px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:52%; background:#16120d"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-weight:600; font-variant-numeric:tabular-nums">26</span></div>
+                <div style="display:grid; grid-template-columns:20px 68px 1fr auto; gap:9px; align-items:center"><span style="font-family:'Zen Old Mincho',serif; font-size:14px; color:#b3231a">鬼</span><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#4a4438">KIDŌ</span><div style="position:relative; height:9px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:61%; background:#16120d"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-weight:600; font-variant-numeric:tabular-nums">31</span></div>
+                <div style="display:grid; grid-template-columns:20px 68px 1fr auto; gap:9px; align-items:center"><span style="font-family:'Zen Old Mincho',serif; font-size:14px; color:#b3231a">霊</span><span style="font-family:'IBM Plex Mono',monospace; font-size:9px; color:#4a4438">REIRYOKU</span><div style="position:relative; height:9px; border:1px solid rgba(22,18,13,.45)"><div style="position:absolute; top:0; bottom:0; left:0; width:44%; background:#16120d"></div></div><span style="font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-weight:600; font-variant-numeric:tabular-nums">22</span></div>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); margin:16px 22px 0; border-top:1.5px solid #16120d; border-bottom:1.5px solid #16120d">
+              <div style="padding:11px 0; border-right:1px solid rgba(22,18,13,.2)"><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:7.5px; letter-spacing:.18em; color:#8c8474">TREINOS</p><p style="margin:2px 0 0; font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; line-height:1">34</p></div>
+              <div style="padding:11px 0 11px 12px; border-right:1px solid rgba(22,18,13,.2)"><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:7.5px; letter-spacing:.18em; color:#8c8474">ORDENS</p><p style="margin:2px 0 0; font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; line-height:1">96</p></div>
+              <div style="padding:11px 0 11px 12px"><p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:7.5px; letter-spacing:.18em; color:#8c8474">RECORDE</p><p style="margin:2px 0 0; font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; line-height:1">28</p></div>
+            </div>
+
+            <div style="padding:14px 22px 0">
+              <p style="margin:0; font-family:'IBM Plex Mono',monospace; font-size:8.5px; letter-spacing:.24em; color:#8c8474">CONQUISTAS · 6/10</p>
+              <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:7px; margin-top:9px">
+                <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:#16120d"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; color:#f4efe2">初</span></div>
+                <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:#16120d"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; color:#f4efe2">七</span></div>
+                <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:#b3231a"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; color:#f4efe2">卍</span></div>
+                <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; background:#16120d"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; color:#f4efe2">水</span></div>
+                <div style="aspect-ratio:1; display:flex; align-items:center; justify-content:center; border:1.5px solid rgba(22,18,13,.35)"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; color:#b0a795">虚</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="position:relative; z-index:5; display:grid; grid-template-columns:repeat(5,1fr); border-top:1.5px solid #16120d; padding-bottom:26px; background:#eae2d2">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0 5px"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; line-height:1">隊</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; color:#6b6357">QUARTEL</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0 5px"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; line-height:1">刀</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; color:#6b6357">DOJO</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0 5px"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; line-height:1">糧</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; color:#6b6357">RAÇÕES</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0 5px"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; line-height:1">令</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; color:#6b6357">ORDENS</span></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0 5px; background:#16120d"><span style="font-family:'Zen Old Mincho',serif; font-size:15px; color:#f4efe2; line-height:1">神</span><span style="font-family:'IBM Plex Mono',monospace; font-size:7.5px; color:#f4efe2">FICHA</span></div>
+          </div>
+        </div>
+      </x-import></div>
+    </div>
+
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return { devW: 402, devH: 874 };
+  }
+}
+</script>
+</body>
+</html>

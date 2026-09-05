@@ -31,8 +31,8 @@ export default defineConfig({
         description:
           'Fitness e nutrição gamificados no universo do Bleach. Treina, regista refeições, cumpre as ordens da tua divisão e sobe de patente no Gotei 13.',
         lang: 'pt-PT',
-        theme_color: '#050507',
-        background_color: '#050507',
+        theme_color: '#0c0e13',
+        background_color: '#0c0e13',
         display: 'standalone',
         orientation: 'any',
         start_url: '/',

@@ -29,7 +29,7 @@ export function ExerciseDemo({
     <figure className={cn('m-0', className)}>
       <div
         className={cn(
-          'relative overflow-hidden rounded-xl border border-void-600 bg-void-950',
+          'relative overflow-hidden chamfer-md border border-void-600 bg-void-950',
           video ? 'aspect-video' : 'aspect-[3/2]',
         )}
       >

@@ -17,7 +17,7 @@ const config: CapacitorConfig = {
     // o esquema de URL da WebView — esse é o `server.iosScheme` acima.
     contentInset: 'never',
     // O tema é preto; evita o flash branco entre o splash e o primeiro render.
-    backgroundColor: '#050507',
+    backgroundColor: '#0c0e13',
   },
   server: {
     iosScheme: 'https',
@@ -26,7 +26,7 @@ const config: CapacitorConfig = {
     SplashScreen: {
       // Escondido à mão em `initNative()`, quando o React já pintou.
       launchAutoHide: false,
-      backgroundColor: '#050507',
+      backgroundColor: '#0c0e13',
       showSpinner: false,
     },
     Keyboard: {

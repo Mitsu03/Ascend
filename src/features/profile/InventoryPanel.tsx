@@ -68,14 +68,14 @@ export function InventoryPanel() {
                     <li
                       key={item.id}
                       className={cn(
-                        'rounded-xl border p-3.5',
+                        'chamfer-md border p-3.5',
                         isEquipped ? 'border-ember/60 bg-ember/5' : 'border-void-600 bg-void-800/40',
                         !owned && 'opacity-75',
                       )}
                     >
                       <div className="flex items-start gap-3">
                         <span
-                          className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg border border-void-600"
+                          className="mt-0.5 flex size-9 shrink-0 items-center justify-center chamfer-sm border border-void-600"
                           style={slot === 'title' ? undefined : { background: item.value, opacity: owned ? 1 : 0.4 }}
                         >
                           {slot === 'title' && <Icon name="Star" size={16} className="text-gold" />}
@@ -92,7 +92,7 @@ export function InventoryPanel() {
                               <p className="truncate text-sm font-medium text-ink">{name}</p>
                               <span
                                 className={cn(
-                                  'rounded-full border px-1.5 py-px text-[10px] font-medium',
+                                  'chamfer-xs border px-1.5 py-px text-[10px] font-medium',
                                   RARITY_CLASSES[item.rarity],
                                 )}
                               >

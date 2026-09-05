@@ -121,6 +121,8 @@ export const en: Dictionary = {
     pernas: 'Legs',
     ombros: 'Shoulders',
     bracos: 'Arms',
+    antebracos: 'Forearms',
+    pescoco: 'Neck',
     core: 'Core',
     cardio: 'Cardio',
     corpo_inteiro: 'Full body',
@@ -463,11 +465,86 @@ export const en: Dictionary = {
     noResults: 'No exercises found.',
   },
 
+  collections: {
+    title: 'Workout collections',
+    open: 'Collections',
+    description: 'Ready-made weekly plans. Apply the whole week, or take just the day you want.',
+    daysCount: (n: number) => `${n} ${n === 1 ? 'day' : 'days'}`,
+    weeklySets: (n: number) => `${n} sets per week`,
+    sourceLabel: (source: string) => `Source: ${source}`,
+    notesHeading: 'NOTES',
+    daysHeading: 'DAYS IN THIS COLLECTION',
+    back: 'Back to collections',
+    applyWeek: 'Apply the whole week',
+    applyDay: 'Apply this day',
+    dayLabel: 'Day of the week',
+    suggestedDay: (weekday: string) => `Suggested for ${weekday}`,
+    replacesDay: (weekday: string) => `Replaces your ${weekday} workout.`,
+    freeDay: (weekday: string) => `${weekday} is free.`,
+    confirmWeekTitle: 'Apply this collection to the week?',
+    confirmWeekMessage: (name: string, days: number) =>
+      `Your current plan is deleted and replaced by the ${days} days of “${name}”. Your session history is kept. This cannot be undone.`,
+    confirmWeekConfirm: 'Replace the plan',
+    appliedWeek: 'Collection applied',
+    appliedWeekDetail: (name: string, days: number) => `“${name}” — ${days} days in your weekly plan.`,
+    appliedDay: 'Day applied',
+    appliedDayDetail: (day: string, weekday: string) => `“${day}” is now your ${weekday} workout.`,
+    empty: 'No collections available yet.',
+  },
+
+  aiPlan: {
+    title: 'AI plan',
+    description: 'Describe the training you want and the AI builds the weekly plan.',
+    promptLabel: 'What do you want to train for?',
+    promptPlaceholder: 'e.g. weekly plan, 3× a week, to run 5 km a month from now',
+    examplesTitle: 'Examples',
+    examples: [
+      'Weekly plan, 3× a week, to run 5 km a month from now',
+      'Four sessions a week at home with dumbbells only, to build muscle',
+      'Two short sessions a week to ease back in after a knee injury',
+    ],
+    footerHint: 'The AI may ask a few questions before building the plan.',
+    ask: 'Continue',
+    askingQuestions: 'Working out what else it needs…',
+    questionsHint: 'Leave blank anything you are unsure about.',
+    answerPlaceholder: 'Or write your own answer…',
+    answerAria: (question: string) => `Free answer to: ${question}`,
+    generate: 'Build plan',
+    regenerate: 'Build again',
+    thinking: 'Building your plan…',
+    daysCount: (n: number) => `${n} ${n === 1 ? 'session proposed' : 'sessions proposed'}`,
+    newTag: 'new',
+    newExercises: (n: number) =>
+      n === 1
+        ? '1 new exercise will be added to your catalogue.'
+        : `${n} new exercises will be added to your catalogue.`,
+    replaceLabel: 'Replace the current plan',
+    replaceOn: (n: number) =>
+      n === 1
+        ? 'The session you have now is deleted. This cannot be undone.'
+        : `The ${n} sessions you have now are deleted. This cannot be undone.`,
+    replaceOff: 'The new sessions are added to the ones you already have.',
+    save: 'Save plan',
+    confirmReplaceTitle: 'Replace the current plan?',
+    confirmReplaceMessage: (n: number) =>
+      n === 1
+        ? 'The session in your current plan is deleted and replaced by this one. Your logged session history stays. This cannot be undone.'
+        : `The ${n} sessions in your current plan are deleted and replaced by this one. Your logged session history stays. This cannot be undone.`,
+    emptyPrompt: 'Write what you want to train for first.',
+    emptyPlan: 'The AI returned no usable session. Try rewording the request.',
+    notConfigured: 'Plan generation needs an AI service connected under Shinigami › Settings.',
+    failed: 'Could not build the plan. Check your connection and settings.',
+    disclaimer:
+      'The plan is an automatically generated suggestion, not a supervised programme. Review it before saving and adjust anything that does not suit you.',
+  },
+
   nutrition: {
     // ── Rations screen (prototype) ────────────────────────────────────────
     todayLabel: 'Rations · today',
     photoRow: 'Photograph a meal',
     photoRowHint: 'The estimate comes back for you to confirm',
+    textRow: 'Describe a meal',
+    textRowHint: 'You write the dish, the AI splits the ingredients',
     proteinBonus: (xp: number) => `Protein +${xp}`,
     remainingHeading: 'LEFT TO GOAL',
     overHeading: 'OVER GOAL',
@@ -563,7 +640,21 @@ export const en: Dictionary = {
 
   photoLog: {
     title: 'Log from a photo',
-    description: 'Take a photo of your plate or scan the packaging barcode.',
+    titleGeneric: 'Log a meal',
+    descriptionGeneric: 'Photograph the plate, write what you ate, or scan the packaging barcode.',
+    photographMeal: 'Photograph meal',
+    describeMeal: 'Describe meal',
+    modeText: 'Describe',
+    textLabel: 'What did you eat?',
+    textHint: 'You can write the whole dish — the AI breaks it into ingredients.',
+    textPlaceholder: 'e.g. steak with rice, chips and a fried egg',
+    textAnalyse: 'Analyse',
+    textAnalyseAgain: 'Analyse again',
+    textFooterHint: 'Write the meal and press Analyse.',
+    barcodeFooterHint: 'Scan a barcode to start.',
+    noFoodInText: 'No food was identified in this description.',
+    textNotConfigured: 'Writing the meal needs an AI service connected under Shinigami › Settings.',
+    textFailed: 'Could not analyse the description. Check your connection and settings.',
     modePhoto: 'Photo',
     modeBarcode: 'Barcode',
     openCamera: 'Open camera',
@@ -597,11 +688,12 @@ export const en: Dictionary = {
     estimatedValues: 'Estimated values',
     gramsAria: (food: string) => `Amount of ${food} in grams`,
     disclaimer:
-      'Photo estimates are approximate and can get portion sizes wrong. Always check the values before logging.',
-    visionTitle: 'Photo recognition',
+      'Automatic estimates are approximate and can get portion sizes wrong. Always check the values before logging.',
+    visionTitle: 'AI assistant',
     visionHint:
-      'Optional. Connect an OpenAI-compatible vision service to estimate foods from photos. The key is stored on this device only and is sent solely to the endpoint you provide.',
-    visionRowHint: 'Estimate foods from photos',
+      'Optional. Connect an OpenAI-compatible service and you unlock three things: estimating foods from photos, describing the meal in writing, and generating training plans from a request. The key is stored on this device only and is sent solely to the endpoint you provide.',
+    visionRowHint: 'Photos, descriptions and training plans',
+
     visionProvider: 'Service',
     visionFree: 'Free',
     visionPaid: 'Paid',

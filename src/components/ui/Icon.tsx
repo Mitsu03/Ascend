@@ -131,7 +131,15 @@ interface IconProps {
   strokeWidth?: number
 }
 
-export function Icon({ name, className, size = 18, strokeWidth = 2 }: IconProps) {
+/*
+ * `strokeWidth` a 1,5 é o traço do sistema Bleach: o desenho especifica um
+ * sprite de 30 símbolos com `stroke-width:1.5`, `stroke:currentColor` e sem
+ * preenchimento. O lucide já é essa linguagem — o que estava fora era a
+ * espessura, que a 2 px fazia os ícones lerem mais pesados do que o texto ao
+ * lado deles. O sprite em si fica por portar: cobre 30 dos 58 ícones que a app
+ * usa, e os restantes (código de barras, régua, pesquisa) não existem lá.
+ */
+export function Icon({ name, className, size = 18, strokeWidth = 1.5 }: IconProps) {
   const Component = (ICONS as Record<string, LucideIcon>)[name] ?? Circle
   return <Component className={className} size={size} strokeWidth={strokeWidth} aria-hidden="true" />
 }
