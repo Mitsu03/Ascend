@@ -175,6 +175,8 @@ function repeatPenalty(foodIds: string[], recency: Map<string, number>): number 
  * para a seguinte quando essa já está registada.
  */
 export function inferMealSlot(loggedMeals: MealType[], hour: number = new Date().getHours()): MealType {
+  // De madrugada ainda é a noite anterior: propõe-se algo leve, não um pequeno-almoço.
+  if (hour < 5) return 'snack'
   const order: MealType[] = ['pequeno_almoco', 'almoco', 'lanche', 'jantar', 'snack']
   /** Hora a partir da qual deixa de fazer sentido propor cada refeição. */
   const until = [11, 15, 19, 22, 24]

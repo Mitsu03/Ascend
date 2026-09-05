@@ -71,7 +71,7 @@ const MEAL_OVERRIDES: Record<string, MealType[]> = {
   'claras-ovo': ['pequeno_almoco', 'lanche', 'almoco', 'jantar'],
   'peru-fatias': ALL_MEALS,
   fiambre: ALL_MEALS,
-  'atum-lata': ALL_MEALS,
+  'atum-lata': ['almoco', 'lanche', 'jantar', 'snack'],
 
   // Hidratos de pequeno-almoço e lanche
   aveia: ['pequeno_almoco', 'lanche'],

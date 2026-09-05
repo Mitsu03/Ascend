@@ -417,7 +417,8 @@ export function NutritionPage() {
   const date = today()
   const todayEntries = useMemo(() => entriesForDate(date), [entriesForDate, date, entries])
   const totals = useMemo(() => totalsForDate(date), [totalsForDate, date, entries])
-  const remaining = remainingMacros(totals, targets)
+  // Memoizado: é dependência do cálculo das sugestões, que é caro.
+  const remaining = useMemo(() => remainingMacros(totals, targets), [totals, targets])
 
   const diet = profile?.dietPreference ?? 'sem_preferencia'
 

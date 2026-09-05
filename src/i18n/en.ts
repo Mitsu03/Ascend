@@ -609,7 +609,9 @@ export const en: Dictionary = {
       jantar: 'Dinner',
       snack: 'Snack',
     },
-    comboTitle: (meal: string, food: string) => `${meal} with ${food.toLowerCase()}`,
+    // Lower-case the first letter only: `toLowerCase()` ruined "Greek yoghurt".
+    comboTitle: (meal: string, food: string) =>
+      `${meal} with ${food.charAt(0).toLowerCase()}${food.slice(1)}`,
     forMeal: (meal: string) => `For ${meal.toLowerCase()}`,
     otherSuggestions: 'Other suggestions',
   },

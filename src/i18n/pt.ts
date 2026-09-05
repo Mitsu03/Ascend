@@ -617,7 +617,9 @@ export const pt = {
       jantar: 'Jantar',
       snack: 'Snack',
     },
-    comboTitle: (meal: string, food: string) => `${meal} com ${food.toLowerCase()}`,
+    // Só a inicial em minúscula: `toLowerCase()` estragava «Bolachas Maria».
+    comboTitle: (meal: string, food: string) =>
+      `${meal} com ${food.charAt(0).toLowerCase()}${food.slice(1)}`,
     forMeal: (meal: string) => `Para o ${meal.toLowerCase()}`,
     otherSuggestions: 'Outras sugestões',
   },
