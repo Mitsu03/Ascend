@@ -523,6 +523,18 @@ export const en: Dictionary = {
     gapCarbs: (n: number) => `${n} g of carbs`,
     gapFat: (n: number) => `${n} g of fat`,
     listJoin: ' and ',
+
+    // Title for generated combinations: meal + anchor food.
+    comboMeals: {
+      pequeno_almoco: 'Breakfast',
+      almoco: 'Lunch',
+      lanche: 'Afternoon snack',
+      jantar: 'Dinner',
+      snack: 'Snack',
+    },
+    comboTitle: (meal: string, food: string) => `${meal} with ${food.toLowerCase()}`,
+    forMeal: (meal: string) => `For ${meal.toLowerCase()}`,
+    otherSuggestions: 'Other suggestions',
   },
 
   artwork: {
