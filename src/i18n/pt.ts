@@ -821,6 +821,7 @@ export const pt = {
     fieldHeight: 'Altura',
     fieldAge: 'Idade',
     fieldDiet: 'Preferência alimentar',
+    fieldEquipment: 'Equipamento',
     ageYears: (n: number) => `${n} anos`,
     dailyTargets: 'Metas diárias estimadas',
     targetsSummary: (kcal: string, p: number, c: number, f: number) =>

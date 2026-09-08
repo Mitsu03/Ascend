@@ -806,6 +806,7 @@ export const en: Dictionary = {
     fieldHeight: 'Height',
     fieldAge: 'Age',
     fieldDiet: 'Dietary preference',
+    fieldEquipment: 'Equipment',
     ageYears: (n: number) => `${n} years`,
     dailyTargets: 'Estimated daily targets',
     targetsSummary: (kcal: string, p: number, c: number, f: number) =>

@@ -25,6 +25,12 @@ import type {
  * O modelo escolhe de preferência exercícios do catálogo local (pelo id), mas
  * pode criar os que faltarem — o catálogo não tem corrida no exterior nem
  * séries de intervalos, que são precisamente o que um plano de 5 km pede.
+ *
+ * O catálogo vai inteiro para o modelo, sem o filtro de equipamento do perfil.
+ * Quem tem «nenhum» no perfil pede na mesma um treino de ginásio — e sem as
+ * máquinas na lista o modelo só podia devolver o treino de casa outra vez. O
+ * equipamento do perfil continua a ir no pedido, mas como pista e não como
+ * filtro: o que o utilizador escreve manda sobre o perfil.
  */
 
 export interface PlanQuestion {
@@ -80,9 +86,10 @@ function profileSummary(profile: UserProfile): string {
   ].join(', ')
 }
 
-function catalogueList(profile: UserProfile): string {
-  // O filtro de nível não se aplica: a escolha final é revista pelo utilizador.
-  return availableExercises({ equipment: profile.equipment, level: 'avancado' })
+function catalogueList(): string {
+  // Nem o nível nem o equipamento filtram: a escolha final é revista pelo
+  // utilizador, e o pedido escrito pode contrariar o perfil.
+  return availableExercises({ equipment: 'ginasio', level: 'avancado' })
     .map((exercise) => `${exercise.id} | ${exercise.name.en} | ${exercise.muscleGroup} | ${exercise.equipment}`)
     .join('\n')
 }
@@ -182,6 +189,10 @@ interface RawPlan {
 const PLAN_PROMPT = [
   'You are a strength and conditioning coach. Build a weekly training plan for the athlete.',
   'Prefer exercises from the catalogue below and refer to them by their exact id.',
+  'The profile says what equipment the athlete usually has: stay within it unless the request or',
+  'the answers name a gym, a machine or a piece of equipment, in which case the request wins.',
+  'When the request names a gym, build the session around barbells, cables and machines rather',
+  'than bodyweight variations.',
   'When the plan genuinely needs something the catalogue lacks (outdoor running, interval sets,',
   'specific mobility work), invent it and declare it in "newExercises" — every id used in a day',
   'must exist either in the catalogue or in "newExercises".',
@@ -242,7 +253,7 @@ export async function buildPlan(
           `Athlete profile: ${profileSummary(profile)}`,
           `Request: ${request.trim()}`,
           answered ? `Answers to your questions:\n${answered}` : 'The athlete answered no extra questions.',
-          `Exercise catalogue (id | name | muscle group | equipment):\n${catalogueList(profile)}`,
+          `Exercise catalogue (id | name | muscle group | equipment):\n${catalogueList()}`,
         ].join('\n\n'),
       },
     ],
@@ -271,8 +282,10 @@ export async function buildPlan(
     newById.set(id, exercise)
   }
 
+  // O mesmo conjunto que foi para o modelo: filtrar aqui por equipamento
+  // deitaria fora exatamente os ids de ginásio que lhe pedimos para usar.
   const catalogueIds = new Set(
-    availableExercises({ equipment: profile.equipment, level: 'avancado' }).map((exercise) => exercise.id),
+    availableExercises({ equipment: 'ginasio', level: 'avancado' }).map((exercise) => exercise.id),
   )
   /** Aceita o id tal como veio, ou a versão prefixada de um exercício novo. */
   const resolveId = (raw: unknown): string | undefined => {
