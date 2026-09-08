@@ -34,7 +34,7 @@ import { DEFAULT_VISION_ENDPOINT, DEFAULT_VISION_MODEL, useSettingsStore } from 
 import { useUserStore } from '@/store/userStore'
 import { useWorkoutStore } from '@/store/workoutStore'
 import type { ArtIconName } from '@/data/artIcons'
-import type { AttributeKey, DietPreference, Goal, UserProfile } from '@/types'
+import type { AttributeKey, DietPreference, Equipment, Goal, UserProfile } from '@/types'
 
 /**
  * As quatro artes de combate do Gotei, cada uma com o seu emblema:
@@ -63,6 +63,9 @@ const AVATAR_VARIANTS = Array.from({ length: AVATAR_VARIANT_COUNT }, (_, index) 
 
 const GOAL_ORDER: Goal[] = ['perder_gordura', 'ganhar_massa', 'manter', 'condicao_fisica']
 const DIET_ORDER: DietPreference[] = ['sem_preferencia', 'mediterranica', 'vegetariano', 'vegan']
+// O equipamento escolhia-se só no onboarding e ficava trancado: quem tivesse
+// posto «sem equipamento» nunca mais via um exercício de ginásio no catálogo.
+const EQUIPMENT_ORDER: Equipment[] = ['nenhum', 'halteres', 'ginasio']
 
 /**
  * O topo da ficha: o retrato dentro dos dois anéis carmim, a patente, e o
@@ -750,6 +753,7 @@ function SettingsCard() {
   const fields: [string, string][] = [
     [t.profile.fieldGoal, t.goals[profile.goal]],
     [t.profile.fieldDaysPerWeek, String(profile.daysPerWeek)],
+    [t.profile.fieldEquipment, t.equipment[profile.equipment]],
     [t.profile.fieldWeight, `${profile.weightKg} kg`],
     [t.profile.fieldHeight, `${profile.heightCm} cm`],
     [t.profile.fieldAge, t.profile.ageYears(profile.age)],
@@ -897,6 +901,21 @@ function SettingsCard() {
                 {[2, 3, 4, 5, 6].map((days) => (
                   <option key={days} value={days}>
                     {t.profile.daysOption(days)}
+                  </option>
+                ))}
+              </Select>
+            )}
+          </Field>
+          <Field label={t.profile.fieldEquipment}>
+            {(id) => (
+              <Select
+                id={id}
+                value={draft.equipment}
+                onChange={(event) => setDraft({ ...draft, equipment: event.target.value as Equipment })}
+              >
+                {EQUIPMENT_ORDER.map((equipment) => (
+                  <option key={equipment} value={equipment}>
+                    {t.equipment[equipment]}
                   </option>
                 ))}
               </Select>
