@@ -600,6 +600,20 @@ export const en: Dictionary = {
     gapCarbs: (n: number) => `${n} g of carbs`,
     gapFat: (n: number) => `${n} g of fat`,
     listJoin: ' and ',
+
+    // Title for generated combinations: meal + anchor food.
+    comboMeals: {
+      pequeno_almoco: 'Breakfast',
+      almoco: 'Lunch',
+      lanche: 'Afternoon snack',
+      jantar: 'Dinner',
+      snack: 'Snack',
+    },
+    // Lower-case the first letter only: `toLowerCase()` ruined "Greek yoghurt".
+    comboTitle: (meal: string, food: string) =>
+      `${meal} with ${food.charAt(0).toLowerCase()}${food.slice(1)}`,
+    forMeal: (meal: string) => `For ${meal.toLowerCase()}`,
+    otherSuggestions: 'Other suggestions',
   },
 
   artwork: {

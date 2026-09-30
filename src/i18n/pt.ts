@@ -608,6 +608,20 @@ export const pt = {
     gapCarbs: (n: number) => `${n} g de hidratos`,
     gapFat: (n: number) => `${n} g de gordura`,
     listJoin: ' e ',
+
+    // Título das combinações montadas pelo gerador: refeição + alimento âncora.
+    comboMeals: {
+      pequeno_almoco: 'Pequeno-almoço',
+      almoco: 'Almoço',
+      lanche: 'Lanche',
+      jantar: 'Jantar',
+      snack: 'Snack',
+    },
+    // Só a inicial em minúscula: `toLowerCase()` estragava «Bolachas Maria».
+    comboTitle: (meal: string, food: string) =>
+      `${meal} com ${food.charAt(0).toLowerCase()}${food.slice(1)}`,
+    forMeal: (meal: string) => `Para o ${meal.toLowerCase()}`,
+    otherSuggestions: 'Outras sugestões',
   },
 
   artwork: {

@@ -12,7 +12,7 @@ import { useI18n } from '@/i18n'
 import { cn } from '@/lib/cn'
 import { WATER_GOAL_ML } from '@/services/calculations'
 import { today } from '@/services/dates'
-import { suggestMeals } from '@/services/suggestions'
+import { inferMealSlot, recentFoodWeights, suggestMeals } from '@/services/suggestions'
 import {
   MEAL_ORDER,
   checkProteinBonus,
@@ -411,14 +411,38 @@ export function NutritionPage() {
   const [adding, setAdding] = useState<MealType | null>(null)
   const [photoLogging, setPhotoLogging] = useState<MealType | null>(null)
   const [logMode, setLogMode] = useState<'foto' | 'texto'>('foto')
+  // Cada toque em "outras sugestões" muda a semente do ranking.
+  const [suggestionRound, setSuggestionRound] = useState(0)
 
   const date = today()
   const todayEntries = useMemo(() => entriesForDate(date), [entriesForDate, date, entries])
   const totals = useMemo(() => totalsForDate(date), [totalsForDate, date, entries])
-  const remaining = remainingMacros(totals, targets)
+  // Memoizado: é dependência do cálculo das sugestões, que é caro.
+  const remaining = useMemo(() => remainingMacros(totals, targets), [totals, targets])
 
   const diet = profile?.dietPreference ?? 'sem_preferencia'
-  const suggestions = useMemo(() => suggestMeals(remaining, diet, t, lang), [remaining, diet, t, lang])
+
+  // A refeição a que as sugestões dizem respeito: a hora do dia, saltando as
+  // que já estão registadas.
+  const mealSlot = useMemo(
+    () => inferMealSlot(todayEntries.map((entry) => entry.mealType)),
+    [todayEntries],
+  )
+  // Penaliza o que já foi comido nos últimos dias, para não repetir pratos.
+  const recency = useMemo(() => recentFoodWeights(entries, date), [entries, date])
+  const suggestions = useMemo(
+    () =>
+      suggestMeals({
+        remaining,
+        diet,
+        meal: mealSlot,
+        recency,
+        seed: `${date}:${mealSlot}:${suggestionRound}`,
+        t,
+        language: lang,
+      }),
+    [remaining, diet, mealSlot, recency, date, suggestionRound, t, lang],
+  )
   // Oito alimentos do catálogo para registo de um toque, sem abrir o modal.
   const quickFoods = useMemo(() => searchFoods('', diet, lang).slice(0, 8), [diet, lang])
 
@@ -486,11 +510,27 @@ export function NutritionPage() {
 
         {/* Sugestões */}
         <section className="mt-3.5 chamfer-lg border border-ember/30 bg-ember/5 p-3.5">
-          <div className="flex items-center gap-[9px]">
+          <div className="flex min-w-0 items-center gap-[9px]">
             <ArtIcon name="spark-spirit" size={18} className="shrink-0 text-ember-soft" />
-            <p className="text-[10.5px] font-bold tracking-[0.16em] text-ember-soft">
+            <p className="shrink-0 text-[10.5px] font-bold tracking-[0.16em] text-ember-soft">
               {t.nutrition.suggestionsCaption}
             </p>
+            {suggestions.suggestions.length > 0 && (
+              <span className="ml-auto flex min-w-0 items-center gap-1.5">
+                <span className="truncate text-[10px] text-ink-muted">
+                  {t.nutrition.forMeal(t.meals[suggestions.meal])}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSuggestionRound((round) => round + 1)}
+                  aria-label={t.nutrition.otherSuggestions}
+                  title={t.nutrition.otherSuggestions}
+                  className="shrink-0 chamfer-xs p-1 text-ember-soft transition-colors hover:bg-ember/[0.14]"
+                >
+                  <Icon name="RefreshCw" size={13} />
+                </button>
+              </span>
+            )}
           </div>
 
           {suggestions.message ? (
